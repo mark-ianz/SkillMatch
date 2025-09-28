@@ -1,4 +1,3 @@
-import { Button } from "@/components/ui/button";
 import {
   NavigationMenu,
   NavigationMenuContent,
@@ -10,11 +9,12 @@ import {
 } from "@/components/ui/navigation-menu";
 import Link from "next/link";
 import React from "react";
+import JoinNowButton from "../common/button/JoinNowButton";
 
 export default function Header() {
   return (
     <header className="border-b flex items-center justify-between p-6 px-96 h-20">
-      <p className="font-sans font-semibold text-2xl">SkillMatch</p>
+      <Link href={"/"} className="font-sans font-semibold text-2xl">SkillMatch</Link>
       <div className="flex items-center gap-4">
         <NavigationMenu viewport={false}>
           <NavigationMenuList>
@@ -57,7 +57,7 @@ export default function Header() {
             </NavigationMenuItem>
           </NavigationMenuList>
         </NavigationMenu>
-        <Button>Join Now</Button>
+        <JoinNowButton />
       </div>
     </header>
   );
