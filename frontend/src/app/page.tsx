@@ -1,103 +1,134 @@
-import Image from "next/image";
+import { Input } from "@/components/ui/input";
+import {
+  ChevronRight,
+  CirclePercent,
+  Computer,
+  Cpu,
+  GraduationCap,
+  HandCoins,
+  HardHat,
+  PenTool,
+} from "lucide-react";
+import Link from "next/link";
+import React from "react";
+import HeaderText from "./_components/global/HeaderText";
+import { getImageProps } from "next/image";
 
-export default function Home() {
+export default function LandingPage() {
+  const searchRecommendations = [
+    "web-developer",
+    "frontend-developer",
+    "backend-developer",
+    "fullstack-developer",
+    "designer",
+    "product-manager",
+  ];
+
+  const qualificationCategories = [
+    {
+      name: "Technology & IT",
+      svg: <Cpu className="w-10 h-10" />,
+    },
+    // Software Development
+    {
+      name: "Software Development",
+      svg: <Computer className="w-10 h-10" />,
+    },
+    // Business & Management
+    {
+      name: "Business & Management",
+      svg: <HandCoins className="w-10 h-10" />,
+    },
+    // Creative & Design
+    {
+      name: "Creative & Design",
+      svg: <PenTool className="w-10 h-10" />,
+    },
+    // Sales & Marketing
+    {
+      name: "Sales & Marketing",
+      svg: <CirclePercent className="w-10 h-10" />,
+    },
+    // Education & Training
+    {
+      name: "Education & Training",
+      svg: <GraduationCap className="w-10 h-10" />,
+    },
+    // Engineering & Architecture
+    {
+      name: "Engineering & Architecture",
+      svg: <HardHat className="w-10 h-10" />,
+    },
+  ];
+
+  function getBackgroundImage(srcSet = "") {
+    const imageSet = srcSet
+      .split(", ")
+      .map((str) => {
+        const [url, dpi] = str.split(" ");
+        return `url("${url}") ${dpi}`;
+      })
+      .join(", ");
+    return `image-set(${imageSet})`;
+  }
+
+  const {
+    props: { srcSet },
+  } = getImageProps({ alt: 'hero-section', width: 1920, height: 1080, src: '/hero_section_image.png' })
+  const backgroundImage = getBackgroundImage(srcSet)
+
   return (
-    <div className="font-sans grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20">
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="font-mono list-inside list-decimal text-sm/6 text-center sm:text-left">
-          <li className="mb-2 tracking-[-.01em]">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] font-mono font-semibold px-1 py-0.5 rounded">
-              src/app/page.tsx
-            </code>
-            .
-          </li>
-          <li className="tracking-[-.01em]">
-            Totoo na to tangina. Last na gago.
-          </li>
-        </ol>
-
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
+    <main>
+      <section id="hero" className="h-[calc(100vh-5rem)]">
+        <div className="text-white bg-orange-50 py-10 px-96 h-[calc(100vh-25rem)] flex items-center bg-no-repeat bg-cover bg-center" style={{ backgroundImage }}>
+          <div className="w-[600px] flex flex-col">
+            <div>
+              <p className="text-6xl font-sansation">Kickstart your career.</p>
+              <p className="font-sansation text-6xl">Carve your path.</p>
+            </div>
+            <div className="flex flex-col gap-4">
+              <Input
+                type="text"
+                placeholder="Search for jobs and companies"
+                className="w-full mt-6 bg-white text-black"
+              />
+              <ul className="flex flex-wrap gap-2">
+                {searchRecommendations.map((item, index) => (
+                  <li
+                    key={index}
+                    className="text-sm flex items-center justify-center gap-2 border p-1 px-4 rounded-md bg-black/50 cursor-pointer hover:bg-black/70 duration-200 transition-all"
+                  >
+                    {item}
+                    <ChevronRight className="w-4 h-4" />
+                  </li>
+                ))}
+              </ul>
+              <Link
+                href="/explore?categories=jobs"
+                className="text-sm flex items-center justify-center w-fit underline"
+              >
+                Explore More <ChevronRight className="w-4 h-4" />
+              </Link>
+            </div>
+          </div>
         </div>
-      </main>
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
-    </div>
+        <div className="px-96 py-10">
+          <HeaderText>Qualification Categories</HeaderText>
+          <ul className="grid grid-cols-7 gap-4 mt-4">
+            {qualificationCategories.map((category, index) => (
+              <li
+                key={index}
+                className="aspect-square flex gap-4 items-center p-4 py-6 rounded-md border flex-col text-sm text-center hover:shadow-md cursor-pointer duration-200 hover:scale-105 transition-all"
+              >
+                {category.svg}
+                <span className="font-sansation items-end">
+                  {category.name}
+                </span>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </section>
+    </main>
   );
 }
