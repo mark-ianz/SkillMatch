@@ -13,7 +13,7 @@ import React from "react";
 
 export default function Header() {
   return (
-    <header className="border-b flex items-center justify-between p-6 px-96">
+    <header className="border-b flex items-center justify-between p-6 px-96 h-20">
       <p className="font-sans font-semibold text-2xl">SkillMatch</p>
       <div className="flex items-center gap-4">
         <NavigationMenu viewport={false}>
