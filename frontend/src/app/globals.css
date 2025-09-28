@@ -7,6 +7,9 @@
   --color-skillmatch-primary-blue: #9ed0e6;
   --color-skillmatch-primary-green: #95bb4d;
   --color-skillmatch-primary-yellow: #e7a630;
+  --font-sansation: "Sansation", sans-serif;
+  --font-geist-sans: "Geist Sans", sans-serif;
+  --font-geist-mono: "Geist Mono", monospace;
 }
 
 @theme inline {
