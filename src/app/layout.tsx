@@ -1,8 +1,7 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono, Sansation } from "next/font/google";
 import "./globals.css";
-import Header from "./_components/global/Header";
-import Footer from "./_components/global/Footer";
+import { Toaster } from "@/components/ui/sonner";
 
 const geistSans = Geist({
   variable: "--font-geist",
@@ -35,9 +34,8 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} ${sansation.variable} antialiased overflow-y-scroll`}
       >
-        <Header />
         {children}
-        <Footer />
+        <Toaster />
       </body>
     </html>
   );

@@ -11,8 +11,8 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 import React from "react";
-import HeaderText from "./_components/global/HeaderText";
 import { getImageProps } from "next/image";
+import HeaderText from "../_components/global/HeaderText";
 
 export default function LandingPage() {
   const searchRecommendations = [

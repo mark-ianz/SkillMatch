@@ -1,10 +1,10 @@
 import { authConfig } from "@/lib/auth";
 import { getServerSession } from "next-auth";
 import React from "react";
-import LogoutButton from "../_components/common/button/LogoutButton";
 import Image from "next/image";
-import MainLayout from "../_components/global/MainLayout";
 import { User2 as EmptyProfile } from "lucide-react";
+import MainLayout from "@/app/_components/global/MainLayout";
+import LogoutButton from "@/app/_components/common/button/LogoutButton";
 
 export default async function Profile() {
   const session = await getServerSession(authConfig);
