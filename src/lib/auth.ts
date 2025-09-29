@@ -1,21 +1,6 @@
-import { NextAuthOptions } from "next-auth"
-import GoogleProvider from "next-auth/providers/google"
-import { db } from "./db"
-
-/* // Extend the built-in session types
-declare module "next-auth" {
-  interface Session {
-    user: {
-      id: string
-      firstName: string
-      lastName: string
-      roleId: number
-      email: string
-      name: string
-      image: string
-    }
-  }
-} */
+import { NextAuthOptions } from "next-auth";
+import GoogleProvider from "next-auth/providers/google";
+import { db } from "./db";
 
 export const authConfig: NextAuthOptions = {
   providers: [
@@ -24,59 +9,45 @@ export const authConfig: NextAuthOptions = {
       clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
     }),
   ],
-  /* callbacks: {
-    async signIn({ user, account, profile }) {
-      if (account?.provider === "google") {
-        try {
-          // Check if user exists
-          const [existingUser] = await db.execute(
-            'SELECT * FROM users WHERE email = ? OR oauth_id = ?',
-            [user.email, account.providerAccountId]
-          );
+  callbacks: {
+    async signIn({ user }) {
+      // Itong user object sa taas ^^, laman niyan is yung info galing sa Google account
 
-          if (!(existingUser as any[]).length) {
-            // Create new user from Google data
-            await db.execute(`
-              INSERT INTO users (
-                first_name, last_name, email, auth_provider, 
-                oauth_id, role_id, status_id
-              ) VALUES (?, ?, ?, 'google', ?, 3, 1)
-            `, [
-              (profile as any)?.given_name || user.name?.split(' ')[0] || '',
-              (profile as any)?.family_name || user.name?.split(' ').slice(1).join(' ') || '',
-              user.email,
-              account.providerAccountId
-            ]);
-          }
-          return true;
-        } catch (error) {
-          console.error('Error saving user:', error);
-          return false;
-        }
-      }
-      return true;
+      // TODO: Query the database to check if the user exists on the QCU database.
+
+      // Dummy data, for example ito yung mga data na nasa DB ng QCU
+      const students = [
+        {
+          student_number: "23-2583",
+          email: "bustillo.markian.buenavista@gmail.com",
+          first_name: "Mark Ian",
+          last_name: "Bustillo",
+        },
+        {
+          student_number: "23-2584",
+          email: "aleckbiong@gmail.com",
+          first_name: "Aleck",
+          last_name: "Biong",
+        },
+        {
+          student_number: "23-2585",
+          email: "zyllepalajoren@gmail.com",
+          first_name: "Zylle",
+          last_name: "Palajoren",
+        },
+      ];
+
+      // Simulating yung checking sa DB, check kung yung email ba ng user is nagmamatch sa mga emails sa DB 
+      const isInDB = students.find((student) => student.email === user.email);
+
+      // If walang nag match, ibig sabihin yung email na ginamit is hindi associated sa QCU
+      if (!isInDB) return "/auth/signin?error=EmailNotAllowed"; // Redirect to sign-in page with error
+
+      return true; // Continue the sign-in process
     },
-    async session({ session, token }) {
-      // Add user data to session
-      if (session.user?.email) {
-        const [userData] = await db.execute(
-          'SELECT id, first_name, last_name, role_id FROM users WHERE email = ?',
-          [session.user.email]
-        );
-        const user = (userData as any[])[0];
-        if (user) {
-          session.user.id = user.id;
-          session.user.firstName = user.first_name;
-          session.user.lastName = user.last_name;
-          session.user.roleId = user.role_id;
-        }
-      }
-      return session;
-    }
+    async redirect({ url, baseUrl }) {
+      if (url === baseUrl + "/profile") return url;
+      return baseUrl;
+    },
   },
-  pages: {
-    signIn: '/auth/signin', // Custom sign-in page (you'll create this later)
-  } */
-}
-
-// No need to export NextAuth here - it's handled in the route.ts file
+};
