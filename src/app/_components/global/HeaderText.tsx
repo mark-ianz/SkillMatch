@@ -1,8 +1,14 @@
-import React from 'react'
-import { twMerge } from 'tailwind-merge'
+import React from "react";
+import { twMerge } from "tailwind-merge";
 
-export default function HeaderText({ children, className }: { children?: React.ReactNode, className?: string }) {
-  return (
-    <p className={twMerge("text-4xl", className)}>{children}</p>
-  )
+export default function HeaderText({
+  children,
+  className,
+  text,
+}: {
+  children?: React.ReactNode;
+  className?: string;
+  text?: string;
+}) {
+  return <p className={twMerge("text-4xl", className)}>{text || children}</p>;
 }
