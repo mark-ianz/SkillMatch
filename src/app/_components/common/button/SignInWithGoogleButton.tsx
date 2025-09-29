@@ -1,14 +1,13 @@
 import { Button } from "@/components/ui/button";
 import { signIn } from "next-auth/react";
 import Image from "next/image";
-import { redirect } from "next/navigation";
 import React from "react";
 
 export default function SignInWithGoogleButton() {
   return (
     <Button
       onClick={async () => {
-        const result = await signIn("google", { redirect: false });
+        const result = await signIn("google", { callbackUrl: "/profile"});
         console.log(result)
       }}
       className="bg-skillmatch-primary-light text-skillmatch-dark border hover:bg-skillmatch-muted-light"
