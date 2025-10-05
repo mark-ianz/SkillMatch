@@ -2,11 +2,27 @@ import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
   images: {
-    domains: [
-      "lh3.googleusercontent.com", // Google profile images
-      "lh4.googleusercontent.com", // Google profile images (alternative)
-      "lh5.googleusercontent.com", // Google profile images (alternative)
-      "lh6.googleusercontent.com", // Google profile images (alternative)
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "lh3.googleusercontent.com",
+        pathname: "/**",
+      },
+      {
+        protocol: "https",
+        hostname: "lh4.googleusercontent.com",
+        pathname: "/**",
+      },
+      {
+        protocol: "https",
+        hostname: "lh5.googleusercontent.com",
+        pathname: "/**",
+      },
+      {
+        protocol: "https",
+        hostname: "lh6.googleusercontent.com",
+        pathname: "/**",
+      },
     ],
   },
 };
