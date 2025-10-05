@@ -3,7 +3,7 @@ import { getServerSession } from "next-auth";
 import React from "react";
 import Image from "next/image";
 import { User2 as EmptyProfile } from "lucide-react";
-import MainLayout from "@/app/_components/global/MainLayout";
+import MainLayout from "@/app/_components/layout/MainLayout";
 import LogoutButton from "@/app/_components/common/button/LogoutButton";
 
 export default async function Profile() {
