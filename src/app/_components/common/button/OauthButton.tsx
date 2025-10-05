@@ -1,3 +1,5 @@
+"use client";
+
 import { Button } from "@/components/ui/button";
 import { signIn } from "next-auth/react";
 import Image from "next/image";
@@ -8,10 +10,12 @@ export default function OauthButton({
   className,
   callbackUrl,
   provider,
+  text,
 }: {
   callbackUrl?: string;
   className?: string;
   provider: "google" | "linkedIn";
+  text: string;
 }) {
   const source =
     provider === "google" ? "/logo/GoogleLogo.png" : "/logo/LinkedInLogo.png";
@@ -27,13 +31,8 @@ export default function OauthButton({
         className
       )}
     >
-      <Image
-        src={source}
-        alt={`${provider} Logo`}
-        width={16}
-        height={16}
-      />
-      Sign in with {provider === "google" ? "Google" : "LinkedIn"}
+      <Image src={source} alt={`${provider} Logo`} width={16} height={16} />
+      {text}
     </Button>
   );
 }
