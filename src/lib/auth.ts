@@ -1,5 +1,5 @@
 import { NextAuthOptions, User } from "next-auth";
-import { User as UserInfo } from "@/app/types/user.types";
+import { ExtendedAdapterUser, ExtendedSession, ExtendedToken, ExtendedUser, Onboarding, User as UserInfo } from "@/app/types/user.types";
 import GoogleProvider from "next-auth/providers/google";
 import { db } from "./db";
 import { QueryResult, ResultSetHeader, RowDataPacket } from "mysql2";
@@ -17,7 +17,6 @@ export const authConfig: NextAuthOptions = {
   callbacks: {
     async signIn({ user }) {
       // Itong user object sa taas ^^, laman niyan is yung info galing sa Google account
-
       const connection = await db.getConnection();
 
       try {
@@ -25,7 +24,7 @@ export const authConfig: NextAuthOptions = {
         await connection.beginTransaction();
 
         // 1. Check if the user's email exists in the QCU database
-        const [student] = await db.query<(QCU_User & RowDataPacket)[]>(
+        const [student] = await connection.query<(QCU_User & RowDataPacket)[]>(
           "SELECT * FROM qcu_db WHERE email = ?",
           [user.email]
         );
@@ -39,16 +38,18 @@ export const authConfig: NextAuthOptions = {
         // If the email exists in the QCU database, proceed with sign-in
 
         // 4. Check if user is onboarding (exists in onboarding table)
-        const [isUserOnboarding] = await db.query<RowDataPacket[]>(
+        const [onboardingUser] = await connection.query<(Onboarding & RowDataPacket)[]>(
           "SELECT * FROM `onboarding` WHERE email = ?",
           [user.email]
         );
 
-        // 5. If user is already onboarding, skip the inserting of data to user table and account table.
-        // Else insert the data to user table, account table and onboarding table.
-        if (!(isUserOnboarding.length > 0)) {
+        // Initiate user_id variable for the user object
+        let user_id: number | null;
+
+        // 5. If user is already not onboarding, insert the data to user table, account table and onboarding table.
+        if (!(onboardingUser.length > 0)) {
           // 5.1. Save user's data on the user table.
-          const [newUser] = await db.query<ResultSetHeader>(
+          const [newUser] = await connection.query<ResultSetHeader>(
             "INSERT INTO `user` (`first_name`, `middle_name`, `last_name`, `gender`, `birthdate`, `street_address`, `phone_number`, `role_id`, `status_id`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)",
             [
               student[0].first_name,
@@ -64,19 +65,30 @@ export const authConfig: NextAuthOptions = {
           );
 
           // 5.2. Insert user data to account table
-          await db.query<ResultSetHeader>(
+          await connection.query<ResultSetHeader>(
             "INSERT INTO `account` (`user_id`, `email`, `profile_image`, `provider`, `provider_id`) VALUES (?, ?, ?, ?, ?)",
             [newUser.insertId, user.email, user.image, "google", user.id]
           );
 
           // 5.3. Insert user to onboarding table
-          await db.query(
+          await connection.query(
             "INSERT INTO `onboarding` (`user_id`,`email`, `step`) VALUES (?, ?, ?)",
             [newUser.insertId, user.email, 1]
           );
+
+          // 5.4 Define the user_id and role_id on the user object for session and jwt callbacks
+          user_id = newUser.insertId;
+        } else {
+          // Else get their user id and define it on the user object for session and jwt callbacks.
+          // Skip the inserting of data to user table and account table
+          user_id = onboardingUser[0].user_id;
         }
 
-        // 7. Commit the transaction if all queries are successful
+        // 7. Define the user_id on the user object for session and jwt callbacks
+        (user as ExtendedUser).user_id = user_id;
+        (user as ExtendedUser).role_id = 3; // Set role to 'OJT' (3)
+
+        // 8. Commit the transaction if all queries are successful
 
         await connection.commit();
       } catch (error: Error | unknown) {
@@ -85,7 +97,7 @@ export const authConfig: NextAuthOptions = {
 
         console.log(error);
         if ((error as MySQLError).code === "ER_DUP_ENTRY") {
-          return "/gago"; // Continue the sign-in process if duplicate entry error occurs
+          return "/auth/signup?error=DuplicateEntry"; // Continue the sign-in process if duplicate entry error occurs
         }
 
         if (error instanceof Error && error.message === "EmailNotAllowed") {
@@ -100,5 +112,39 @@ export const authConfig: NextAuthOptions = {
 
       return true; // Continue the sign-up process
     },
+    async jwt({ token, user }) {
+      // First time jwt callback is run, user object is available
+      try {
+        console.log("JWT Callback, token:", token);
+        console.log("JWT Callback, user:", user);
+        if (user) {
+          token.email = user.email;
+          token.name = user.name;
+          token.picture = user.image;
+          token.user_id = (user as ExtendedUser).user_id;
+          token.role_id = (user as ExtendedUser).role_id;
+        }
+        return token;
+      } catch (error) {
+        console.log("JWT CALLBACK ERROR:", error);
+        return token;
+      }
+    },
+    async session({ session, token }) {
+      console.debug("Session Callback, session:", session);
+      if (session.user) {
+        session.user.email = (token as ExtendedToken).email;
+        session.user.name = (token as ExtendedToken).name;
+        session.user.image = (token as ExtendedToken).picture;
+        (session as ExtendedSession).user.user_id = (token as ExtendedToken).user_id;
+        (session as ExtendedSession).user.role_id = (token as ExtendedToken).role_id;
+      }
+      return session;
+    }
+  },
+  pages: {
+    signIn: "/auth/signin",
+    signOut: "/auth/signin",
+    error: "/auth/signup",
   },
 };

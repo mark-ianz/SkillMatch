@@ -14,3 +14,30 @@ export type User = {
   status_id: number;
   created_at: Date;
 };
+
+export type Onboarding = {
+  onboarding_id: number;
+  user_id: number;
+  step: number;
+  email: string;
+  created_at: Date;
+};
+
+import { DefaultSession, User as NextAuthUser } from "next-auth";
+import { AdapterUser } from "next-auth/adapters";
+import { JWT } from "next-auth/jwt";
+
+export type ExtendedInfo = {
+  user_id: number;
+  role_id: number;
+};
+
+export type ExtendedUser = NextAuthUser & ExtendedInfo;
+
+export type ExtendedAdapterUser = AdapterUser & ExtendedInfo;
+
+export type ExtendedToken = JWT & ExtendedInfo;
+
+export type ExtendedSession = DefaultSession & {
+  user: ExtendedInfo;
+};
