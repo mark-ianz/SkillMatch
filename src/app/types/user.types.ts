@@ -1,3 +1,7 @@
+import { DefaultSession, User as NextAuthUser } from "next-auth";
+import { AdapterUser } from "next-auth/adapters";
+import { JWT } from "next-auth/jwt";
+
 export type User = {
   user_id: number;
   first_name: string;
@@ -23,10 +27,23 @@ export type Onboarding = {
   created_at: Date;
 };
 
-import { DefaultSession, User as NextAuthUser } from "next-auth";
-import { AdapterUser } from "next-auth/adapters";
-import { JWT } from "next-auth/jwt";
+export type Account = {
+  acccount_id: number;
+  user_id: number;
+  email: string;
+  profile_image?: string;
+  provider: "google" | "local" | "linkedin";
+  provider_id: string;
+  password_hash?: string;
+  created_at: Date;
+};
 
+export type OnboardingFullInfo = Onboarding &
+  User & {
+    email: string;
+  };
+
+// JWT and Session Extensions
 export type ExtendedInfo = {
   user_id: number;
   role_id: number;
