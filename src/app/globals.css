@@ -4,9 +4,9 @@
 @custom-variant dark (&:is(.dark *));
 
 @theme {
-  --color-skillmatch-primary-blue: #9ed0e6;
-  --color-skillmatch-primary-green: #95bb4d;
-  --color-skillmatch-primary-yellow: #e7a630;
+  --color-skillmatch-primary-blue: #4F6899;
+  --color-skillmatch-primary-green: #5AAC5D;
+  --color-skillmatch-primary-yellow: #EFC858;
   --color-skillmatch-light: #F4F4F4;
   --color-skillmatch-dark: #1a1a1f;
   --color-skillmatch-muted-light: #bfbfbf;
