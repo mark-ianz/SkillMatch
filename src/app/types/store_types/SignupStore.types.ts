@@ -1,11 +1,10 @@
 // Step is the part of signup process
-// 0 - initial (continue with google)
 // 1 - personal details
 // 2 - address
 // 3 - academic details
 // 4 - skills
-// 5 - certifications
-// 6 - review & submit
+// 5 - resume / certifications
+// 6 - setup password
 
 type Skill = {
   skill_id: number;
@@ -16,17 +15,19 @@ type Skill = {
 export type PersonalDetailsStore = {
   first_name: string;
   last_name: string;
-  email_address: string;
+  middle_name: string | null;
+  email?: string;
   phone_number: string;
   gender: "male" | "female" | "prefer not to say";
-  birthdate: Date | null;
+  birthdate: Date | null | string;
 
   setFirstName: (first_name: string) => void;
   setLastName: (last_name: string) => void;
-  setEmailAddress: (email_address: string) => void;
+  setMiddleName: (middle_name: string | null) => void;
+  setEmail: (email: string) => void;
   setPhoneNumber: (phone_number: string) => void;
   setGender: (gender: "male" | "female" | "prefer not to say") => void;
-  setBirthdate: (birthdate: Date) => void;
+  setBirthdate: (birthdate: Date | null | string) => void;
 };
 
 // Step 2: Address
@@ -73,16 +74,17 @@ export type CertificationsStore = {
 
 // General Signup Store
 export type GeneralSignupStore = {
-  currentStep: number;
-  farthestStep: number;
-  error: { title: string; description: string } | null;
-
+  /*   error: { title: string; description: string } | null;
+  
   nextStep: () => void;
   prevStep: () => void;
   goToStep: (s: number) => void;
+  setError: (e: { title: string; description: string }) => void; */
+
+  currentStep: number;
+  farthestStep: number;
   setCurrentStep: (s: number) => void;
   setFarthestStep: (s: number) => void;
-  setError: (e: { title: string; description: string }) => void;
 
   collectData: () => {
     personal: PersonalDetailsStore;

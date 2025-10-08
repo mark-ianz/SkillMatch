@@ -6,14 +6,16 @@ const MAX_STEP = 6;
 const useSignupStore = create<SignupStore>((set, get) => ({
   // Step 1: Personal
   first_name: "",
+  middle_name: "",
   last_name: "",
-  email_address: "",
+  email: "",
   phone_number: "",
   gender: "prefer not to say",
   birthdate: null,
   setFirstName: (first_name) => set({ first_name }),
   setLastName: (last_name) => set({ last_name }),
-  setEmailAddress: (email_address) => set({ email_address }),
+  setMiddleName: (middle_name) => set({ middle_name }),
+  setEmail: (email) => set({ email }),
   setPhoneNumber: (phone_number) => set({ phone_number }),
   setGender: (gender) => set({ gender }),
   setBirthdate: (birthdate) => set({ birthdate }),
@@ -61,12 +63,12 @@ const useSignupStore = create<SignupStore>((set, get) => ({
   clearCertifications: () => set({ certifications: [] }),
 
   // General Signup flow
-  currentStep: 0,
-  farthestStep: 0,
+  currentStep: 1,
+  farthestStep: 1,
   error: null,
 
-  goToStep: (step) => {
-    const clampedStep = Math.max(0, Math.min(MAX_STEP, step));
+  /* goToStep: (step) => {
+    const clampedStep = Math.max(1, Math.min(MAX_STEP, step));
     const { farthestStep } = get();
     if (clampedStep <= farthestStep) {
       set({ currentStep: clampedStep });
@@ -82,18 +84,27 @@ const useSignupStore = create<SignupStore>((set, get) => ({
   },
   prevStep: () => {
     const { currentStep } = get();
-    if (currentStep > 0) set({ currentStep: currentStep - 1 });
-  },
+    if (currentStep > 1) set({ currentStep: currentStep - 1 });
+  }, */
+
+  // setCurrentStep is to jump steps but not exceed farthestStep
   setCurrentStep: (step) =>
-    set({ currentStep: Math.max(0, Math.min(MAX_STEP, step)) }),
+    set((state) => ({
+      currentStep: Math.min(
+        state.currentStep,
+        Math.max(1, Math.min(MAX_STEP, step))
+      ),
+    })),
+
+  // setFarthestStep is to set the farthest step reached
   setFarthestStep: (step) =>
     set((state) => ({
       farthestStep: Math.max(
         state.farthestStep,
-        Math.max(0, Math.min(MAX_STEP, step))
+        Math.max(1, Math.min(MAX_STEP, step))
       ),
     })),
-  setError: (e) => set({ error: e }),
+  /* setError: (e) => set({ error: e }),  */
 
   // Collect everything into one payload
   collectData: () => {
@@ -101,14 +112,16 @@ const useSignupStore = create<SignupStore>((set, get) => ({
     return {
       personal: {
         first_name: state.first_name,
+        middle_name: state.middle_name,
         last_name: state.last_name,
-        email_address: state.email_address,
+        email: state.email,
         phone_number: state.phone_number,
         gender: state.gender,
         birthdate: state.birthdate,
         setFirstName: state.setFirstName,
+        setMiddleName: state.setMiddleName,
         setLastName: state.setLastName,
-        setEmailAddress: state.setEmailAddress,
+        setEmail: state.setEmail,
         setPhoneNumber: state.setPhoneNumber,
         setGender: state.setGender,
         setBirthdate: state.setBirthdate,
