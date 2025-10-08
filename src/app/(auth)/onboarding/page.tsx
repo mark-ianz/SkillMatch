@@ -4,17 +4,18 @@ import InputWithLabel from "@/app/_components/common/input/InputWithLabel";
 import LoadingGeneric from "@/app/_components/global/LoadingGeneric";
 import MainLayout from "@/app/_components/layout/MainLayout";
 import { Button } from "@/components/ui/button";
-import { authConfig } from "@/lib/auth";
-import { getServerSession } from "next-auth";
 import { useSession } from "next-auth/react";
 import { redirect, RedirectType } from "next/navigation";
 import React from "react";
 import RenderSteps from "../signup/(steps)/RenderSteps";
-import PaddedWrapper from "@/app/_components/global/PaddedWrapper";
+import { useGetOnboarding } from "@/app/hooks/query/useUser";
 
 export default function Onboarding() {
   const session = useSession();
 
+  const { data: onboardingData } = useGetOnboarding(9);
+
+  console.log(onboardingData);
   console.log(session);
 
   if (session.status === "loading") {
