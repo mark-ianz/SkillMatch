@@ -1,9 +1,13 @@
-import { NextAuthOptions, User } from "next-auth";
-import { ExtendedAdapterUser, ExtendedSession, ExtendedToken, ExtendedUser, Onboarding, User as UserInfo } from "@/types/user.types";
+import { NextAuthOptions } from "next-auth";
+import {
+  ExtendedSession,
+  ExtendedToken,
+  ExtendedUser,
+  Onboarding,
+} from "@/types/user.types";
 import GoogleProvider from "next-auth/providers/google";
 import { db } from "./db";
-import { QueryResult, ResultSetHeader, RowDataPacket } from "mysql2";
-import { JWT } from "next-auth/jwt";
+import { ResultSetHeader, RowDataPacket } from "mysql2";
 import { QCU_User } from "@/types/qcu_user.types";
 import { MySQLError } from "@/types/mysql_error.types";
 
@@ -38,10 +42,9 @@ export const authConfig: NextAuthOptions = {
         // If the email exists in the QCU database, proceed with sign-in
 
         // 4. Check if user is onboarding (exists in onboarding table)
-        const [onboardingUser] = await connection.query<(Onboarding & RowDataPacket)[]>(
-          "SELECT * FROM `onboarding` WHERE email = ?",
-          [user.email]
-        );
+        const [onboardingUser] = await connection.query<
+          (Onboarding & RowDataPacket)[]
+        >("SELECT * FROM `onboarding` WHERE email = ?", [user.email]);
 
         // Initiate user_id variable for the user object
         let user_id: number | null;
@@ -136,11 +139,15 @@ export const authConfig: NextAuthOptions = {
         session.user.email = (token as ExtendedToken).email;
         session.user.name = (token as ExtendedToken).name;
         session.user.image = (token as ExtendedToken).picture;
-        (session as ExtendedSession).user.user_id = (token as ExtendedToken).user_id;
-        (session as ExtendedSession).user.role_id = (token as ExtendedToken).role_id;
+        (session as ExtendedSession).user.user_id = (
+          token as ExtendedToken
+        ).user_id;
+        (session as ExtendedSession).user.role_id = (
+          token as ExtendedToken
+        ).role_id;
       }
       return session;
-    }
+    },
   },
   pages: {
     signIn: "/signup",
