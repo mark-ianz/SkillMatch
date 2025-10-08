@@ -1,7 +1,7 @@
 import InputWithLabel from "@/components/common/input/InputWithLabel";
 import SelectWithLabel from "@/components/common/input/SelectWithLabel";
 import { useGetOnboarding } from "@/hooks/query/useUser";
-import useSignupStore from "@/app/store/SignupStore";
+import useSignupStore from "@/store/SignupStore";
 import { Button } from "@/components/ui/button";
 import { useSession } from "next-auth/react";
 import React, { useEffect } from "react";

@@ -7,7 +7,7 @@ import { redirect, RedirectType } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import RenderSteps from "./(steps)/RenderSteps";
 import Step1 from "./(steps)/Step1";
-import useSignupStore from "@/app/store/SignupStore";
+import useSignupStore from "@/store/SignupStore";
 import TextLogo from "@/components/global/TextLogo";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";

@@ -1,5 +1,5 @@
 import { create } from "zustand";
-import { SignupStore } from "@/types/store_types/SignupStore.types";
+import { SignupStore } from "../types/store_types/SignupStore.types";
 
 const MAX_STEP = 6;
 
