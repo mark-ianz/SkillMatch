@@ -3,7 +3,7 @@ import SelectWithLabel from "@/components/common/input/SelectWithLabel";
 import {
   useGetOnboarding,
   useUpdateStepOneOnboarding,
-} from "@/hooks/query/useUser";
+} from "@/hooks/query/useOnboarding";
 import useSignupStore from "@/store/SignupStore";
 import { useSession } from "next-auth/react";
 import React, { useEffect } from "react";

@@ -1,4 +1,4 @@
-import { UserService } from "@/services/user.services";
+import { OnboardingService } from "@/services/onboarding.services";
 import { NextResponse } from "next/server";
 
 export async function GET(
@@ -14,7 +14,7 @@ export async function GET(
     );
   }
 
-  const onboardingData = await UserService.getOnboarding(Number(params.id));
+  const onboardingData = await OnboardingService.getOnboarding(Number(params.id));
 
   if (!onboardingData) {
     return NextResponse.json(
