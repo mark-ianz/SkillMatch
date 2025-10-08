@@ -1,14 +1,14 @@
 "use client";
 
-import LoadingGeneric from "@/app/_components/global/LoadingGeneric";
-import MainLayout from "@/app/_components/layout/MainLayout";
+import LoadingGeneric from "@/components/global/LoadingGeneric";
+import MainLayout from "@/components/layout/MainLayout";
 import { useSession } from "next-auth/react";
 import { redirect, RedirectType } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import RenderSteps from "./(steps)/RenderSteps";
 import Step1 from "./(steps)/Step1";
 import useSignupStore from "@/app/store/SignupStore";
-import TextLogo from "@/app/_components/global/TextLogo";
+import TextLogo from "@/components/global/TextLogo";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { getStepDetails } from "@/lib/utils";

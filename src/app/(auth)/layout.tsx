@@ -1,9 +1,9 @@
 "use client";
 
 import { ReactNode } from "react";
-import Header from "../_components/global/Header";
+import Header from "../../components/global/Header";
 import { SessionProvider } from "next-auth/react";
-import MainLayout from "../_components/layout/MainLayout";
+import MainLayout from "../../components/layout/MainLayout";
 
 export default function Layout({ children }: { children: ReactNode }) {
   return (

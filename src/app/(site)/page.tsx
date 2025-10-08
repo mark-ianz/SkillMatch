@@ -12,7 +12,7 @@ import {
 import Link from "next/link";
 import React from "react";
 import { getImageProps } from "next/image";
-import HeaderText from "../_components/global/HeaderText";
+import HeaderText from "../../components/global/HeaderText";
 
 export default function LandingPage() {
   const searchRecommendations = [
