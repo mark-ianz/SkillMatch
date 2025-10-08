@@ -1,22 +1,30 @@
 "use client";
 
-import InputWithLabel from "@/app/_components/common/input/InputWithLabel";
 import LoadingGeneric from "@/app/_components/global/LoadingGeneric";
 import MainLayout from "@/app/_components/layout/MainLayout";
-import { Button } from "@/components/ui/button";
 import { useSession } from "next-auth/react";
 import { redirect, RedirectType } from "next/navigation";
-import React from "react";
-import RenderSteps from "../signup/(steps)/RenderSteps";
-import { useGetOnboarding } from "@/app/hooks/query/useUser";
+import React, { useEffect, useState } from "react";
+import RenderSteps from "./(steps)/RenderSteps";
+import Step1 from "./(steps)/Step1";
+import useSignupStore from "@/app/store/SignupStore";
+import TextLogo from "@/app/_components/global/TextLogo";
+import Image from "next/image";
+import { Button } from "@/components/ui/button";
+import { getStepDetails } from "@/lib/utils";
+/* import useSignupStore from "@/app/store/SignupStore"; */
 
 export default function Onboarding() {
   const session = useSession();
+  /* const step = useSignupStore((state) => state.step); */
 
-  const { data: onboardingData } = useGetOnboarding(9);
+  const currentStep = useSignupStore((state) => state.currentStep);
 
-  console.log(onboardingData);
-  console.log(session);
+  const [stepDetails, setStepDetails] = useState(getStepDetails(currentStep));
+
+  useEffect(() => {
+    setStepDetails(getStepDetails(currentStep));
+  }, [currentStep]);
 
   if (session.status === "loading") {
     return (
@@ -27,43 +35,44 @@ export default function Onboarding() {
   }
 
   // redirect the user to signup if no session exists
-  if (!session.data) {
+  if (!session.data || !session.data.user) {
     redirect("/signup", RedirectType.replace);
   }
 
   return (
     <div className="flex w-full border rounded-md shadow-md">
       <div className="w-1/3 bg-skillmatch-primary-green rounded-l-md">
-        <RenderSteps />
-      </div>
-      <div className="grow p-10">
-        <div className="flex">
-          <InputWithLabel
-            label="First Name"
-            id="first-name"
-            type="text"
-            placeholder="Enter your first name"
-          />
-          <InputWithLabel
-            label="Middle Name"
-            id="middle-name"
-            type="text"
-            placeholder="Enter your middle name"
-          />
-          <InputWithLabel
-            label="Last Name"
-            id="last-name"
-            type="text"
-            placeholder="Enter your last name"
-          />
+        <div className="flex flex-col gap-4 py-10 px-10">
+          <div className="flex flex-col gap-12">
+            <TextLogo />
+            <p className="text-2xl text-skillmatch-light flex flex-col">
+              Step {currentStep}
+              <span className="text-sm">{stepDetails?.description}</span>
+            </p>
+          </div>
+          <RenderSteps />
         </div>
-        <InputWithLabel
-          label="Email"
-          id="email"
-          type="email"
-          placeholder="Enter your email"
-        />
-        <Button>Next</Button>
+      </div>
+      <div className="grow p-10 flex flex-col gap-4">
+        <div className="flex flex-col gap-12">
+          <div className="flex items-center justify-end">
+            <Image
+              width={75}
+              height={75}
+              src="/logo/SkillMatch.png"
+              alt="SkillMatch Logo"
+            />
+          </div>
+          <p className="text-4xl text-skillmatch-dark">{stepDetails?.title}</p>
+        </div>
+        <form className="flex flex-col gap-6">
+          <Step1 />
+          <div className="flex justify-end">
+            <Button type="button" className="w-24">
+              Next
+            </Button>
+          </div>
+        </form>
       </div>
     </div>
   );
