@@ -2,7 +2,6 @@ import React from "react";
 import LogoSkillMatch from "@/components/global/LogoSkillMatch";
 import Link from "next/link";
 import OauthButton from "@/components/common/button/OauthButton";
-import MainLayout from "@/components/layout/MainLayout";
 
 export default function Signup() {
   return (

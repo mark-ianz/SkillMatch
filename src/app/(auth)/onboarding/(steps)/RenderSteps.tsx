@@ -1,5 +1,5 @@
 import useSignupStore from "@/store/SignupStore";
-import { Check, CheckCircle, Circle } from "lucide-react";
+import { Check } from "lucide-react";
 import React from "react";
 import { twMerge } from "tailwind-merge";
 

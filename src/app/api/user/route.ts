@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { db } from "@/lib/db";
-import z, { ZodError } from "zod";
+import { ZodError } from "zod";
 import { createUserInputSchema } from "@/schema/user";
 import { ResultSetHeader } from "mysql2";
 import bcrypt from "bcrypt";
