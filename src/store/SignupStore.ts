@@ -91,7 +91,7 @@ const useSignupStore = create<SignupStore>((set, get) => ({
   setCurrentStep: (step) =>
     set((state) => ({
       currentStep: Math.min(
-        state.currentStep,
+        state.farthestStep,
         Math.max(1, Math.min(MAX_STEP, step))
       ),
     })),

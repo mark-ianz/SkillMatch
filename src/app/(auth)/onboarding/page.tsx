@@ -13,16 +13,33 @@ import Image from "next/image";
 import { getStepDetails } from "@/lib/utils";
 import Step2 from "./(steps)/Step2";
 import ErrorArray from "@/components/common/ErrorArray";
+import { useGetOnboarding } from "@/hooks/query/useOnboarding";
 /* import useSignupStore from "@/app/store/SignupStore"; */
 
 export default function Onboarding() {
   const session = useSession();
-  /* const step = useSignupStore((state) => state.step); */
+  const { data: onboardingData } = useGetOnboarding(session.data?.user.user_id);
 
+  const farthestStep = useSignupStore((state) => state.farthestStep);
   const currentStep = useSignupStore((state) => state.currentStep);
   const errors = useSignupStore((state) => state.error);
 
+  const setFarthestStep = useSignupStore((state) => state.setFarthestStep);
+  const setCurrentStep = useSignupStore((state) => state.setCurrentStep);
+
   const [stepDetails, setStepDetails] = useState(getStepDetails(currentStep));
+
+  useEffect(() => {
+    // Populate the currentStep and farthestStep from onboardingData when it loads
+    if (onboardingData) {
+      console.log("Populating steps from onboarding data:", onboardingData);
+      setFarthestStep(onboardingData.step);
+      setCurrentStep(onboardingData.step);
+    }
+  }, [onboardingData, setCurrentStep, setFarthestStep]);
+
+  console.log("Current Step:", currentStep);
+  console.log("Farthest Step:", farthestStep);
 
   useEffect(() => {
     setStepDetails(getStepDetails(currentStep));

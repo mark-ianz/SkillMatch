@@ -41,8 +41,6 @@ export default function Step1() {
   const setBirthdate = useSignupStore((state) => state.setBirthdate);
   const setPhoneNumber = useSignupStore((state) => state.setPhoneNumber);
   const setGender = useSignupStore((state) => state.setGender);
-  const setFarthestStep = useSignupStore((state) => state.setFarthestStep);
-  const setCurrentStep = useSignupStore((state) => state.setCurrentStep);
 
   const { data: onboardingData } = useGetOnboarding(session.data?.user.user_id);
 
@@ -56,8 +54,6 @@ export default function Step1() {
       setBirthdate(onboardingData.birthdate);
       setPhoneNumber(onboardingData.phone_number);
       setGender(onboardingData.gender);
-      setFarthestStep(onboardingData.step);
-      setCurrentStep(onboardingData.step);
     }
   }, [
     onboardingData,
@@ -68,8 +64,6 @@ export default function Step1() {
     setBirthdate,
     setPhoneNumber,
     setGender,
-    setFarthestStep,
-    setCurrentStep,
   ]);
 
   // Submit handler
