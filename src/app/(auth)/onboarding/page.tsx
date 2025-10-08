@@ -10,8 +10,9 @@ import Step1 from "./(steps)/Step1";
 import useSignupStore from "@/store/SignupStore";
 import TextLogo from "@/components/global/TextLogo";
 import Image from "next/image";
-import { Button } from "@/components/ui/button";
 import { getStepDetails } from "@/lib/utils";
+import Step2 from "./(steps)/Step2";
+import ErrorArray from "@/components/common/ErrorArray";
 /* import useSignupStore from "@/app/store/SignupStore"; */
 
 export default function Onboarding() {
@@ -19,6 +20,7 @@ export default function Onboarding() {
   /* const step = useSignupStore((state) => state.step); */
 
   const currentStep = useSignupStore((state) => state.currentStep);
+  const errors = useSignupStore((state) => state.error);
 
   const [stepDetails, setStepDetails] = useState(getStepDetails(currentStep));
 
@@ -53,8 +55,8 @@ export default function Onboarding() {
           <RenderSteps />
         </div>
       </div>
-      <div className="grow p-10 flex flex-col gap-4">
-        <div className="flex flex-col gap-12">
+      <div className="grow p-10 flex flex-col gap-10">
+        <div className="flex flex-col">
           <div className="flex items-center justify-end">
             <Image
               width={75}
@@ -63,15 +65,16 @@ export default function Onboarding() {
               alt="SkillMatch Logo"
             />
           </div>
-          <p className="text-4xl text-skillmatch-dark">{stepDetails?.title}</p>
-        </div>
-        <form className="flex flex-col gap-6">
-          <Step1 />
-          <div className="flex justify-end">
-            <Button type="button" className="w-24">
-              Next
-            </Button>
+          <div className="flex flex-col gap-4">
+            <p className="text-4xl text-skillmatch-dark">
+              {stepDetails?.title}
+            </p>
+            <ErrorArray error={errors} />
           </div>
+        </div>
+        <form>
+          {currentStep === 1 && <Step1 />}
+          {currentStep === 2 && <Step2 />}
         </form>
       </div>
     </div>
