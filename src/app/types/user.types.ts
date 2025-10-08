@@ -9,10 +9,10 @@ export type User = {
   last_name: string;
   gender: "male" | "female" | "prefer not to say";
   birthdate: Date;
-  street_address?: string;
-  barangay?: string;
-  city?: string;
-  municipality?: string;
+  street_address: string;
+  barangay: string;
+  city: string;
+  municipality: string;
   phone_number: string;
   role_id: number;
   status_id: number;
@@ -41,6 +41,10 @@ export type Account = {
 export type OnboardingFullInfo = Onboarding &
   User & {
     email: string;
+    street_address: string | null;
+    barangay: string | null;
+    city: string | null;
+    municipality: string | null;
   };
 
 // JWT and Session Extensions
