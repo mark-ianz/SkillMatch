@@ -19,13 +19,13 @@ export default function Signup() {
           <OauthButton
             text="Sign up with Google"
             provider="google"
-            callbackUrl="/auth/onboarding"
+            callbackUrl="/onboarding"
             className="w-[400px]"
           />
           <OauthButton
             text="Sign up with LinkedIn"
             provider="linkedIn"
-            callbackUrl="/auth/onboarding"
+            callbackUrl="/onboarding"
             className="w-[400px]"
           />
           <p className="text-xs text-muted-foreground">

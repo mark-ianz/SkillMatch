@@ -97,11 +97,11 @@ export const authConfig: NextAuthOptions = {
 
         console.log(error);
         if ((error as MySQLError).code === "ER_DUP_ENTRY") {
-          return "/auth/signup?error=DuplicateEntry"; // Continue the sign-in process if duplicate entry error occurs
+          return "/signup?error=DuplicateEntry"; // Continue the sign-in process if duplicate entry error occurs
         }
 
         if (error instanceof Error && error.message === "EmailNotAllowed") {
-          return "/auth/signup?error=EmailNotAllowed"; // Redirect to sign-up page with error
+          return "/signup?error=EmailNotAllowed"; // Redirect to sign-up page with error
         }
 
         await connection.rollback();
@@ -143,8 +143,8 @@ export const authConfig: NextAuthOptions = {
     }
   },
   pages: {
-    signIn: "/auth/signin",
-    signOut: "/auth/signin",
-    error: "/auth/signup",
+    signIn: "/signup",
+    signOut: "/signup",
+    error: "/signup",
   },
 };

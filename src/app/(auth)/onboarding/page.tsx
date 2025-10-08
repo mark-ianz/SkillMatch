@@ -28,7 +28,7 @@ export default function Onboarding() {
 
   // redirect the user to signup if no session exists
   if (!session.data) {
-    redirect("/auth/signup", RedirectType.replace);
+    redirect("/signup", RedirectType.replace);
   }
 
   return (

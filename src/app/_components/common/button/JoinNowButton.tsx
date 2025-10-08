@@ -8,7 +8,7 @@ export default function JoinNowButton() {
   const router = useRouter();
 
   const handleJoinNow = () => {
-    router.push("/auth/signin");
+    router.push("/signin");
   };
 
   return <Button onClick={handleJoinNow}>Join Now</Button>;
