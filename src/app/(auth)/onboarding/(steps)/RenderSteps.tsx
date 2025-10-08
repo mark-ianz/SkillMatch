@@ -1,5 +1,5 @@
 import useSignupStore from "@/app/store/SignupStore";
-import { CheckCircle, Circle } from "lucide-react";
+import { Check, CheckCircle, Circle } from "lucide-react";
 import React from "react";
 import { twMerge } from "tailwind-merge";
 
@@ -17,8 +17,7 @@ export default function RenderSteps() {
   ];
 
   return (
-    <ol className="flex flex-col gap-4 h-full justify-between py-10">
-      <p className="px-10 text-xl text-skillmatch-light">Join SkillMatch Now</p>
+    <ol className="flex flex-col gap-6 h-full justify-between">
       {steps.map((step, index) => {
         const isCurrent = currentStep === index + 1;
         const isCompleted = farthestStep > index + 1;
@@ -27,13 +26,24 @@ export default function RenderSteps() {
           <li
             key={index}
             className={twMerge(
-              "px-10 py-2",
               isCurrent ? "text-skillmatch-light" : "text-skillmatch-muted-dark"
             )}
           >
             <div className="flex items-center gap-2">
-              {isCompleted ? <CheckCircle /> : <Circle />}
-              <div>
+              <span
+                className={twMerge(
+                  "border border-skillmatch-muted-light text-skillmatch-muted-light rounded-full w-7 h-7 text-xs flex items-center justify-center font-bold",
+                  isCurrent &&
+                    "text-skillmatch-primary-green bg-skillmatch-light border-skillmatch-light"
+                )}
+              >
+                {isCompleted ? <Check className="w-5 h-5" /> : index + 1}
+              </span>
+              <div
+                className={twMerge(
+                  !isCurrent && " text-skillmatch-muted-light"
+                )}
+              >
                 <p className="text-xs">Step {index + 1}/6</p>
                 <p className="text-sm">{step}</p>
               </div>
