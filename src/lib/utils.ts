@@ -1,4 +1,4 @@
-import { ParsedError } from "@/app/types/zod.types";
+import { ParsedError } from "@/types/zod.types";
 import { steps } from "@/const/steps";
 import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";

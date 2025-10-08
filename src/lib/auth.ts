@@ -1,11 +1,11 @@
 import { NextAuthOptions, User } from "next-auth";
-import { ExtendedAdapterUser, ExtendedSession, ExtendedToken, ExtendedUser, Onboarding, User as UserInfo } from "@/app/types/user.types";
+import { ExtendedAdapterUser, ExtendedSession, ExtendedToken, ExtendedUser, Onboarding, User as UserInfo } from "@/types/user.types";
 import GoogleProvider from "next-auth/providers/google";
 import { db } from "./db";
 import { QueryResult, ResultSetHeader, RowDataPacket } from "mysql2";
 import { JWT } from "next-auth/jwt";
-import { QCU_User } from "@/app/types/qcu_user.types";
-import { MySQLError } from "@/app/types/mysql_error.types";
+import { QCU_User } from "@/types/qcu_user.types";
+import { MySQLError } from "@/types/mysql_error.types";
 
 export const authConfig: NextAuthOptions = {
   providers: [

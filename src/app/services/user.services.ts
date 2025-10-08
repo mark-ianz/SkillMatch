@@ -1,6 +1,6 @@
 import { db } from "@/lib/db";
 import { RowDataPacket } from "mysql2";
-import { OnboardingFullInfo } from "../types/user.types";
+import { OnboardingFullInfo } from "../../types/user.types";
 
 export const UserService = {
   getOnboarding: async (user_id: number) => {

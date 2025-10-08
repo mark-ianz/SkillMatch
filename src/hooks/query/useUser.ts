@@ -1,4 +1,4 @@
-import { OnboardingFullInfo } from "@/app/types/user.types";
+import { OnboardingFullInfo } from "@/types/user.types";
 import { api } from "@/lib/axios";
 import { useQuery } from "@tanstack/react-query";
 
