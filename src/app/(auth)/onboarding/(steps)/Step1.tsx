@@ -1,13 +1,28 @@
 import InputWithLabel from "@/components/common/input/InputWithLabel";
 import SelectWithLabel from "@/components/common/input/SelectWithLabel";
-import { useGetOnboarding } from "@/hooks/query/useUser";
+import {
+  useGetOnboarding,
+  useUpdateStepOneOnboarding,
+} from "@/hooks/query/useUser";
 import useSignupStore from "@/store/SignupStore";
 import { useSession } from "next-auth/react";
 import React, { useEffect } from "react";
 import { format, parseISO } from "date-fns";
+import { Button } from "@/components/ui/button";
+import { onboardingStepOneSchema } from "@/schema/onboarding";
+import { ZodError } from "zod";
+import { formatZodError } from "@/lib/utils";
 
 export default function Step1() {
   const session = useSession();
+  const setError = useSignupStore((state) => state.setError);
+  const nextStep = useSignupStore((state) => state.nextStep);
+  const farthestStep = useSignupStore((state) => state.farthestStep);
+
+  const { mutate } = useUpdateStepOneOnboarding(
+    session.data?.user.user_id,
+    farthestStep
+  );
 
   // Signup Store Values
   const firstName = useSignupStore((state) => state.first_name);
@@ -31,6 +46,7 @@ export default function Step1() {
 
   const { data: onboardingData } = useGetOnboarding(session.data?.user.user_id);
 
+  // Side effect to populate the form if there's existing onboarding data
   useEffect(() => {
     if (onboardingData) {
       setFirstName(onboardingData.first_name);
@@ -56,7 +72,45 @@ export default function Step1() {
     setCurrentStep,
   ]);
 
-  console.log(birthdate);
+  // Submit handler
+  async function handleNextStep() {
+    // get all the data from Step 1 on the store
+    const first_name = useSignupStore.getState().first_name;
+    const middle_name = useSignupStore.getState().middle_name;
+    const last_name = useSignupStore.getState().last_name;
+    const email = useSignupStore.getState().email;
+    const phone_number = useSignupStore.getState().phone_number;
+    const gender = useSignupStore.getState().gender;
+    const birthdate = useSignupStore.getState().birthdate;
+
+    // validate the data
+    try {
+      // clear previous errors
+      setError(null);
+
+      const parsed = onboardingStepOneSchema.parse({
+        first_name,
+        middle_name,
+        last_name,
+        email,
+        phone_number,
+        gender,
+        birthdate,
+      });
+
+      // update the user info on the backend
+      mutate(parsed);
+    } catch (error) {
+      // catch the zod error
+      if (error instanceof ZodError) {
+        setError(formatZodError(error));
+        return;
+      }
+    }
+
+    // increment the step on the store
+    nextStep();
+  }
 
   return (
     <div className="flex flex-col gap-6">
@@ -143,6 +197,9 @@ export default function Step1() {
           readOnly
         />
       </RowContainer>
+      <Button type="button" className="ml-auto w-24" onClick={handleNextStep}>
+        Next
+      </Button>
     </div>
   );
 }
