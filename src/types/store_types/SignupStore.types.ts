@@ -74,15 +74,17 @@ export type CertificationsStore = {
 
 // General Signup Store
 export type GeneralSignupStore = {
-  /*   error: { title: string; description: string } | null;
+  /*   
   
-  nextStep: () => void;
   prevStep: () => void;
-  goToStep: (s: number) => void;
-  setError: (e: { title: string; description: string }) => void; */
+  goToStep: (s: number) => void; */
 
+  setError: (e: string[] | null) => void;
+  error: string[] | null;
   currentStep: number;
   farthestStep: number;
+
+  nextStep: () => void;
   setCurrentStep: (s: number) => void;
   setFarthestStep: (s: number) => void;
 

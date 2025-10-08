@@ -74,6 +74,10 @@ const useSignupStore = create<SignupStore>((set, get) => ({
       set({ currentStep: clampedStep });
     }
   },
+  prevStep: () => {
+    const { currentStep } = get();
+    if (currentStep > 1) set({ currentStep: currentStep - 1 });
+    }, */
   nextStep: () => {
     const { currentStep, farthestStep } = get();
     const newStep = Math.min(MAX_STEP, currentStep + 1);
@@ -82,10 +86,6 @@ const useSignupStore = create<SignupStore>((set, get) => ({
       farthestStep: Math.max(farthestStep, newStep),
     });
   },
-  prevStep: () => {
-    const { currentStep } = get();
-    if (currentStep > 1) set({ currentStep: currentStep - 1 });
-  }, */
 
   // setCurrentStep is to jump steps but not exceed farthestStep
   setCurrentStep: (step) =>
@@ -104,7 +104,7 @@ const useSignupStore = create<SignupStore>((set, get) => ({
         Math.max(1, Math.min(MAX_STEP, step))
       ),
     })),
-  /* setError: (e) => set({ error: e }),  */
+  setError: (e: string[] | null) => set({ error: e }),
 
   // Collect everything into one payload
   collectData: () => {
