@@ -1,7 +1,7 @@
 import useSignupStore from "@/store/SignupStore";
 import { Check } from "lucide-react";
 import React from "react";
-import { twMerge } from "tailwind-merge";
+import { cn } from "@/lib/utils";
 
 export default function RenderSteps() {
   const farthestStep = useSignupStore((state) => state.farthestStep);
@@ -25,13 +25,13 @@ export default function RenderSteps() {
         return (
           <li
             key={index}
-            className={twMerge(
+            className={cn(
               isCurrent ? "text-skillmatch-light" : "text-skillmatch-muted-dark"
             )}
           >
             <div className="flex items-center gap-2">
               <span
-                className={twMerge(
+                className={cn(
                   "border border-skillmatch-muted-light text-skillmatch-muted-light rounded-full w-7 h-7 text-xs flex items-center justify-center font-bold",
                   isCurrent &&
                     "text-skillmatch-primary-green bg-skillmatch-light border-skillmatch-light"
@@ -39,11 +39,7 @@ export default function RenderSteps() {
               >
                 {isCompleted ? <Check className="w-5 h-5" /> : index + 1}
               </span>
-              <div
-                className={twMerge(
-                  !isCurrent && " text-skillmatch-muted-light"
-                )}
-              >
+              <div className={cn(!isCurrent && " text-skillmatch-muted-light")}>
                 <p className="text-xs">Step {index + 1}/6</p>
                 <p className="text-sm">{step}</p>
               </div>

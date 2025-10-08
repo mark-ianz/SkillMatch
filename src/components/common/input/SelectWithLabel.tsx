@@ -7,7 +7,7 @@ import {
   SelectTrigger,
 } from "@/components/ui/select";
 import { capitalizeFirstLetter } from "@/lib/utils";
-import { twMerge } from "tailwind-merge";
+import { cn } from "@/lib/utils";;
 
 type Props = {
   id: string;
@@ -38,13 +38,13 @@ export default function SelectWithLabel({
   selectItemClassName,
 }: Props) {
   return (
-    <div className={twMerge(containerClassName)}>
+    <div className={cn(containerClassName)}>
       <Label id={id}>{capitalizeFirstLetter(label)}</Label>
       <Select
         defaultValue={value || fallbackValue || ""}
         onValueChange={onChange}
       >
-        <SelectTrigger id={id} className={twMerge(selectTriggerClassName)}>
+        <SelectTrigger id={id} className={cn(selectTriggerClassName)}>
           {capitalizeFirstLetter(value) || fallbackValue || "Select an option"}
         </SelectTrigger>
         <SelectContent align="start" className={selectContentClassName}>

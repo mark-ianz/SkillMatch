@@ -1,5 +1,5 @@
 import React from "react";
-import { twMerge } from "tailwind-merge";
+import { cn } from "@/lib/utils";;
 
 export default function HeaderText({
   children,
@@ -10,5 +10,5 @@ export default function HeaderText({
   className?: string;
   text?: string;
 }) {
-  return <p className={twMerge("text-4xl", className)}>{text || children}</p>;
+  return <p className={cn("text-4xl", className)}>{text || children}</p>;
 }

@@ -1,5 +1,5 @@
 import React, { ReactNode } from "react";
-import { twMerge } from "tailwind-merge";
+import { cn } from "@/lib/utils";;
 import PaddedWrapper from "../global/PaddedWrapper";
 
 export default function MainLayout({
@@ -11,7 +11,7 @@ export default function MainLayout({
 }) {
   return (
     <main
-      className={twMerge(
+      className={cn(
         "py-20",
         className,
         "h-[calc(100dvh-80px)] flex flex-col"

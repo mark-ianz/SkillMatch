@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { signIn } from "next-auth/react";
 import Image from "next/image";
 import React from "react";
-import { twMerge } from "tailwind-merge";
+import { cn } from "@/lib/utils";;
 
 export default function OauthButton({
   className,
@@ -26,7 +26,7 @@ export default function OauthButton({
         const result = await signIn(provider, { callbackUrl });
         console.log(result);
       }}
-      className={twMerge(
+      className={cn(
         "bg-skillmatch-primary-light text-skillmatch-muted-dark border hover:bg-skillmatch-muted-light",
         className
       )}

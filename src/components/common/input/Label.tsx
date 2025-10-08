@@ -1,5 +1,5 @@
 import React, { ReactNode } from "react";
-import { twMerge } from "tailwind-merge";
+import { cn } from "@/lib/utils";;
 
 type Props = {
   id: string | undefined;
@@ -11,7 +11,7 @@ export default function Label({id, children, className}: Props) {
   return (
     <label
       htmlFor={id}
-      className={twMerge("text-sm font-medium", className)}
+      className={cn("text-sm font-medium", className)}
     >
       {children}
     </label>
