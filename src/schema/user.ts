@@ -1,22 +1,8 @@
 import { z } from "zod";
+import { onboardingStepOneSchema } from "./onboarding";
 
-const createUserInputSchema = z
-  .object({
-    first_name: z
-      .string({ error: "First name must be a string" })
-      .min(1, { error: "First name is required" }),
-    middle_name: z.string({ error: "Middle name must be a string" }).optional(),
-    last_name: z
-      .string({ error: "Last name must be a string" })
-      .min(1, { error: "Last name is required" }),
-    gender: z.enum(["male", "female", "prefer not to say"], {
-      error: "Gender is required",
-    }),
-    birthdate: z
-      .string()
-      .refine((val) => !isNaN(Date.parse(val)), {
-        error: "Invalid birthdate",
-      }),
+export const createUserInputSchema = onboardingStepOneSchema
+  .extend({
     street_address: z
       .string({ error: "Street address must be a string" })
       .min(1, { error: "Street address is required" }),
@@ -29,10 +15,7 @@ const createUserInputSchema = z
     municipality: z
       .string({ error: "Municipality must be a string" })
       .min(1, { error: "Municipality is required" }),
-    phone_number: z
-      .string({ error: "Phone number must be a string" })
-      .min(1, { error: "Phone number is required" }),
-    email: z.email(),
+
     password: z
       .string({ error: "Password must be a string" })
       .min(8, { error: "Password must be at least 8 characters long" }),
@@ -49,4 +32,3 @@ const createUserInputSchema = z
   });
 
 export type CreateUserInput = z.infer<typeof createUserInputSchema>;
-export { createUserInputSchema };
