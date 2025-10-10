@@ -9,7 +9,7 @@ export default function RenderSteps() {
   const currentStep = useSignupStore((state) => state.currentStep);
 
   return (
-    <ol className="flex flex-col gap-6 h-full justify-between">
+    <ol className="flex flex-col h-full justify-between">
       {steps.map((step, index) => {
         const isCurrent = currentStep === step.step;
         const isCompleted = farthestStep > step.step;
@@ -23,7 +23,7 @@ export default function RenderSteps() {
           <li
             key={index}
             className={cn(
-              "py-2 px-4 rounded-md",
+              "py-5 px-4",
               // If the step is completed or the step is not the
               isCurrent && "bg-skillmatch-muted-dark/20",
               canJump &&
