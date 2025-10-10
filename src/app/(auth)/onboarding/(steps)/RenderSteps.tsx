@@ -8,6 +8,8 @@ export default function RenderSteps() {
   const farthestStep = useSignupStore((state) => state.farthestStep);
   const currentStep = useSignupStore((state) => state.currentStep);
 
+  const goToStep = useSignupStore((state) => state.goToStep);
+
   return (
     <ol className="flex flex-col h-full justify-between">
       {steps.map((step, index) => {
@@ -17,10 +19,11 @@ export default function RenderSteps() {
         // User can jump if they are on a previous step and this step is either completer or their farthest step.
         const canJump =
           farthestStep > step.step ||
-          (farthestStep === step.step + 1 && !isCurrent);
+          (farthestStep === step.step && !isCurrent);
 
         return (
           <li
+            onClick={() => goToStep(step.step)}
             key={index}
             className={cn(
               "py-5 px-4",
