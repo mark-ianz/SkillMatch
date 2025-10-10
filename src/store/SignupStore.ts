@@ -67,17 +67,19 @@ const useSignupStore = create<SignupStore>((set, get) => ({
   farthestStep: 1,
   error: null,
 
-  /* goToStep: (step) => {
+  /* 
+  prevStep: () => {
+    const { currentStep } = get();
+    if (currentStep > 1) set({ currentStep: currentStep - 1 });
+    }, */
+
+  goToStep: (step: number) => {
     const clampedStep = Math.max(1, Math.min(MAX_STEP, step));
     const { farthestStep } = get();
     if (clampedStep <= farthestStep) {
       set({ currentStep: clampedStep });
     }
   },
-  prevStep: () => {
-    const { currentStep } = get();
-    if (currentStep > 1) set({ currentStep: currentStep - 1 });
-    }, */
   nextStep: () => {
     const { currentStep, farthestStep } = get();
     const newStep = Math.min(MAX_STEP, currentStep + 1);

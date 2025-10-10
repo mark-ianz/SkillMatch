@@ -76,9 +76,9 @@ export type CertificationsStore = {
 export type GeneralSignupStore = {
   /*   
   
-  prevStep: () => void;
-  goToStep: (s: number) => void; */
-
+  prevStep: () => void;*/
+  
+  goToStep: (s: number) => void;
   setError: (e: string[] | null) => void;
   error: string[] | null;
   currentStep: number;
