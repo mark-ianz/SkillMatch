@@ -12,6 +12,7 @@ import { Button } from "@/components/ui/button";
 import { onboardingStepOneSchema } from "@/schema/onboarding";
 import { ZodError } from "zod";
 import { formatZodError } from "@/lib/utils";
+import RowContainer from "./RowContainer";
 
 export default function Step1() {
   const session = useSession();
@@ -196,8 +197,4 @@ export default function Step1() {
       </Button>
     </div>
   );
-}
-
-function RowContainer({ children }: { children: React.ReactNode }) {
-  return <div className="flex gap-4">{children}</div>;
 }
