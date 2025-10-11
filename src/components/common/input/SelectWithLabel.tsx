@@ -23,6 +23,7 @@ type Props = {
   selectTriggerClassName?: string;
   selectContentClassName?: string;
   selectItemClassName?: string;
+  disabled?: boolean;
 };
 
 export default function SelectWithLabel({
@@ -36,6 +37,7 @@ export default function SelectWithLabel({
   selectTriggerClassName,
   selectContentClassName,
   selectItemClassName,
+  disabled
 }: Props) {
   return (
     <div className={cn(containerClassName)}>
@@ -43,8 +45,9 @@ export default function SelectWithLabel({
       <Select
         defaultValue={value || fallbackValue || ""}
         onValueChange={onChange}
+        disabled={disabled}
       >
-        <SelectTrigger id={id} className={cn(selectTriggerClassName)}>
+        <SelectTrigger id={id} className={cn("w-full", selectTriggerClassName)}>
           {capitalizeFirstLetter(value) || fallbackValue || "Select an option"}
         </SelectTrigger>
         <SelectContent align="start" className={selectContentClassName}>
