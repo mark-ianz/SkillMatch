@@ -13,6 +13,7 @@ import { onboardingStepOneSchema } from "@/schema/onboarding";
 import { ZodError } from "zod";
 import { formatZodError } from "@/lib/utils";
 import RowContainer from "./RowContainer";
+import StepContainer from "./StepContainer";
 
 export default function Step1() {
   const session = useSession();
@@ -108,7 +109,7 @@ export default function Step1() {
   }
 
   return (
-    <div className="flex flex-col gap-6">
+    <StepContainer>
       <RowContainer>
         <InputWithLabel
           readOnly
@@ -195,6 +196,6 @@ export default function Step1() {
       <Button type="button" className="ml-auto w-24" onClick={handleNextStep}>
         Next
       </Button>
-    </div>
+    </StepContainer>
   );
 }
