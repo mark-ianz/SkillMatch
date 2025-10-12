@@ -32,15 +32,19 @@ export type PersonalDetailsStore = {
 
 // Step 2: Address
 export type AddressStore = {
-  street_address: string;
+  street_name: string;
+  house_number: string;
+  subdivision: string | null;
   barangay: string;
-  city: string;
-  municipality: string;
+  postal_code: string;
+  city_municipality: string;
 
-  setStreetAddress: (street_address: string) => void;
+  setStreetName: (street_name: string) => void;
+  setHouseNumber: (house_number: string) => void;
+  setSubdivision: (subdivision: string | null) => void;
   setBarangay: (barangay: string) => void;
-  setCity: (city: string) => void;
-  setMunicipality: (municipality: string) => void;
+  setPostalCode: (postal_code: string) => void;
+  setCityMunicipality: (city_municipality: string) => void;
 };
 
 // Step 3: Academic
