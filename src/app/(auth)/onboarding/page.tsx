@@ -83,9 +83,16 @@ export default function Onboarding() {
             />
           </div>
           <div className="flex flex-col gap-4">
-            <p className="text-4xl text-skillmatch-dark">
-              {stepDetails?.title}
-            </p>
+            <div className="flex flex-col gap-2">
+              <p className="text-4xl text-skillmatch-dark">
+                {stepDetails?.title}
+              </p>
+              <p>
+                <span className="text-red-500 mr-1">*</span>{" "}
+                <span className="text-sm text-skillmatch-muted-dark">Indicates required fields</span>
+              </p>
+            </div>
+
             <ErrorArray error={errors} />
           </div>
         </div>

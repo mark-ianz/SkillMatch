@@ -123,6 +123,7 @@ export default function Step1() {
           onChange={(e) => setFirstName(e.target.value)}
         />
         <InputWithLabel
+          optional={true}
           readOnly={!!onboardingData?.middle_name}
           containerClassName="grow"
           label="Middle Name"
