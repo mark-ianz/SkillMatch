@@ -1,11 +1,11 @@
 import React from "react";
-import StepContainer from "./StepContainer";
-import RowContainer from "./RowContainer";
+import StepContainer from "../../../../components/page_specific/onboarding/StepContainer";
+import RowContainer from "../../../../components/common/input/RowContainer";
 import InputWithLabel from "@/components/common/input/InputWithLabel";
 import useSignupStore from "@/store/SignupStore";
 import { Button } from "@/components/ui/button";
-import SelectCityMunicipality from "./SelectCityMunicipality";
-import SelectBarangay from "./SelectBarangay";
+import SelectCityMunicipality from "../../../../components/common/input/SelectCityMunicipality";
+import SelectBarangay from "../../../../components/common/input/SelectBarangay";
 
 export default function Step2() {
   const setStreetName = useSignupStore((state) => state.setStreetName);

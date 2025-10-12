@@ -12,8 +12,8 @@ import { Button } from "@/components/ui/button";
 import { onboardingStepOneSchema } from "@/schema/onboarding";
 import { ZodError } from "zod";
 import { formatZodError } from "@/lib/utils";
-import RowContainer from "./RowContainer";
-import StepContainer from "./StepContainer";
+import RowContainer from "../../../../components/common/input/RowContainer";
+import StepContainer from "../../../../components/page_specific/onboarding/StepContainer";
 
 export default function Step1() {
   const session = useSession();

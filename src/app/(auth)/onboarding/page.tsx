@@ -5,7 +5,7 @@ import MainLayout from "@/components/layout/MainLayout";
 import { useSession } from "next-auth/react";
 import { redirect, RedirectType } from "next/navigation";
 import React, { useEffect, useState } from "react";
-import RenderSteps from "./(steps)/RenderSteps";
+import RenderSteps from "../../../components/page_specific/onboarding/RenderSteps";
 import Step1 from "./(steps)/Step1";
 import useSignupStore from "@/store/SignupStore";
 import TextLogo from "@/components/global/TextLogo";
