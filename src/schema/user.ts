@@ -3,7 +3,7 @@ import { onboardingStepOneSchema } from "./onboarding";
 
 export const createUserInputSchema = onboardingStepOneSchema
   .extend({
-    street_address: z
+    street_name: z
       .string({ error: "Street address must be a string" })
       .min(1, { error: "Street address is required" }),
     barangay: z
