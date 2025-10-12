@@ -18,7 +18,7 @@ export async function POST(request: Request) {
       last_name,
       gender,
       birthdate,
-      street_address,
+      street_name,
       barangay,
       city,
       municipality,
@@ -34,14 +34,14 @@ export async function POST(request: Request) {
     await connection.beginTransaction();
 
     const userResult = await connection.query<ResultSetHeader>(
-      "INSERT INTO `user` (`first_name`, `middle_name`, `last_name`, `gender`, `birthdate`, `street_address`, `barangay`, `city`, `municipality`, `phone_number`, `role_id`, `status_id`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+      "INSERT INTO `user` (`first_name`, `middle_name`, `last_name`, `gender`, `birthdate`, `street_name`, `barangay`, `city`, `municipality`, `phone_number`, `role_id`, `status_id`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
       [
         first_name,
         middle_name,
         last_name,
         gender,
         birthdate,
-        street_address,
+        street_name,
         barangay,
         city,
         municipality,
