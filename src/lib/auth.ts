@@ -53,7 +53,7 @@ export const authConfig: NextAuthOptions = {
         if (!(onboardingUser.length > 0)) {
           // 5.1. Save user's data on the user table.
           const [newUser] = await connection.query<ResultSetHeader>(
-            "INSERT INTO `user` (`first_name`, `middle_name`, `last_name`, `gender`, `birthdate`, `street_address`, `phone_number`, `role_id`, `status_id`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)",
+            "INSERT INTO `user` (`first_name`, `middle_name`, `last_name`, `gender`, `birthdate`, `street_name`, `phone_number`, `role_id`, `status_id`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)",
             [
               student[0].first_name,
               student[0].middle_name,
