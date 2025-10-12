@@ -17,12 +17,14 @@ export default function Step2() {
     <StepContainer>
       <RowContainer>
         <InputWithLabel
+          required={true}
           placeholder="e.g., Blk 5 Lot 12 or 123"
           onChange={(e) => setHouseNumber(e.target.value)}
           label="House Number"
           containerClassName="w-full"
         />
         <InputWithLabel
+          required={true}
           placeholder="e.g., Rizal Avenue or Sampaguita St."
           onChange={(e) => setStreetName(e.target.value)}
           label="Street Name"
@@ -38,6 +40,7 @@ export default function Step2() {
           containerClassName="w-full"
         />
         <InputWithLabel
+          required={true}
           placeholder="e.g., 1101"
           onChange={(e) => setPostalCode(e.target.value)}
           label="Postal Code"

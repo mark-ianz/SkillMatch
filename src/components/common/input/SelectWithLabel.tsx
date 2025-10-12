@@ -24,6 +24,7 @@ type Props = {
   selectContentClassName?: string;
   selectItemClassName?: string;
   disabled?: boolean;
+  required?: boolean;
 };
 
 export default function SelectWithLabel({
@@ -37,11 +38,12 @@ export default function SelectWithLabel({
   selectTriggerClassName,
   selectContentClassName,
   selectItemClassName,
-  disabled
+  disabled,
+  required
 }: Props) {
   return (
     <div className={cn(containerClassName)}>
-      <Label id={id}>{capitalizeFirstLetter(label)}</Label>
+      <Label id={id} required={required}>{capitalizeFirstLetter(label)}</Label>
       <Select
         defaultValue={value || fallbackValue || ""}
         onValueChange={onChange}

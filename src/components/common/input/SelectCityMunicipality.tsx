@@ -19,6 +19,7 @@ export default function SelectCityMunicipality() {
 
   return (
     <ComboBoxWithLabel
+      required={true}
       containerClassName="w-full"
       value={selected_city_municipality}
       items={city_municipality_list}

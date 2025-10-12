@@ -13,6 +13,7 @@ type Props = {
   disabled?: boolean;
   containerClassName?: string;
   readonly?: boolean;
+  required?: boolean;
 };
 
 export default function ComboBoxWithLabel({
@@ -25,10 +26,11 @@ export default function ComboBoxWithLabel({
   disabled,
   readonly,
   containerClassName,
+  required
 }: Props) {
   return (
     <div className={cn("flex flex-col gap-1", containerClassName)}>
-      <Label id={id}>{label}</Label>
+      <Label required={required} id={id}>{label}</Label>
       <Combobox
         disabled={disabled}
         items={items}

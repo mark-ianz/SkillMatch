@@ -20,6 +20,7 @@ export default function SelectBarangay() {
 
   return (
     <ComboBoxWithLabel
+      required={true}
       containerClassName="w-full"
       value={barangay}
       disabled={!selected_city_municipality}

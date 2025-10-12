@@ -112,6 +112,7 @@ export default function Step1() {
     <StepContainer>
       <RowContainer>
         <InputWithLabel
+          required={true}
           readOnly
           containerClassName="grow"
           label="First Name"
@@ -132,6 +133,7 @@ export default function Step1() {
           onChange={(e) => setMiddleName(e.target.value)}
         />
         <InputWithLabel
+          required={true}
           readOnly
           containerClassName="grow"
           label="Last Name"
@@ -145,6 +147,7 @@ export default function Step1() {
 
       <RowContainer>
         <InputWithLabel
+          required={true}
           readOnly
           containerClassName="grow"
           label="Email"
@@ -155,6 +158,7 @@ export default function Step1() {
           onChange={(e) => setEmail(e.target.value)}
         />
         <InputWithLabel
+          required={true}
           containerClassName="grow"
           label="Phone Number"
           id="phone-number"
@@ -167,6 +171,7 @@ export default function Step1() {
 
       <RowContainer>
         <SelectWithLabel
+          required={true}
           containerClassName="w-1/2"
           selectTriggerClassName="w-full"
           id="gender"
@@ -180,6 +185,7 @@ export default function Step1() {
           ]}
         />
         <InputWithLabel
+          required={true}
           containerClassName="w-1/2"
           label="Birthdate"
           id="birthdate"

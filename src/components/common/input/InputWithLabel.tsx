@@ -9,16 +9,17 @@ interface InputWithLabelProps
   containerClassName?: string;
   labelClassName?: string;
   inputClassName?: string;
+  required?: boolean;
 }
 
 const InputWithLabel = forwardRef<HTMLInputElement, InputWithLabelProps>(
   (
-    { label, id, containerClassName, labelClassName, inputClassName, ...props },
+    { label, id, containerClassName, labelClassName, inputClassName, required, ...props },
     ref
   ) => {
     return (
       <div className={cn("flex flex-col gap-1", containerClassName)}>
-        <Label id={id} className={labelClassName}>
+        <Label id={id} className={labelClassName} required={required}>
           {label}
         </Label>
         <Input
