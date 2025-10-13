@@ -1,8 +1,13 @@
 import { OnboardingFullInfo } from "@/types/user.types";
 import { api } from "@/lib/axios";
 import { useMutation, useQuery } from "@tanstack/react-query";
-import { OnboardingStepOneSchema } from "@/schema/onboarding";
+import {
+  OnboardingStepOneSchema,
+  OnboardingStepTwoSchema,
+} from "@/schema/onboarding";
 import useSignupStore from "@/store/SignupStore";
+
+const nextStep = useSignupStore.getState().nextStep;
 
 export function useGetOnboarding(userId: number | undefined) {
   // Step 1: Personal Details
@@ -19,9 +24,10 @@ export function useGetOnboarding(userId: number | undefined) {
   const setStreetName = useSignupStore((state) => state.setStreetName);
   const setSubdivision = useSignupStore((state) => state.setSubdivision);
   const setPostalCode = useSignupStore((state) => state.setPostalCode);
-  const setCityMunicipality = useSignupStore((state) => state.setCityMunicipality);
+  const setCityMunicipality = useSignupStore(
+    (state) => state.setCityMunicipality
+  );
   const setBarangay = useSignupStore((state) => state.setBarangay);
-
 
   return useQuery({
     queryKey: ["onboarding", userId],
@@ -43,13 +49,13 @@ export function useGetOnboarding(userId: number | undefined) {
 
       // Address
       setHouseNumber(data.house_number);
-      setStreetName(data.street_name)
+      setStreetName(data.street_name);
       setSubdivision(data.subdivision);
       setPostalCode(data.postal_code);
       setCityMunicipality(data.city_municipality || "");
       setBarangay(data.barangay || "");
 
-      console.log(data)
+      console.log(data);
 
       return data;
     },
@@ -63,11 +69,33 @@ export function useUpdateStepOneOnboarding(
   return useMutation({
     mutationKey: ["onboarding", userId, "step-one"],
     mutationFn: async (stepOneData: OnboardingStepOneSchema) => {
-      console.log("farthestStep", farthestStep);
       await api.post(`/onboarding/${userId}/submit/${farthestStep}/step-one`, {
         ...stepOneData,
       });
       return;
+    },
+    onSuccess: () => {
+      // increment the step on the store
+      nextStep();
+    },
+  });
+}
+
+export function useUpdateStepTwoOnboarding(
+  userId: number | undefined,
+  farthestStep: number
+) {
+  return useMutation({
+    mutationKey: ["onboarding", userId, "step-two"],
+    mutationFn: async (stepTwoData: OnboardingStepTwoSchema) => {
+      await api.post(`/onboarding/${userId}/submit/${farthestStep}/step-two`, {
+        ...stepTwoData,
+      });
+      return;
+    },
+    onSuccess: () => {
+      // increment the step on the store
+      nextStep();
     },
   });
 }
