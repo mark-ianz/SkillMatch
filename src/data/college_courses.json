@@ -1,0 +1,25 @@
+{
+  "College of Business Administration and Accountancy": {
+    "courses": [
+      "Bachelor of Science in Accountancy",
+      "Bachelor of Science in Business Administration",
+      "Bachelor of Science in Hospitality Management"
+    ]
+  },
+  "College of Education": {
+    "courses": ["Bachelor of Early Childhood Education"]
+  },
+  "College of Engineering": {
+    "courses": [
+      "Bachelor of Science in Industrial Engineering",
+      "Bachelor of Science in Electronics Engineering"
+    ]
+  },
+  "College of Computer Studies": {
+    "courses": [
+      "Bachelor of Science in Information Technology",
+      "Bachelor of Science in Computer Science",
+      "Bachelor of Science in Information Systems"
+    ]
+  }
+}
