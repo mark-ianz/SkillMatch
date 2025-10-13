@@ -46,8 +46,7 @@ export type OnboardingFullInfo = Onboarding &
     email: string;
     street_name: string | null;
     barangay: string | null;
-    city: string | null;
-    municipality: string | null;
+    city_municipality: string | null;
   };
 
 // JWT and Session Extensions
