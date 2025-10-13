@@ -1,9 +1,6 @@
 import InputWithLabel from "@/components/common/input/InputWithLabel";
 import SelectWithLabel from "@/components/common/input/SelectWithLabel";
-import {
-  useGetOnboarding,
-  useUpdateStepOneOnboarding,
-} from "@/hooks/query/useOnboarding";
+import { useUpdateStepOneOnboarding } from "@/hooks/query/useOnboarding";
 import useSignupStore from "@/store/SignupStore";
 import { useSession } from "next-auth/react";
 import React from "react";
@@ -18,7 +15,6 @@ import StepContainer from "../../../../components/page_specific/onboarding/StepC
 export default function Step1() {
   const session = useSession();
   const setError = useSignupStore((state) => state.setError);
-  const nextStep = useSignupStore((state) => state.nextStep);
   const farthestStep = useSignupStore((state) => state.farthestStep);
 
   const { mutate } = useUpdateStepOneOnboarding(
@@ -78,9 +74,6 @@ export default function Step1() {
         return;
       }
     }
-
-    // increment the step on the store
-    nextStep();
   }
 
   return (
