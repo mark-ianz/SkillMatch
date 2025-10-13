@@ -67,4 +67,41 @@ export const onboardingStepOneSchema = z.object({
   }),
 });
 
+export const onboardingStepTwoSchema = z.object({
+  house_number: z
+    .string()
+    .trim()
+    .min(1, { message: "House number is required" })
+    .max(10, { message: "House number must be less than 10 characters" })
+    .optional(),
+  street_name: z
+    .string()
+    .trim()
+    .min(1, { message: "Street name is required" })
+    .max(100, { message: "Street name must be less than 100 characters" })
+    .optional(),
+  subdivision: z
+    .string()
+    .trim()
+    .min(1, { message: "Subdivision is required" })
+    .max(100, { message: "Subdivision must be less than 100 characters" })
+    .optional(),
+  postal_code: z
+    .string()
+    .trim()
+    .length(4, { message: "Postal code must be 4 digits" })
+    .refine((val) => /^\d+$/.test(val), {
+      message: "Postal code must only contain digits",
+    }),
+  city_municipality: z
+    .string()
+    .trim()
+    .min(1, { message: "City/Municipality is required" }),
+  barangay: z
+    .string()
+    .trim()
+    .min(1, { message: "Barangay is required" }),
+});
+
 export type OnboardingStepOneSchema = z.infer<typeof onboardingStepOneSchema>;
+export type OnboardingStepTwoSchema = z.infer<typeof onboardingStepTwoSchema>;
