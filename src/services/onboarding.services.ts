@@ -1,6 +1,6 @@
 import { db } from "@/lib/db";
 import { ResultSetHeader, RowDataPacket } from "mysql2";
-import { OnboardingStepOneSchema } from "@/schema/onboarding";
+import { OnboardingStepOneSchema, OnboardingStepTwoSchema } from "@/schema/onboarding";
 import { OnboardingFullInfo } from "../types/user.types";
 
 export const OnboardingService = {
@@ -43,6 +43,51 @@ export const OnboardingService = {
           // Compare it with the farthest step reached
           // Because sometimes the user already reached step 3 or 4 and is just going back to step 1 to edit details
           Math.max(2, farthestStep),
+          user_id,
+        ]
+      );
+
+      // Commit the transaction
+      await connection.commit();
+    } catch (error) {
+      await connection.rollback();
+      throw error;
+    } finally {
+      connection.release();
+    }
+    return;
+  },
+
+  submitStepTwo: async (
+    user_id: number,
+    farthestStep: number,
+    data: OnboardingStepTwoSchema
+  ) => {
+    const connection = await db.getConnection();
+    try {
+      // Update the onboarding table with the provided data
+      await connection.query<ResultSetHeader>(
+        `UPDATE user SET house_number = ?, street_name = ?, subdivision = ?, postal_code = ?, city_municipality = ?, barangay = ? WHERE user.user_id = ?`,
+        [
+          data.house_number,
+          data.street_name,
+          data.subdivision,
+          data.postal_code,
+          data.city_municipality,
+          data.barangay,
+          user_id,
+        ]
+      );
+
+      // Update the step on the onboarding table
+      await connection.query<ResultSetHeader>(
+        `UPDATE onboarding SET step = ? WHERE onboarding.user_id = ?`,
+        [
+          // Compare with the farthest step reached
+          // Since this HTTP handler handles submitting step two, the minimum step to set is 3
+          // Compare it with the farthest step reached
+          // Because sometimes the user already reached step 4 and is just going back to step 2 to edit details
+          Math.max(3, farthestStep),
           user_id,
         ]
       );
