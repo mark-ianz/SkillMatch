@@ -17,7 +17,7 @@ export default function Step2() {
 
   const farthestStep = useSignupStore((state) => state.farthestStep);
 
-  const { mutate } = useUpdateStepTwoOnboarding(
+  const { mutate, isPending } = useUpdateStepTwoOnboarding(
     session.data?.user.user_id,
     farthestStep
   );
@@ -113,7 +113,12 @@ export default function Step2() {
         <SelectBarangay />
       </RowContainer>
 
-      <Button onClick={handleNextStep} type="button" className="ml-auto w-24">
+      <Button
+        disabled={isPending}
+        onClick={handleNextStep}
+        type="button"
+        className="ml-auto w-24"
+      >
         Next
       </Button>
     </StepContainer>

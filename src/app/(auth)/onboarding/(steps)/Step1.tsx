@@ -17,7 +17,7 @@ export default function Step1() {
   const setError = useSignupStore((state) => state.setError);
   const farthestStep = useSignupStore((state) => state.farthestStep);
 
-  const { mutate } = useUpdateStepOneOnboarding(
+  const { mutate, isPending } = useUpdateStepOneOnboarding(
     session.data?.user.user_id,
     farthestStep
   );
@@ -168,7 +168,7 @@ export default function Step1() {
           readOnly
         />
       </RowContainer>
-      <Button type="button" className="ml-auto w-24" onClick={handleNextStep}>
+      <Button disabled={isPending} type="button" className="ml-auto w-24" onClick={handleNextStep}>
         Next
       </Button>
     </StepContainer>
