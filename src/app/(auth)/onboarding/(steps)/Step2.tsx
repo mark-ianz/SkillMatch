@@ -8,6 +8,8 @@ import SelectCityMunicipality from "../../../../components/common/input/SelectCi
 import SelectBarangay from "../../../../components/common/input/SelectBarangay";
 
 export default function Step2() {
+  const street_name = useSignupStore((state) => state.street_name);
+
   const setStreetName = useSignupStore((state) => state.setStreetName);
   const setHouseNumber = useSignupStore((state) => state.setHouseNumber);
   const setSubdivision = useSignupStore((state) => state.setSubdivision);
@@ -24,6 +26,7 @@ export default function Step2() {
           containerClassName="w-full"
         />
         <InputWithLabel
+          value={street_name}
           required={true}
           placeholder="e.g., Rizal Avenue or Sampaguita St."
           onChange={(e) => setStreetName(e.target.value)}

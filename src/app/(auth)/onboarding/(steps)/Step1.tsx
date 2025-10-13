@@ -6,7 +6,7 @@ import {
 } from "@/hooks/query/useOnboarding";
 import useSignupStore from "@/store/SignupStore";
 import { useSession } from "next-auth/react";
-import React, { useEffect } from "react";
+import React from "react";
 import { format, parseISO } from "date-fns";
 import { Button } from "@/components/ui/button";
 import { onboardingStepOneSchema } from "@/schema/onboarding";
@@ -27,12 +27,12 @@ export default function Step1() {
   );
 
   // Signup Store Values
-  const firstName = useSignupStore((state) => state.first_name);
-  const middleName = useSignupStore((state) => state.middle_name);
-  const lastName = useSignupStore((state) => state.last_name);
+  const first_name = useSignupStore((state) => state.first_name);
+  const middle_name = useSignupStore((state) => state.middle_name);
+  const last_name = useSignupStore((state) => state.last_name);
   const email = useSignupStore((state) => state.email);
   const birthdate = useSignupStore((state) => state.birthdate);
-  const phoneNumber = useSignupStore((state) => state.phone_number);
+  const phone_number = useSignupStore((state) => state.phone_number);
   const gender = useSignupStore((state) => state.gender);
 
   // Signup Store Setters
@@ -40,33 +40,8 @@ export default function Step1() {
   const setMiddleName = useSignupStore((state) => state.setMiddleName);
   const setLastName = useSignupStore((state) => state.setLastName);
   const setEmail = useSignupStore((state) => state.setEmail);
-  const setBirthdate = useSignupStore((state) => state.setBirthdate);
   const setPhoneNumber = useSignupStore((state) => state.setPhoneNumber);
   const setGender = useSignupStore((state) => state.setGender);
-
-  const { data: onboardingData } = useGetOnboarding(session.data?.user.user_id);
-
-  // Side effect to populate the form if there's existing onboarding data
-  useEffect(() => {
-    if (onboardingData) {
-      setFirstName(onboardingData.first_name);
-      setMiddleName(onboardingData.middle_name);
-      setLastName(onboardingData.last_name);
-      setEmail(onboardingData.email);
-      setBirthdate(onboardingData.birthdate);
-      setPhoneNumber(onboardingData.phone_number);
-      setGender(onboardingData.gender);
-    }
-  }, [
-    onboardingData,
-    setFirstName,
-    setMiddleName,
-    setLastName,
-    setEmail,
-    setBirthdate,
-    setPhoneNumber,
-    setGender,
-  ]);
 
   // Submit handler
   async function handleNextStep() {
@@ -119,18 +94,18 @@ export default function Step1() {
           id="first-name"
           type="text"
           placeholder="Enter your first name"
-          value={firstName}
+          value={first_name}
           onChange={(e) => setFirstName(e.target.value)}
         />
         <InputWithLabel
           optional={true}
-          readOnly={!!onboardingData?.middle_name}
+          readOnly={!!middle_name}
           containerClassName="grow"
           label="Middle Name"
           id="middle-name"
           type="text"
           placeholder="Enter your middle name"
-          value={middleName || ""}
+          value={middle_name || ""}
           onChange={(e) => setMiddleName(e.target.value)}
         />
         <InputWithLabel
@@ -141,7 +116,7 @@ export default function Step1() {
           id="last-name"
           type="text"
           placeholder="Enter your last name"
-          value={lastName}
+          value={last_name}
           onChange={(e) => setLastName(e.target.value)}
         />
       </RowContainer>
@@ -165,7 +140,7 @@ export default function Step1() {
           id="phone-number"
           type="text"
           placeholder="Enter your phone number"
-          value={phoneNumber}
+          value={phone_number}
           onChange={(e) => setPhoneNumber(e.target.value)}
         />
       </RowContainer>
