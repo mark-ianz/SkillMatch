@@ -1,7 +1,6 @@
 import { formatZodError } from "@/lib/utils";
 import {
   onboardingStepThreeSchema,
-  onboardingStepTwoSchema,
 } from "@/schema/onboarding";
 import { OnboardingService } from "@/services/onboarding.services";
 import { NextResponse } from "next/server";
