@@ -1,4 +1,3 @@
-import { OnboardingFullInfo } from "@/types/user.types";
 import { api } from "@/lib/axios";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import {
@@ -6,6 +5,7 @@ import {
   OnboardingStepTwoSchema,
 } from "@/schema/onboarding";
 import useSignupStore from "@/store/SignupStore";
+import { OnboardingFullInfo } from "@/types/onboarding.types";
 
 const nextStep = useSignupStore.getState().nextStep;
 
@@ -28,6 +28,14 @@ export function useGetOnboarding(userId: number | undefined) {
     (state) => state.setCityMunicipality
   );
   const setBarangay = useSignupStore((state) => state.setBarangay);
+
+  // Step 3: Academic Details
+  const setCollege = useSignupStore((state) => state.setCollege);
+  const setCourse = useSignupStore((state) => state.setCourse);
+  const setYearLevel = useSignupStore((state) => state.setYearLevel);
+  const setExpectedGraduationYear = useSignupStore(
+    (state) => state.setExpectedGraduationYear
+  );
 
   return useQuery({
     queryKey: ["onboarding", userId],
@@ -54,6 +62,12 @@ export function useGetOnboarding(userId: number | undefined) {
       setPostalCode(data.postal_code);
       setCityMunicipality(data.city_municipality || "");
       setBarangay(data.barangay || "");
+
+      // Academic Details
+      setCollege(data.college || "");
+      setCourse(data.course || "");
+      setYearLevel(data.year_level || "4th year");
+      setExpectedGraduationYear(data.expected_graduation_year || "");
 
       console.log(data);
 
