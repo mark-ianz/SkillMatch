@@ -6,10 +6,7 @@
 // 5 - resume / certifications
 // 6 - setup password
 
-type Skill = {
-  skill_id: number;
-  skill_name: string;
-};
+import { Skill } from "../skill.types";
 
 // Step 1: Personal Details
 export type PersonalDetailsStore = {
