@@ -15,6 +15,7 @@ import Step2 from "./(steps)/Step2";
 import ErrorArray from "@/components/common/ErrorArray";
 import { useGetOnboarding } from "@/hooks/query/useOnboarding";
 import Step3 from "./(steps)/Step3";
+import Step4 from "./(steps)/Step4";
 /* import useSignupStore from "@/app/store/SignupStore"; */
 
 export default function Onboarding() {
@@ -61,7 +62,7 @@ export default function Onboarding() {
 
   return (
     <div className="flex w-full border rounded-md shadow-md">
-      <div className="w-1/3 bg-skillmatch-primary-green rounded-l-md">
+      <div className="w-1/3 shrink-0 bg-skillmatch-primary-green rounded-l-md">
         <div className="flex flex-col gap-4 py-10 px-10">
           <div className="flex flex-col gap-12">
             <TextLogo />
@@ -101,6 +102,7 @@ export default function Onboarding() {
           {currentStep === 1 && <Step1 />}
           {currentStep === 2 && <Step2 />}
           {currentStep === 3 && <Step3 />}
+          {currentStep === 4 && <Step4 />}
         </form>
       </div>
     </div>
