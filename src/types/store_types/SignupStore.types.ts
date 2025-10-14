@@ -51,12 +51,12 @@ export type AddressStore = {
 export type AcademicDetailsStore = {
   college: string;
   course: string;
-  year_level: "3rd Year" | "4th Year";
+  year_level: "3rd year" | "4th year";
   expected_graduation_year: string;
 
   setCollege: (college: string) => void;
   setCourse: (course: string) => void;
-  setYearLevel: (year_level: "3rd Year" | "4th Year") => void;
+  setYearLevel: (year_level: "3rd year" | "4th year") => void;
   setExpectedGraduationYear: (expected_graduation_year: string) => void;
 };
 
