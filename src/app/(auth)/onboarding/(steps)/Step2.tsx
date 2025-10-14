@@ -89,6 +89,7 @@ export default function Step2() {
 
       <RowContainer>
         <InputWithLabel
+          optional={true}
           value={subdivision || ""}
           placeholder="e.g., Green Meadows Village (Optional)"
           onChange={(e) => setSubdivision(e.target.value)}
