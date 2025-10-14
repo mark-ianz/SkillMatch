@@ -82,10 +82,10 @@ export const onboardingStepTwoSchema = z.object({
     .optional(),
   subdivision: z
     .string()
-    .trim()
-    .min(1, { message: "Subdivision is required" })
-    .max(100, { message: "Subdivision must be less than 100 characters" })
-    .optional(),
+    .nullable()
+    .refine((val) => !val || val.length <= 100, {
+      message: "Subdivision must be less than 100 characters",
+    }),
   postal_code: z
     .string()
     .trim()
@@ -97,10 +97,7 @@ export const onboardingStepTwoSchema = z.object({
     .string()
     .trim()
     .min(1, { message: "City/Municipality is required" }),
-  barangay: z
-    .string()
-    .trim()
-    .min(1, { message: "Barangay is required" }),
+  barangay: z.string().trim().min(1, { message: "Barangay is required" }),
 });
 
 export type OnboardingStepOneSchema = z.infer<typeof onboardingStepOneSchema>;
