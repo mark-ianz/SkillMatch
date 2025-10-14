@@ -2,7 +2,7 @@ import { DefaultSession, User as NextAuthUser } from "next-auth";
 import { AdapterUser } from "next-auth/adapters";
 import { JWT } from "next-auth/jwt";
 
-export type User = {
+export type User = Address & {
   user_id: number;
   first_name: string;
   middle_name: string | null;
@@ -14,21 +14,20 @@ export type User = {
   subdivision: string | null;
   postal_code: string;
   barangay: string;
-  city: string;
-  municipality: string;
   phone_number: string;
   role_id: number;
   status_id: number;
   created_at: Date;
 };
 
-export type Onboarding = {
-  onboarding_id: number;
-  user_id: number;
-  step: number;
-  email: string;
-  created_at: Date;
-};
+export type Address = {
+  house_number: string;
+  street_name: string;
+  subdivision: string | null;
+  postal_code: string;
+  barangay: string;
+  city_municipality: string;
+}
 
 export type Account = {
   acccount_id: number;
@@ -41,13 +40,12 @@ export type Account = {
   created_at: Date;
 };
 
-export type OnboardingFullInfo = Onboarding &
-  User & {
-    email: string;
-    street_name: string | null;
-    barangay: string | null;
-    city_municipality: string | null;
-  };
+export type AcademicDetails = {
+  college: string;
+  course: string;
+  year_level: "3rd year" | "4th year";
+  expected_graduation_year: string;
+}
 
 // JWT and Session Extensions
 export type ExtendedInfo = {
