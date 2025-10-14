@@ -6,8 +6,18 @@ import React from "react";
 import college_courses from "@/data/college_courses.json";
 import { addYears } from "date-fns";
 import { Button } from "@/components/ui/button";
+import { useUpdateStepThreeOnboarding } from "@/hooks/query/useOnboarding";
+import { useSession } from "next-auth/react";
+import { onboardingStepThreeSchema } from "@/schema/onboarding";
+import { ZodError } from "zod";
+import { formatZodError } from "@/lib/utils";
 
 export default function Step3() {
+  const session = useSession();
+  const { mutate, isPending } = useUpdateStepThreeOnboarding(
+    session.data?.user.user_id
+  );
+
   const college = useSignupStore((state) => state.college);
   const course = useSignupStore((state) => state.course);
   const year_level = useSignupStore((state) => state.year_level);
@@ -21,6 +31,7 @@ export default function Step3() {
   const setExpectedGraduationYear = useSignupStore(
     (state) => state.setExpectedGraduationYear
   );
+  const setError = useSignupStore((state) => state.setError);
 
   const college_list = Object.keys(college_courses).map((college) => ({
     value: college,
@@ -32,8 +43,31 @@ export default function Step3() {
         (course) => ({ value: course.abbr, label: course.course_name })
       )
     : [];
-  console.log(college_list);
-  console.log(course_list);
+
+  // Submit handler
+  async function handleNextStep() {
+    // validate the data
+    try {
+      // clear previous errors
+      setError(null);
+
+      const parsed = onboardingStepThreeSchema.parse({
+        college,
+        course,
+        year_level,
+        expected_graduation_year,
+      });
+
+      // update the user info on the backend
+      mutate(parsed);
+    } catch (error) {
+      // catch the zod error
+      if (error instanceof ZodError) {
+        setError(formatZodError(error));
+        return;
+      }
+    }
+  }
   return (
     <StepContainer>
       <RowContainer>
@@ -100,8 +134,8 @@ export default function Step3() {
         />
       </RowContainer>
       <Button
-        /* disabled={isPending}
-        onClick={handleNextStep} */
+        disabled={isPending}
+        onClick={handleNextStep}
         type="button"
         className="ml-auto w-24"
       >
