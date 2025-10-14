@@ -1,17 +1,19 @@
 import { db } from "@/lib/db";
 import { ResultSetHeader, RowDataPacket } from "mysql2";
 import { OnboardingStepOneSchema, OnboardingStepTwoSchema } from "@/schema/onboarding";
-import { OnboardingFullInfo } from "../types/user.types";
+import { OnboardingFullInfo } from "@/types/onboarding.types";
 
 export const OnboardingService = {
   getOnboarding: async (user_id: number) => {
     const [rows] = await db.query<(OnboardingFullInfo & RowDataPacket)[]>(
-      `SELECT o.*, u.*, a.email FROM 
+      `SELECT o.*, u.*, op.*, a.email FROM 
         onboarding AS o
         JOIN user AS u
         ON o.user_id = u.user_id
         JOIN account AS a
         ON u.user_id = a.user_id
+        JOIN ojt_profile AS op
+        ON u.user_id = op.user_id
         WHERE o.user_id = ?`,
       [user_id]
     );
