@@ -3,13 +3,13 @@ import {
   ExtendedSession,
   ExtendedToken,
   ExtendedUser,
-  Onboarding,
 } from "@/types/user.types";
 import GoogleProvider from "next-auth/providers/google";
 import { db } from "./db";
 import { ResultSetHeader, RowDataPacket } from "mysql2";
 import { QCU_User } from "@/types/qcu_user.types";
 import { MySQLError } from "@/types/mysql_error.types";
+import { Onboarding } from "@/types/onboarding.types";
 
 export const authConfig: NextAuthOptions = {
   providers: [
@@ -47,7 +47,7 @@ export const authConfig: NextAuthOptions = {
         >("SELECT * FROM `onboarding` WHERE email = ?", [user.email]);
 
         // Initiate user_id variable for the user object
-        let user_id: number | null;
+        let user_id: number | undefined;
 
         // 5. If user is already not onboarding, insert the data to user table, account table and onboarding table.
         if (!(onboardingUser.length > 0)) {
@@ -79,6 +79,17 @@ export const authConfig: NextAuthOptions = {
             [newUser.insertId, user.email, 1]
           );
 
+          // 5.4 Insert user to ojt_profile
+          await connection.query(
+            "INSERT INTO `ojt_profile` (`user_id`, `college`, `course`, `expected_graduation_year`) VALUES (?, ?, ?, ?)",
+            [
+              newUser.insertId,
+              student[0].college,
+              student[0].course,
+              student[0].expected_graduation_year,
+            ]
+          );
+
           // 5.4 Define the user_id and role_id on the user object for session and jwt callbacks
           user_id = newUser.insertId;
         } else {
@@ -88,7 +99,7 @@ export const authConfig: NextAuthOptions = {
         }
 
         // 7. Define the user_id on the user object for session and jwt callbacks
-        (user as ExtendedUser).user_id = user_id;
+        (user as ExtendedUser).user_id = user_id!;
         (user as ExtendedUser).role_id = 3; // Set role to 'OJT' (3)
 
         // 8. Commit the transaction if all queries are successful
