@@ -37,7 +37,7 @@ const useSignupStore = create<SignupStore>((set, get) => ({
   // Step 3: Academic
   college: "",
   course: "",
-  year_level: "4th Year",
+  year_level: "4th year",
   expected_graduation_year: "",
   setCollege: (college) => set({ college }),
   setCourse: (course) => set({ course }),
