@@ -2,13 +2,14 @@ import { api } from "@/lib/axios";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import {
   OnboardingStepOneSchema,
+  OnboardingStepThreeSchema,
   OnboardingStepTwoSchema,
 } from "@/schema/onboarding";
 import useSignupStore from "@/store/SignupStore";
 import { OnboardingFullInfo } from "@/types/onboarding.types";
 
 const nextStep = useSignupStore.getState().nextStep;
-const farthestStep = useSignupStore.getState().farthestStep;  
+const farthestStep = useSignupStore.getState().farthestStep;
 
 export function useGetOnboarding(userId: number | undefined) {
   // Step 1: Personal Details
@@ -100,6 +101,25 @@ export function useUpdateStepTwoOnboarding(userId: number | undefined) {
       await api.post(`/onboarding/${userId}/submit/${farthestStep}/step-two`, {
         ...stepTwoData,
       });
+      return;
+    },
+    onSuccess: () => {
+      // increment the step on the store
+      nextStep();
+    },
+  });
+}
+
+export function useUpdateStepThreeOnboarding(userId: number | undefined) {
+  return useMutation({
+    mutationKey: ["onboarding", userId, "step-three"],
+    mutationFn: async (stepThreeData: OnboardingStepThreeSchema) => {
+      await api.post(
+        `/onboarding/${userId}/submit/${farthestStep}/step-three`,
+        {
+          ...stepThreeData,
+        }
+      );
       return;
     },
     onSuccess: () => {
