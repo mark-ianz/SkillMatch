@@ -14,6 +14,7 @@ import { getStepDetails } from "@/lib/utils";
 import Step2 from "./(steps)/Step2";
 import ErrorArray from "@/components/common/ErrorArray";
 import { useGetOnboarding } from "@/hooks/query/useOnboarding";
+import Step3 from "./(steps)/Step3";
 /* import useSignupStore from "@/app/store/SignupStore"; */
 
 export default function Onboarding() {
@@ -99,6 +100,7 @@ export default function Onboarding() {
         <form>
           {currentStep === 1 && <Step1 />}
           {currentStep === 2 && <Step2 />}
+          {currentStep === 3 && <Step3 />}
         </form>
       </div>
     </div>
