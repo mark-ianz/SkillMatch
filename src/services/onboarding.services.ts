@@ -1,6 +1,10 @@
 import { db } from "@/lib/db";
 import { ResultSetHeader, RowDataPacket } from "mysql2";
-import { OnboardingStepOneSchema, OnboardingStepTwoSchema } from "@/schema/onboarding";
+import {
+  OnboardingStepOneSchema,
+  OnboardingStepThreeSchema,
+  OnboardingStepTwoSchema,
+} from "@/schema/onboarding";
 import { OnboardingFullInfo } from "@/types/onboarding.types";
 
 export const OnboardingService = {
@@ -94,6 +98,47 @@ export const OnboardingService = {
         ]
       );
 
+      // Commit the transaction
+      await connection.commit();
+    } catch (error) {
+      await connection.rollback();
+      throw error;
+    } finally {
+      connection.release();
+    }
+    return;
+  },
+
+  submitStepThree: async (
+    user_id: number,
+    farthestStep: number,
+    data: OnboardingStepThreeSchema
+  ) => {
+    const connection = await db.getConnection();
+    try {
+      // Update the onboarding table with the provided data
+      await connection.query<ResultSetHeader>(
+        `UPDATE ojt_profile SET college = ?, course = ?, year_level = ?, expected_graduation_year = ? WHERE ojt_profile.user_id = ?`,
+        [
+          data.college,
+          data.course,
+          data.year_level,
+          data.expected_graduation_year,
+          user_id,
+        ]
+      );
+      // Update the step on the onboarding table
+      await connection.query<ResultSetHeader>(
+        `UPDATE onboarding SET step = ? WHERE onboarding.user_id = ?`,
+        [
+          // Compare with the farthest step reached
+          // Since this HTTP handler handles submitting step three, the minimum step to set is 4
+          // Compare it with the farthest step reached
+          // Because sometimes the user already reached step 5 and is just going back to step 3 to edit details
+          Math.max(4, farthestStep),
+          user_id,
+        ]
+      );
       // Commit the transaction
       await connection.commit();
     } catch (error) {
