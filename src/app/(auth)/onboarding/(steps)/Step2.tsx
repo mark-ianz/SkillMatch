@@ -15,11 +15,8 @@ import { formatZodError } from "@/lib/utils";
 export default function Step2() {
   const session = useSession();
 
-  const farthestStep = useSignupStore((state) => state.farthestStep);
-
   const { mutate, isPending } = useUpdateStepTwoOnboarding(
-    session.data?.user.user_id,
-    farthestStep
+    session.data?.user.user_id
   );
 
   const house_number = useSignupStore((state) => state.house_number);

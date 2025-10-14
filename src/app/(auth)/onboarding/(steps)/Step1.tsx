@@ -15,11 +15,9 @@ import StepContainer from "../../../../components/page_specific/onboarding/StepC
 export default function Step1() {
   const session = useSession();
   const setError = useSignupStore((state) => state.setError);
-  const farthestStep = useSignupStore((state) => state.farthestStep);
 
   const { mutate, isPending } = useUpdateStepOneOnboarding(
-    session.data?.user.user_id,
-    farthestStep
+    session.data?.user.user_id
   );
 
   // Signup Store Values
@@ -168,7 +166,12 @@ export default function Step1() {
           readOnly
         />
       </RowContainer>
-      <Button disabled={isPending} type="button" className="ml-auto w-24" onClick={handleNextStep}>
+      <Button
+        disabled={isPending}
+        type="button"
+        className="ml-auto w-24"
+        onClick={handleNextStep}
+      >
         Next
       </Button>
     </StepContainer>

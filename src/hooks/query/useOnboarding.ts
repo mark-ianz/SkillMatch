@@ -8,6 +8,7 @@ import useSignupStore from "@/store/SignupStore";
 import { OnboardingFullInfo } from "@/types/onboarding.types";
 
 const nextStep = useSignupStore.getState().nextStep;
+const farthestStep = useSignupStore.getState().farthestStep;  
 
 export function useGetOnboarding(userId: number | undefined) {
   // Step 1: Personal Details
@@ -76,10 +77,7 @@ export function useGetOnboarding(userId: number | undefined) {
   });
 }
 
-export function useUpdateStepOneOnboarding(
-  userId: number | undefined,
-  farthestStep: number
-) {
+export function useUpdateStepOneOnboarding(userId: number | undefined) {
   return useMutation({
     mutationKey: ["onboarding", userId, "step-one"],
     mutationFn: async (stepOneData: OnboardingStepOneSchema) => {
@@ -95,10 +93,7 @@ export function useUpdateStepOneOnboarding(
   });
 }
 
-export function useUpdateStepTwoOnboarding(
-  userId: number | undefined,
-  farthestStep: number
-) {
+export function useUpdateStepTwoOnboarding(userId: number | undefined) {
   return useMutation({
     mutationKey: ["onboarding", userId, "step-two"],
     mutationFn: async (stepTwoData: OnboardingStepTwoSchema) => {
