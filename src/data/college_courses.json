@@ -1,25 +1,50 @@
 {
   "College of Business Administration and Accountancy": {
     "courses": [
-      "Bachelor of Science in Accountancy",
-      "Bachelor of Science in Business Administration",
-      "Bachelor of Science in Hospitality Management"
+      {
+        "course_name": "Bachelor of Science in Entrepreneurship",
+        "abbr": "BS Entrep"
+      },
+      {
+        "course_name": "Bachelor of Science in Accountancy",
+        "abbr": "BSA"
+      }
     ]
   },
   "College of Education": {
-    "courses": ["Bachelor of Early Childhood Education"]
+    "courses": [
+      {
+        "course_name": "Bachelor of Early Childhood Education",
+        "abbr": "BECEd"
+      }
+    ]
   },
   "College of Engineering": {
     "courses": [
-      "Bachelor of Science in Industrial Engineering",
-      "Bachelor of Science in Electronics Engineering"
+      {
+        "course_name": "Bachelor of Science in Industrial Engineering",
+        "abbr": "BSIE"
+      },
+      {
+        "course_name": "Bachelor of Science in Electronics Engineering",
+        "abbr": "BSECE"
+      }
     ]
   },
   "College of Computer Studies": {
     "courses": [
-      "Bachelor of Science in Information Technology",
-      "Bachelor of Science in Computer Science",
-      "Bachelor of Science in Information Systems"
+      {
+        "course_name": "Bachelor of Science in Information Technology",
+        "abbr": "BSIT"
+      },
+      {
+        "course_name": "Bachelor of Science in Computer Science",
+        "abbr": "BSCS"
+      },
+      {
+        "course_name": "Bachelor of Science in Information Systems",
+        "abbr": "BSIS"
+      }
     ]
   }
 }
