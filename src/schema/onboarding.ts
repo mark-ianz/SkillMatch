@@ -100,5 +100,18 @@ export const onboardingStepTwoSchema = z.object({
   barangay: z.string().trim().min(1, { message: "Barangay is required" }),
 });
 
+export const onboardingStepThreeSchema = z.object({
+  college: z.string().trim().min(1, { message: "College is required" }),
+  course: z.string().trim().min(1, { message: "Course is required" }),
+  year_level: z.string().trim().min(1, { message: "Year level is required" }),
+  expected_graduation_year: z
+    .string()
+    .trim()
+    .min(1, { message: "Expected graduation year is required" }),
+});
+
 export type OnboardingStepOneSchema = z.infer<typeof onboardingStepOneSchema>;
 export type OnboardingStepTwoSchema = z.infer<typeof onboardingStepTwoSchema>;
+export type OnboardingStepThreeSchema = z.infer<
+  typeof onboardingStepThreeSchema
+>;
