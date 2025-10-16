@@ -9,92 +9,37 @@ import {
 } from "@/components/ui/popover";
 import { Skill } from "@/types/skill.types";
 import useSignupStore from "@/store/SignupStore";
+import { useSearchSkills } from "@/hooks/query/useSkills";
+import useDebounce from "@/hooks/useDebounce";
+import LoadingGeneric from "@/components/global/LoadingGeneric";
+import { toast } from "sonner";
+
+const MAXIMUM_SKILLS = parseInt(
+  process.env.NEXT_PUBLIC_MAXIMUM_SKILLS as string
+);
 
 export default function SearchSkill() {
+  const skills = useSignupStore((state) => state.skills);
   const addSkill = useSignupStore((state) => state.addSkill);
 
   const [searchQuery, setSearchQuery] = useState("");
+  const debouncedSearchQuery = useDebounce(searchQuery, 300);
+
   const [isOpen, setIsOpen] = useState(false);
   const [results, setResults] = useState<Skill[]>([]);
   const containerRef = useRef<HTMLDivElement>(null);
 
-  const dummySkills = [
-    {
-      skill_id: 1,
-      skill_name: "HTML",
-    },
-    {
-      skill_id: 2,
-      skill_name: "CSS",
-    },
-    {
-      skill_id: 3,
-      skill_name: "JavaScript",
-    },
-    {
-      skill_id: 4,
-      skill_name: "React",
-    },
-    {
-      skill_id: 5,
-      skill_name: "NodeJS",
-    },
-    {
-      skill_id: 6,
-      skill_name: "TypeScript",
-    },
-    {
-      skill_id: 7,
-      skill_name: "Python",
-    },
-    {
-      skill_id: 8,
-      skill_name: "Ruby",
-    },
-    {
-      skill_id: 9,
-      skill_name: "PHP",
-    },
-    {
-      skill_id: 10,
-      skill_name: "Go",
-    },
-    {
-      skill_id: 11,
-      skill_name: "Swift",
-    },
-    {
-      skill_id: 12,
-      skill_name: "Kotlin",
-    },
-    {
-      skill_id: 13,
-      skill_name: "Dart",
-    },
-    {
-      skill_id: 14,
-      skill_name: "Scala",
-    },
-    {
-      skill_id: 15,
-      skill_name: "Elixir",
-    },
-  ];
-
-  const limited = dummySkills.slice(0, 7);
+  const { data, isLoading } = useSearchSkills(debouncedSearchQuery);
 
   useEffect(() => {
-    if (searchQuery.trim()) {
-      const filtered = limited.filter((skill) =>
-        skill.skill_name.toLowerCase().includes(searchQuery.toLowerCase())
-      );
-      setResults(filtered);
+    if (debouncedSearchQuery.trim()) {
+      setResults(data?.skills || []);
       setIsOpen(true);
     } else {
       setResults([]);
       setIsOpen(false);
     }
-  }, [searchQuery]);
+  }, [debouncedSearchQuery, data]);
 
   // Handle click outside to close popover
   useEffect(() => {
@@ -115,6 +60,23 @@ export default function SearchSkill() {
 
   // Handle selecting a skill
   function handleSelectSkill(skill: Skill) {
+    // Check if skill already added
+    if (skills.find((s) => s.skill_id === skill.skill_id)) {
+      toast("Skill already added. Please select a different skill.", {
+        style: { backgroundColor: "#fee2e2", color: "#b91c1c" },
+        duration: 4000,
+      });
+      return;
+    }
+
+    if (skills.length >= MAXIMUM_SKILLS) {
+      toast(`Maximum of ${MAXIMUM_SKILLS} skills allowed.`, {
+        style: { backgroundColor: "#fee2e2", color: "#b91c1c" },
+        duration: 4000,
+      });
+      return;
+    }
+
     console.log("Selected skill:", skill);
     addSkill(skill);
     setIsOpen(false);
@@ -147,7 +109,12 @@ export default function SearchSkill() {
           onOpenAutoFocus={(e) => e.preventDefault()}
         >
           <div className="max-h-[300px] overflow-y-auto">
-            {results.length > 0 ? (
+            {isLoading && (
+              <div className="flex items-center justify-center h-[100px]">
+                <LoadingGeneric className="w-6 h-6" />
+              </div>
+            )}
+            {results.length > 0 && (
               <div className="py-2">
                 {results.map((skill) => (
                   <button
@@ -159,7 +126,8 @@ export default function SearchSkill() {
                   </button>
                 ))}
               </div>
-            ) : (
+            )}
+            {results.length === 0 && !isLoading && (
               <div className="px-4 py-8 text-center text-sm text-muted-foreground">
                 No skills found
               </div>
