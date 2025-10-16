@@ -54,17 +54,10 @@ const useSignupStore = create<SignupStore>((set, get) => ({
     })),
   clearSkills: () => set({ skills: [] }),
 
-  // Step 5: Certifications
-  certifications: [],
-  addCertification: (cert) =>
-    set((state) => ({
-      certifications: [...state.certifications, cert],
-    })),
-  removeCertification: (index) =>
-    set((state) => ({
-      certifications: state.certifications.filter((_, i) => i !== index),
-    })),
-  clearCertifications: () => set({ certifications: [] }),
+  // Step 5: Resume
+  resume_path: null,
+  setResumePath: (resume_path) => set({ resume_path }),
+  clearResume: () => set({ resume_path: null }),
 
   // General Signup flow
   currentStep: 1,
@@ -162,11 +155,10 @@ const useSignupStore = create<SignupStore>((set, get) => ({
         removeSkill: state.removeSkill,
         clearSkills: state.clearSkills,
       },
-      certifications: {
-        certifications: state.certifications,
-        addCertification: state.addCertification,
-        removeCertification: state.removeCertification,
-        clearCertifications: state.clearCertifications,
+      resume: {
+        resume_path: state.resume_path,
+        setResumePath: state.setResumePath,
+        clearResume: state.clearResume,
       },
     };
   },

@@ -65,12 +65,11 @@ export type SkillsStore = {
   clearSkills: () => void;
 };
 
-// Step 5: Certifications
-export type CertificationsStore = {
-  certifications: { title: string; file: File }[];
-  addCertification: (cert: { title: string; file: File }) => void;
-  removeCertification: (index: number) => void;
-  clearCertifications: () => void;
+// Step 5: Resume
+export type ResumeStore = {
+  resume_path: string | null;
+  setResumePath: (path: string | null) => void;
+  clearResume: () => void;
 };
 
 // General Signup Store
@@ -94,7 +93,7 @@ export type GeneralSignupStore = {
     address: AddressStore;
     academic: AcademicDetailsStore;
     skills: SkillsStore;
-    certifications: CertificationsStore;
+    resume: ResumeStore;
   };
 };
 
@@ -102,5 +101,5 @@ export type SignupStore = PersonalDetailsStore &
   AddressStore &
   AcademicDetailsStore &
   SkillsStore &
-  CertificationsStore &
+  ResumeStore &
   GeneralSignupStore;
