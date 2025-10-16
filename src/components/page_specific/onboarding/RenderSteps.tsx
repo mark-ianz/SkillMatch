@@ -54,7 +54,7 @@ export default function RenderSteps() {
                     : "text-skillmatch-muted-light"
                 )}
               >
-                <p className="text-xs">Step {step.step}/6</p>
+                <p className="text-xs">Step {step.step}/{steps.length}</p>
                 <p className="text-sm">{step.title}</p>
               </div>
             </div>
