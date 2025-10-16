@@ -38,20 +38,8 @@ export const OnboardingService = {
         [data.middle_name, data.gender, data.phone_number, user_id]
       );
 
-      // Get the
-
       // Update the step on the onboarding table
-      await connection.query<ResultSetHeader>(
-        `UPDATE onboarding SET step = ? WHERE onboarding.user_id = ?`,
-        [
-          // Compare with the farthest step reached
-          // Since this HTTP handler handles submitting step one, the minimum step to set is 2
-          // Compare it with the farthest step reached
-          // Because sometimes the user already reached step 3 or 4 and is just going back to step 1 to edit details
-          Math.max(2, farthestStep),
-          user_id,
-        ]
-      );
+      OnboardingService.updateStep(user_id, 4, farthestStep);
 
       // Commit the transaction
       await connection.commit();
@@ -86,17 +74,7 @@ export const OnboardingService = {
       );
 
       // Update the step on the onboarding table
-      await connection.query<ResultSetHeader>(
-        `UPDATE onboarding SET step = ? WHERE onboarding.user_id = ?`,
-        [
-          // Compare with the farthest step reached
-          // Since this HTTP handler handles submitting step two, the minimum step to set is 3
-          // Compare it with the farthest step reached
-          // Because sometimes the user already reached step 4 and is just going back to step 2 to edit details
-          Math.max(3, farthestStep),
-          user_id,
-        ]
-      );
+      OnboardingService.updateStep(user_id, 3, farthestStep);
 
       // Commit the transaction
       await connection.commit();
@@ -127,18 +105,10 @@ export const OnboardingService = {
           user_id,
         ]
       );
+
       // Update the step on the onboarding table
-      await connection.query<ResultSetHeader>(
-        `UPDATE onboarding SET step = ? WHERE onboarding.user_id = ?`,
-        [
-          // Compare with the farthest step reached
-          // Since this HTTP handler handles submitting step three, the minimum step to set is 4
-          // Compare it with the farthest step reached
-          // Because sometimes the user already reached step 5 and is just going back to step 3 to edit details
-          Math.max(4, farthestStep),
-          user_id,
-        ]
-      );
+      OnboardingService.updateStep(user_id, 4, farthestStep);
+
       // Commit the transaction
       await connection.commit();
     } catch (error) {
@@ -148,5 +118,22 @@ export const OnboardingService = {
       connection.release();
     }
     return;
+  },
+
+  updateStep: async (
+    user_id: number,
+    update_to_step: number,
+    farthestStep: number
+  ) => {
+    await db.query<ResultSetHeader>(
+      `UPDATE onboarding SET step = ? WHERE onboarding.user_id = ?`,
+      [
+        // Compare with the farthest step reached
+        // Compare it with the farthest step reached
+        // Because sometimes the user already reached step 5 and is just going back to step 3 to edit details
+        Math.max(update_to_step, farthestStep),
+        user_id,
+      ]
+    );
   },
 };
