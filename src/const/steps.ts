@@ -21,8 +21,8 @@ export const steps = [
   },
   {
     step: 5,
-    title: "Certifications",
-    description: "Add your certifications",
+    title: "Resume",
+    description: "Upload your resume",
   },
   {
     step: 6,
