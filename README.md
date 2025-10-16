@@ -1,36 +1,59 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# SkillMatch
 
-## Getting Started
+**SkillMatch** is a web-based platform that connects OJT seekers with companies and independent employers. Applicants can create profiles, upload resumes, and showcase their skills, while employers can post job or internship opportunities. The platform serves as a two-way marketplace, enabling applications, profile views, and interactions to facilitate matching between candidates and opportunities.
 
-First, run the development server:
+> ⚠️ Work in Progress
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+---
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Demo
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+This project is under development and not yet deployed.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+---
 
-## Learn More
+## Features (Planned)
 
-To learn more about Next.js, take a look at the following resources:
+- User registration and authentication  
+- Applicant profiles with skills and resumes  
+- Employer dashboards to post opportunities  
+- Job/internship application functionality  
+- Interaction tools like messaging and profile views  
+- Two-way marketplace for matching candidates and opportunities  
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+---
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Tech Stack
 
-## Deploy on Vercel
+- **Frontend:** Next.js, React, Tailwind CSS, Radix UI components, cmdk  
+- **State Management:** Zustand  
+- **Forms & Validation:** Zod  
+- **Styling & Utilities:** Tailwind Merge, tw-animate-css  
+- **Data Fetching & Caching:** TanStack React Query  
+- **Icons & Notifications:** Lucide React, Sonner  
+- **Backend / Database:** MySQL2, bcrypt, Axios  
+- **Authentication:** NextAuth  
+- **Themes:** Next Themes  
+- **TypeScript for type safety**  
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+---
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## Installation
+
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/mark-ianz/skillmatch.git
+
+2. Navigate to the project folder:
+   ```bash
+   cd skillmatch
+   
+3. Install dependencies:
+   ```bash
+   npm install
+
+4. Run the development server:
+   ```bash
+   npm run dev
+
+The app will be available at http://localhost:3000.
