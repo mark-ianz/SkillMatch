@@ -1,4 +1,5 @@
 import { api } from "@/lib/axios";
+import useSignupStore from "@/store/SignupStore";
 import { Skill, SkillQuery } from "@/types/skill.types";
 import { useMutation, useQuery } from "@tanstack/react-query";
 
@@ -16,10 +17,16 @@ export function useSearchSkills(q: string) {
 }
 
 export function useUpdateUserSkills(user_id: number | undefined) {
+  const nextStep = useSignupStore((state) => state.nextStep);
+
   return useMutation({
     mutationKey: ["update-user-skills", user_id],
     mutationFn: async (skills: Skill[]) => {
       await api.post(`/skills/update/${user_id}`, { skills });
+    },
+    onSuccess: () => {
+      // increment the step on the store
+      nextStep();
     },
   });
 }
