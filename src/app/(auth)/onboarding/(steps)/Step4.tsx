@@ -1,4 +1,5 @@
 import SearchSkill from "@/components/common/input/SearchSkill";
+import SkipStep from "@/components/page_specific/onboarding/SkipStep";
 import StepContainer from "@/components/page_specific/onboarding/StepContainer";
 import { Button } from "@/components/ui/button";
 import { useUpdateUserSkills } from "@/hooks/query/useSkills";
@@ -24,7 +25,6 @@ export default function Step4() {
 
   function handleNextStep() {
     const skills_store = useSignupStore.getState().skills;
-    console.log(skills_store)
     const { data, success, error } = updateSkillSchema.safeParse(skills_store);
     const setError = useSignupStore.getState().setError;
 
@@ -46,14 +46,17 @@ export default function Step4() {
           Maximum of {MAXIMUM_SKILLS} skills. {total_skills}/{MAXIMUM_SKILLS}
         </p>
       </div>
-      <Button
-        disabled={isPending}
-        onClick={handleNextStep}
-        type="button"
-        className="ml-auto w-24"
-      >
-        Next
-      </Button>
+      <div className="flex items-center justify-end gap-2">
+        <SkipStep />
+        <Button
+          disabled={isPending}
+          onClick={handleNextStep}
+          type="button"
+          className="w-24"
+        >
+          Next
+        </Button>
+      </div>
     </StepContainer>
   );
 }
