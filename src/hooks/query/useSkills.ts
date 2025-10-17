@@ -22,7 +22,7 @@ export function useUpdateUserSkills(user_id: number | undefined) {
   return useMutation({
     mutationKey: ["update-user-skills", user_id],
     mutationFn: async (skills: Skill[]) => {
-      await api.post(`/ojt/skills/update/${user_id}`, { skills });
+      await api.post(`/ojt/skills/${user_id}`, { skills });
     },
     onSuccess: () => {
       // increment the step on the store
