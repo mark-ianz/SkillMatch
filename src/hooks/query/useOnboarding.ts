@@ -41,6 +41,9 @@ export function useGetOnboarding(userId: number | undefined) {
     (state) => state.setExpectedGraduationYear
   );
 
+  // Step 4: Skills
+  const setSkills = useSignupStore((state) => state.setSkills);
+
   return useQuery({
     queryKey: ["onboarding", userId],
     queryFn: async () => {
@@ -72,6 +75,9 @@ export function useGetOnboarding(userId: number | undefined) {
       setCourse(data.course || "");
       setYearLevel(data.year_level || "4th year");
       setExpectedGraduationYear(data.expected_graduation_year || "");
+
+      // Skills
+      setSkills(data.skills || []);
 
       console.log(data);
 
@@ -131,7 +137,7 @@ export function useUpdateStepThreeOnboarding(userId: number | undefined) {
   });
 }
 
-export function useUpdateStepFiveOnboarding (userId: number | undefined) {
+export function useUpdateStepFiveOnboarding(userId: number | undefined) {
   const nextStep = useSignupStore.getState().nextStep;
   const setResumePath = useSignupStore.getState().setResumePath;
 
@@ -140,9 +146,13 @@ export function useUpdateStepFiveOnboarding (userId: number | undefined) {
     mutationFn: async (file: File) => {
       const fd = new FormData();
       fd.append("resume", file, file.name);
-      const { data } = await api.post(`/onboarding/${userId}/submit/${farthestStep}/step-five`, fd, {
-        headers: { "Content-Type": "multipart/form-data" },
-      });
+      const { data } = await api.post(
+        `/onboarding/${userId}/submit/${farthestStep}/step-five`,
+        fd,
+        {
+          headers: { "Content-Type": "multipart/form-data" },
+        }
+      );
       return data as UploadResult;
     },
     onSuccess: (data) => {
