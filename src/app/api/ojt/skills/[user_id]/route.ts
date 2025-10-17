@@ -28,3 +28,21 @@ export async function POST(request: Request, context: { params: { user_id: strin
     );
   }
 }
+
+export async function GET (_: Request, context: { params: { user_id: string } }) {
+  const params = await context.params;
+  const user_id = params.user_id;
+  if (!user_id) {
+    return new Response("Missing user_id", { status: 400 });
+  }
+
+  try {
+    const skills = await SkillServices.getUserSkills(user_id);
+    return NextResponse.json(skills);
+  } catch {
+    return NextResponse.json(
+      { error: "Failed to retrieve skills" },
+      { status: 500 }
+    );
+  }
+}
