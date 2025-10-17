@@ -10,6 +10,7 @@ import SkipStep from "@/components/page_specific/onboarding/SkipStep";
 import { useSession } from "next-auth/react";
 import { useUpdateStepFiveOnboarding } from "@/hooks/query/useOnboarding";
 import { X } from "lucide-react";
+import Label from "@/components/common/input/Label";
 
 export default function Step5() {
   const session = useSession();
@@ -60,13 +61,18 @@ export default function Step5() {
 
   return (
     <StepContainer>
-      <div className="flex flex-col gap-4 border rounded-md shadow-sm p-4">
-        <label className="text-sm">Upload your resume (PDF, JPG, PNG)</label>
-        <Input
-          type="file"
-          onChange={handleFile}
-          accept=".pdf,.jpg,.jpeg,.png"
-        />
+      <div className="flex flex-col gap-4 rounded-md">
+        <div className="flex flex-col gap-2">
+          <Label id="resume" optional>
+            Upload your resume (PDF, JPG, PNG)
+          </Label>
+          <Input
+            id="resume"
+            type="file"
+            onChange={handleFile}
+            accept=".pdf,.jpg,.jpeg,.png"
+          />
+        </div>
 
         {file && <p className="text-sm">Selected: {file.name}</p>}
         {error && <p className="text-sm text-destructive">{error}</p>}
