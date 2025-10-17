@@ -31,4 +31,18 @@ export const SkillServices = {
       connection.release();
     }
   },
+  getUserSkills: async (user_id: string | number) => {
+    const [rows] = await db.query<(RowDataPacket & { skill_id: number })[]>(
+      `SELECT ojt_skill.skill_id FROM ojt_skill WHERE ojt_skill.user_id = ?`,
+      [user_id]
+    );
+    const skill_ids = rows.map((row) => row.skill_id);
+
+    const [skillRows] = await db.query(
+      `SELECT * FROM skill WHERE skill_id IN (?)`,
+      [skill_ids]
+    );
+
+    return skillRows as Skill[];
+  },
 };
