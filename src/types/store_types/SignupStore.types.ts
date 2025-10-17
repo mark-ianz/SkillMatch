@@ -63,6 +63,8 @@ export type SkillsStore = {
   addSkill: (skill: Skill) => void;
   removeSkill: (skill_id: number) => void;
   clearSkills: () => void;
+  setSkills: (skills: Skill[]) => void;
+
 };
 
 // Step 5: Resume

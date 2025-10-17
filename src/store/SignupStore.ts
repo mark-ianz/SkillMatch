@@ -48,6 +48,7 @@ const useSignupStore = create<SignupStore>((set, get) => ({
   // Step 4: Skills
   skills: [],
   addSkill: (skill) => set((state) => ({ skills: [...state.skills, skill] })),
+  setSkills: (skills) => set({ skills }),
   removeSkill: (skill_id) =>
     set((state) => ({
       skills: state.skills.filter((s) => s.skill_id !== skill_id),
@@ -154,6 +155,7 @@ const useSignupStore = create<SignupStore>((set, get) => ({
         addSkill: state.addSkill,
         removeSkill: state.removeSkill,
         clearSkills: state.clearSkills,
+        setSkills: state.setSkills,
       },
       resume: {
         resume_path: state.resume_path,
