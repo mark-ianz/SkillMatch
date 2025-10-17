@@ -1,4 +1,5 @@
 import { OnboardingService } from "@/services/onboarding.services";
+import { SkillServices } from "@/services/skill.services";
 import { NextResponse } from "next/server";
 
 export async function GET(
@@ -16,6 +17,8 @@ export async function GET(
 
   const onboardingData = await OnboardingService.getOnboarding(Number(params.id));
 
+  const skills = await SkillServices.getUserSkills(Number(params.id));
+
   if (!onboardingData) {
     return NextResponse.json(
       { error: "Onboarding data not found" },
@@ -23,5 +26,5 @@ export async function GET(
     );
   }
 
-  return NextResponse.json(onboardingData, { status: 200 });
+  return NextResponse.json({...onboardingData, skills}, { status: 200 });
 }
