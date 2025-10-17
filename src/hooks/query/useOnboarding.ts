@@ -44,6 +44,9 @@ export function useGetOnboarding(userId: number | undefined) {
   // Step 4: Skills
   const setSkills = useSignupStore((state) => state.setSkills);
 
+  // Step 5: Resume
+  const setResumePath = useSignupStore((state) => state.setResumePath);
+
   return useQuery({
     queryKey: ["onboarding", userId],
     queryFn: async () => {
@@ -79,6 +82,8 @@ export function useGetOnboarding(userId: number | undefined) {
       // Skills
       setSkills(data.skills || []);
 
+      // Resume
+      setResumePath(data.resume_path || null);
       console.log(data);
 
       return data;
