@@ -5,18 +5,23 @@ import StepContainer from "@/components/page_specific/onboarding/StepContainer";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import useSignupStore from "@/store/SignupStore";
-import useUploadResume from "@/hooks/query/useResume";
 import { toast } from "sonner";
 import SkipStep from "@/components/page_specific/onboarding/SkipStep";
+import { useSession } from "next-auth/react";
+import { useUpdateStepFiveOnboarding } from "@/hooks/query/useOnboarding";
 
 export default function Step5() {
+  const session = useSession();
+
+  const user_id = session.data?.user.user_id;
+
   const [file, setFile] = useState<File | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [uploadedPath, setUploadedPath] = useState<string | null>(null);
 
   const allowed = ["application/pdf", "image/jpeg", "image/png"];
   const MAX_BYTES = 5 * 1024 * 1024; // 5MB
-  const { mutateAsync, isPending } = useUploadResume();
+  const { mutateAsync, isPending } = useUpdateStepFiveOnboarding(user_id!);
 
   function handleFile(e: React.ChangeEvent<HTMLInputElement>) {
     setError(null);
