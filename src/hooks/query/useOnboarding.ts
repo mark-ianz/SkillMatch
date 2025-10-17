@@ -8,6 +8,8 @@ import {
 import useSignupStore from "@/store/SignupStore";
 import { OnboardingFullInfo } from "@/types/onboarding.types";
 
+type UploadResult = { path: string };
+
 const nextStep = useSignupStore.getState().nextStep;
 const farthestStep = useSignupStore.getState().farthestStep;
 
@@ -124,6 +126,29 @@ export function useUpdateStepThreeOnboarding(userId: number | undefined) {
     },
     onSuccess: () => {
       // increment the step on the store
+      nextStep();
+    },
+  });
+}
+
+export function useUpdateStepFiveOnboarding (userId: number | undefined) {
+  const nextStep = useSignupStore.getState().nextStep;
+  const setResumePath = useSignupStore.getState().setResumePath;
+
+  return useMutation({
+    mutationKey: ["onboarding", userId, "upload-resume"],
+    mutationFn: async (file: File) => {
+      const fd = new FormData();
+      fd.append("resume", file, file.name);
+      const { data } = await api.post(`/onboarding/${userId}/submit/${farthestStep}/step-five`, fd, {
+        headers: { "Content-Type": "multipart/form-data" },
+      });
+      return data as UploadResult;
+    },
+    onSuccess: (data) => {
+      if (data?.path) {
+        setResumePath(data.path);
+      }
       nextStep();
     },
   });
