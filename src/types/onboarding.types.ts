@@ -1,4 +1,5 @@
 import { OJTProfile } from "./ojt_profile.types";
+import { Skill } from "./skill.types";
 import { AcademicDetails, User } from "./user.types";
 
 export type Onboarding = {
@@ -9,4 +10,7 @@ export type Onboarding = {
   created_at: Date;
 };
 
-export type OnboardingFullInfo = Onboarding & User & AcademicDetails & OJTProfile;
+export type OnboardingFullInfo = Onboarding &
+  User &
+  AcademicDetails &
+  OJTProfile & { skills: Skill[] };
