@@ -4,6 +4,7 @@ import {
   OnboardingStepOneSchema,
   OnboardingStepThreeSchema,
   OnboardingStepTwoSchema,
+  OnboardingStepSixSchema,
 } from "@/schema/onboarding";
 import useSignupStore from "@/store/SignupStore";
 import { OnboardingFullInfo } from "@/types/onboarding.types";
@@ -164,6 +165,22 @@ export function useUpdateStepFiveOnboarding(userId: number | undefined) {
       if (data?.path) {
         setResumePath(data.path);
       }
+      nextStep();
+    },
+  });
+}
+
+export function useUpdateStepSixOnboarding(userId: number | undefined) {
+  return useMutation({
+    mutationKey: ["onboarding", userId, "step-six"],
+    mutationFn: async (data: OnboardingStepSixSchema) => {
+      await api.post(`/onboarding/${userId}/submit/${farthestStep}/step-six`, {
+        ...data,
+      });
+      return;
+    },
+    onSuccess: () => {
+      // increment the step on the store
       nextStep();
     },
   });

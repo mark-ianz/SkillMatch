@@ -60,6 +60,12 @@ const useSignupStore = create<SignupStore>((set, get) => ({
   setResumePath: (resume_path) => set({ resume_path }),
   clearResume: () => set({ resume_path: null }),
 
+  // Step 6: Password
+  password: "",
+  confirm_password: "",
+  setPassword: (password) => set({ password }),
+  setConfirmPassword: (confirm_password) => set({ confirm_password }),
+
   // General Signup flow
   currentStep: 1,
   farthestStep: 1,

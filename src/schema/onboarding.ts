@@ -115,3 +115,19 @@ export type OnboardingStepTwoSchema = z.infer<typeof onboardingStepTwoSchema>;
 export type OnboardingStepThreeSchema = z.infer<
   typeof onboardingStepThreeSchema
 >;
+
+const MIN_PASSWORD_CHAR = Number(process.env.NEXT_PUBLIC_MIN_PASSWORD_CHAR) || 8;
+
+export const onboardingStepSixSchema = z
+  .object({
+    password: z
+      .string()
+      .min(MIN_PASSWORD_CHAR, { message: `Password must be at least ${MIN_PASSWORD_CHAR} characters` }),
+    confirm_password: z.string(),
+  })
+  .refine((data) => data.password === data.confirm_password, {
+    path: ["confirm_password"],
+    message: "Passwords do not match",
+  });
+
+export type OnboardingStepSixSchema = z.infer<typeof onboardingStepSixSchema>;

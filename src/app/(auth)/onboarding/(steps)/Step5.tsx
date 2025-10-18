@@ -9,7 +9,6 @@ import { toast } from "sonner";
 import SkipStep from "@/components/page_specific/onboarding/SkipStep";
 import { useSession } from "next-auth/react";
 import { useUpdateStepFiveOnboarding } from "@/hooks/query/useOnboarding";
-import { X } from "lucide-react";
 import Label from "@/components/common/input/Label";
 
 export default function Step5() {

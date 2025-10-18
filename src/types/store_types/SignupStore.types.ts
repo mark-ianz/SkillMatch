@@ -74,6 +74,14 @@ export type ResumeStore = {
   clearResume: () => void;
 };
 
+// Step 6: Password
+export type PasswordStore = {
+  password: string;
+  confirm_password: string;
+  setPassword: (password: string) => void;
+  setConfirmPassword: (confirm_password: string) => void;
+};
+
 // General Signup Store
 export type GeneralSignupStore = {
   /*   
@@ -104,4 +112,5 @@ export type SignupStore = PersonalDetailsStore &
   AcademicDetailsStore &
   SkillsStore &
   ResumeStore &
+  PasswordStore &
   GeneralSignupStore;
