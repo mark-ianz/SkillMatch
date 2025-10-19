@@ -17,7 +17,7 @@ export const ResumeService = {
     const current_path = row[0]?.resume_path;
 
     if (current_path) {
-      deleteFile(current_path);
+      await deleteFile(current_path);
     }
 
     // if there is a current_path, delete the file
@@ -47,8 +47,8 @@ export const ResumeService = {
       throw new ServiceError("Invalid file type", 400);
     }
 
-    const uploadsDir = path.join(process.cwd(), "public", "uploads", "resumes");
-    fs.mkdirSync(uploadsDir, { recursive: true });
+  const uploadsDir = path.join(process.cwd(), "public", "uploads", "resumes");
+  fs.mkdirSync(uploadsDir, { recursive: true });
 
     const arrayBuffer = await fileObj.arrayBuffer!();
     const buffer = Buffer.from(arrayBuffer);
@@ -75,6 +75,28 @@ export const ResumeService = {
       return true;
     } catch (error) {
       console.log(error);
+      return false;
+    }
+  },
+  delete_resume: async (user_id: number) => {
+    // get current resume path from DB
+    const [rows] = await db.query<(OJTProfile & RowDataPacket)[]>(
+      "SELECT resume_path FROM ojt_profile WHERE user_id = ?",
+      [user_id]
+    );
+
+    const resumePath = rows[0]?.resume_path;
+    if (!resumePath) return true;
+
+    // use safe delete helper
+    const deleted = await deleteFile(resumePath);
+
+    // remove DB reference regardless of file delete success
+    try {
+      await db.query("UPDATE ojt_profile SET resume_path = NULL WHERE user_id = ?", [user_id]);
+      return deleted;
+    } catch (err) {
+      console.error(err);
       return false;
     }
   },

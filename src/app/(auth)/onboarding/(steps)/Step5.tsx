@@ -10,6 +10,7 @@ import SkipStep from "@/components/page_specific/onboarding/SkipStep";
 import { useSession } from "next-auth/react";
 import { useUpdateStepFiveOnboarding } from "@/hooks/query/useOnboarding";
 import Label from "@/components/common/input/Label";
+import { api } from "@/lib/axios";
 
 export default function Step5() {
   const session = useSession();
@@ -88,9 +89,17 @@ export default function Step5() {
             <Button
               variant={"outline"}
               size="sm"
-              onClick={() => {
+              onClick={async () => {
                 const { clearResume } = useSignupStore.getState();
+                const user_id = session.data?.user.user_id;
+                // optimistically clear
                 clearResume();
+                if (!user_id) return;
+                try {
+                  await api.post(`/ojt/resume/delete`, { user_id });
+                } catch (err) {
+                  console.error("Failed to delete resume on server:", err);
+                }
               }}
             >
               Clear
