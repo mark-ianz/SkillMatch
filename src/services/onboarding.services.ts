@@ -4,7 +4,9 @@ import {
   OnboardingStepOneSchema,
   OnboardingStepThreeSchema,
   OnboardingStepTwoSchema,
+  OnboardingStepSixSchema,
 } from "@/schema/onboarding";
+import bcrypt from "bcrypt";
 import { OnboardingFullInfo } from "@/types/onboarding.types";
 
 export const OnboardingService = {
@@ -135,5 +137,33 @@ export const OnboardingService = {
         user_id,
       ]
     );
+  },
+  submitStepSix: async (
+    user_id: number,
+    farthestStep: number,
+    data: OnboardingStepSixSchema
+  ) => {
+    const connection = await db.getConnection();
+    try {
+      await connection.beginTransaction();
+
+      // Hash the password and update the account table
+      const hashed = bcrypt.hashSync(data.password, 10);
+      await connection.query<ResultSetHeader>(
+        `UPDATE account SET password_hash = ? WHERE user_id = ?`,
+        [hashed, user_id]
+      );
+
+      // Update the onboarding step to 6 (or keep farthest)
+      await OnboardingService.updateStep(user_id, 6, farthestStep);
+
+      await connection.commit();
+    } catch (error) {
+      await connection.rollback();
+      throw error;
+    } finally {
+      connection.release();
+    }
+    return;
   },
 };

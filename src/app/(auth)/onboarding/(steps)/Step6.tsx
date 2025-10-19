@@ -20,7 +20,7 @@ export default function Step6() {
 
   const session = useSession();
   const userId = session.data?.user?.user_id;
-  const { mutateAsync, isPending } = useUpdateStepSixOnboarding(userId);
+  const { mutate, isPending } = useUpdateStepSixOnboarding(userId);
 
   // PasswordInput manages visibility internally
 
@@ -29,7 +29,7 @@ export default function Step6() {
       setError(null);
       const parsed = onboardingStepSixSchema.parse({ password: password.trim(), confirm_password: confirm_password.trim() });
       // call backend
-      await mutateAsync(parsed);
+      mutate(parsed);
     } catch (err) {
       // zod validation error
       if (err instanceof ZodError) {
