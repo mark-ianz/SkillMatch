@@ -10,6 +10,21 @@ import bcrypt from "bcrypt";
 import { OnboardingFullInfo } from "@/types/onboarding.types";
 
 export const OnboardingService = {
+  // helper: perform finalization using existing connection
+  _finalizeWithConnection: async (connection: unknown, user_id: number) => {
+    // set status to active and remove onboarding row
+    // connection is expected to be a DB connection with a `query` method
+    // We avoid generic type args here to keep signatures compatible.
+    // connection is expected to be a DB connection with a `query` method
+    await (connection as unknown as { query: (sql: string, params?: unknown[]) => Promise<unknown> }).query(
+      `UPDATE user SET status_id = ? WHERE user_id = ?`,
+      [1, user_id]
+    );
+    await (connection as unknown as { query: (sql: string, params?: unknown[]) => Promise<unknown> }).query(
+      `DELETE FROM onboarding WHERE user_id = ?`,
+      [user_id]
+    );
+  },
   getOnboarding: async (user_id: number) => {
     const [rows] = await db.query<(OnboardingFullInfo & RowDataPacket)[]>(
       `SELECT o.*, u.*, op.*, a.email FROM 
@@ -154,9 +169,24 @@ export const OnboardingService = {
         [hashed, user_id]
       );
 
-      // Update the onboarding step to 6 (or keep farthest)
-      await OnboardingService.updateStep(user_id, 6, farthestStep);
+      // Finalize onboarding (same actions used by the skip flow)
+      await OnboardingService._finalizeWithConnection(connection, user_id);
 
+      await connection.commit();
+    } catch (error) {
+      await connection.rollback();
+      throw error;
+    } finally {
+      connection.release();
+    }
+    return;
+  },
+  finalizeOnboardingNoPassword: async (user_id: number) => {
+    const connection = await db.getConnection();
+    try {
+      await connection.beginTransaction();
+      // perform identical finalization steps using the shared helper
+      await OnboardingService._finalizeWithConnection(connection, user_id);
       await connection.commit();
     } catch (error) {
       await connection.rollback();

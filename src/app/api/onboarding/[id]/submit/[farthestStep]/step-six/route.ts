@@ -36,7 +36,7 @@ export async function POST(
 
   try {
     await OnboardingService.submitStepSix(Number(params.id), params.farthestStep, data);
-    return NextResponse.json({ status: 204 });
+    return NextResponse.json({ ok: true }, { status: 200 });
   } catch (error) {
     console.error("Error submitting onboarding step six:", error);
     return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
