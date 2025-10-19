@@ -38,6 +38,10 @@ export const SkillServices = {
     );
     const skill_ids = rows.map((row) => row.skill_id);
 
+    if (skill_ids.length === 0) {
+      return [];
+    }
+
     const [skillRows] = await db.query(
       `SELECT * FROM skill WHERE skill_id IN (?)`,
       [skill_ids]
