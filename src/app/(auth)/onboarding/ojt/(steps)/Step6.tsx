@@ -1,0 +1,109 @@
+"use client";
+
+import React from "react";
+import StepContainer from "@/components/page_specific/onboarding/StepContainer";
+import { Button } from "@/components/ui/button";
+import useSignupStore from "@/store/SignupStore";
+import { useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
+import { useUpdateStepSixOnboarding } from "@/hooks/query/useOnboarding";
+import { onboardingStepSixSchema } from "@/schema/onboarding";
+import { ZodError } from "zod";
+import { formatZodError } from "@/lib/utils";
+import PasswordInput from "@/components/common/input/PasswordInput";
+import { api } from "@/lib/axios";
+
+export default function Step6() {
+  const password = useSignupStore((s) => s.password);
+  const confirm_password = useSignupStore((s) => s.confirm_password);
+  const setPassword = useSignupStore((s) => s.setPassword);
+  const setConfirmPassword = useSignupStore((s) => s.setConfirmPassword);
+  const setError = useSignupStore((s) => s.setError);
+
+  const session = useSession();
+  const userId = session.data?.user?.user_id;
+  const router = useRouter();
+  const { mutate, isPending } = useUpdateStepSixOnboarding(userId);
+  const farthestStep = useSignupStore((s) => s.farthestStep);
+  const nextStep = useSignupStore((s) => s.nextStep);
+
+  // PasswordInput manages visibility internally
+
+  async function handleNext() {
+    try {
+      setError(null);
+      const parsed = onboardingStepSixSchema.parse({ password: password.trim(), confirm_password: confirm_password.trim() });
+      // call backend
+      mutate(parsed, {
+        onSuccess: () => {
+          // increment locally then navigate to profile after successful finalization
+          nextStep();
+          router.push("/profile");
+        },
+        onError: (err) => {
+          const msg = err instanceof Error ? err.message : String(err);
+          setError([msg]);
+        },
+      });
+    } catch (err) {
+      // zod validation error
+      if (err instanceof ZodError) {
+        setError(formatZodError(err));
+        return;
+      }
+
+      // mutation or other error
+      const msg = err instanceof Error ? err.message : String(err);
+      setError([msg]);
+    }
+  }
+
+  return (
+    <StepContainer>
+      <div className="flex flex-col gap-4 rounded-md">
+        <PasswordInput
+          id="password"
+          label="Password"
+          value={password}
+          onChange={setPassword}
+          autoComplete="new-password"
+          required
+        />
+
+        <PasswordInput
+          id="confirm_password"
+          label="Confirm Password"
+          value={confirm_password}
+          onChange={setConfirmPassword}
+          autoComplete="new-password"
+          required
+        />
+      </div>
+      <div className="flex items-center justify-end gap-2">
+        <Button
+          type="button"
+          variant={"outline"}
+          onClick={async () => {
+            // finalize on server then advance locally and redirect
+            if (!userId) return;
+            try {
+              setError(null);
+              await api.post(`/onboarding/${userId}/submit/${farthestStep}/step-six-skip`);
+              nextStep();
+              router.push("/profile");
+            } catch (err) {
+              console.error("Failed to finalize onboarding on skip:", err);
+              const msg = err instanceof Error ? err.message : String(err);
+              setError([msg]);
+            }
+          }}
+        >
+          Skip
+        </Button>
+        <Button disabled={isPending || password.trim() === ""} type="button" onClick={handleNext} className="w-24">
+          {isPending ? "Saving..." : "Next"}
+        </Button>
+      </div>
+    </StepContainer>
+  );
+}
