@@ -2,17 +2,19 @@ import useSignupStore from "@/store/SignupStore";
 import { Check } from "lucide-react";
 import React from "react";
 import { cn } from "@/lib/utils";
-import { steps } from "@/const/steps";
+import { employer_steps, steps } from "@/const/steps";
 
-export default function RenderSteps() {
+export default function RenderSteps({ type }: { type: "ojt" | "employer" }) {
   const farthestStep = useSignupStore((state) => state.farthestStep);
   const currentStep = useSignupStore((state) => state.currentStep);
 
   const goToStep = useSignupStore((state) => state.goToStep);
 
+  const stepsToRender = () => (type === "employer" ? employer_steps : steps);
+
   return (
     <ol className="flex flex-col h-full justify-between">
-      {steps.map((step, index) => {
+      {stepsToRender().map((step, index) => {
         const isCurrent = currentStep === step.step;
         const isCompleted = farthestStep > step.step;
 
@@ -54,7 +56,9 @@ export default function RenderSteps() {
                     : "text-skillmatch-muted-light"
                 )}
               >
-                <p className="text-xs">Step {step.step}/{steps.length}</p>
+                <p className="text-xs">
+                  Step {step.step}/{steps.length}
+                </p>
                 <p className="text-sm">{step.title}</p>
               </div>
             </div>
