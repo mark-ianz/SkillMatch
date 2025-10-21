@@ -9,11 +9,6 @@ export type User = Address & {
   last_name: string;
   gender: "male" | "female" | "prefer not to say";
   birthdate: Date;
-  street_name: string;
-  house_number: string;
-  subdivision: string | null;
-  postal_code: string;
-  barangay: string;
   phone_number: string;
   role_id: number;
   status_id: number;
