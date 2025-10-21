@@ -6,27 +6,34 @@ import RenderSteps from "@/components/page_specific/onboarding/RenderSteps";
 import Image from "next/image";
 import ErrorArray from "@/components/common/ErrorArray";
 import useSignupStore from "@/store/SignupStore";
-import { getStepDetails } from "@/lib/utils";
+import { cn, getStepDetails } from "@/lib/utils";
 import TextLogo from "@/components/global/TextLogo";
 import { useEffect, useState } from "react";
 import { useSession } from "next-auth/react";
 import LoadingGeneric from "@/components/global/LoadingGeneric";
-import { redirect, RedirectType } from "next/navigation";
+import { redirect, RedirectType, usePathname } from "next/navigation";
 
 export default function OnboardingLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  // checks if the path is for ojt or employer
+  const path = usePathname();
+  const type = path.includes("/onboarding/ojt") ? "ojt" : "employer";
+
   const session = useSession();
   const currentStep = useSignupStore((state) => state.currentStep);
   const errors = useSignupStore((state) => state.error);
 
-  const [stepDetails, setStepDetails] = useState(getStepDetails(currentStep));
+  const [currentStepDetails, setCurrentStepDetails] = useState(
+    getStepDetails(currentStep)
+  );
 
+  // update current step details when currentStep changes
   useEffect(() => {
-    setStepDetails(getStepDetails(currentStep));
-  }, [currentStep]);
+    setCurrentStepDetails(getStepDetails(currentStep, type));
+  }, [currentStep, type]);
 
   if (session.status === "loading") {
     return (
@@ -44,17 +51,19 @@ export default function OnboardingLayout({
   return (
     <QueryClientProviderWrapper>
       <MainLayout className="items-center">
-        <div className="flex w-full border rounded-md shadow-md">
-          <div className="w-1/3 shrink-0 bg-skillmatch-primary-green rounded-l-md">
+        <div className="flex w-full border rounded-md shadow-md min-h-[600px]">
+          <div className={cn("w-1/3 shrink-0 rounded-l-md", type === "ojt" ? " bg-skillmatch-primary-green " : " bg-skillmatch-primary-blue")}>
             <div className="flex flex-col gap-4 py-10 px-10">
               <div className="flex flex-col gap-12">
                 <TextLogo />
                 <p className="text-2xl text-skillmatch-light flex flex-col">
                   Step {currentStep}
-                  <span className="text-sm">{stepDetails?.description}</span>
+                  <span className="text-sm">
+                    {currentStepDetails?.description}
+                  </span>
                 </p>
               </div>
-              <RenderSteps />
+              <RenderSteps type={type} />
             </div>
           </div>
           <div className="grow p-10 flex flex-col gap-10">
@@ -70,7 +79,7 @@ export default function OnboardingLayout({
               <div className="flex flex-col gap-4">
                 <div className="flex flex-col gap-2">
                   <p className="text-4xl text-skillmatch-dark">
-                    {stepDetails?.title}
+                    {currentStepDetails?.title}
                   </p>
                   <p>
                     <span className="text-red-500 mr-1">*</span>{" "}
