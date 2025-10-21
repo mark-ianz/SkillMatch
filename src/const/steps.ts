@@ -30,3 +30,16 @@ export const steps = [
     description: "Set your password",
   },
 ];
+
+export const employer_steps = [
+  {
+    step: 1,
+    title: "Company Details",
+    description: "Enter your company information",
+  },
+  {
+    step: 2,
+    title: "Account Verification",
+    description: "Upload documents for verification",
+  },
+]
