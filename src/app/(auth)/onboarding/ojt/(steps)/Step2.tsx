@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button";
 import SelectCityMunicipality from "@/components/common/input/SelectCityMunicipality";
 import SelectBarangay from "@/components/common/input/SelectBarangay";
 import { onboardingStepTwoSchema } from "@/schema/onboarding";
-import { useUpdateStepTwoOnboarding } from "@/hooks/query/useOnboarding";
+import { useUpdateStepTwoOnboardingOJT } from "@/hooks/query/useOnboardingOJT";
 import { useSession } from "next-auth/react";
 import { ZodError } from "zod";
 import { formatZodError } from "@/lib/utils";
@@ -15,7 +15,7 @@ import { formatZodError } from "@/lib/utils";
 export default function Step2() {
   const session = useSession();
 
-  const { mutate, isPending } = useUpdateStepTwoOnboarding(
+  const { mutate, isPending } = useUpdateStepTwoOnboardingOJT(
     session.data?.user.user_id
   );
 

@@ -6,7 +6,7 @@ import React from "react";
 import college_courses from "@/data/college_courses.json";
 import { addYears } from "date-fns";
 import { Button } from "@/components/ui/button";
-import { useUpdateStepThreeOnboarding } from "@/hooks/query/useOnboarding";
+import { useUpdateStepThreeOnboardingOJT } from "@/hooks/query/useOnboardingOJT";
 import { useSession } from "next-auth/react";
 import { onboardingStepThreeSchema } from "@/schema/onboarding";
 import { ZodError } from "zod";
@@ -14,7 +14,7 @@ import { formatZodError } from "@/lib/utils";
 
 export default function Step3() {
   const session = useSession();
-  const { mutate, isPending } = useUpdateStepThreeOnboarding(
+  const { mutate, isPending } = useUpdateStepThreeOnboardingOJT(
     session.data?.user.user_id
   );
 

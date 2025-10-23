@@ -6,12 +6,12 @@ import { Button } from "@/components/ui/button";
 import useSignupStore from "@/store/SignupStore";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
-import { useUpdateStepSixOnboarding } from "@/hooks/query/useOnboarding";
-import { onboardingStepSixSchema } from "@/schema/onboarding";
+import { useUpdateStepSixOnboardingOJT } from "@/hooks/query/useOnboardingOJT";
 import { ZodError } from "zod";
 import { formatZodError } from "@/lib/utils";
 import PasswordInput from "@/components/common/input/PasswordInput";
 import { api } from "@/lib/axios";
+import { onboardingPasswordSchema } from "@/schema/onboarding";
 
 export default function Step6() {
   const password = useSignupStore((s) => s.password);
@@ -23,7 +23,7 @@ export default function Step6() {
   const session = useSession();
   const userId = session.data?.user?.user_id;
   const router = useRouter();
-  const { mutate, isPending } = useUpdateStepSixOnboarding(userId);
+  const { mutate, isPending } = useUpdateStepSixOnboardingOJT(userId);
   const farthestStep = useSignupStore((s) => s.farthestStep);
   const nextStep = useSignupStore((s) => s.nextStep);
 
@@ -32,7 +32,7 @@ export default function Step6() {
   async function handleNext() {
     try {
       setError(null);
-      const parsed = onboardingStepSixSchema.parse({ password: password.trim(), confirm_password: confirm_password.trim() });
+      const parsed = onboardingPasswordSchema.parse({ password: password.trim(), confirm_password: confirm_password.trim() });
       // call backend
       mutate(parsed, {
         onSuccess: () => {

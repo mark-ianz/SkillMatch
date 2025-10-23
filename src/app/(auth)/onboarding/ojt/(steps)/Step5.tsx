@@ -8,7 +8,7 @@ import useSignupStore from "@/store/SignupStore";
 import { toast } from "sonner";
 import SkipStep from "@/components/page_specific/onboarding/SkipStep";
 import { useSession } from "next-auth/react";
-import { useUpdateStepFiveOnboarding } from "@/hooks/query/useOnboarding";
+import { useUpdateStepFiveOnboardingOJT } from "@/hooks/query/useOnboardingOJT";
 import Label from "@/components/common/input/Label";
 import { api } from "@/lib/axios";
 
@@ -24,7 +24,7 @@ export default function Step5() {
 
   const allowed = ["application/pdf", "image/jpeg", "image/png"];
   const MAX_BYTES = 5 * 1024 * 1024; // 5MB
-  const { mutateAsync, isPending } = useUpdateStepFiveOnboarding(user_id!);
+  const { mutateAsync, isPending } = useUpdateStepFiveOnboardingOJT(user_id!);
 
   function handleFile(e: React.ChangeEvent<HTMLInputElement>) {
     setError(null);

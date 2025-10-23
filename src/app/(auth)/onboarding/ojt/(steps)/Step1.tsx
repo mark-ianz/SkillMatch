@@ -1,6 +1,5 @@
 import InputWithLabel from "@/components/common/input/InputWithLabel";
 import SelectWithLabel from "@/components/common/input/SelectWithLabel";
-import { useUpdateStepOneOnboarding } from "@/hooks/query/useOnboarding";
 import useSignupStore from "@/store/SignupStore";
 import { useSession } from "next-auth/react";
 import React from "react";
@@ -11,12 +10,13 @@ import { ZodError } from "zod";
 import { formatZodError } from "@/lib/utils";
 import RowContainer from "@/components/common/input/RowContainer";
 import StepContainer from "@/components/page_specific/onboarding/StepContainer";
+import { useUpdateStepOneOnboardingOJT } from "@/hooks/query/useOnboardingOJT";
 
 export default function Step1() {
   const session = useSession();
   const setError = useSignupStore((state) => state.setError);
 
-  const { mutate, isPending } = useUpdateStepOneOnboarding(
+  const { mutate, isPending } = useUpdateStepOneOnboardingOJT(
     session.data?.user.user_id
   );
 
