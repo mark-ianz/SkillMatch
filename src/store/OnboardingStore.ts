@@ -15,7 +15,11 @@ export type OnboardingStoreState = {
   goToStep: (step: number) => void;
   setPassword: (password: string) => void;
   setConfirmPassword: (confirm_password: string) => void;
+  setType: (type: "ojt" | "employer") => void;
 };
+
+const MAX_STEP_OJT = 6;
+const MAX_STEP_EMPLOYER = 3;
 
 const useOnboardingStore = create<OnboardingStoreState>((set, get) => ({
   currentStep: 1,
@@ -24,7 +28,7 @@ const useOnboardingStore = create<OnboardingStoreState>((set, get) => ({
   password: "",
   confirm_password: "",
   type: "ojt",
-  MAX_STEP: get().type === "ojt" ? 6 : 3,
+  MAX_STEP: 6,
 
   // Setter
   setPassword: (password) => set({ password }),
@@ -44,6 +48,8 @@ const useOnboardingStore = create<OnboardingStoreState>((set, get) => ({
       ),
     })),
   setError: (error) => set({ error }),
+  setType: (type) =>
+    set({ type, MAX_STEP: type === "ojt" ? MAX_STEP_OJT : MAX_STEP_EMPLOYER }), // Update MAX_STEP based on type
   nextStep: () => {
     const { currentStep, farthestStep } = get();
     const newStep = Math.min(get().MAX_STEP, currentStep + 1);
