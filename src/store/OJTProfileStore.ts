@@ -20,7 +20,7 @@ export type OJTProfileStoreState = Partial<OJTProfile> &
     setExpectedGraduationYear: (expected_graduation_year: string) => void;
   };
 
-const useOJTProfileStore = create<OJTProfileStoreState>((set, get) => ({
+const useOJTProfileStore = create<OJTProfileStoreState>((set) => ({
   // Academic Details
   ojt_id: undefined,
   user_id: undefined,
