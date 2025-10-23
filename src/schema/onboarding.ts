@@ -116,13 +116,52 @@ export type OnboardingStepThreeSchema = z.infer<
   typeof onboardingStepThreeSchema
 >;
 
-const MIN_PASSWORD_CHAR = Number(process.env.NEXT_PUBLIC_MIN_PASSWORD_CHAR) || 8;
+// Company Onboarding Schemas
+export const companyOnboardingStepOneSchema = z.object({
+  company_name: z
+    .string()
+    .trim()
+    .min(1, { message: "Company name is required" }),
+  company_email: z.email({ message: "Invalid email address" }),
+  telephone_number: z
+    .string()
+    .trim()
+    .min(7, { message: "Telephone number must be at least 7 digits" })
+    .refine((val) => /^\d+$/.test(val), {
+      message: "Telephone number must only contain digits",
+    }),
+  phone_number: z
+    .string()
+    .trim()
+    .min(MAX_PHONE_NUMBER_CHAR, {
+      message: `Phone number must be at least ${MAX_PHONE_NUMBER_CHAR} digits`,
+    })
+    .refine((val) => /^\d+$/.test(val), {
+      message: "Phone number must only contain digits",
+    }),
+  website: z
+    .url({ message: "Invalid website URL" })
+    .optional()
+    .or(z.literal("")),
+  facebook_page: z
+    .url({ message: "Invalid Facebook page URL" })
+    .optional()
+    .or(z.literal("")),
+});
 
-export const onboardingStepSixSchema = z
+export type CompanyOnboardingStepOneSchema = z.infer<
+  typeof companyOnboardingStepOneSchema
+>;
+
+// Submit Password
+const MIN_PASSWORD_CHAR =
+  Number(process.env.NEXT_PUBLIC_MIN_PASSWORD_CHAR) || 8;
+
+export const onboardingPasswordSchema = z
   .object({
-    password: z
-      .string()
-      .min(MIN_PASSWORD_CHAR, { message: `Password must be at least ${MIN_PASSWORD_CHAR} characters` }),
+    password: z.string().min(MIN_PASSWORD_CHAR, {
+      message: `Password must be at least ${MIN_PASSWORD_CHAR} characters`,
+    }),
     confirm_password: z.string(),
   })
   .refine((data) => data.password === data.confirm_password, {
@@ -130,4 +169,4 @@ export const onboardingStepSixSchema = z
     message: "Passwords do not match",
   });
 
-export type OnboardingStepSixSchema = z.infer<typeof onboardingStepSixSchema>;
+export type OnboardingPasswordSchema = z.infer<typeof onboardingPasswordSchema>;
