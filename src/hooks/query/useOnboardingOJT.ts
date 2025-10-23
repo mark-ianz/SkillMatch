@@ -19,12 +19,14 @@ const farthestStep = useOnboardingStore.getState().farthestStep;
 export function useGetOnboardingOJT(userId: number | undefined) {
   const setUser = useUserStore((state) => state.setUser);
   const setOJTProfile = useOJTProfileStore((state) => state.setOJTProfile);
-  const setAcademicDetails = useOJTProfileStore((state) => state.setAcademicDetails);
+  const setAcademicDetails = useOJTProfileStore(
+    (state) => state.setAcademicDetails
+  );
   const setSkills = useOJTProfileStore((state) => state.setSkills);
-  const setResumePath = useOJTProfileStore((state) => state.setOJTProfile);
   // Onboarding step state
   const setCurrentStep = useOnboardingStore((state) => state.setCurrentStep);
   const setFarthestStep = useOnboardingStore((state) => state.setFarthestStep);
+  const setType = useOnboardingStore((state) => state.setType);
 
   return useQuery({
     queryKey: ["onboarding", userId],
@@ -32,6 +34,9 @@ export function useGetOnboardingOJT(userId: number | undefined) {
       const { data } = await api.get<OnboardingStudentFullInfo>(
         `/onboarding/${userId}`
       );
+
+      // Set type to OJT to ensure correct MAX_STEP
+      setType("ojt");
 
       // Set user data
       setUser({
