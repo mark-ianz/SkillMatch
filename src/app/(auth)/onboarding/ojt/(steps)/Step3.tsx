@@ -1,7 +1,6 @@
 import RowContainer from "@/components/common/input/RowContainer";
 import SelectWithLabel from "@/components/common/input/SelectWithLabel";
 import StepContainer from "@/components/page_specific/onboarding/StepContainer";
-import useSignupStore from "@/store/SignupStore";
 import React from "react";
 import college_courses from "@/data/college_courses.json";
 import { addYears } from "date-fns";
@@ -11,6 +10,8 @@ import { useSession } from "next-auth/react";
 import { onboardingStepThreeSchema } from "@/schema/onboarding";
 import { ZodError } from "zod";
 import { formatZodError } from "@/lib/utils";
+import useOJTProfileStore from "@/store/OJTProfileStore";
+import useOnboardingStore from "@/store/OnboardingStore";
 
 export default function Step3() {
   const session = useSession();
@@ -18,20 +19,20 @@ export default function Step3() {
     session.data?.user.user_id
   );
 
-  const college = useSignupStore((state) => state.college);
-  const course = useSignupStore((state) => state.course);
-  const year_level = useSignupStore((state) => state.year_level);
-  const expected_graduation_year = useSignupStore(
+  const college = useOJTProfileStore((state) => state.college);
+  const course = useOJTProfileStore((state) => state.course);
+  const year_level = useOJTProfileStore((state) => state.year_level);
+  const expected_graduation_year = useOJTProfileStore(
     (state) => state.expected_graduation_year
   );
 
-  const setCollege = useSignupStore((state) => state.setCollege);
-  const setCourse = useSignupStore((state) => state.setCourse);
-  const setYearLevel = useSignupStore((state) => state.setYearLevel);
-  const setExpectedGraduationYear = useSignupStore(
+  const setCollege = useOJTProfileStore((state) => state.setCollege);
+  const setCourse = useOJTProfileStore((state) => state.setCourse);
+  const setYearLevel = useOJTProfileStore((state) => state.setYearLevel);
+  const setExpectedGraduationYear = useOJTProfileStore(
     (state) => state.setExpectedGraduationYear
   );
-  const setError = useSignupStore((state) => state.setError);
+  const setError = useOnboardingStore((state) => state.setError);
 
   const college_list = Object.keys(college_courses).map((college) => ({
     value: college,
@@ -76,7 +77,7 @@ export default function Step3() {
           containerClassName="w-full"
           id="college"
           label="College"
-          value={college}
+          value={college || college_list[0]?.value || ""}
           onChange={setCollege as (college: string) => void}
           items={college_list}
         />
@@ -88,7 +89,7 @@ export default function Step3() {
           containerClassName="w-full"
           id="course"
           label="Course"
-          value={course}
+          value={course || course_list[0]?.value || ""}
           onChange={setCourse as (course: string) => void}
           items={course_list}
         />
@@ -99,7 +100,7 @@ export default function Step3() {
           containerClassName="w-full"
           id="year_level"
           label="Year Level"
-          value={year_level}
+          value={year_level || "4th year"}
           onChange={setYearLevel as (year_level: string) => void}
           items={[
             { value: "3rd year", label: "3rd year" },
@@ -111,7 +112,7 @@ export default function Step3() {
           containerClassName="w-full"
           id="expected_graduation_year"
           label="Expected Graduation Year"
-          value={expected_graduation_year}
+          value={expected_graduation_year || ""}
           onChange={
             setExpectedGraduationYear as (
               expected_graduation_year: string

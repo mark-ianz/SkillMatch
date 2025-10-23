@@ -1,14 +1,14 @@
-import useSignupStore from "@/store/SignupStore";
 import { Check } from "lucide-react";
 import React from "react";
 import { cn } from "@/lib/utils";
 import { employer_steps, steps } from "@/const/steps";
+import useOnboardingStore from "@/store/OnboardingStore";
 
 export default function RenderSteps({ type }: { type: "ojt" | "employer" }) {
-  const farthestStep = useSignupStore((state) => state.farthestStep);
-  const currentStep = useSignupStore((state) => state.currentStep);
+  const farthestStep = useOnboardingStore((state) => state.farthestStep);
+  const currentStep = useOnboardingStore((state) => state.currentStep);
 
-  const goToStep = useSignupStore((state) => state.goToStep);
+  const goToStep = useOnboardingStore((state) => state.goToStep);
 
   const stepsToRender = () => (type === "employer" ? employer_steps : steps);
 

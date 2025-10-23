@@ -2,6 +2,7 @@ import { create } from "zustand";
 import { User } from "@/types/user.types";
 
 export type UserStoreState = Partial<User> & {
+  email: string | undefined;
   setUser: (user: Partial<User>) => void;
   clearUser: () => void;
 
@@ -11,6 +12,7 @@ export type UserStoreState = Partial<User> & {
   setPhoneNumber: (phone_number: string) => void;
   setGender: (gender: "male" | "female" | "prefer not to say") => void;
   setBirthdate: (birthdate: Date | null | string) => void;
+  setEmail: (email: string) => void;
 
   setStreetName: (street_name: string) => void;
   setHouseNumber: (house_number: string) => void;
@@ -38,6 +40,7 @@ const useUserStore = create<UserStoreState>((set) => ({
   postal_code: "",
   barangay: "",
   city_municipality: "",
+  email: undefined,
 
   // Personal Information Setters
   setFirstName: (first_name: string) => set({ first_name }),
@@ -47,6 +50,7 @@ const useUserStore = create<UserStoreState>((set) => ({
   setGender: (gender: "male" | "female" | "prefer not to say") =>
     set({ gender }),
   setBirthdate: (birthdate: Date | null | string) => set({ birthdate }),
+  setEmail: (email: string) => set({ email }),
 
   // Address Setters
   setPostalCode: (postal_code) => set({ postal_code }),

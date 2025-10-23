@@ -5,13 +5,13 @@ import MainLayout from "@/components/layout/MainLayout";
 import RenderSteps from "@/components/page_specific/onboarding/RenderSteps";
 import Image from "next/image";
 import ErrorArray from "@/components/common/ErrorArray";
-import useSignupStore from "@/store/SignupStore";
 import { cn, getStepDetails } from "@/lib/utils";
 import TextLogo from "@/components/global/TextLogo";
 import { useEffect, useState } from "react";
 import { useSession } from "next-auth/react";
 import LoadingGeneric from "@/components/global/LoadingGeneric";
 import { redirect, RedirectType, usePathname } from "next/navigation";
+import useOnboardingStore from "@/store/OnboardingStore";
 
 export default function OnboardingLayout({
   children,
@@ -23,8 +23,8 @@ export default function OnboardingLayout({
   const type = path.includes("/onboarding/ojt") ? "ojt" : "employer";
 
   const session = useSession();
-  const currentStep = useSignupStore((state) => state.currentStep);
-  const errors = useSignupStore((state) => state.error);
+  const currentStep = useOnboardingStore((state) => state.currentStep);
+  const errors = useOnboardingStore((state) => state.error);
 
   const [currentStepDetails, setCurrentStepDetails] = useState(
     getStepDetails(currentStep)

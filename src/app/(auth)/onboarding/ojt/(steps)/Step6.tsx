@@ -3,7 +3,6 @@
 import React from "react";
 import StepContainer from "@/components/page_specific/onboarding/StepContainer";
 import { Button } from "@/components/ui/button";
-import useSignupStore from "@/store/SignupStore";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { useUpdateStepSixOnboardingOJT } from "@/hooks/query/useOnboardingOJT";
@@ -12,20 +11,21 @@ import { formatZodError } from "@/lib/utils";
 import PasswordInput from "@/components/common/input/PasswordInput";
 import { api } from "@/lib/axios";
 import { onboardingPasswordSchema } from "@/schema/onboarding";
+import useOnboardingStore from "@/store/OnboardingStore";
 
 export default function Step6() {
-  const password = useSignupStore((s) => s.password);
-  const confirm_password = useSignupStore((s) => s.confirm_password);
-  const setPassword = useSignupStore((s) => s.setPassword);
-  const setConfirmPassword = useSignupStore((s) => s.setConfirmPassword);
-  const setError = useSignupStore((s) => s.setError);
+  const password = useOnboardingStore((s) => s.password);
+  const confirm_password = useOnboardingStore((s) => s.confirm_password);
+  const setPassword = useOnboardingStore((s) => s.setPassword);
+  const setConfirmPassword = useOnboardingStore((s) => s.setConfirmPassword);
+  const setError = useOnboardingStore((s) => s.setError);
 
   const session = useSession();
   const userId = session.data?.user?.user_id;
   const router = useRouter();
   const { mutate, isPending } = useUpdateStepSixOnboardingOJT(userId);
-  const farthestStep = useSignupStore((s) => s.farthestStep);
-  const nextStep = useSignupStore((s) => s.nextStep);
+  const farthestStep = useOnboardingStore((s) => s.farthestStep);
+  const nextStep = useOnboardingStore((s) => s.nextStep);
 
   // PasswordInput manages visibility internally
 

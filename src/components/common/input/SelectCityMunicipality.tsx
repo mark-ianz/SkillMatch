@@ -1,7 +1,7 @@
 import React from "react";
 import city_municipality from "@/data/city_municipality.json";
 import ComboBoxWithLabel from "@/components/common/input/ComboBoxWithLabel";
-import useSignupStore from "@/store/SignupStore";
+import useUserStore from "@/store/UserStore";
 
 export default function SelectCityMunicipality() {
   const city_municipality_list = Object.keys(city_municipality).map((key) => ({
@@ -9,11 +9,11 @@ export default function SelectCityMunicipality() {
     value: key,
   }));
 
-  const selected_city_municipality = useSignupStore(
+  const selected_city_municipality = useUserStore(
     (state) => state.city_municipality
   );
 
-  const setCityMunicipality = useSignupStore(
+  const setCityMunicipality = useUserStore(
     (state) => state.setCityMunicipality
   );
 
@@ -21,7 +21,7 @@ export default function SelectCityMunicipality() {
     <ComboBoxWithLabel
       required={true}
       containerClassName="w-full"
-      value={selected_city_municipality}
+      value={selected_city_municipality || ""}
       items={city_municipality_list}
       searchFor="city/municipality"
       id="city-municipality"

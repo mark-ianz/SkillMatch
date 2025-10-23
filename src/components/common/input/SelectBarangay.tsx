@@ -1,10 +1,10 @@
 import ComboBoxWithLabel from "@/components/common/input/ComboBoxWithLabel";
-import useSignupStore from "@/store/SignupStore";
 import city_municipality from "@/data/city_municipality.json";
+import useUserStore from "@/store/UserStore";
 import React from "react";
 
 export default function SelectBarangay() {
-  const selected_city_municipality = useSignupStore(
+  const selected_city_municipality = useUserStore(
     (state) => state.city_municipality
   );
 
@@ -15,14 +15,14 @@ export default function SelectBarangay() {
     value: barangay,
   }));
 
-  const setBarangay = useSignupStore((state) => state.setBarangay);
-  const barangay = useSignupStore((state) => state.barangay);
+  const setBarangay = useUserStore((state) => state.setBarangay);
+  const barangay = useUserStore((state) => state.barangay);
 
   return (
     <ComboBoxWithLabel
       required={true}
       containerClassName="w-full"
-      value={barangay}
+      value={barangay || ""}
       disabled={!selected_city_municipality}
       items={barangay_list}
       searchFor="barangay"

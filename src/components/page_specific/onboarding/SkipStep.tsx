@@ -1,12 +1,12 @@
 import { Button } from "@/components/ui/button";
-import useSignupStore from "@/store/SignupStore";
 import React from "react";
 import { useSession } from "next-auth/react";
 import { api } from "@/lib/axios";
+import useOnboardingStore from "@/store/OnboardingStore";
 
 export default function SkipStep() {
-  const nextStep = useSignupStore((state) => state.nextStep);
-  const farthestStep = useSignupStore((state) => state.farthestStep);
+  const nextStep = useOnboardingStore((state) => state.nextStep);
+  const farthestStep = useOnboardingStore((state) => state.farthestStep);
   const session = useSession();
 
   async function handleSkip() {

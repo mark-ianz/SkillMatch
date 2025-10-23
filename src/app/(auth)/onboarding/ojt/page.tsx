@@ -1,6 +1,5 @@
 "use client";
 
-import useSignupStore from "@/store/SignupStore";
 import React, { useEffect } from "react";
 import Step1 from "./(steps)/Step1";
 import Step2 from "./(steps)/Step2";
@@ -10,16 +9,17 @@ import Step5 from "./(steps)/Step5";
 import Step6 from "./(steps)/Step6";
 import { useSession } from "next-auth/react";
 import { useGetOnboardingOJT } from "@/hooks/query/useOnboardingOJT";
+import useOnboardingStore from "@/store/OnboardingStore";
 
 export default function FormInputs() {
   const session = useSession();
-  const currentStep = useSignupStore((state) => state.currentStep);
+  const currentStep = useOnboardingStore((state) => state.currentStep);
   const { data: onboardingData } = useGetOnboardingOJT(
     session.data?.user.user_id
   );
 
-  const setFarthestStep = useSignupStore((state) => state.setFarthestStep);
-  const setCurrentStep = useSignupStore((state) => state.setCurrentStep);
+  const setFarthestStep = useOnboardingStore((state) => state.setFarthestStep);
+  const setCurrentStep = useOnboardingStore((state) => state.setCurrentStep);
 
   useEffect(() => {
     // Populate the currentStep and farthestStep from onboardingData when it loads

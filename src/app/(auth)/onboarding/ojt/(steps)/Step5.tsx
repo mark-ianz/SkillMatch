@@ -4,20 +4,21 @@ import React, { useState } from "react";
 import StepContainer from "@/components/page_specific/onboarding/StepContainer";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import useSignupStore from "@/store/SignupStore";
 import { toast } from "sonner";
 import SkipStep from "@/components/page_specific/onboarding/SkipStep";
 import { useSession } from "next-auth/react";
 import { useUpdateStepFiveOnboardingOJT } from "@/hooks/query/useOnboardingOJT";
 import Label from "@/components/common/input/Label";
 import { api } from "@/lib/axios";
+import useOJTProfileStore from "@/store/OJTProfileStore";
+import useOnboardingStore from "@/store/OnboardingStore";
 
 export default function Step5() {
   const session = useSession();
 
   const user_id = session.data?.user.user_id;
 
-  const resume_path = useSignupStore((state) => state.resume_path);
+  const resume_path = useOJTProfileStore((state) => state.resume_path);
 
   const [file, setFile] = useState<File | null>(null);
   const [error, setError] = useState<string | null>(null);
@@ -47,7 +48,8 @@ export default function Step5() {
     try {
       const result = await mutateAsync(file);
       if (result.path) {
-        const { setResumePath, setFarthestStep } = useSignupStore.getState();
+        const setResumePath= useOJTProfileStore.getState().setResumePath;
+        const setFarthestStep = useOnboardingStore.getState().setFarthestStep;
         setResumePath(result.path);
         setFarthestStep(5);
         toast.success("Resume uploaded successfully");
@@ -90,7 +92,7 @@ export default function Step5() {
               variant={"outline"}
               size="sm"
               onClick={async () => {
-                const { clearResume } = useSignupStore.getState();
+                const { clearResume } = useOJTProfileStore.getState();
                 const user_id = session.data?.user.user_id;
                 // optimistically clear
                 clearResume();

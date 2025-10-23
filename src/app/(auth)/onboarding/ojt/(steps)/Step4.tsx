@@ -5,7 +5,8 @@ import { Button } from "@/components/ui/button";
 import { useUpdateUserSkills } from "@/hooks/query/useSkills";
 import { formatZodError } from "@/lib/utils";
 import { updateSkillSchema } from "@/schema/skill";
-import useSignupStore from "@/store/SignupStore";
+import useOJTProfileStore from "@/store/OJTProfileStore";
+import useOnboardingStore from "@/store/OnboardingStore";
 
 import { Skill } from "@/types/skill.types";
 import { X } from "lucide-react";
@@ -17,16 +18,16 @@ const MAXIMUM_SKILLS = parseInt(
 
 export default function Step4() {
   const session = useSession();
-  const total_skills = useSignupStore((state) => state.skills.length);
+  const skills = useOJTProfileStore((state) => state.skills);
 
   const { mutate, isPending } = useUpdateUserSkills(
     session?.data?.user?.user_id
   );
 
   function handleNextStep() {
-    const skills_store = useSignupStore.getState().skills;
-    const { data, success, error } = updateSkillSchema.safeParse(skills_store);
-    const setError = useSignupStore.getState().setError;
+    const current_skills = useOJTProfileStore.getState().skills;
+    const { data, success, error } = updateSkillSchema.safeParse(current_skills);
+    const setError = useOnboardingStore.getState().setError;
 
     if (!success) {
       setError(formatZodError(error));
@@ -43,7 +44,7 @@ export default function Step4() {
         <SearchSkill />
         <RenderSkills />
         <p className="text-xs text-skillmatch-secondary-dark/50 mt-4">
-          Maximum of {MAXIMUM_SKILLS} skills. {total_skills}/{MAXIMUM_SKILLS}
+          Maximum of {MAXIMUM_SKILLS} skills. {skills.length}/{MAXIMUM_SKILLS}
         </p>
       </div>
       <div className="flex items-center justify-end gap-2">
@@ -62,7 +63,7 @@ export default function Step4() {
 }
 
 function RenderSkills() {
-  const skills = useSignupStore((state) => state.skills);
+  const skills = useOJTProfileStore((state) => state.skills);
   return (
     skills.length > 0 && (
       <div className="flex flex-wrap gap-2">
@@ -75,8 +76,8 @@ function RenderSkills() {
 }
 
 function SkillList({ skill }: { skill: Skill }) {
-  const removeSkill = useSignupStore((state) => state.removeSkill);
-  const skills = useSignupStore((state) => state.skills);
+  const removeSkill = useOJTProfileStore((state) => state.removeSkill);
+  const skills = useOJTProfileStore((state) => state.skills);
 
   function handleRemoveSkill() {
     removeSkill(skill.skill_id);

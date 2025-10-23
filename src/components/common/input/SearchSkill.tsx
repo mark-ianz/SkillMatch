@@ -8,19 +8,19 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { Skill } from "@/types/skill.types";
-import useSignupStore from "@/store/SignupStore";
 import { useSearchSkills } from "@/hooks/query/useSkills";
 import useDebounce from "@/hooks/useDebounce";
 import LoadingGeneric from "@/components/global/LoadingGeneric";
 import { toast } from "sonner";
+import useOJTProfileStore from "@/store/OJTProfileStore";
 
 const MAXIMUM_SKILLS = parseInt(
   process.env.NEXT_PUBLIC_MAXIMUM_SKILLS as string
 );
 
 export default function SearchSkill() {
-  const skills = useSignupStore((state) => state.skills);
-  const addSkill = useSignupStore((state) => state.addSkill);
+  const skills = useOJTProfileStore((state) => state.skills);
+  const addSkill = useOJTProfileStore((state) => state.addSkill);
 
   const [searchQuery, setSearchQuery] = useState("");
   const debouncedSearchQuery = useDebounce(searchQuery, 300);
