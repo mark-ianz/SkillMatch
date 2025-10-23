@@ -10,7 +10,7 @@ export type Onboarding = {
   created_at: Date;
 };
 
-export type OnboardingFullInfo = Onboarding &
+export type OnboardingStudentFullInfo = Onboarding &
   User &
   AcademicDetails &
   OJTProfile & { skills: Skill[] };
