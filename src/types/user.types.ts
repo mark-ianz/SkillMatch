@@ -8,7 +8,7 @@ export type User = Address & {
   middle_name: string | null;
   last_name: string;
   gender: "male" | "female" | "prefer not to say";
-  birthdate: Date;
+  birthdate: Date | null | string;
   phone_number: string;
   role_id: number;
   status_id: number;
