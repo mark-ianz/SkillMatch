@@ -9,12 +9,14 @@ import Step4 from "./(steps)/Step4";
 import Step5 from "./(steps)/Step5";
 import Step6 from "./(steps)/Step6";
 import { useSession } from "next-auth/react";
-import { useGetOnboarding } from "@/hooks/query/useOnboarding";
+import { useGetOnboardingOJT } from "@/hooks/query/useOnboardingOJT";
 
 export default function FormInputs() {
   const session = useSession();
   const currentStep = useSignupStore((state) => state.currentStep);
-  const { data: onboardingData } = useGetOnboarding(session.data?.user.user_id);
+  const { data: onboardingData } = useGetOnboardingOJT(
+    session.data?.user.user_id
+  );
 
   const setFarthestStep = useSignupStore((state) => state.setFarthestStep);
   const setCurrentStep = useSignupStore((state) => state.setCurrentStep);
