@@ -2,7 +2,7 @@ import { formatZodError } from "@/lib/utils";
 import {
   onboardingStepThreeSchema,
 } from "@/schema/onboarding";
-import { OnboardingService } from "@/services/onboarding.services";
+import OnboardingOJTServices from "@/services/onboarding/onboarding.ojt.services";
 import { NextResponse } from "next/server";
 
 export async function POST(
@@ -40,7 +40,7 @@ export async function POST(
 
   // Call the service to handle the business logic
   try {
-    await OnboardingService.submitStepThree(
+    await OnboardingOJTServices.submitStepThree(
       Number(params.id),
       params.farthestStep,
       data

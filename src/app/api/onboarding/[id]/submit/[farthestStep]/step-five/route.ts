@@ -1,5 +1,5 @@
 import { ServiceError } from "@/lib/errors";
-import { OnboardingService } from "@/services/onboarding.services";
+import OnboardingSharedServices from "@/services/onboarding/onboarding.shared.services";
 import ResumeService from "@/services/resume.services";
 import { NextResponse } from "next/server";
 
@@ -27,7 +27,7 @@ export async function POST(
   try {
     const path = await ResumeService.upload_both(request, user_id);
 
-    await OnboardingService.updateStep(user_id, 6, farthestStep);
+    await OnboardingSharedServices.updateStep(user_id, 6, farthestStep);
 
     return NextResponse.json({ path });
   } catch (error) {
