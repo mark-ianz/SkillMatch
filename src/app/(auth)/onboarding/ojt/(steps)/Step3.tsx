@@ -52,16 +52,20 @@ export default function Step3() {
       // clear previous errors
       setError(null);
 
-      const parsed = onboardingStepThreeSchema.parse({
-        college,
-        course,
-        year_level,
-        expected_graduation_year,
-      });
+      const toParse = {
+        college: college || "",
+        course: course || "",
+        year_level: year_level || "",
+        expected_graduation_year: expected_graduation_year || "",
+      }
+
+      const parsed = onboardingStepThreeSchema.parse(toParse);
+
 
       // update the user info on the backend
       mutate(parsed);
     } catch (error) {
+      console.log(error)
       // catch the zod error
       if (error instanceof ZodError) {
         setError(formatZodError(error));
@@ -100,7 +104,7 @@ export default function Step3() {
           containerClassName="w-full"
           id="year_level"
           label="Year Level"
-          value={year_level || "4th year"}
+          value={year_level || ""}
           onChange={setYearLevel as (year_level: string) => void}
           items={[
             { value: "3rd year", label: "3rd year" },
@@ -145,3 +149,5 @@ export default function Step3() {
     </StepContainer>
   );
 }
+
+// TODO, ERRORS ON SUBMITTING EMPTY SELECT FIELDS
