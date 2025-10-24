@@ -3,7 +3,7 @@ import { User } from "@/types/user.types";
 
 export type UserStoreState = Partial<User> & {
   email: string | undefined;
-  setUser: (user: Partial<User>) => void;
+  setUser: (user: Partial<User> & { email: string | undefined }) => void;
   clearUser: () => void;
 
   setFirstName: (first_name: string) => void;
