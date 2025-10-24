@@ -41,6 +41,7 @@ export function useGetOnboardingOJT(userId: number | undefined) {
       // Set user data
       setUser({
         user_id: data.user_id,
+        email: data.email,
         first_name: data.first_name,
         middle_name: data.middle_name,
         last_name: data.last_name,
@@ -61,12 +62,12 @@ export function useGetOnboardingOJT(userId: number | undefined) {
       setOJTProfile({
         ojt_id: data.ojt_id,
         user_id: data.user_id,
-        college: data.college,
-        course: data.course,
+        college: data.college || "",
+        course: data.course || "",
         year_level: data.year_level,
-        expected_graduation_year: data.expected_graduation_year,
-        resume_path: data.resume_path,
-        visibility: data.visibility,
+        expected_graduation_year: data.expected_graduation_year || "",
+        resume_path: data.resume_path || "",
+        visibility: data.visibility || "",
         created_at: data.created_at,
       });
       setAcademicDetails({
