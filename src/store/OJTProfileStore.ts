@@ -4,7 +4,7 @@ import { AcademicDetails } from "@/types/user.types";
 import { Skill } from "@/types/skill.types";
 
 export type OJTProfileStoreState = Partial<OJTProfile> &
-  Partial<AcademicDetails> & {
+  AcademicDetails & {
     skills: Skill[];
     setOJTProfile: (profile: Partial<OJTProfile>) => void;
     setAcademicDetails: (details: Partial<AcademicDetails>) => void;
@@ -24,10 +24,10 @@ const useOJTProfileStore = create<OJTProfileStoreState>((set) => ({
   // Academic Details
   ojt_id: undefined,
   user_id: undefined,
-  college: "",
+  college: null,
   course: "",
   year_level: "4th year",
-  expected_graduation_year: "",
+  expected_graduation_year: null,
   resume_path: null,
   visibility: "private",
   created_at: undefined,
