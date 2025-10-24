@@ -36,10 +36,10 @@ export type Account = {
 };
 
 export type AcademicDetails = {
-  college: string;
+  college: string | null;
   course: string;
-  year_level: "3rd year" | "4th year";
-  expected_graduation_year: string;
+  year_level: "3rd year" | "4th year" | null;
+  expected_graduation_year: string | null;
 }
 
 // JWT and Session Extensions
