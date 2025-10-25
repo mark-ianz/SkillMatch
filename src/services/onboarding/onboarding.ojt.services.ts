@@ -40,7 +40,7 @@ async function submitStepOne(
     );
 
     // Update the step on the onboarding table
-    OnboardingSharedServices.updateStep(user_id, 4, farthestStep);
+    OnboardingSharedServices.updateStep(connection, 2, farthestStep, user_id);
 
     // Commit the transaction
     await connection.commit();
@@ -75,7 +75,7 @@ async function submitStepTwo(
     );
 
     // Update the step on the onboarding table
-    OnboardingSharedServices.updateStep(user_id, 3, farthestStep);
+    OnboardingSharedServices.updateStep(connection, 3, farthestStep, user_id);
 
     // Commit the transaction
     await connection.commit();
@@ -108,7 +108,7 @@ async function submitStepThree(
     );
 
     // Update the step on the onboarding table
-    OnboardingSharedServices.updateStep(user_id, 4, farthestStep);
+    OnboardingSharedServices.updateStep(connection, 4, farthestStep, user_id);
 
     // Commit the transaction
     await connection.commit();

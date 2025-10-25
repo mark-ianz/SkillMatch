@@ -1,3 +1,4 @@
+import { db } from "@/lib/db";
 import OnboardingSharedServices from "@/services/onboarding/onboarding.shared.services";
 import { NextResponse } from "next/server";
 
@@ -26,8 +27,9 @@ export async function POST(
   try {
     // update onboarding step +1 (use updateStep with new value)
     await OnboardingSharedServices.updateStep(
-      Number(params.id),
+      undefined,
       Number(params.farthestStep) + 1,
+      Number(params.id),
       Number(params.farthestStep)
     );
     return NextResponse.json({ status: 204 });
