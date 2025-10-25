@@ -172,6 +172,10 @@ export const authConfig: NextAuthOptions = {
               "INSERT INTO `onboarding` (`company_id`,`email`, `step`) VALUES (?, ?, ?)",
               [newCompany.insertId, user.email, 1]
             );
+
+            // 2.4 Define the company_id and role_id on the user object for session and jwt callbacks
+            company_id = newCompany.insertId;
+
           } else {
             // Else get their company id for the user object
             // Skip the inserting of data to user table and account table
@@ -208,6 +212,7 @@ export const authConfig: NextAuthOptions = {
           token.name = user.name;
           token.picture = user.image;
           token.user_id = (user as ExtendedUser).user_id;
+          token.company_id = (user as ExtendedUser).company_id;
           token.role_id = (user as ExtendedUser).role_id;
         }
         return token;
@@ -228,6 +233,9 @@ export const authConfig: NextAuthOptions = {
         (session as ExtendedSession).user.role_id = (
           token as ExtendedToken
         ).role_id;
+        (session as ExtendedSession).user.company_id = (
+          token as ExtendedToken
+        ).company_id;
       }
       return session;
     },
