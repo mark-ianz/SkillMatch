@@ -10,11 +10,11 @@ export default function RenderSteps({ type }: { type: "ojt" | "employer" }) {
 
   const goToStep = useOnboardingStore((state) => state.goToStep);
 
-  const stepsToRender = () => (type === "employer" ? employer_steps : steps);
+  const stepsToRender = type === "employer" ? employer_steps : steps;
 
   return (
     <ol className="flex flex-col h-full justify-between">
-      {stepsToRender().map((step, index) => {
+      {stepsToRender.map((step, index) => {
         const isCurrent = currentStep === step.step;
         const isCompleted = farthestStep > step.step;
 
@@ -57,7 +57,7 @@ export default function RenderSteps({ type }: { type: "ojt" | "employer" }) {
                 )}
               >
                 <p className="text-xs">
-                  Step {step.step}/{steps.length}
+                  Step {step.step}/{stepsToRender.length}
                 </p>
                 <p className="text-sm">{step.title}</p>
               </div>
