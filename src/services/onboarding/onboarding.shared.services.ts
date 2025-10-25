@@ -15,7 +15,7 @@ async function _finalizeWithConnection(connection: unknown, user_id: number) {
     connection as unknown as {
       query: (sql: string, params?: unknown[]) => Promise<unknown>;
     }
-  ).query(`UPDATE user SET status_id = ? WHERE user_id = ?`, [1, user_id]);
+  ).query(`UPDATE account SET status_id = ? WHERE user_id = ?`, [1, user_id]);
   await (
     connection as unknown as {
       query: (sql: string, params?: unknown[]) => Promise<unknown>;
