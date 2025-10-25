@@ -39,7 +39,17 @@ export const employer_steps = [
   },
   {
     step: 2,
-    title: "Account Verification",
-    description: "Upload documents for verification",
+    title: "Partnership Documents",
+    description: "Upload partnership documents for verification",
   },
-]
+  {
+    step: 3,
+    title: "Legal Documents",
+    description: "Upload legal documents for verification",
+  },
+  {
+    step: 4,
+    title: "Password",
+    description: "Set your password",
+  }
+];
