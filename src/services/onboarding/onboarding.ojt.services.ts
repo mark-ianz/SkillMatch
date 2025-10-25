@@ -11,7 +11,7 @@ import OnboardingSharedServices from "./onboarding.shared.services";
 
 async function getOnboarding(user_id: number) {
   const [rows] = await db.query<(OnboardingStudentFullInfo & RowDataPacket)[]>(
-    `SELECT o.*, u.*, op.*, a.email FROM 
+    `SELECT o.*, u.*, op.*, a.email, a.role_id, a.status_id FROM 
         onboarding AS o
         JOIN user AS u
         ON o.user_id = u.user_id
