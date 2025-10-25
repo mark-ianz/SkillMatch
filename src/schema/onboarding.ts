@@ -116,19 +116,23 @@ export type OnboardingStepThreeSchema = z.infer<
   typeof onboardingStepThreeSchema
 >;
 
-// Company Onboarding Schemas
-export const companyOnboardingStepOneSchema = z.object({
+// Employer Onboarding Schemas
+export const employerOnboardingStepOneSchema = z.object({
   company_name: z
     .string()
     .trim()
     .min(1, { message: "Company name is required" }),
-  company_email: z.email({ message: "Invalid email address" }),
+  company_email: z
+    .email({ message: "Invalid email address" })
+    .min(1, { message: "Company email is required" }),
   telephone_number: z
     .string()
     .trim()
-    .min(7, { message: "Telephone number must be at least 7 digits" })
-    .refine((val) => /^\d+$/.test(val), {
-      message: "Telephone number must only contain digits",
+    .min(7, { message: "Telephone number must be at least 7 characters" })
+    .max(20, { message: "Telephone number must be at most 20 characters" })
+    .refine((val) => /^[\d\-()]+$/.test(val), {
+      message:
+        "Telephone number must only contain digits, dashes (-), or parentheses ()",
     }),
   phone_number: z
     .string()
@@ -149,8 +153,8 @@ export const companyOnboardingStepOneSchema = z.object({
     .or(z.literal("")),
 });
 
-export type CompanyOnboardingStepOneSchema = z.infer<
-  typeof companyOnboardingStepOneSchema
+export type EmployerOnboardingStepOneSchema = z.infer<
+  typeof employerOnboardingStepOneSchema
 >;
 
 // Submit Password

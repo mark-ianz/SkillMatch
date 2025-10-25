@@ -1,6 +1,6 @@
-import { CompanyOnboardingStepOneSchema } from "@/schema/onboarding";
+import { EmployerOnboardingStepOneSchema } from "@/schema/onboarding";
 
-export type Company = CompanyOnboardingStepOneSchema & {
+export type Company = EmployerOnboardingStepOneSchema & {
   company_id: string;
   moa_path: string;
   loi_path: string;
