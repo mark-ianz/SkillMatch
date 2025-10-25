@@ -18,15 +18,15 @@ export default function Signup() {
           </div>
           <div className="flex flex-col items-center justify-center gap-2">
             <OauthButton
-              text="Sign up with Google"
-              provider="google"
-              callbackUrl="/onboarding"
+              text="Sign up with Google as OJT"
+              provider="google-ojt"
+              callbackUrl="/onboarding/ojt"
               className="w-[400px]"
             />
             <OauthButton
-              text="Sign up with LinkedIn"
-              provider="linkedIn"
-              callbackUrl="/onboarding"
+              text="Sign up with Google as Company"
+              provider="google-company"
+              callbackUrl="/onboarding/company"
               className="w-[400px]"
             />
             <p className="text-xs text-muted-foreground">
