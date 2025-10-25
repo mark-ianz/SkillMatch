@@ -10,8 +10,6 @@ export type User = Address & {
   gender: "male" | "female" | "prefer not to say";
   birthdate: Date | null | string;
   phone_number: string;
-  role_id: number;
-  status_id: number;
   created_at: Date;
 };
 
@@ -22,7 +20,7 @@ export type Address = {
   postal_code: string;
   barangay: string;
   city_municipality: string;
-}
+};
 
 export type Account = {
   acccount_id: number;
@@ -33,6 +31,8 @@ export type Account = {
   provider_id: string;
   password_hash?: string;
   created_at: Date;
+  role_id: number;
+  status_id: number;
 };
 
 export type AcademicDetails = {
@@ -40,7 +40,7 @@ export type AcademicDetails = {
   course: string;
   year_level: "3rd year" | "4th year" | null;
   expected_graduation_year: string | null;
-}
+};
 
 // JWT and Session Extensions
 export type ExtendedInfo = {
