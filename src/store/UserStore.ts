@@ -1,26 +1,27 @@
 import { create } from "zustand";
-import { User } from "@/types/user.types";
+import { Account, User } from "@/types/user.types";
 
-export type UserStoreState = Partial<User> & {
-  email: string | undefined;
-  setUser: (user: Partial<User> & { email: string | undefined }) => void;
-  clearUser: () => void;
+export type UserStoreState = Partial<User> &
+  Partial<Account> & {
+    email: string | undefined;
+    setUser: (user: Partial<User> & Partial<Account>) => void;
+    clearUser: () => void;
 
-  setFirstName: (first_name: string) => void;
-  setLastName: (last_name: string) => void;
-  setMiddleName: (middle_name: string | null) => void;
-  setPhoneNumber: (phone_number: string) => void;
-  setGender: (gender: "male" | "female" | "prefer not to say") => void;
-  setBirthdate: (birthdate: Date | null | string) => void;
-  setEmail: (email: string) => void;
+    setFirstName: (first_name: string) => void;
+    setLastName: (last_name: string) => void;
+    setMiddleName: (middle_name: string | null) => void;
+    setPhoneNumber: (phone_number: string) => void;
+    setGender: (gender: "male" | "female" | "prefer not to say") => void;
+    setBirthdate: (birthdate: Date | null | string) => void;
+    setEmail: (email: string) => void;
 
-  setStreetName: (street_name: string) => void;
-  setHouseNumber: (house_number: string) => void;
-  setSubdivision: (subdivision: string | null) => void;
-  setBarangay: (barangay: string) => void;
-  setPostalCode: (postal_code: string) => void;
-  setCityMunicipality: (city_municipality: string) => void;
-};
+    setStreetName: (street_name: string) => void;
+    setHouseNumber: (house_number: string) => void;
+    setSubdivision: (subdivision: string | null) => void;
+    setBarangay: (barangay: string) => void;
+    setPostalCode: (postal_code: string) => void;
+    setCityMunicipality: (city_municipality: string) => void;
+  };
 
 const useUserStore = create<UserStoreState>((set) => ({
   // Personal Information
