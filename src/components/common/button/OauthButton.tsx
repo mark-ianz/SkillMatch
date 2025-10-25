@@ -14,11 +14,15 @@ export default function OauthButton({
 }: {
   callbackUrl?: string;
   className?: string;
-  provider: "google" | "linkedIn";
+  provider: "google-ojt" | "google-company" | "linkedIn";
   text: string;
 }) {
   const source =
-    provider === "google" ? "/logo/GoogleLogo.png" : "/logo/LinkedInLogo.png";
+    provider === "google-ojt"
+      ? "/logo/GoogleLogo.png"
+      : provider === "google-company"
+      ? "/logo/GoogleLogo.png"
+      : "/logo/LinkedInLogo.png";
 
   return (
     <Button
