@@ -13,4 +13,7 @@ export type Onboarding = {
 export type OnboardingStudentFullInfo = Onboarding &
   User &
   AcademicDetails &
-  OJTProfile & { skills: Skill[] };
+  OJTProfile & { skills: Skill[] } & {
+    role_id: number;
+    status_id: number;
+  };
