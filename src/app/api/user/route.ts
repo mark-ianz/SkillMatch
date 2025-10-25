@@ -34,7 +34,7 @@ export async function POST(request: Request) {
     await connection.beginTransaction();
 
     const userResult = await connection.query<ResultSetHeader>(
-      "INSERT INTO `user` (`first_name`, `middle_name`, `last_name`, `gender`, `birthdate`, `street_name`, `barangay`, `city`, `municipality`, `phone_number`, `role_id`, `status_id`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+      "INSERT INTO `user` (`first_name`, `middle_name`, `last_name`, `gender`, `birthdate`, `street_name`, `barangay`, `city`, `municipality`, `phone_number`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
       [
         first_name,
         middle_name,
@@ -46,8 +46,6 @@ export async function POST(request: Request) {
         city,
         municipality,
         phone_number,
-        role_id,
-        status_id,
       ]
     );
 
@@ -55,12 +53,19 @@ export async function POST(request: Request) {
     const hashedPassword = bcrypt.hashSync(password, 10);
 
     await connection.query(
-      "INSERT INTO `account` (`user_id`, `email`, `auth_provider`, `oauth_id`, `password_hash`) VALUES (?, ?, ?, ?, ?)",
-      [userId, email, auth_provider, oauth_id, hashedPassword]
+      "INSERT INTO `account` (`user_id`, `email`, `auth_provider`, `oauth_id`, `password_hash`, `role_id`, `status_id`) VALUES (?, ?, ?, ?, ?, ?, ?)",
+      [
+        userId,
+        email,
+        auth_provider,
+        oauth_id,
+        hashedPassword,
+        role_id,
+        status_id,
+      ]
     );
 
     connection.commit();
-
 
     return NextResponse.json({ message: "User created" }, { status: 201 });
   } catch (error: Error | ZodError | unknown) {
