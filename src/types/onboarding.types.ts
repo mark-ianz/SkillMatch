@@ -4,7 +4,8 @@ import { AcademicDetails, User } from "./user.types";
 
 export type Onboarding = {
   onboarding_id: number;
-  user_id: number;
+  user_id: number | null;
+  company_id: number | null;
   step: number;
   email: string;
   created_at: Date;
