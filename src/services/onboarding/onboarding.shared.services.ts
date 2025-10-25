@@ -1,7 +1,9 @@
 import { db } from "@/lib/db";
+import { ServiceError } from "@/lib/errors";
 import { OnboardingPasswordSchema } from "@/schema/onboarding";
 import bcrypt from "bcrypt";
 import { ResultSetHeader } from "mysql2";
+import { Pool, PoolConnection } from "mysql2/promise";
 
 // helper: perform finalization using existing connection
 async function _finalizeWithConnection(connection: unknown, user_id: number) {
@@ -44,20 +46,44 @@ async function submitPassword(user_id: number, data: OnboardingPasswordSchema) {
 }
 
 async function updateStep(
-  user_id: number,
+  connection: Pool | PoolConnection = db,
   update_to_step: number,
-  farthestStep: number
+  farthestStep: number,
+  user_id?: number,
+  company_id?: number
 ) {
-  await db.query<ResultSetHeader>(
-    `UPDATE onboarding SET step = ? WHERE onboarding.user_id = ?`,
-    [
-      // Compare with the farthest step reached
-      // Compare it with the farthest step reached
-      // Because sometimes the user already reached step 5 and is just going back to step 3 to edit details
-      Math.max(update_to_step, farthestStep),
-      user_id,
-    ]
-  );
+  // Since onboarding can be for both OJT and Company, we need to handle both cases
+
+  // Check if both user_id and company_id are provided
+  if (!user_id && !company_id) {
+    throw new ServiceError(
+      "Either user_id or company_id must be provided",
+      400
+    );
+  }
+
+  // Update the onboarding step based on whether it's for a user or a company
+  if (company_id && !user_id) {
+    await connection.query<ResultSetHeader>(
+      `UPDATE onboarding SET step = ? WHERE onboarding.company_id = ?`,
+      [
+        // Compare it with the farthest step reached
+        Math.max(update_to_step, farthestStep),
+        company_id,
+      ]
+    );
+  } else if (user_id && !company_id) {
+    await connection.query<ResultSetHeader>(
+      `UPDATE onboarding SET step = ? WHERE onboarding.user_id = ? AND onboarding.company_id = ?`,
+      [
+        // Compare with the farthest step reached
+        // Compare it with the farthest step reached
+        // Because sometimes the user already reached step 5 and is just going back to step 3 to edit details
+        Math.max(update_to_step, farthestStep),
+        user_id,
+      ]
+    );
+  }
 }
 
 const OnboardingSharedServices = {
