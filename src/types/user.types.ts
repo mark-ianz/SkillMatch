@@ -24,7 +24,8 @@ export type Address = {
 
 export type Account = {
   acccount_id: number;
-  user_id: number;
+  user_id: number | null;
+  company_id: number | null;
   email: string;
   profile_image?: string;
   provider: "google" | "local" | "linkedin";
@@ -44,8 +45,9 @@ export type AcademicDetails = {
 
 // JWT and Session Extensions
 export type ExtendedInfo = {
-  user_id: number;
+  user_id?: number;
   role_id: number;
+  company_id?: number;
 };
 
 export type ExtendedUser = NextAuthUser & ExtendedInfo;
