@@ -27,7 +27,7 @@ async function getOnboarding(user_id: number) {
 
 async function submitStepOne(
   user_id: number,
-  farthestStep: number,
+  _farthestStep: number,
   data: OnboardingStepOneSchema
 ) {
   const connection = await db.getConnection();
@@ -40,7 +40,12 @@ async function submitStepOne(
     );
 
     // Update the step on the onboarding table
-    OnboardingSharedServices.updateStep(connection, 2, farthestStep, user_id);
+    OnboardingSharedServices.updateStep({
+      connection,
+      farthestStep: _farthestStep,
+      update_to_step: 2,
+      user_id,
+    });
 
     // Commit the transaction
     await connection.commit();
@@ -55,7 +60,7 @@ async function submitStepOne(
 
 async function submitStepTwo(
   user_id: number,
-  farthestStep: number,
+  _farthestStep: number,
   data: OnboardingStepTwoSchema
 ) {
   const connection = await db.getConnection();
@@ -75,7 +80,12 @@ async function submitStepTwo(
     );
 
     // Update the step on the onboarding table
-    OnboardingSharedServices.updateStep(connection, 3, farthestStep, user_id);
+    OnboardingSharedServices.updateStep({
+      connection,
+      farthestStep: _farthestStep,
+      update_to_step: 3,
+      user_id,
+    });
 
     // Commit the transaction
     await connection.commit();
@@ -90,7 +100,7 @@ async function submitStepTwo(
 
 async function submitStepThree(
   user_id: number,
-  farthestStep: number,
+  _farthestStep: number,
   data: OnboardingStepThreeSchema
 ) {
   const connection = await db.getConnection();
@@ -108,7 +118,12 @@ async function submitStepThree(
     );
 
     // Update the step on the onboarding table
-    OnboardingSharedServices.updateStep(connection, 4, farthestStep, user_id);
+    OnboardingSharedServices.updateStep({
+      connection,
+      farthestStep: _farthestStep,
+      update_to_step: 4,
+      user_id,
+    });
 
     // Commit the transaction
     await connection.commit();
@@ -123,7 +138,7 @@ async function submitStepThree(
 
 async function submitStepSix(
   user_id: number,
-  farthestStep: number,
+  _farthestStep: number,
   data: OnboardingPasswordSchema
 ) {
   const connection = await db.getConnection();
