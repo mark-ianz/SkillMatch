@@ -46,13 +46,13 @@ async function submitPassword(user_id: number, data: OnboardingPasswordSchema) {
 }
 
 async function updateStep({
-  connection,
+  connection = db,
   update_to_step,
   farthestStep,
   user_id,
   company_id,
 }: {
-  connection: Pool | PoolConnection;
+  connection?: Pool | PoolConnection;
   update_to_step: number;
   farthestStep: number;
   user_id?: number;

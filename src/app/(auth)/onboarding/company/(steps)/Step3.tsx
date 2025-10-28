@@ -15,22 +15,22 @@ import LoadingGeneric from "@/components/global/LoadingGeneric";
 export default function Step3() {
   const company_id = useRequireCompany();
 
-  const { mutate, isPending } = useUpdateStepThreeOnboardingCompany(company_id!);
+  const { mutate, isPending } = useUpdateStepThreeOnboardingCompany(company_id);
 
   const { mutateAsync: mutateUploadBusinessPermit } = useUploadCompanyDocument(
-    company_id!,
+    company_id,
     "business_permit_path"
   );
   const { mutateAsync: mutateUploadMayorPermit } = useUploadCompanyDocument(
-    company_id!,
+    company_id,
     "mayor_permit_path"
   );
   const { mutateAsync: mutateUploadDti } = useUploadCompanyDocument(
-    company_id!,
+    company_id,
     "dti_permit_path"
   );
   const { mutateAsync: mutateUploadBir } = useUploadCompanyDocument(
-    company_id!,
+    company_id,
     "bir_cert_of_registration_path"
   );
 
