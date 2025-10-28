@@ -19,15 +19,18 @@ const MAXIMUM_SKILLS = parseInt(
 export default function Step4() {
   const session = useSession();
   const skills = useOJTProfileStore((state) => state.skills);
+  const setError = useOnboardingStore.getState().setError;
 
   const { mutate, isPending } = useUpdateUserSkills(
     session?.data?.user?.user_id
   );
 
   function handleNextStep() {
+    setError(null);
+
     const current_skills = useOJTProfileStore.getState().skills;
-    const { data, success, error } = updateSkillSchema.safeParse(current_skills);
-    const setError = useOnboardingStore.getState().setError;
+    const { data, success, error } =
+      updateSkillSchema.safeParse(current_skills);
 
     if (!success) {
       setError(formatZodError(error));
