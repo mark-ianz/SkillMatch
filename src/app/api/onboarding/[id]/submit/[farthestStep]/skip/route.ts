@@ -25,12 +25,11 @@ export async function POST(
 
   try {
     // update onboarding step +1 (use updateStep with new value)
-    await OnboardingSharedServices.updateStep(
-      undefined,
-      Number(params.farthestStep) + 1,
-      Number(params.id),
-      Number(params.farthestStep)
-    );
+    await OnboardingSharedServices.updateStep({
+      user_id: Number(params.id),
+      farthestStep: Number(params.farthestStep),
+      update_to_step: Number(params.farthestStep) + 1,
+    });
     return NextResponse.json({ status: 204 });
   } catch (error) {
     console.error("Error skipping onboarding step:", error);
