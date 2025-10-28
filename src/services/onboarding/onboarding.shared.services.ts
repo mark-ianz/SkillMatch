@@ -74,7 +74,7 @@ async function updateStep(
     );
   } else if (user_id && !company_id) {
     await connection.query<ResultSetHeader>(
-      `UPDATE onboarding SET step = ? WHERE onboarding.user_id = ? AND onboarding.company_id = ?`,
+      `UPDATE onboarding SET step = ? WHERE onboarding.user_id = ?`,
       [
         // Compare with the farthest step reached
         // Compare it with the farthest step reached
