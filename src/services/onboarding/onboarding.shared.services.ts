@@ -45,13 +45,19 @@ async function submitPassword(user_id: number, data: OnboardingPasswordSchema) {
   return;
 }
 
-async function updateStep(
-  connection: Pool | PoolConnection = db,
-  update_to_step: number,
-  farthestStep: number,
-  user_id?: number,
-  company_id?: number
-) {
+async function updateStep({
+  connection,
+  update_to_step,
+  farthestStep,
+  user_id,
+  company_id,
+}: {
+  connection: Pool | PoolConnection;
+  update_to_step: number;
+  farthestStep: number;
+  user_id?: number;
+  company_id?: number;
+}) {
   // Since onboarding can be for both OJT and Company, we need to handle both cases
 
   // Check if both user_id and company_id are provided
