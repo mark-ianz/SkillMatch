@@ -1,17 +1,16 @@
 "use client";
 
-import React, { useState } from "react";
+import React from "react";
 import StepContainer from "@/components/page_specific/onboarding/StepContainer";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
+// Button not required here; FileUploadField includes its own action button
 import { toast } from "sonner";
 import SkipStep from "@/components/page_specific/onboarding/SkipStep";
 import { useSession } from "next-auth/react";
 import { useUpdateStepFiveOnboardingOJT } from "@/hooks/query/useOnboardingOJT";
-import Label from "@/components/common/input/Label";
 import { api } from "@/lib/axios";
 import useOJTProfileStore from "@/store/OJTProfileStore";
 import useOnboardingStore from "@/store/OnboardingStore";
+import FileUploadField from "@/components/common/input/FileUploadField";
 
 export default function Step5() {
   const session = useSession();
@@ -20,105 +19,48 @@ export default function Step5() {
 
   const resume_path = useOJTProfileStore((state) => state.resume_path);
 
-  const [file, setFile] = useState<File | null>(null);
-  const [error, setError] = useState<string | null>(null);
+  const { mutateAsync } = useUpdateStepFiveOnboardingOJT(user_id!);
 
-  const allowed = ["application/pdf", "image/jpeg", "image/png"];
-  const MAX_BYTES = 5 * 1024 * 1024; // 5MB
-  const { mutateAsync, isPending } = useUpdateStepFiveOnboardingOJT(user_id!);
-
-  function handleFile(e: React.ChangeEvent<HTMLInputElement>) {
-    setError(null);
-    const f = e.target.files?.[0] ?? null;
-    if (!f) return setFile(null);
-    if (!allowed.includes(f.type)) {
-      setError("Only PDF, JPG and PNG files are allowed.");
-      return setFile(null);
+  async function handleUploadFile(f: File) {
+    const result = await mutateAsync(f);
+    if (result.path) {
+      const setResumePath = useOJTProfileStore.getState().setResumePath;
+      const setFarthestStep = useOnboardingStore.getState().setFarthestStep;
+      setResumePath(result.path);
+      setFarthestStep(5);
+      toast.success("Resume uploaded successfully");
     }
-    if (f.size > MAX_BYTES) {
-      setError("File size exceeds 5MB limit.");
-      return setFile(null);
-    }
-    setFile(f);
+    return result;
   }
 
-  async function handleUpload() {
-    if (!file) return setError("Please select a file first.");
-    setError(null);
+  async function handleClearResume() {
+    const { clearResume } = useOJTProfileStore.getState();
+    const user_id = session.data?.user.user_id;
+    // optimistically clear
+    clearResume();
+    if (!user_id) return;
     try {
-      const result = await mutateAsync(file);
-      if (result.path) {
-        const setResumePath= useOJTProfileStore.getState().setResumePath;
-        const setFarthestStep = useOnboardingStore.getState().setFarthestStep;
-        setResumePath(result.path);
-        setFarthestStep(5);
-        toast.success("Resume uploaded successfully");
-      }
-      setFile(null);
-    } catch (err: unknown) {
-      const message = err instanceof Error ? err.message : String(err);
-      setError(message || "Upload error");
+      await api.post(`/ojt/resume/delete`, { user_id });
+    } catch (err) {
+      console.error("Failed to delete resume on server:", err);
     }
   }
 
   return (
     <StepContainer>
       <div className="flex flex-col gap-4 rounded-md">
-        <div className="flex flex-col gap-2">
-          <Label id="resume" optional>
-            Upload your resume (PDF, JPG, PNG)
-          </Label>
-          <Input
-            id="resume"
-            type="file"
-            onChange={handleFile}
-            accept=".pdf,.jpg,.jpeg,.png"
-          />
-        </div>
-
-        {file && <p className="text-sm">Selected: {file.name}</p>}
-        {error && <p className="text-sm text-destructive">{error}</p>}
-        {resume_path && (
-          <div className="flex items-center gap-4">
-            <a
-              href={resume_path}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-sm text-skillmatch-primary-green underline"
-            >
-              Click to view
-            </a>
-            <Button
-              variant={"outline"}
-              size="sm"
-              onClick={async () => {
-                const { clearResume } = useOJTProfileStore.getState();
-                const user_id = session.data?.user.user_id;
-                // optimistically clear
-                clearResume();
-                if (!user_id) return;
-                try {
-                  await api.post(`/ojt/resume/delete`, { user_id });
-                } catch (err) {
-                  console.error("Failed to delete resume on server:", err);
-                }
-              }}
-            >
-              Clear
-            </Button>
-          </div>
-        )}
+        <FileUploadField
+          id="resume"
+          label={"Upload your resume (PDF, JPG, PNG)"}
+          accept=".pdf,.jpg,.jpeg,.png"
+          currentPath={resume_path ?? null}
+          onUpload={handleUploadFile}
+          onClear={handleClearResume}
+          optional
+        />
       </div>
       <div className="flex items-center justify-end gap-2">
         <SkipStep />
-        <Button
-          className="w-24"
-          disabled={isPending}
-          type="button"
-          onClick={handleUpload}
-        >
-          {isPending ? "Uploading..." : "Upload"}
-        </Button>
       </div>
     </StepContainer>
   );
