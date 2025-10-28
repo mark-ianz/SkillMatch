@@ -17,4 +17,20 @@ export function useUploadResume(user_id: number) {
   });
 }
 
-export default useUploadResume;
+export function useUploadCompanyDocument(company_id: number, type: string) {
+  return useMutation({
+    mutationKey: ["upload-company-document", type],
+    mutationFn: async (file: File) => {
+      const fd = new FormData();
+      fd.append("file", file, file.name);
+      const { data } = await api.post(
+        `/company/${company_id}/document/`,
+        fd,
+        {
+          headers: { "Content-Type": "multipart/form-data" },
+        }
+      );
+      return data as UploadResult;
+    },
+  });
+}
