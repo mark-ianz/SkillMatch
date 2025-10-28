@@ -2,7 +2,7 @@ import { EmployerOnboardingStepOneSchema } from "@/schema/onboarding";
 
 export type Company = EmployerOnboardingStepOneSchema & {
   company_id: string;
-  moa_path: string;
+  mou_path: string;
   loi_path: string;
   cp_path: string;
   business_permit_path: string;
