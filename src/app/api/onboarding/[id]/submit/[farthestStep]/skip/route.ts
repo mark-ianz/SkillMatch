@@ -1,4 +1,3 @@
-import { db } from "@/lib/db";
 import OnboardingSharedServices from "@/services/onboarding/onboarding.shared.services";
 import { NextResponse } from "next/server";
 
