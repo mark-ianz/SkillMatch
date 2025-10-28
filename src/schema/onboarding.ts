@@ -153,8 +153,26 @@ export const employerOnboardingStepOneSchema = z.object({
     .or(z.literal("")),
 });
 
+export const employerOnboardingStepTwoSchema = z.object({
+  mou_path: z
+    .string()
+    .trim()
+    .min(1, { message: "File for Memorandum of Understanding is required" }),
+  loi_path: z
+    .string()
+    .trim()
+    .min(1, { message: "File for Letter of Intent is required" }),
+  cp_path: z
+    .string()
+    .trim()
+    .min(1, { message: "File for Company Profile is required" }),
+});
+
 export type EmployerOnboardingStepOneSchema = z.infer<
   typeof employerOnboardingStepOneSchema
+>;
+export type EmployerOnboardingStepTwoSchema = z.infer<
+  typeof employerOnboardingStepTwoSchema
 >;
 
 // Submit Password
