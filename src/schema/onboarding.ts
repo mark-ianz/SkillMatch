@@ -168,6 +168,29 @@ export const employerOnboardingStepTwoSchema = z.object({
     .min(1, { message: "File for Company Profile is required" }),
 });
 
+export const employerOnboardingStepThreeSchema = z.object({
+  business_permit_path: z
+    .string()
+    .trim()
+    .min(1, { message: "File for Business Permit is required" }),
+  mayor_permit_path: z
+    .string()
+    .trim()
+    .min(1, { message: "File for Mayor's Permit is required" }),
+  dti_permit_path: z
+    .string()
+    .trim()
+    .min(1, { message: "File for DTI Permit is required" }),
+  bir_cert_of_registration_path: z
+    .string()
+    .trim()
+    .min(1, { message: "File for BIR Certificate / Registration is required" }),
+});
+
+export type EmployerOnboardingStepThreeSchema = z.infer<
+  typeof employerOnboardingStepThreeSchema
+>;
+
 export type EmployerOnboardingStepOneSchema = z.infer<
   typeof employerOnboardingStepOneSchema
 >;
