@@ -30,4 +30,4 @@ yarn-error.log*
 .pnpm-debug.log*
 
 # Uploaded resumes (local storage)
-public/uploads/resumes/
+public/uploads
