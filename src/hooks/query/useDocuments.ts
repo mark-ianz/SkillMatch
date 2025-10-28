@@ -17,14 +17,15 @@ export function useUploadResume(user_id: number) {
   });
 }
 
-export function useUploadCompanyDocument(company_id: number, type: string) {
+export function useUploadCompanyDocument(company_id: number | undefined | null, type?: string) {
   return useMutation({
     mutationKey: ["upload-company-document", type],
     mutationFn: async (file: File) => {
+      if (!company_id) throw new Error("Missing company_id");
       const fd = new FormData();
       fd.append("file", file, file.name);
       const { data } = await api.post(
-        `/company/${company_id}/document/`,
+        `/company/documents/${company_id}`,
         fd,
         {
           headers: { "Content-Type": "multipart/form-data" },
