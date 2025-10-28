@@ -1,8 +1,11 @@
 import { useSession } from "next-auth/react";
 import { forbidden, unauthorized } from "next/navigation";
 
-export default function useRequireCompany(): number {
+export default function useRequireCompany(): number | null {
   const session = useSession();
+
+  // while session is loading, return null so callers can render a loader
+  if (session.status === "loading") return null;
 
   if (session.status === "unauthenticated") {
     unauthorized();
@@ -13,6 +16,6 @@ export default function useRequireCompany(): number {
     forbidden();
   }
 
-  const company_id = session.data?.user.company_id as number;
-  return company_id;
+  const company_id = session.data?.user.company_id as number | undefined;
+  return company_id ?? null;
 }
