@@ -1,6 +1,7 @@
+import { Company } from "./company.types";
 import { OJTProfile } from "./ojt_profile.types";
 import { Skill } from "./skill.types";
-import { AcademicDetails, User } from "./user.types";
+import { AcademicDetails, PublicAccount, User } from "./user.types";
 
 export type Onboarding = {
   onboarding_id: number;
@@ -18,3 +19,5 @@ export type OnboardingStudentFullInfo = Onboarding &
     role_id: number;
     status_id: number;
   };
+
+export type OnboardingCompanyFullInfo = Onboarding & Company & PublicAccount;
