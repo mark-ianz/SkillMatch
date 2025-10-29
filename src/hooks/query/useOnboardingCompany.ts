@@ -1,18 +1,72 @@
 import { api } from "@/lib/axios";
-import { EmployerOnboardingStepOneSchema, EmployerOnboardingStepTwoSchema, EmployerOnboardingStepThreeSchema } from "@/schema/onboarding";
+import {
+  EmployerOnboardingStepOneSchema,
+  EmployerOnboardingStepTwoSchema,
+  EmployerOnboardingStepThreeSchema,
+} from "@/schema/onboarding";
+import useCompanyStore from "@/store/CompanyStore";
 import useOnboardingStore from "@/store/OnboardingStore";
-import { useMutation } from "@tanstack/react-query";
+import { OnboardingCompanyFullInfo } from "@/types/onboarding.types";
+import { useMutation, useQuery } from "@tanstack/react-query";
 
 const nextStep = useOnboardingStore.getState().nextStep;
 const farthestStep = useOnboardingStore.getState().farthestStep;
 
-export function useUpdateStepOneOnboardingCompany(company_id: number | undefined | null) {
+export function useGetOnboardingCompany(company_id: number | undefined) {
+  const setCompany = useCompanyStore((state) => state.setCompany);
+
+  // Onboarding step state
+  const setCurrentStep = useOnboardingStore((state) => state.setCurrentStep);
+  const setFarthestStep = useOnboardingStore((state) => state.setFarthestStep);
+  const setType = useOnboardingStore((state) => state.setType);
+
+  return useQuery({
+    queryKey: ["onboarding", company_id],
+    queryFn: async () => {
+      const { data } = await api.get<OnboardingCompanyFullInfo>(
+        `/onboarding/${company_id}/company`
+      );
+
+      // Set type to company to ensure correct MAX_STEP
+      setType("company");
+
+      // Set company data
+      setCompany({
+        company_name: data.company_name || "",
+        company_email: data.company_email || "",
+        telephone_number: data.telephone_number || "",
+        phone_number: data.phone_number || "",
+        website: data.website || "",
+        facebook_page: data.facebook_page || "",
+        mou_path: data.mou_path || "",
+        loi_path: data.loi_path || "",
+        cp_path: data.cp_path || "",
+        business_permit_path: data.business_permit_path || "",
+        mayor_permit_path: data.mayor_permit_path || "",
+        dti_permit_path: data.dti_permit_path || "",
+        bir_cert_of_registration_path: data.bir_cert_of_registration_path || "",
+      });
+
+      // Step state
+      setFarthestStep(data.step || 1);
+      setCurrentStep(data.step || 1);
+      return data;
+    },
+  });
+}
+
+export function useUpdateStepOneOnboardingCompany(
+  company_id: number | undefined | null
+) {
   return useMutation({
     mutationKey: ["onboarding", company_id, "step-one"],
     mutationFn: async (stepOneData: EmployerOnboardingStepOneSchema) => {
-      await api.post(`/onboarding/${company_id}/submit/${farthestStep}/step-one/company`, {
-        ...stepOneData,
-      });
+      await api.post(
+        `/onboarding/${company_id}/submit/${farthestStep}/step-one/company`,
+        {
+          ...stepOneData,
+        }
+      );
       return;
     },
     onSuccess: () => {
@@ -22,13 +76,18 @@ export function useUpdateStepOneOnboardingCompany(company_id: number | undefined
   });
 }
 
-export function useUpdateStepTwoOnboardingCompany(company_id: number | undefined | null) {
+export function useUpdateStepTwoOnboardingCompany(
+  company_id: number | undefined | null
+) {
   return useMutation({
     mutationKey: ["onboarding", company_id, "step-two"],
     mutationFn: async (stepTwoData: EmployerOnboardingStepTwoSchema) => {
-      await api.post(`/onboarding/${company_id}/submit/${farthestStep}/step-two/company`, {
-        ...stepTwoData,
-      });
+      await api.post(
+        `/onboarding/${company_id}/submit/${farthestStep}/step-two/company`,
+        {
+          ...stepTwoData,
+        }
+      );
       return;
     },
     onSuccess: () => {
@@ -38,13 +97,18 @@ export function useUpdateStepTwoOnboardingCompany(company_id: number | undefined
   });
 }
 
-export function useUpdateStepThreeOnboardingCompany(company_id: number | undefined | null) {
+export function useUpdateStepThreeOnboardingCompany(
+  company_id: number | undefined | null
+) {
   return useMutation({
     mutationKey: ["onboarding", company_id, "step-three"],
     mutationFn: async (stepThreeData: EmployerOnboardingStepThreeSchema) => {
-      await api.post(`/onboarding/${company_id}/submit/${farthestStep}/step-three/company`, {
-        ...stepThreeData,
-      });
+      await api.post(
+        `/onboarding/${company_id}/submit/${farthestStep}/step-three/company`,
+        {
+          ...stepThreeData,
+        }
+      );
       return;
     },
     onSuccess: () => {
