@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect } from "react";
+import React from "react";
 import Step1 from "./(steps)/Step1";
 import Step2 from "./(steps)/Step2";
 import Step3 from "./(steps)/Step3";
@@ -14,21 +14,9 @@ import useOnboardingStore from "@/store/OnboardingStore";
 export default function FormInputs() {
   const session = useSession();
   const currentStep = useOnboardingStore((state) => state.currentStep);
-  const { data: onboardingData } = useGetOnboardingOJT(
-    session.data?.user.user_id
-  );
 
-  const setFarthestStep = useOnboardingStore((state) => state.setFarthestStep);
-  const setCurrentStep = useOnboardingStore((state) => state.setCurrentStep);
-
-  useEffect(() => {
-    // Populate the currentStep and farthestStep from onboardingData when it loads
-    if (onboardingData) {
-      console.log("Populating steps from onboarding data:", onboardingData);
-      setFarthestStep(onboardingData.step);
-      setCurrentStep(onboardingData.step);
-    }
-  }, [onboardingData, setCurrentStep, setFarthestStep]);
+  // No use of value, just to trigger data fetch and state setup
+  useGetOnboardingOJT(session.data?.user.user_id);
 
   return (
     <>
