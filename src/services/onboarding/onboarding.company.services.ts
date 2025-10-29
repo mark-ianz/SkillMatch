@@ -1,11 +1,26 @@
 import { db } from "@/lib/db";
-import { ResultSetHeader } from "mysql2";
+import { ResultSetHeader, RowDataPacket } from "mysql2";
 import {
   EmployerOnboardingStepOneSchema,
   EmployerOnboardingStepTwoSchema,
   EmployerOnboardingStepThreeSchema,
 } from "@/schema/onboarding";
 import OnboardingSharedServices from "./onboarding.shared.services";
+import { OnboardingCompanyFullInfo } from "@/types/onboarding.types";
+
+async function getOnboardingCompany(company_id: number) {
+  const [rows] = await db.query<(OnboardingCompanyFullInfo & RowDataPacket)[]>(
+    `SELECT o.*, c.*, a.email, a.role_id, a.status_id, a.profile_image FROM 
+        onboarding AS o
+        JOIN company AS c
+        ON o.company_id = c.company_id
+        JOIN account AS a
+        ON o.company_id = a.company_id
+        WHERE o.company_id = ?`,
+    [company_id]
+  );
+  return rows[0];
+}
 
 async function submitStepOne(
   company_id: number,
@@ -110,6 +125,7 @@ async function submitStepThree(
 }
 
 const CompanyOnboardingService = {
+  getOnboardingCompany,
   submitStepOne,
   submitStepTwo,
   submitStepThree,
