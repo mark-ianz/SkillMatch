@@ -78,8 +78,8 @@ export function useGetOnboardingOJT(userId: number | undefined) {
       });
       setSkills(data.skills || []);
       // Step state
-      setCurrentStep(data.step || 1);
       setFarthestStep(data.step || 1);
+      setCurrentStep(data.step || 1);
       return data;
     },
   });
