@@ -15,7 +15,6 @@ import { useSession } from "next-auth/react";
 
 export default function Step1() {
   const session = useSession();
-  console.log(session)
   const { mutate, isPending } = useUpdateStepOneOnboardingCompany(session.data?.user.company_id);
 
   const company_name = useCompanyStore((s) => s.company_name || "");
