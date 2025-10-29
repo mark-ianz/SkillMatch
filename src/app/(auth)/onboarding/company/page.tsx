@@ -7,9 +7,13 @@ import Step2 from "./(steps)/Step2";
 import Step3 from "./(steps)/Step3";
 import { useSession } from "next-auth/react";
 import { forbidden, unauthorized } from "next/navigation";
+import { useGetOnboardingCompany } from "@/hooks/query/useOnboardingCompany";
 
 export default function FormInputs() {
   const session = useSession();
+
+  // No use of value, just to trigger data fetch and state setup
+  useGetOnboardingCompany(session.data?.user.company_id);
 
   if (session.status === "unauthenticated") {
     unauthorized();
