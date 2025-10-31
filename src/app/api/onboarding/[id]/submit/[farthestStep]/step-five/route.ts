@@ -27,7 +27,11 @@ export async function POST(
   try {
     const path = await ResumeService.upload_both(request, user_id);
 
-    await OnboardingSharedServices.updateStep(undefined, 6, farthestStep, user_id);
+    await OnboardingSharedServices.updateStep({
+      farthestStep,
+      update_to_step: 6,
+      user_id,
+    });
 
     return NextResponse.json({ path });
   } catch (error) {
