@@ -8,6 +8,7 @@ import Step3 from "./(steps)/Step3";
 import { useSession } from "next-auth/react";
 import { forbidden, unauthorized } from "next/navigation";
 import { useGetOnboardingCompany } from "@/hooks/query/useOnboardingCompany";
+import Step4 from "./(steps)/Step4";
 
 export default function FormInputs() {
   const session = useSession();
@@ -30,6 +31,7 @@ export default function FormInputs() {
       {currentStep === 1 && <Step1 />}
       {currentStep === 2 && <Step2 />}
       {currentStep === 3 && <Step3 />}
+      {currentStep === 4 && <Step4 />}
     </>
   );
 }
