@@ -6,6 +6,8 @@ import {
   EmployerOnboardingStepThreeSchema,
 } from "@/schema/onboarding";
 import OnboardingSharedServices from "./onboarding.shared.services";
+import { OnboardingPasswordSchema } from "@/schema/onboarding";
+import bcrypt from "bcrypt";
 import { OnboardingCompanyFullInfo } from "@/types/onboarding.types";
 
 async function getOnboardingCompany(company_id: number) {
@@ -124,11 +126,48 @@ async function submitStepThree(
   }
 }
 
+async function submitStepFour(
+  company_id: number,
+  _farthestStep: number,
+  data: OnboardingPasswordSchema
+) {
+  const connection = await db.getConnection();
+  try {
+    await connection.beginTransaction();
+
+    // Hash and update company account password
+    const hashed = bcrypt.hashSync(data.password, 10);
+    await connection.query<ResultSetHeader>(
+      `UPDATE account SET password_hash = ? WHERE company_id = ?`,
+      [hashed, company_id]
+    );
+
+    // Finalize onboarding for company: mark account active and remove onboarding row
+    await connection.query<ResultSetHeader>(
+      `UPDATE account SET status_id = ? WHERE company_id = ?`,
+      [1, company_id]
+    );
+    await connection.query<ResultSetHeader>(
+      `DELETE FROM onboarding WHERE company_id = ?`,
+      [company_id]
+    );
+
+    await connection.commit();
+  } catch (error) {
+    await connection.rollback();
+    throw error;
+  } finally {
+    connection.release();
+  }
+  return;
+}
+
 const CompanyOnboardingService = {
   getOnboardingCompany,
   submitStepOne,
   submitStepTwo,
   submitStepThree,
+  submitStepFour,
 };
 
 export default CompanyOnboardingService;
