@@ -3,6 +3,7 @@ import {
   EmployerOnboardingStepOneSchema,
   EmployerOnboardingStepTwoSchema,
   EmployerOnboardingStepThreeSchema,
+  OnboardingPasswordSchema,
 } from "@/schema/onboarding";
 import useCompanyStore from "@/store/CompanyStore";
 import useOnboardingStore from "@/store/OnboardingStore";
@@ -107,6 +108,27 @@ export function useUpdateStepThreeOnboardingCompany(
         `/onboarding/${company_id}/submit/${farthestStep}/step-three/company`,
         {
           ...stepThreeData,
+        }
+      );
+      return;
+    },
+    onSuccess: () => {
+      // increment the step on the store
+      nextStep();
+    },
+  });
+}
+
+export function useUpdateStepFourOnboardingCompany(
+  company_id: number | undefined | null
+) {
+  return useMutation({
+    mutationKey: ["onboarding", company_id, "step-four"],
+    mutationFn: async (data: OnboardingPasswordSchema) => {
+      await api.post(
+        `/onboarding/${company_id}/submit/${farthestStep}/step-four/company`,
+        {
+          ...data,
         }
       );
       return;
