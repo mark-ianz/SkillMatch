@@ -6,7 +6,7 @@ import useOnboardingStore from "@/store/OnboardingStore";
 import Step2 from "./(steps)/Step2";
 import Step3 from "./(steps)/Step3";
 import { useSession } from "next-auth/react";
-import { forbidden, unauthorized } from "next/navigation";
+import { redirect } from "next/navigation";
 import { useGetOnboardingCompany } from "@/hooks/query/useOnboardingCompany";
 import Step4 from "./(steps)/Step4";
 
@@ -17,11 +17,11 @@ export default function FormInputs() {
   useGetOnboardingCompany(session.data?.user.company_id);
 
   if (session.status === "unauthenticated") {
-    unauthorized();
+    redirect("/signin");
   }
 
   if (!session.data?.user.company_id && session.status !== "loading") {
-    forbidden();
+    redirect("/signin");
   }
 
   const currentStep = useOnboardingStore((state) => state.currentStep);
