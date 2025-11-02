@@ -1,0 +1,26 @@
+Company Sign in Cases:
+	Case A: Company has an onboarding and account record, meaning they are still onboarding.
+		- They should be redirected to "/onboarding/company" with their data automatically filled.
+
+	Case B: Company does not have an onboarding record but has an account record, meaning they are done on onboarding process and now either pending to be approved by SPARD or already active.
+		Case B.1: Account status = "Pending"
+			- Block the sign-in and redirect "?error=AccountPending".
+		Case B.2: Account status = "Active"
+			- Redirect them somewhere authenticated company only could access like "/profile".
+		/// Could add more case status...
+
+	Case C: Company with no record at all and tries to sign in:
+		- Block the sign-in and redirect "?error=DoesNotExist".
+
+---
+
+Company Signup Cases:
+	Case A: Company with no record at all and signs up:
+		- Insert their data on account, company and onboarding table.
+		- Redirect them to "/onboarding/company" to continue filling up their data.
+
+	Case B: Company with onboarding record tried to signup, means they’ve already started the signup flow:
+		- Block the sign-up and redirect "?error=AlreadyExist".
+
+	Case C: Company with no onboarding record but has an account record meaning they are done on onboarding process and now only has an account record:
+		- Block the sign-up and redirect "?error=AlreadyExist". 
