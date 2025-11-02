@@ -14,7 +14,7 @@ export default function JoinNowButton() {
 
   return (
     <Button
-      variant={path.includes("ojt") ? "default" : "default_employer"}
+      variant={path.includes("company") ? "default_employer" : "default"}
       onClick={handleJoinNow}
     >
       Join Now
