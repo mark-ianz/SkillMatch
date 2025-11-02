@@ -43,6 +43,11 @@ export default function OnboardingLayout({
     );
   }
 
+  // if the user status_id is active, redirect to profile
+  if (session.data?.user.status_id === 1) {
+    redirect("/profile", RedirectType.replace);
+  }
+
   // redirect the user to signup if no session exists
   if (!session.data || !session.data.user) {
     redirect("/signup", RedirectType.replace);
@@ -52,7 +57,14 @@ export default function OnboardingLayout({
     <QueryClientProviderWrapper>
       <MainLayout className="items-center">
         <div className="flex w-full border rounded-md shadow-md min-h-[600px]">
-          <div className={cn("w-1/3 shrink-0 rounded-l-md", type === "ojt" ? " bg-skillmatch-primary-green " : " bg-skillmatch-primary-blue")}>
+          <div
+            className={cn(
+              "w-1/3 shrink-0 rounded-l-md",
+              type === "ojt"
+                ? " bg-skillmatch-primary-green "
+                : " bg-skillmatch-primary-blue"
+            )}
+          >
             <div className="flex flex-col gap-4 py-10 px-10">
               <div className="flex flex-col gap-12">
                 <TextLogo />
