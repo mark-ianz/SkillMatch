@@ -8,6 +8,8 @@ import QuickSignInButtons from "@/components/common/button/QuickSignInButtons";
 import MainLayout from "@/components/layout/MainLayout";
 import { useSession } from "next-auth/react";
 import { redirect } from "next/navigation";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { SignupForm } from "@/components/page_specific/signup/SignupForm";
 
 export default function Signup() {
   const session = useSession();
@@ -22,6 +24,27 @@ export default function Signup() {
       redirect("/onboarding/company");
     }
   }
+
+  return (
+    <MainLayout className="items-center justify-center -mt-20">
+      <div className="w-full max-w-lg">
+        <Tabs defaultValue="ojt" className="w-full">
+          <TabsList className="grid w-full grid-cols-2 mb-2">
+            <TabsTrigger className="cursor-pointer" value="ojt">OJT</TabsTrigger>
+            <TabsTrigger className="cursor-pointer" value="company">Company</TabsTrigger>
+          </TabsList>
+
+          <TabsContent value="ojt">
+            <SignupForm mode="ojt" />
+          </TabsContent>
+
+          <TabsContent value="company">
+            <SignupForm mode="company" />
+          </TabsContent>
+        </Tabs>
+      </div>
+    </MainLayout>
+  );
 
   return (
     <MainLayout className="items-center justify-center">
