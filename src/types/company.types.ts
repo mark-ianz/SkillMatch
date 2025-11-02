@@ -11,3 +11,12 @@ export type Company = EmployerOnboardingStepOneSchema & {
   bir_cert_of_registration_path: string;
   created_at: Date;
 }
+
+export type CompanyProfile = {
+  company_id: number;
+  company_name: string;
+  company_image: string | null;
+  website: string | null;
+  facebook_page: string | null;
+  company_email: string;
+};
