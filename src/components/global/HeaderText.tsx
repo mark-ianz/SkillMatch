@@ -10,5 +10,5 @@ export default function HeaderText({
   className?: string;
   text?: string;
 }) {
-  return <p className={cn("text-4xl", className)}>{text || children}</p>;
+  return <p className={cn("text-4xl text-skillmatch-dark", className)}>{text || children}</p>;
 }
