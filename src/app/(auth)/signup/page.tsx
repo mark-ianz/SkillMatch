@@ -1,10 +1,28 @@
+"use client";
+
 import React from "react";
 import LogoSkillMatch from "@/components/global/LogoSkillMatch";
 import Link from "next/link";
 import OauthButton from "@/components/common/button/OauthButton";
+import QuickSignInButtons from "@/components/common/button/QuickSignInButtons";
 import MainLayout from "@/components/layout/MainLayout";
+import { useSession } from "next-auth/react";
+import { redirect } from "next/navigation";
 
 export default function Signup() {
+  const session = useSession();
+
+  if (session.status === "authenticated") {
+    // Redirect based on role
+    if (session.data.user.role_id === 3) {
+      redirect("/onboarding/ojt");
+    }
+
+    if (session.data.user.role_id === 4) {
+      redirect("/onboarding/company");
+    }
+  }
+
   return (
     <MainLayout className="items-center justify-center">
       <div className="p-10 gap-10 flex flex-col items-center justify-center border rounded-md h-[500px] min-w-[700px] -mt-20">
@@ -19,16 +37,19 @@ export default function Signup() {
           <div className="flex flex-col items-center justify-center gap-2">
             <OauthButton
               text="Sign up with Google as OJT"
-              provider="google-ojt"
+              provider="google-ojt-signup"
               callbackUrl="/onboarding/ojt"
               className="w-[400px]"
             />
             <OauthButton
               text="Sign up with Google as Company"
-              provider="google-company"
+              provider="google-company-signup"
               callbackUrl="/onboarding/company"
               className="w-[400px]"
             />
+            <div className="pt-4">
+              <QuickSignInButtons />
+            </div>
             <p className="text-xs text-muted-foreground">
               Continue with your Quezon City University email address.
             </p>
