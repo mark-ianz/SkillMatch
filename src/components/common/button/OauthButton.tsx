@@ -7,11 +7,13 @@ import React from "react";
 import { cn } from "@/lib/utils";
 
 export default function OauthButton({
+  variant,
   className,
   callbackUrl,
   provider,
   text,
 }: {
+  variant?: "default" | "default_employer";
   callbackUrl?: string;
   className?: string;
   provider:
@@ -25,7 +27,6 @@ export default function OauthButton({
   const source = provider.includes("google")
     ? "/logo/GoogleLogo.png"
     : "/logo/LinkedInLogo.png";
-
   return (
     <Button
       onClick={async () => {
@@ -33,11 +34,14 @@ export default function OauthButton({
         console.log(result);
       }}
       className={cn(
-        "bg-skillmatch-primary-light text-skillmatch-muted-dark border hover:bg-skillmatch-muted-light",
-        className
+        /* "bg-skillmatch-primary-light text-skillmatch-muted-dark border hover:bg-skillmatch-muted-light", */
+        className,
       )}
+      variant={variant}
     >
-      <Image src={source} alt={`${provider} Logo`} width={16} height={16} />
+      <div className="bg-white p-0.5 rounded-full">
+        <Image src={source} alt={`${provider} Logo`} width={16} height={16} />
+      </div>
       {text}
     </Button>
   );
