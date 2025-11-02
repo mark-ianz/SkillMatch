@@ -50,6 +50,7 @@ export type ExtendedInfo = {
   user_id?: number;
   role_id: number;
   company_id?: number;
+  status_id?: number;
 };
 
 export type ExtendedUser = NextAuthUser & ExtendedInfo;
