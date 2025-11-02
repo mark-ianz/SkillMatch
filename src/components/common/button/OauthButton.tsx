@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { signIn } from "next-auth/react";
 import Image from "next/image";
 import React from "react";
-import { cn } from "@/lib/utils";;
+import { cn } from "@/lib/utils";
 
 export default function OauthButton({
   className,
@@ -14,15 +14,17 @@ export default function OauthButton({
 }: {
   callbackUrl?: string;
   className?: string;
-  provider: "google-ojt" | "google-company" | "linkedIn";
+  provider:
+    | "google-ojt"
+    | "google-company"
+    | "google-company-signup"
+    | "google-ojt-signup"
+    | "linkedIn";
   text: string;
 }) {
-  const source =
-    provider === "google-ojt"
-      ? "/logo/GoogleLogo.png"
-      : provider === "google-company"
-      ? "/logo/GoogleLogo.png"
-      : "/logo/LinkedInLogo.png";
+  const source = provider.includes("google")
+    ? "/logo/GoogleLogo.png"
+    : "/logo/LinkedInLogo.png";
 
   return (
     <Button
