@@ -14,7 +14,7 @@ import PaddedWrapper from "./PaddedWrapper";
 
 export default function Header() {
   return (
-    <header className="border-b h-20 flex items-center justify-center">
+    <header className="border-b h-20 flex items-center justify-center sticky top-0 bg-white z-50">
       <PaddedWrapper className=" justify-between">
         <Link href={"/"} className="font-sans font-semibold text-2xl">
           SkillMatch
