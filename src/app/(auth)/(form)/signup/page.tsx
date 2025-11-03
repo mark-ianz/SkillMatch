@@ -7,11 +7,15 @@ import OauthButton from "@/components/common/button/OauthButton";
 import QuickSignInButtons from "@/components/common/button/QuickSignInButtons";
 import MainLayout from "@/components/layout/MainLayout";
 import { useSession } from "next-auth/react";
-import { redirect } from "next/navigation";
+import { redirect, useRouter, useSearchParams } from "next/navigation";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { SignupForm } from "@/components/page_specific/signup/SignupForm";
+import { SignupForm } from "@/components/auth/SignupForm";
 
 export default function Signup() {
+  // default type if exists in query params
+  const searchParams = useSearchParams();
+  const router = useRouter();
+  const type = searchParams.get("type");
   const session = useSession();
 
   if (session.status === "authenticated") {
@@ -25,25 +29,37 @@ export default function Signup() {
     }
   }
 
+  function handleTabChange(value: string): void {
+    // change the search params to reflect the current tab
+    const params = new URLSearchParams(searchParams.toString());
+    params.set("type", value);
+    router.push(`/signup?${params.toString()}`);
+  }
+  return null;
+
   return (
-    <MainLayout className="items-center justify-center -mt-20">
-      <div className="w-full max-w-lg">
-        <Tabs defaultValue="ojt" className="w-full">
-          <TabsList className="grid w-full grid-cols-2 mb-2">
-            <TabsTrigger className="cursor-pointer" value="ojt">OJT</TabsTrigger>
-            <TabsTrigger className="cursor-pointer" value="company">Company</TabsTrigger>
-          </TabsList>
+    <Tabs
+      onValueChange={handleTabChange}
+      defaultValue={type || "ojt"}
+      className="w-full"
+    >
+      <TabsList className="grid w-full grid-cols-2 mb-2">
+        <TabsTrigger className="cursor-pointer" value="ojt">
+          OJT
+        </TabsTrigger>
+        <TabsTrigger className="cursor-pointer" value="company">
+          Company
+        </TabsTrigger>
+      </TabsList>
 
-          <TabsContent value="ojt">
-            <SignupForm mode="ojt" />
-          </TabsContent>
+      <TabsContent value="ojt">
+        <SignupForm mode="ojt" />
+      </TabsContent>
 
-          <TabsContent value="company">
-            <SignupForm mode="company" />
-          </TabsContent>
-        </Tabs>
-      </div>
-    </MainLayout>
+      <TabsContent value="company">
+        <SignupForm mode="company" />
+      </TabsContent>
+    </Tabs>
   );
 
   return (
