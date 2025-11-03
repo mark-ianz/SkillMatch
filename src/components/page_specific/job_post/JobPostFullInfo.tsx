@@ -22,8 +22,8 @@ export function JobPostFullInfo({ data }: { data: JobPost }) {
 
   return (
     <div className="w-full max-w-2xl">
-      <Card className="p-8 space-y-8 border-0 shadow-sm">
-        <div className="space-y-6">
+      <Card className="p-8 space-y-2 border-0 shadow-sm">
+        <div className="space-y-3">
           {/* Company header */}
           <div className="flex items-start justify-between gap-4">
             <div className="flex-1">
@@ -94,7 +94,7 @@ export function JobPostFullInfo({ data }: { data: JobPost }) {
         {/* Divider */}
         <div className="border-t" />
 
-        <div className="space-y-3">
+        <div className="space-y-1">
           <h2 className="text-sm font-semibold text-foreground uppercase tracking-wide">
             Overview
           </h2>
@@ -103,7 +103,7 @@ export function JobPostFullInfo({ data }: { data: JobPost }) {
           </p>
         </div>
 
-        <div className="space-y-4">
+        <div className="space-y-1">
           <h2 className="text-sm font-semibold text-foreground uppercase tracking-wide">
             Requirements
           </h2>
@@ -141,7 +141,7 @@ export function JobPostFullInfo({ data }: { data: JobPost }) {
           </div>
 
           {data.preferred_qualifications && (
-            <div className="space-y-2 pt-2">
+            <div className="space-y-1 pt-2">
               <p className="text-xs font-medium text-muted-foreground">
                 Preferred Qualifications
               </p>
@@ -155,15 +155,15 @@ export function JobPostFullInfo({ data }: { data: JobPost }) {
         {/* Divider */}
         <div className="border-t" />
 
-        <div className="space-y-4">
+        <div className="space-y-2">
           <h2 className="text-sm font-semibold text-foreground uppercase tracking-wide">
             Responsibilities
           </h2>
 
-          <ul className="space-y-3">
+          <ul>
             {data.job_responsibilities.map((responsibility, idx) => (
               <li key={idx} className="flex gap-3 text-sm text-foreground">
-                <span className="text-muted-foreground flex-shrink-0 mt-1">
+                <span className="text-muted-foreground flex-shrink-0">
                   •
                 </span>
                 <span className="leading-relaxed">{responsibility}</span>
