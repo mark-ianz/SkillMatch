@@ -53,12 +53,12 @@ export default function TestPage() {
       ],
     },
     {
-      company_name: "asdasd",
+      company_name: "Ambatubas Corporation",
       company_image:
         "https://lh3.googleusercontent.com/a/ACg8ocKzIYPJnTrYfs4NUAEU2SHc7E3hHYLNDApbJ5TL-HqfCsQrcn-u=s96-c",
       website: null,
       facebook_page: null,
-      company_email: "asdasd@asd.asdasd",
+      company_email: "zylle.palajoren@ambatumbas.com",
       job_post_id: 2,
       company_id: 8,
       job_title: "Marketing Intern",
@@ -66,7 +66,7 @@ export default function TestPage() {
       location: "Quezon City, Metro Manila",
       job_category: "Marketing",
       job_overview:
-        "Support the marketing team in social media campaigns and content creation.",
+        "The Marketing Intern will play an essential role in supporting the marketing team across various digital initiatives. This includes assisting in the planning and execution of social media campaigns, creating engaging content tailored for different platforms, and contributing fresh, creative ideas to strengthen brand presence. The intern will work closely with the team to ensure consistent messaging across channels, analyze engagement data to help refine strategies, and provide support in marketing operations such as email campaigns and campaign performance tracking. This role offers hands-on experience in digital marketing and exposure to real-world marketing tools and processes, making it an excellent opportunity to learn and grow in a fast-paced environment.",
       job_responsibilities: [
         "Create social media posts",
         "Monitor engagement",
@@ -93,7 +93,7 @@ export default function TestPage() {
       <div className="flex flex-col gap-4">
         <ProfileBanner data={dummy} />
         <ShortcutsCard />
-        <JobPostFullInfo data={job_posts_dummy[0]} />
+        <JobPostFullInfo data={job_posts_dummy[1]} />
       </div>
     </main>
   );
