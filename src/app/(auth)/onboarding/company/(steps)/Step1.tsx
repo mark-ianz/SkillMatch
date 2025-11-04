@@ -70,7 +70,7 @@ export default function Step1() {
           id="company_name"
           placeholder="Enter your company name"
           value={company_name}
-          onChange={(e) => setCompanyName(e.target.value)}
+          onChange={(e: React.ChangeEvent<HTMLInputElement>) => setCompanyName(e.target.value)}
         />
 
         <InputWithLabel
@@ -80,7 +80,7 @@ export default function Step1() {
           type="email"
           placeholder="company@domain.com"
           value={company_email}
-          onChange={(e) => setCompanyEmail(e.target.value)}
+          onChange={(e: React.ChangeEvent<HTMLInputElement>) => setCompanyEmail(e.target.value)}
         />
       </RowContainer>
       <RowContainer>
@@ -90,7 +90,7 @@ export default function Step1() {
           id="telephone_number"
           placeholder="Enter your telephone number"
           value={telephone_number}
-          onChange={(e) => setTelephoneNumber(e.target.value)}
+          onChange={(e: React.ChangeEvent<HTMLInputElement>) => setTelephoneNumber(e.target.value)}
         />
 
         <InputWithLabel
@@ -99,7 +99,7 @@ export default function Step1() {
           id="phone_number"
           placeholder="Enter your phone number"
           value={phone_number}
-          onChange={(e) => setPhoneNumber(e.target.value)}
+          onChange={(e: React.ChangeEvent<HTMLInputElement>) => setPhoneNumber(e.target.value)}
         />
       </RowContainer>
 
@@ -110,7 +110,7 @@ export default function Step1() {
           id="website"
           placeholder="companywebsite.com"
           value={website}
-          onChange={(e) => setWebsite(e.target.value)}
+          onChange={(e: React.ChangeEvent<HTMLInputElement>) => setWebsite(e.target.value)}
         />
 
         <InputWithLabel
@@ -119,7 +119,7 @@ export default function Step1() {
           id="facebook_page"
           placeholder="facebook.com/companypage"
           value={facebook_page}
-          onChange={(e) => setFacebookPage(e.target.value)}
+          onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFacebookPage(e.target.value)}
         />
       </RowContainer>
       <Button
