@@ -1,27 +1,35 @@
-import { CompanyProfile } from "./company.types";
+import { CompanyAddress, CompanyProfile } from "./company.types";
 
-type WorkArrangement = "Remote" | "On-site" | "Hybrid";
-type ShiftType = 'Day shift' | 'Night shift' | 'Flexible hours';
+export type WorkArrangement = "Remote" | "On-site" | "Hybrid";
+/* type ShiftType = 'Day shift' | 'Night shift' | 'Flexible hours'; */
 
-export type JobPost = CompanyProfile & {
+export type JobPost = CompanyProfile & CompanyAddress & {
   job_post_id: number;
   company_id: number;
+
+  // Basic Info
   job_title: string;
-  work_arrangement: WorkArrangement;
-  location?: string;
-  job_category?: string;
+  program_required: string[]; // e.g., ["BS Computer Science", "BS Information Technology"]
+  job_category?: string[];
+  available_positions: number;
+  
+  // Work Details
   job_overview: string;
   job_responsibilities: string[];
-  soft_skills: string[];
   preferred_qualifications?: string;
+  work_arrangement: WorkArrangement; // "Remote" | "On-site" | "Hybrid"
   is_paid: boolean;
   allowance_description?: string | null;
-  shift_type: ShiftType;
-  working_days?: string;
-  hours_per_week?: number;
+
+  // Skills
+  soft_skills: string[];
   technical_skills: string[];
   created_at: string; // ISO string
   updated_at: string; // ISO string
+
+  /* shift_type: ShiftType; */
+  /* hours_per_week?: number; */
+  /* working_days?: string; */
 };
 
 export type JobPostQuery = JobPost & {
@@ -29,4 +37,5 @@ export type JobPostQuery = JobPost & {
   job_responsibilities: string;
   soft_skills: string;
   technical_skills: string;
+  program_required: string;
 };
