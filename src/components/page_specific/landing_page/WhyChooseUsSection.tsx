@@ -1,6 +1,7 @@
 import React from "react";
 import { ShieldCheck, IdCard, Users, Globe } from "lucide-react";
 import GettingStartedCard from "./GettingStartedCard";
+import { UserType } from "@/types/user.types";
 
 const REASONS = [
   {
@@ -29,7 +30,7 @@ const REASONS = [
   },
 ];
 
-export default function WhyChooseUsSection() {
+export default function WhyChooseUsSection({ type }: { type: UserType }) {
   return (
     <section className="mt-16 bg-skillmatch-primary-green py-12 text-skillmatch-light flex flex-col justify-center items-center">
       <div className="max-w-7xl flex flex-col justify-center items-center">
