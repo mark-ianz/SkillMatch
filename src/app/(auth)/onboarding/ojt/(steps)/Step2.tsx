@@ -71,7 +71,7 @@ export default function Step2() {
           value={house_number}
           required={true}
           placeholder="e.g., Blk 5 Lot 12 or 123"
-          onChange={(e) => setHouseNumber(e.target.value)}
+          onChange={(e: React.ChangeEvent<HTMLInputElement>) => setHouseNumber(e.target.value)}
           label="House Number"
           containerClassName="w-full"
         />
@@ -79,7 +79,7 @@ export default function Step2() {
           value={street_name}
           required={true}
           placeholder="e.g., Rizal Avenue or Sampaguita St."
-          onChange={(e) => setStreetName(e.target.value)}
+          onChange={(e: React.ChangeEvent<HTMLInputElement>) => setStreetName(e.target.value)}
           label="Street Name"
           containerClassName="w-full"
         />
@@ -90,7 +90,7 @@ export default function Step2() {
           optional={true}
           value={subdivision || ""}
           placeholder="e.g., Green Meadows Village (Optional)"
-          onChange={(e) => setSubdivision(e.target.value)}
+          onChange={(e: React.ChangeEvent<HTMLInputElement>) => setSubdivision(e.target.value)}
           label="Subdivision"
           containerClassName="w-full"
         />
@@ -98,7 +98,7 @@ export default function Step2() {
           value={postal_code}
           required={true}
           placeholder="e.g., 1101"
-          onChange={(e) => setPostalCode(e.target.value)}
+          onChange={(e: React.ChangeEvent<HTMLInputElement>) => setPostalCode(e.target.value)}
           label="Postal Code"
           containerClassName="w-full"
         />
