@@ -12,10 +12,6 @@ interface SignupFormProps {
 export function SignupForm({ mode }: SignupFormProps) {
   const isOJT = mode === "ojt";
 
-  const headingText = isOJT
-    ? "Join SkillMatch as OJT"
-    : "Join SkillMatch as Company";
-
   const subtitle = isOJT ? (
     <>
       Your career journey starts here.

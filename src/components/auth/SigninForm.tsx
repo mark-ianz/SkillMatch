@@ -12,10 +12,6 @@ interface SigninFormProps {
 export function SigninForm({ mode }: SigninFormProps) {
   const isOJT = mode === "ojt";
 
-  const headingText = isOJT
-    ? "Sign in to your OJT account"
-    : "Sign in to your Company account";
-
   const tagline = isOJT
     ? "Your next opportunity awaits. Sign in to explore internships and grow your skills."
     : "Connect with top talent, manage your team, and scale your business.";
