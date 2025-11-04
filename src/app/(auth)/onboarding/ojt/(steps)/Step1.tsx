@@ -87,7 +87,7 @@ export default function Step1() {
           type="text"
           placeholder="Enter your first name"
           value={first_name}
-          onChange={(e) => setFirstName(e.target.value)}
+          onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFirstName(e.target.value)}
         />
         <InputWithLabel
           optional={true}
@@ -98,7 +98,7 @@ export default function Step1() {
           type="text"
           placeholder="Enter your middle name"
           value={middle_name || ""}
-          onChange={(e) => setMiddleName(e.target.value)}
+          onChange={(e: React.ChangeEvent<HTMLInputElement>) => setMiddleName(e.target.value)}
         />
         <InputWithLabel
           required={true}
@@ -109,7 +109,7 @@ export default function Step1() {
           type="text"
           placeholder="Enter your last name"
           value={last_name}
-          onChange={(e) => setLastName(e.target.value)}
+          onChange={(e: React.ChangeEvent<HTMLInputElement>) => setLastName(e.target.value)}
         />
       </RowContainer>
 
@@ -123,7 +123,7 @@ export default function Step1() {
           type="email"
           placeholder="Enter your email"
           value={email}
-          onChange={(e) => setEmail(e.target.value)}
+          onChange={(e: React.ChangeEvent<HTMLInputElement>) => setEmail(e.target.value)}
         />
         <InputWithLabel
           required={true}
@@ -133,7 +133,7 @@ export default function Step1() {
           type="text"
           placeholder="Enter your phone number"
           value={phone_number}
-          onChange={(e) => setPhoneNumber(e.target.value)}
+          onChange={(e: React.ChangeEvent<HTMLInputElement>) => setPhoneNumber(e.target.value)}
         />
       </RowContainer>
 
