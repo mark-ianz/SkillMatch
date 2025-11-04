@@ -52,7 +52,7 @@ export default function HeroSection({ type }: { type: UserType }) {
               src={hero_section_image}
               alt="hero"
               fill
-              quality={80}
+              quality={100}
               priority
               className="object-cover object-center w-full h-full"
             />
