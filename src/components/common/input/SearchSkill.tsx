@@ -1,4 +1,4 @@
-import React from "react";
+"use client";
 import { useEffect, useRef, useState } from "react";
 import { Search } from "lucide-react";
 import { Input } from "@/components/ui/input";
@@ -7,29 +7,36 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import { Skill } from "@/types/skill.types";
-import { useSearchSkills } from "@/hooks/query/useSkills";
+import { Badge } from "@/components/ui/badge";
+import { X } from "lucide-react";
 import useDebounce from "@/hooks/useDebounce";
-import LoadingGeneric from "@/components/global/LoadingGeneric";
-import { toast } from "sonner";
-import useOJTProfileStore from "@/store/OJTProfileStore";
+import { useSearchSkills } from "@/hooks/query/useSkills";
+import { useCreateSkill } from "@/hooks/query/useCreateSkill";
+import { Skill } from "@/types/skill.types";
+import { Button } from "@/components/ui/button";
 
-const MAXIMUM_SKILLS = parseInt(
-  process.env.NEXT_PUBLIC_MAXIMUM_SKILLS as string
-);
+interface SearchSkillProps {
+  selectedSkills?: string[]; // array of skill names
+  onSkillsChange?: (skills: string[]) => void;
+  maxSkills?: number;
+  skillType?: "technical" | "soft";
+}
 
-export default function SearchSkill() {
-  const skills = useOJTProfileStore((state) => state.skills);
-  const addSkill = useOJTProfileStore((state) => state.addSkill);
-
+export default function SearchSkill({
+  selectedSkills = [],
+  onSkillsChange,
+  maxSkills = 10,
+  skillType = "technical",
+}: SearchSkillProps) {
   const [searchQuery, setSearchQuery] = useState("");
   const debouncedSearchQuery = useDebounce(searchQuery, 300);
-
   const [isOpen, setIsOpen] = useState(false);
   const [results, setResults] = useState<Skill[]>([]);
+  const [isCreating, setIsCreating] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
 
   const { data, isLoading } = useSearchSkills(debouncedSearchQuery);
+  const createSkill = useCreateSkill();
 
   useEffect(() => {
     if (debouncedSearchQuery.trim()) {
@@ -58,40 +65,84 @@ export default function SearchSkill() {
     };
   }, []);
 
-  // Handle selecting a skill
-  function handleSelectSkill(skill: Skill) {
-    // Check if skill already added
-    if (skills.find((s) => s.skill_id === skill.skill_id)) {
-      toast("Skill already added. Please select a different skill.", {
-        style: { backgroundColor: "#fee2e2", color: "#b91c1c" },
-        duration: 4000,
-      });
+  async function handleSelectSkill(skill: Skill) {
+    // we store skill names in the job post model
+    if (selectedSkills.includes(skill.skill_name)) {
+      onSkillsChange?.(selectedSkills.filter((s) => s !== skill.skill_name));
+      setIsOpen(false);
+      setSearchQuery("");
       return;
     }
 
-    if (skills.length >= MAXIMUM_SKILLS) {
-      toast(`Maximum of ${MAXIMUM_SKILLS} skills allowed.`, {
-        style: { backgroundColor: "#fee2e2", color: "#b91c1c" },
-        duration: 4000,
-      });
+    if (selectedSkills.length >= maxSkills) {
       return;
     }
 
-    console.log("Selected skill:", skill);
-    addSkill(skill);
+    onSkillsChange?.([...selectedSkills, skill.skill_name]);
     setIsOpen(false);
     setSearchQuery("");
   }
 
+  async function handleCreateSkill(name: string) {
+    setIsCreating(true);
+    try {
+      createSkill.mutate(
+        { skill_name: name, type: skillType === "soft" ? "soft" : "technical" },
+        {
+          onSuccess: (created) => {
+            onSkillsChange?.([...selectedSkills, created.skill_name]);
+            setIsOpen(false);
+            setSearchQuery("");
+          },
+        }
+      );
+    } catch (err: unknown) {
+      // if duplicate, re-run search or show simple feedback
+      const e = err as { response?: { status?: number } };
+      if (e?.response?.status === 409) {
+        // duplicate — fetch latest suggestions and add the existing one
+        // attempt to find the existing skill in current results
+        const existing = results.find(
+          (r) => r.skill_name.toLowerCase() === name.toLowerCase()
+        );
+        if (existing) {
+          onSkillsChange?.([...selectedSkills, existing.skill_name]);
+        }
+      }
+      // otherwise, noop — could surface toast later
+    } finally {
+      setIsCreating(false);
+    }
+  }
+
+  function handleRemoveSkill(skillName: string) {
+    onSkillsChange?.(selectedSkills.filter((s) => s !== skillName));
+  }
+
   return (
-    <div ref={containerRef} className="w-full max-w-md">
+    <div ref={containerRef} className="w-full">
+      <div className="flex flex-wrap gap-2 mb-3">
+        {selectedSkills.map((name, idx) => (
+          <Badge key={idx} variant="secondary" className="gap-1">
+            {name}
+            <button
+              type="button"
+              onClick={() => handleRemoveSkill(name)}
+              className="ml-1 hover:bg-muted-foreground/20 rounded"
+            >
+              <X className="h-3 w-3" />
+            </button>
+          </Badge>
+        ))}
+      </div>
+
       <Popover open={isOpen} onOpenChange={setIsOpen}>
         <PopoverTrigger asChild>
           <div className="relative">
             <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
             <Input
               type="text"
-              placeholder="Search skills..."
+              placeholder={`Search ${skillType} skills...`}
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               onFocus={() => {
@@ -100,6 +151,7 @@ export default function SearchSkill() {
                 }
               }}
               className="pl-9"
+              disabled={selectedSkills.length >= maxSkills}
             />
           </div>
         </PopoverTrigger>
@@ -111,25 +163,50 @@ export default function SearchSkill() {
           <div className="max-h-[300px] overflow-y-auto">
             {isLoading && (
               <div className="flex items-center justify-center h-[100px]">
-                <LoadingGeneric className="w-6 h-6" />
+                <div className="w-6 h-6 animate-spin rounded-full border-2 border-muted-foreground/40 border-t-muted-foreground"></div>
               </div>
             )}
+
             {results.length > 0 && (
               <div className="py-2">
-                {results.map((skill) => (
-                  <button
-                    key={skill.skill_id}
-                    onClick={() => handleSelectSkill(skill)}
-                    className="w-full px-4 py-2 text-left text-sm hover:bg-accent hover:text-accent-foreground transition-colors"
-                  >
-                    {skill.skill_name}
-                  </button>
-                ))}
+                      {results.map((skill) => (
+                        <button
+                          type="button"
+                          key={skill.skill_id}
+                          onClick={() => handleSelectSkill(skill)}
+                          className={`w-full px-4 py-2 text-left text-sm transition-colors ${
+                            selectedSkills.includes(skill.skill_name)
+                              ? "bg-accent text-accent-foreground"
+                              : "hover:bg-accent hover:text-accent-foreground"
+                          }`}
+                        >
+                          {skill.skill_name}
+                        </button>
+                      ))}
               </div>
             )}
-            {results.length === 0 && !isLoading && (
-              <div className="px-4 py-8 text-center text-sm text-muted-foreground">
-                No skills found
+
+            {!isLoading && results.length === 0 && (
+              <div className="px-4 py-4 text-center text-sm text-muted-foreground">
+                {!searchQuery.trim() && <div>Type a skill name to search</div>}
+
+                {searchQuery.trim() && (
+                  <div className="flex flex-col gap-1 justify-center items-center">
+                    <p>No skills found for `{searchQuery.trim()}`.</p>
+                    <Button
+                      type="button"
+                      className="w-fit"
+                      variant={"outline"}
+                      size={"sm"}
+                      onClick={() => handleCreateSkill(searchQuery.trim())}
+                      disabled={isCreating || !searchQuery.trim()}
+                    >
+                      {isCreating
+                        ? "Creating..."
+                        : <>Add skill <span className="text-skillmatch-muted-dark">`{searchQuery.trim()}`</span></>}
+                    </Button>
+                  </div>
+                )}
               </div>
             )}
           </div>
