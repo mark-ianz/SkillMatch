@@ -18,7 +18,7 @@ const buttonVariants = cva(
         secondary:
           "bg-skillmatch-primary-yellow text-secondary-skillmatch-dark hover:bg-skillmatch-primary-yellow/80",
         ghost:
-          "hover:bg-skillmatch-muted-green/30 dark:hover:bg-skillmatch-muted-green/30",
+          "hover:bg-skillmatch-muted-dark/10 dark:hover:bg-skillmatch-muted-dark/30",
         link: "text-primary underline-offset-4 hover:underline",
       },
       size: {
