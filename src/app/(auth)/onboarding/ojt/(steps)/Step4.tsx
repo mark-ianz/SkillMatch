@@ -1,4 +1,4 @@
-import SearchSkill from "@/components/common/input/SearchSkill";
+import SearchSkill from "@/components/common/input/SearchSkill_old";
 import SkipStep from "@/components/page_specific/onboarding/SkipStep";
 import StepContainer from "@/components/page_specific/onboarding/StepContainer";
 import { Button } from "@/components/ui/button";
