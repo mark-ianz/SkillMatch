@@ -10,9 +10,10 @@ import {
   GraduationCap,
   HardHat,
 } from "lucide-react";
-import { getImageProps } from "next/image";
+import Image from "next/image";
 import Link from "next/link";
 import React from "react";
+import hero_section_image from "@/images/background/hero_section_image.png";
 
 export default function HeroSection() {
   const qualificationCategories = [
@@ -40,58 +41,48 @@ export default function HeroSection() {
     "database-administrator",
   ];
 
-  function getBackgroundImage(srcSet = "") {
-    const imageSet = srcSet
-      .split(", ")
-      .map((str) => {
-        const [url, dpi] = str.split(" ");
-        return `url("${url}") ${dpi}`;
-      })
-      .join(", ");
-    return `image-set(${imageSet})`;
-  }
-
-  const {
-    props: { srcSet },
-  } = getImageProps({
-    alt: "hero-section",
-    width: 1920,
-    height: 1080,
-    src: "/hero_section_image.png",
-  });
-
-  const backgroundImage = getBackgroundImage(srcSet);
-
   return (
     <section id="hero" className="h-[calc(100vh-5rem)]">
-      <div className="flex flex-col justify-center">
-        <div
-          className="text-white bg-orange-50 py-10 h-[calc(100vh-25rem)] flex justify-center items-center bg-no-repeat bg-cover bg-center"
-          style={{ backgroundImage }}
-        >
-          <div className="flex flex-col max-w-7xl w-full">
-            <div className="max-w-xl">
-              <h1 className="text-5xl md:text-6xl font-sansation font-semibold leading-tight">
+      <div className="flex flex-col h-full items-center justify-center">
+        <div className="relative flex-1 w-full flex items-center justify-center bg-no-repeat bg-center">
+          {/* Background Image */}
+          <div className="absolute inset-0">
+            <Image
+              src={hero_section_image}
+              alt="hero"
+              fill
+              quality={80}
+              priority
+              className="object-cover object-center w-full h-full"
+            />
+            <div className="absolute inset-0 bg-black/40" />
+          </div>
+
+          {/* Overlay content */}
+          <div className="relative z-10 flex flex-col w-full py-10 max-w-7xl">
+            <div className="max-w-xl text-white">
+              <h1 className="text-4xl md:text-6xl font-sansation font-semibold leading-tight">
                 Build your future.
                 <br />
                 Find your path.
               </h1>
-              <p className="mt-6 text-skillmatch-light/90 text-md">
+              <p className="mt-4 md:mt-6 text-skillmatch-light/90 text-md">
                 Discover verified opportunities, connect with employers, and
                 start a meaningful career path tailored to your skills.
               </p>
             </div>
-            <div className="flex flex-col gap-4 max-w-xl">
+
+            <div className="flex flex-col gap-4 max-w-xl mt-6">
               <Input
                 type="text"
                 placeholder="Search for jobs and companies"
-                className="w-full mt-6 bg-white text-black"
+                className="w-full bg-white text-black"
               />
               <ul className="flex flex-wrap gap-2">
                 {searchRecommendations.map((item, index) => (
                   <li
                     key={index}
-                    className="text-sm flex items-center justify-center gap-2 border p-1 px-4 rounded-md bg-black/50 cursor-pointer hover:bg-black/70 duration-200 transition-all"
+                    className="text-sm flex items-center justify-center gap-2 border p-1 px-4 rounded-md bg-black/30 cursor-pointer hover:bg-black/50 duration-200 transition-all text-white"
                   >
                     {item}
                     <ChevronRight className="w-4 h-4" />
@@ -100,21 +91,23 @@ export default function HeroSection() {
               </ul>
               <Link
                 href="/explore?categories=jobs"
-                className="text-sm flex items-center justify-center w-fit underline"
+                className="text-sm flex items-center justify-center w-fit underline text-white"
               >
                 Explore More <ChevronRight className="w-4 h-4" />
               </Link>
             </div>
           </div>
         </div>
-        <div className="py-10 flex items-center justify-center">
-          <div className=" max-w-7xl">
+
+        {/* Qualification Categories */}
+        <div className="py-6 flex items-center justify-center max-w-7xl">
+          <div className="max-w-7xl w-full">
             <HeaderText>Qualification Categories</HeaderText>
-            <ul className="grid grid-cols-7 gap-4 mt-4">
+            <ul className="grid grid-cols-2 md:grid-cols-7 gap-4 mt-4">
               {qualificationCategories.map((category, index) => (
                 <li
                   key={index}
-                  className="text-skillmatch-primary-green flex gap-4 items-center p-4 py-6 rounded-md border flex-col text-sm text-center hover:shadow-md cursor-pointer duration-200 hover:scale-105 transition-all"
+                  className="text-skillmatch-primary-green flex gap-4 items-center p-4 py-6 rounded-md border flex-col text-sm text-center hover:shadow-md cursor-pointer duration-200 hover:scale-105 transition-all bg-white"
                 >
                   {category.svg}
                   <span className="font-sansation items-end">
