@@ -1,4 +1,5 @@
 import { EmployerOnboardingStepOneSchema } from "@/schema/onboarding";
+import { Address } from "./user.types";
 
 export type Company = EmployerOnboardingStepOneSchema & {
   company_id: string;
@@ -20,3 +21,5 @@ export type CompanyProfile = {
   facebook_page: string | null;
   company_email: string;
 };
+
+export type CompanyAddress = Pick<Address, "street_name" | "barangay" | "city_municipality" | "postal_code">;
