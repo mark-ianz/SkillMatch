@@ -2,7 +2,8 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { JobPost } from "@/types/job_post.types";
-import { Bookmark, Briefcase, Clock, Link, MapPin } from "lucide-react";
+import { Bookmark, Briefcase, Clock, Copy, Link, MapPin } from "lucide-react";
+import Image from "next/image";
 
 export function JobPostFullInfo({ data }: { data: JobPost }) {
   const handleApply = () => {
@@ -20,13 +21,24 @@ export function JobPostFullInfo({ data }: { data: JobPost }) {
     console.log("Copy link clicked");
   };
 
+  const fullAddress = `${data.street_name}, ${data.barangay}, ${data.city_municipality} ${data.postal_code}`;
+
   return (
     <div className="w-full max-w-2xl">
-      <Card className="p-8 space-y-2 border-0 shadow-sm">
-        <div className="space-y-3">
+      <Card className="p-8 border-0 shadow-sm">
+        <div className="space-y-4">
           {/* Company header */}
           <div className="flex items-start justify-between gap-4">
             <div className="flex-1">
+              {data.company_image && (
+                <Image
+                  width={48}
+                  height={48}
+                  src={data.company_image || "/placeholder.svg"}
+                  alt={data.company_name}
+                  className="w-12 h-12 rounded-full object-cover mb-3"
+                />
+              )}
               <h1 className="text-3xl font-semibold text-foreground text-balance">
                 {data.job_title}
               </h1>
@@ -51,7 +63,7 @@ export function JobPostFullInfo({ data }: { data: JobPost }) {
                 onClick={handleCopyLink}
                 className="rounded-lg h-10 w-10"
               >
-                <Link className="w-5 h-5" />
+                <Copy className="w-5 h-5" />
               </Button>
             </div>
           </div>
@@ -60,29 +72,29 @@ export function JobPostFullInfo({ data }: { data: JobPost }) {
           <div className="flex flex-wrap gap-4 text-sm text-muted-foreground">
             <div className="flex items-center gap-2">
               <MapPin className="w-4 h-4" />
-              <span>{data.location}</span>
+              <span>{fullAddress}</span>
             </div>
             <div className="flex items-center gap-2">
-              <Clock className="w-4 h-4" />
+              <Briefcase className="w-4 h-4" />
               <span>{data.work_arrangement}</span>
             </div>
             <div className="flex items-center gap-2">
               <Briefcase className="w-4 h-4" />
-              <span>{data.hours_per_week}h/week</span>
+              <span>
+                {data.available_positions} position
+                {data.available_positions > 1 ? "s" : ""}
+              </span>
             </div>
           </div>
 
           {/* Badges */}
           <div className="flex flex-wrap gap-2">
-            <Badge variant="secondary" className="text-xs">
-              {data.job_category}
-            </Badge>
-            <Badge variant="secondary" className="text-xs">
-              {data.shift_type}
-            </Badge>
-            <Badge variant="secondary" className="text-xs">
-              {data.working_days}
-            </Badge>
+            {data.job_category &&
+              data.job_category.map((category, idx) => (
+                <Badge key={idx} variant="secondary" className="text-xs">
+                  {category}
+                </Badge>
+              ))}
             {!data.is_paid && (
               <Badge variant="outline" className="text-xs">
                 Unpaid
@@ -94,7 +106,7 @@ export function JobPostFullInfo({ data }: { data: JobPost }) {
         {/* Divider */}
         <div className="border-t" />
 
-        <div className="space-y-1">
+        <div className="space-y-3">
           <h2 className="text-sm font-semibold text-foreground uppercase tracking-wide">
             Overview
           </h2>
@@ -103,12 +115,27 @@ export function JobPostFullInfo({ data }: { data: JobPost }) {
           </p>
         </div>
 
-        <div className="space-y-1">
+        <div className="space-y-4">
           <h2 className="text-sm font-semibold text-foreground uppercase tracking-wide">
             Requirements
           </h2>
 
           <div className="flex flex-col gap-4">
+            {data.program_required && data.program_required.length > 0 && (
+              <div className="space-y-1">
+                <p className="text-xs font-medium text-muted-foreground">
+                  Program Required
+                </p>
+                <div className="flex flex-wrap gap-2">
+                  {data.program_required.map((program, idx) => (
+                    <Badge key={idx} variant="outline" className="text-xs">
+                      {program}
+                    </Badge>
+                  ))}
+                </div>
+              </div>
+            )}
+
             {data.technical_skills && data.technical_skills.length > 0 && (
               <div className="space-y-1">
                 <p className="text-xs font-medium text-muted-foreground">
@@ -141,7 +168,7 @@ export function JobPostFullInfo({ data }: { data: JobPost }) {
           </div>
 
           {data.preferred_qualifications && (
-            <div className="space-y-1 pt-2">
+            <div className="space-y-2 pt-2">
               <p className="text-xs font-medium text-muted-foreground">
                 Preferred Qualifications
               </p>
@@ -155,15 +182,15 @@ export function JobPostFullInfo({ data }: { data: JobPost }) {
         {/* Divider */}
         <div className="border-t" />
 
-        <div className="space-y-2">
+        <div className="space-y-4">
           <h2 className="text-sm font-semibold text-foreground uppercase tracking-wide">
             Responsibilities
           </h2>
 
-          <ul>
+          <ul className="space-y-1">
             {data.job_responsibilities.map((responsibility, idx) => (
               <li key={idx} className="flex gap-3 text-sm text-foreground">
-                <span className="text-muted-foreground flex-shrink-0">
+                <span className="text-muted-foreground flex-shrink-0 mt-1">
                   •
                 </span>
                 <span className="leading-relaxed">{responsibility}</span>
