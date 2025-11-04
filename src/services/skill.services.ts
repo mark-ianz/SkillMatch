@@ -1,14 +1,38 @@
 import { db } from "@/lib/db";
 import { Skill } from "@/types/skill.types";
-import { RowDataPacket } from "mysql2";
+import { RowDataPacket, ResultSetHeader } from "mysql2";
 
 export const SkillServices = {
-  searchSkill: async (query: string) => {
+  searchSkill: async (query: string, type: "soft" | "technical" = "technical") => {
+    const table = type === "soft" ? "soft_skill" : "skill";
     const [rows] = await db.query<(Skill & RowDataPacket)[]>(
-      `SELECT * FROM skill WHERE skill_name LIKE ? LIMIT 10`,
+      `SELECT * FROM ${table} WHERE skill_name LIKE ? LIMIT 10`,
       [`${query}%`]
     );
     return rows;
+  },
+  createSkill: async (skill_name: string, type: "soft" | "technical" = "technical") => {
+    const table = type === "soft" ? "soft_skill" : "skill";
+    const connection = await db.getConnection();
+    try {
+      await connection.beginTransaction();
+      const [result] = await connection.query<ResultSetHeader>(
+        `INSERT INTO ${table} (skill_name) VALUES (?)`,
+        [skill_name]
+      );
+      await connection.commit();
+      const insertId = result.insertId;
+      const [rows] = await db.query<(Skill & RowDataPacket)[]>(
+        `SELECT * FROM ${table} WHERE skill_id = ?`,
+        [insertId]
+      );
+      return rows[0] as Skill;
+    } catch (error) {
+      await connection.rollback();
+      throw error;
+    } finally {
+      connection.release();
+    }
   },
   updateSkills: async (user_id: string, skills: Skill[]) => {
     // create connection
