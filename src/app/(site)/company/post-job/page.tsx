@@ -1,5 +1,9 @@
+"use client";
+
+import QueryClientProviderWrapper from "@/components/global/QueryClientProviderWrapper";
 import MainLayout from "@/components/layout/MainLayout";
 import JobPostingForm from "@/components/page_specific/job_post/JobPostForm";
+import { SessionProvider } from "next-auth/react";
 
 export default function PostJobPage() {
   return (
@@ -11,7 +15,11 @@ export default function PostJobPage() {
             Create a new job posting for your company
           </p>
         </div>
-        <JobPostingForm />
+        <SessionProvider>
+          <QueryClientProviderWrapper>
+            <JobPostingForm />
+          </QueryClientProviderWrapper>
+        </SessionProvider>
       </div>
     </MainLayout>
   );
