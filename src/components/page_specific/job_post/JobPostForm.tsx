@@ -12,7 +12,10 @@ import {
 } from "@/components/ui/dialog";
 import { useJobPostingStore } from "@/store/JobPostingStore";
 import { JobPost, WorkArrangement } from "@/types/job_post.types";
-import { jobPostingSchema } from "@/schema/job-posting.schema";
+import {
+  JobPostingFormData,
+  jobPostingSchema,
+} from "@/schema/job-posting.schema";
 import ErrorArray from "@/components/common/ErrorArray";
 
 import BasicInformation from "@/components/page_specific/job_post/BasicInformation";
@@ -23,10 +26,16 @@ import LocationSection from "@/components/page_specific/job_post/LocationSection
 import FormActions from "@/components/page_specific/job_post/FormActions";
 import QueryClientProviderWrapper from "@/components/global/QueryClientProviderWrapper";
 import { formatZodError } from "@/lib/utils";
+import useCreateJobPost from "@/hooks/query/useCreateJobPost";
+import useRequireCompany from "@/hooks/useRequireCompany";
 
 const WORK_ARRANGEMENTS: WorkArrangement[] = ["Remote", "On-site", "Hybrid"];
 
 export default function JobPostingForm() {
+  const company_id = useRequireCompany();
+
+  const { mutate } = useCreateJobPost();
+
   const { formData, updateField, reset } = useJobPostingStore();
   const [currentResponsibility, setCurrentResponsibility] = useState("");
   const [programInput, setProgramInput] = useState("");
@@ -107,9 +116,15 @@ export default function JobPostingForm() {
     setIsSubmitting(true);
     try {
       // TODO: Send to server
-      console.log("[v0] Submitting job posting:", formData);
-      setShowConfirmDialog(false);
-      /* reset(); */
+      mutate(
+        { ...(formData as JobPostingFormData), company_id },
+        {
+          onSuccess: () => {
+            setShowConfirmDialog(false);
+            reset();
+          },
+        }
+      );
     } catch (error) {
       console.error("[v0] Error submitting form:", error);
     } finally {
@@ -172,7 +187,10 @@ export default function JobPostingForm() {
           />
 
           {/* Submit & Reset Buttons */}
-          <FormActions setShowResetConfirmDialog={setShowResetConfirmDialog} />
+          <FormActions
+            setShowResetConfirmDialog={setShowResetConfirmDialog}
+            isSubmitting={isSubmitting}
+          />
         </div>
       </form>
 
