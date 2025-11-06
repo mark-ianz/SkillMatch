@@ -1,16 +1,41 @@
 "use client";
 import React from "react";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { JobPost } from "@/types/job_post.types";
+import SelectBarangay from "@/components/common/input/SelectBarangay";
+import { useJobPostingStore } from "@/store/JobPostingStore";
+import SelectCityMunicipality from "@/components/common/input/SelectCityMunicipality";
 
 type Props = {
   formData: Partial<JobPost>;
-  handleInputChange: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
+  handleInputChange: (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => void;
 };
 
-export default function LocationSection({ formData, handleInputChange }: Props) {
+export default function LocationSection({
+  formData,
+  handleInputChange,
+}: Props) {
+  const city_municipality = useJobPostingStore().formData.city_municipality;
+  const updateField = useJobPostingStore().updateField;
+
+  function handleBarangayChange(value: string) {
+    updateField("barangay", value);
+  }
+
+  function handleCityMunicipalityChange(value: string) {
+    updateField("city_municipality", value);
+  }
+
   return (
     <Card>
       <CardHeader>
@@ -29,17 +54,19 @@ export default function LocationSection({ formData, handleInputChange }: Props) 
           />
         </div>
 
+        <div className="grid gap-2">
+          <SelectCityMunicipality
+            value={city_municipality}
+            onValueChange={handleCityMunicipalityChange}
+          />
+        </div>
+
         <div className="grid grid-cols-2 gap-4">
-          <div className="grid gap-2">
-            <Label htmlFor="barangay">Barangay</Label>
-            <Input
-              id="barangay"
-              name="barangay"
-              placeholder="Barangay"
-              value={formData.barangay || ""}
-              onChange={handleInputChange}
-            />
-          </div>
+          <SelectBarangay
+            value={formData.barangay}
+            onValueChange={handleBarangayChange}
+            selected_city_municipality={city_municipality}
+          />
 
           <div className="grid gap-2">
             <Label htmlFor="postal_code">Postal Code</Label>
@@ -51,17 +78,6 @@ export default function LocationSection({ formData, handleInputChange }: Props) 
               onChange={handleInputChange}
             />
           </div>
-        </div>
-
-        <div className="grid gap-2">
-          <Label htmlFor="city_municipality">City/Municipality</Label>
-          <Input
-            id="city_municipality"
-            name="city_municipality"
-            placeholder="e.g., Makati City"
-            value={formData.city_municipality || ""}
-            onChange={handleInputChange}
-          />
         </div>
       </CardContent>
     </Card>
