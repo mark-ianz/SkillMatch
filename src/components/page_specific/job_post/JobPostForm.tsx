@@ -22,6 +22,7 @@ import CompensationSection from "@/components/page_specific/job_post/Compensatio
 import LocationSection from "@/components/page_specific/job_post/LocationSection";
 import FormActions from "@/components/page_specific/job_post/FormActions";
 import QueryClientProviderWrapper from "@/components/global/QueryClientProviderWrapper";
+import { formatZodError } from "@/lib/utils";
 
 const WORK_ARRANGEMENTS: WorkArrangement[] = ["Remote", "On-site", "Hybrid"];
 
@@ -88,10 +89,13 @@ export default function JobPostingForm() {
     const result = jobPostingSchema.safeParse(formData as JobPost);
 
     if (!result.success) {
-      console.log(result);
-      /* const errorMessages = result.error.map((err) => `${err.path.join(".")}: ${err.message}`)
-      setErrors(errorMessages)
-      setShowConfirmDialog(false) */
+      const errorMessages = formatZodError(result.error);
+      setErrors(errorMessages);
+      setShowConfirmDialog(false);
+
+      // scroll to top
+      window.scrollTo({ top: 0, behavior: "smooth" });
+
       return;
     }
 
@@ -105,7 +109,7 @@ export default function JobPostingForm() {
       // TODO: Send to server
       console.log("[v0] Submitting job posting:", formData);
       setShowConfirmDialog(false);
-      reset();
+      /* reset(); */
     } catch (error) {
       console.error("[v0] Error submitting form:", error);
     } finally {
