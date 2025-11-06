@@ -24,12 +24,18 @@ export default function Step2() {
   const subdivision = useUserStore((state) => state.subdivision);
   const postal_code = useUserStore((state) => state.postal_code);
   const street_name = useUserStore((state) => state.street_name);
+  const barangay = useUserStore((state) => state.barangay);
+  const city_municipality = useUserStore((state) => state.city_municipality);
 
   const setStreetName = useUserStore((state) => state.setStreetName);
   const setHouseNumber = useUserStore((state) => state.setHouseNumber);
   const setSubdivision = useUserStore((state) => state.setSubdivision);
   const setPostalCode = useUserStore((state) => state.setPostalCode);
   const setError = useOnboardingStore((state) => state.setError);
+  const setBarangay = useUserStore((state) => state.setBarangay);
+  const setCityMunicipality = useUserStore(
+    (state) => state.setCityMunicipality
+  );
 
   // Submit handler
   async function handleNextStep() {
@@ -71,7 +77,9 @@ export default function Step2() {
           value={house_number}
           required={true}
           placeholder="e.g., Blk 5 Lot 12 or 123"
-          onChange={(e: React.ChangeEvent<HTMLInputElement>) => setHouseNumber(e.target.value)}
+          onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+            setHouseNumber(e.target.value)
+          }
           label="House Number"
           containerClassName="w-full"
         />
@@ -79,7 +87,9 @@ export default function Step2() {
           value={street_name}
           required={true}
           placeholder="e.g., Rizal Avenue or Sampaguita St."
-          onChange={(e: React.ChangeEvent<HTMLInputElement>) => setStreetName(e.target.value)}
+          onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+            setStreetName(e.target.value)
+          }
           label="Street Name"
           containerClassName="w-full"
         />
@@ -90,7 +100,9 @@ export default function Step2() {
           optional={true}
           value={subdivision || ""}
           placeholder="e.g., Green Meadows Village (Optional)"
-          onChange={(e: React.ChangeEvent<HTMLInputElement>) => setSubdivision(e.target.value)}
+          onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+            setSubdivision(e.target.value)
+          }
           label="Subdivision"
           containerClassName="w-full"
         />
@@ -98,18 +110,27 @@ export default function Step2() {
           value={postal_code}
           required={true}
           placeholder="e.g., 1101"
-          onChange={(e: React.ChangeEvent<HTMLInputElement>) => setPostalCode(e.target.value)}
+          onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+            setPostalCode(e.target.value)
+          }
           label="Postal Code"
           containerClassName="w-full"
         />
       </RowContainer>
 
       <RowContainer>
-        <SelectCityMunicipality />
+        <SelectCityMunicipality
+          onValueChange={setCityMunicipality}
+          value={city_municipality}
+        />
       </RowContainer>
 
       <RowContainer>
-        <SelectBarangay />
+        <SelectBarangay
+          value={barangay}
+          onValueChange={setBarangay}
+          selected_city_municipality={city_municipality}
+        />
       </RowContainer>
 
       <Button
