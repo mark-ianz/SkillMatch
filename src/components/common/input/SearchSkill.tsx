@@ -35,7 +35,7 @@ export default function SearchSkill({
   const [isCreating, setIsCreating] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
 
-  const { data, isLoading } = useSearchSkills(debouncedSearchQuery);
+  const { data, isLoading } = useSearchSkills(debouncedSearchQuery, skillType === "soft" ? "soft" : "technical");
   const createSkill = useCreateSkill();
 
   useEffect(() => {

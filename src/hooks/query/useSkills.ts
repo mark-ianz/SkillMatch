@@ -3,12 +3,12 @@ import useOnboardingStore from "@/store/OnboardingStore";
 import { Skill, SkillQuery } from "@/types/skill.types";
 import { useMutation, useQuery } from "@tanstack/react-query";
 
-export function useSearchSkills(q: string) {
+export function useSearchSkills(q: string, type: "soft" | "technical" = "technical") {
   return useQuery({
-    queryKey: ["search-skills", q],
+    queryKey: ["search-skills", q, type],
     queryFn: async () => {
       const { data } = await api.get<SkillQuery>("/ojt/skills/search", {
-        params: { q },
+        params: { q, type },
       });
       return data;
     },
