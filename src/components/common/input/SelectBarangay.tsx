@@ -3,11 +3,15 @@ import city_municipality from "@/data/city_municipality.json";
 import useUserStore from "@/store/UserStore";
 import React from "react";
 
-export default function SelectBarangay() {
-  const selected_city_municipality = useUserStore(
-    (state) => state.city_municipality
-  );
-
+export default function SelectBarangay({
+  onValueChange,
+  value,
+  selected_city_municipality,
+}: {
+  onValueChange: (value: string) => void;
+  value: string | undefined | null;
+  selected_city_municipality: string | undefined | null; // required, because barangays depend on the selected city/municipality
+}) {
   const barangay_list = city_municipality[
     (selected_city_municipality as keyof typeof city_municipality) || ""
   ]?.barangay_list.map((barangay) => ({
@@ -15,20 +19,17 @@ export default function SelectBarangay() {
     value: barangay,
   }));
 
-  const setBarangay = useUserStore((state) => state.setBarangay);
-  const barangay = useUserStore((state) => state.barangay);
-
   return (
     <ComboBoxWithLabel
       required={true}
       containerClassName="w-full"
-      value={barangay || ""}
+      value={value || ""}
       disabled={!selected_city_municipality}
       items={barangay_list}
       searchFor="barangay"
       id="barangay"
       label="Barangay"
-      onValueChange={setBarangay}
+      onValueChange={onValueChange}
     />
   );
 }
