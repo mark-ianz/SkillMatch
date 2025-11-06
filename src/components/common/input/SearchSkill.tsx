@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, type KeyboardEvent } from "react";
 import { Search } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import {
@@ -109,10 +109,34 @@ export default function SearchSkill({
           onSkillsChange?.([...selectedSkills, existing.skill_name]);
         }
       }
-      // otherwise, noop — could surface toast later
     } finally {
       setIsCreating(false);
     }
+  }
+
+  function handleInputKeyDown(e: KeyboardEvent<HTMLInputElement>) {
+    if (e.key !== "Enter") return;
+    e.preventDefault();
+
+    const q = searchQuery.trim();
+    if (!q) return;
+
+    // If there are search results, select the first one.
+    if (results.length > 0) {
+      const first = results[0];
+      // If it's already selected, just close and clear the input.
+      if (selectedSkills.includes(first.skill_name)) {
+        setIsOpen(false);
+        setSearchQuery("");
+        return;
+      }
+
+      void handleSelectSkill(first);
+      return;
+    }
+
+    // No results -> create the skill with current skillType
+    handleCreateSkill(q);
   }
 
   function handleRemoveSkill(skillName: string) {
@@ -145,6 +169,7 @@ export default function SearchSkill({
               placeholder={`Search ${skillType} skills...`}
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
+              onKeyDown={handleInputKeyDown}
               onFocus={() => {
                 if (searchQuery.trim()) {
                   setIsOpen(true);
