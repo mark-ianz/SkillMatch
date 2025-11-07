@@ -23,6 +23,16 @@ const nextConfig: NextConfig = {
         hostname: "lh6.googleusercontent.com",
         pathname: "/**",
       },
+      {
+        protocol: "https",
+        hostname: "placehold.co",
+        pathname: "/**",
+      },
+      {
+        protocol: "https",
+        hostname: "scontent.fmnl17-2.fna.fbcdn.net",
+        pathname: "/**",
+      }
     ],
   },
   experimental: {
