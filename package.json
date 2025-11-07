@@ -9,6 +9,8 @@
     "lint": "eslint"
   },
   "dependencies": {
+    "@google-apps/meet": "^0.7.1",
+    "@google-cloud/local-auth": "^3.0.1",
     "@radix-ui/react-dialog": "^1.1.15",
     "@radix-ui/react-label": "^2.1.8",
     "@radix-ui/react-navigation-menu": "^1.2.14",
@@ -25,6 +27,8 @@
     "clsx": "^2.1.1",
     "cmdk": "^1.1.1",
     "date-fns": "^4.1.0",
+    "google-auth-library": "^10.5.0",
+    "google-gax": "^5.0.5",
     "lucide-react": "^0.544.0",
     "mysql2": "^3.15.1",
     "next": "15.5.3",
