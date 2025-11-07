@@ -7,7 +7,7 @@ import { JobPostFullInfo } from "@/components/page_specific/job_post/JobPostFull
 import { JobPost } from "@/types/job_post.types";
 import { CompanyPost } from "@/components/page_specific/company_post/CompanyPost";
 import { CompanyPost as CompanyPostType } from "@/types/company_post.types";
-import placeholder_image from "@/images/placeholder_image.avif";
+import GenerateGoogleMeetLink from "@/components/auth/GenerateGoogleMeetLink";
 
 export default function TestPage() {
   const dummy = {
@@ -130,6 +130,7 @@ export default function TestPage() {
           <CompanyPost post={post} key={post.post_id} />
         ))}
       </div>
+      <GenerateGoogleMeetLink />
     </main>
   );
 }
