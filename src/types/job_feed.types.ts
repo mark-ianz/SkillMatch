@@ -1,5 +1,5 @@
 export type JobFeedFilters = {
-  programs: string[];
+  courses: string[];
   locations: string[];
   workArrangement: string[];
   skills: string[];
