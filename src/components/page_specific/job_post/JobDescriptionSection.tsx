@@ -64,7 +64,7 @@ export default function JobDescriptionSection({
                 }
               }}
             />
-            <Button type="button" onClick={addResponsibility}>
+            <Button variant={"default_employer"} type="button" onClick={addResponsibility}>
               Add
             </Button>
           </div>

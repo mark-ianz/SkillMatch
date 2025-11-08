@@ -41,7 +41,7 @@ export default function RequirementsSection({ formData, programInput, setProgram
                 }
               }}
             />
-            <Button type="button" onClick={addProgram}>
+            <Button type="button" onClick={addProgram} variant={"default_employer"}>
               Add
             </Button>
           </div>

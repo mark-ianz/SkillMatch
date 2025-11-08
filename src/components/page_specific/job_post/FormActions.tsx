@@ -14,6 +14,7 @@ export default function FormActions({
   return (
     <div className="flex gap-3">
       <Button
+        variant={"default_employer"}
         type="submit"
         className="flex-1"
         size="lg"
