@@ -1,0 +1,4 @@
+- wrap na ng layout yung create-post tsaka post-job nangyan
+- type ng company post di tugma sa return pag nag post
+- feed ng posts
+- feed ng job posts
