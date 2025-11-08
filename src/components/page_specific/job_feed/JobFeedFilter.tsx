@@ -1,0 +1,227 @@
+"use client";
+
+import { useState } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
+import { Card } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Checkbox } from "@/components/ui/checkbox";
+import { Label } from "@/components/ui/label";
+import { Filter, X } from "lucide-react";
+import { FeedType, JobFeedFilters } from "@/types/job_feed.types";
+import college_courses from "@/data/college_courses.json";
+import { cn } from "@/lib/utils";
+
+interface JobFeedFilterProps {
+  feedType: FeedType;
+  className?: string;
+}
+
+const COLLEGE_LIST = Object.keys(college_courses).map((college) => ({
+  college: college,
+  courses: college_courses[college as keyof typeof college_courses].courses,
+}));
+
+const COURSES = COLLEGE_LIST.flatMap((c) =>
+  c.courses.map((course) => course.course_name)
+);
+
+const LOCATION_OPTIONS = [
+  "Quezon City",
+  "Makati",
+  "Taguig",
+  "Paranaque",
+  "Others",
+];
+
+const WORK_ARRANGEMENT_OPTIONS = ["Remote", "On-site", "Hybrid"];
+
+const JOB_SKILLS = ["JavaScript", "Python", "React", "TypeScript", "SQL"];
+
+export function JobFeedFilter({ feedType, className }: JobFeedFilterProps) {
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const [filters, setFilters] = useState<JobFeedFilters>({
+    courses: searchParams.getAll("course") || [],
+    locations: searchParams.getAll("location") || [],
+    workArrangement: searchParams.getAll("arrangement") || [],
+    skills: searchParams.getAll("skill") || [],
+    isPaid: searchParams.get("paid") === "true" ? true : undefined,
+  });
+
+  const handleFilterChange = (type: keyof JobFeedFilters, value: string) => {
+    setFilters((prev) => {
+      if (Array.isArray(prev[type])) {
+        const array = prev[type] as string[];
+        const updated = array.includes(value)
+          ? array.filter((v) => v !== value)
+          : [...array, value];
+        return { ...prev, [type]: updated };
+      }
+      return prev;
+    });
+  };
+
+  const handleApplyFilters = () => {
+    const params = new URLSearchParams();
+    filters.courses.forEach((p) => params.append("course", p));
+    filters.locations.forEach((l) => params.append("location", l));
+    filters.workArrangement.forEach((w) => params.append("arrangement", w));
+    filters.skills.forEach((s) => params.append("skill", s));
+    if (filters.isPaid !== undefined)
+      params.append("paid", String(filters.isPaid));
+
+    const queryString = params.toString();
+    router.push(`/feed/${feedType}${queryString ? `?${queryString}` : ""}`);
+  };
+
+  const handleReset = () => {
+    setFilters({
+      courses: [],
+      locations: [],
+      workArrangement: [],
+      skills: [],
+      isPaid: undefined,
+    });
+    router.push(`/feed/${feedType}`);
+  };
+
+  const hasActiveFilters =
+    filters.courses.length > 0 ||
+    filters.locations.length > 0 ||
+    filters.workArrangement.length > 0 ||
+    filters.skills.length > 0 ||
+    filters.isPaid !== undefined;
+
+  return (
+    <Card className={cn("p-6 w-full", className)}>
+      <div className="flex items-center justify-between">
+        <div className="flex items-center gap-2">
+          <Filter className="w-4 h-4" />
+          <h3 className="font-semibold">Filters</h3>
+        </div>
+        {hasActiveFilters && (
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={handleReset}
+            className="text-xs h-7"
+          >
+            <X className="w-3 h-3 mr-1" />
+            Reset
+          </Button>
+        )}
+      </div>
+
+      {/* Courses Filter */}
+      <div className="space-y-3">
+        <h4 className="text-sm font-bold">Courses</h4>
+        <div className="space-y-2">
+          {COURSES.map((course, index) => (
+            <div
+              key={course + index}
+              className="flex align-top gap-2 justify-start"
+            >
+              <Checkbox
+                id={`course-${course}`}
+                checked={filters.courses.includes(course)}
+                onCheckedChange={() =>
+                  handleFilterChange("courses", course)
+                }
+              />
+              <Label
+                htmlFor={`course-${course}`}
+                className="text-sm font-normal cursor-pointer leading-tight"
+              >
+                {course.replace("Bachelor of Science in ", "BS ")}
+              </Label>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Location Filter */}
+      <div className="space-y-3 border-t pt-4">
+        <h4 className="text-sm font-semibold">Location</h4>
+        <div className="space-y-2">
+          {LOCATION_OPTIONS.map((location) => (
+            <div key={location} className="flex items-center gap-2">
+              <Checkbox
+                id={`location-${location}`}
+                checked={filters.locations.includes(location)}
+                onCheckedChange={() =>
+                  handleFilterChange("locations", location)
+                }
+              />
+              <Label
+                htmlFor={`location-${location}`}
+                className="text-sm font-normal cursor-pointer"
+              >
+                {location}
+              </Label>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Work Arrangement Filter */}
+      <div className="space-y-3 border-t pt-4">
+        <h4 className="text-sm font-semibold">Work Arrangement</h4>
+        <div className="space-y-2">
+          {WORK_ARRANGEMENT_OPTIONS.map((arrangement) => (
+            <div
+              key={arrangement}
+              className="flex items-center justify-start gap-2"
+            >
+              <Checkbox
+                id={`arrangement-${arrangement}`}
+                checked={filters.workArrangement.includes(arrangement)}
+                onCheckedChange={() =>
+                  handleFilterChange("workArrangement", arrangement)
+                }
+              />
+              <Label
+                htmlFor={`arrangement-${arrangement}`}
+                className="text-sm font-normal cursor-pointer"
+              >
+                {arrangement}
+              </Label>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Skills Filter (for job posts only) */}
+      {feedType === "job-posts" && (
+        <div className="space-y-3 border-t pt-4">
+          <h4 className="text-sm font-semibold">Skills</h4>
+          <div className="space-y-2">
+            {JOB_SKILLS.map((skill) => (
+              <div key={skill} className="flex items-center gap-2">
+                <Checkbox
+                  id={`skill-${skill}`}
+                  checked={filters.skills.includes(skill)}
+                  onCheckedChange={() => handleFilterChange("skills", skill)}
+                />
+                <Label
+                  htmlFor={`skill-${skill}`}
+                  className="text-sm font-normal cursor-pointer"
+                >
+                  {skill}
+                </Label>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {/* Apply Button */}
+      <Button
+        onClick={handleApplyFilters}
+        className="w-full"
+        disabled={!hasActiveFilters}
+      >
+        Apply Filters
+      </Button>
+    </Card>
+  );
+}
