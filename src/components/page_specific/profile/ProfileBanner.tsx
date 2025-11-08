@@ -20,8 +20,7 @@ export default function ProfileBanner({
   const { name, idNumber, course, location, avatarSrc } = data;
 
   return (
-    <div className={cn("max-w-md rounded-lg overflow-hidden shadow-md bg-white", className)}>
-      <div className={cn("h-12 w-full bg-skillmatch-primary-green")} />
+    <div className={cn("max-w-md rounded-lg ", className)}>
 
       {/* avatar */}
       <div className="relative -mt-6 flex justify-center">
