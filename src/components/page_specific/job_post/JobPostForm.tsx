@@ -26,7 +26,7 @@ import LocationSection from "@/components/page_specific/job_post/LocationSection
 import FormActions from "@/components/page_specific/job_post/FormActions";
 import QueryClientProviderWrapper from "@/components/global/QueryClientProviderWrapper";
 import { formatZodError } from "@/lib/utils";
-import useCreateJobPost from "@/hooks/query/useCreateJobPost";
+import { useCreateJobPost } from "@/hooks/query/useJobPosts";
 import useRequireCompany from "@/hooks/useRequireCompany";
 
 const WORK_ARRANGEMENTS: WorkArrangement[] = ["Remote", "On-site", "Hybrid"];
