@@ -6,7 +6,13 @@ import { JobPost } from "@/types/job_post.types";
 import { Bookmark, Briefcase, Copy, MapPin } from "lucide-react";
 import Image from "next/image";
 
-export function JobPostFullInfo({ data, className }: { data: JobPost; className?: string }) {
+export function JobPostFullInfo({
+  data,
+  className,
+}: {
+  data: JobPost;
+  className?: string;
+}) {
   const handleApply = () => {
     // TODO: Implement apply functionality
     console.log("Apply clicked for job:", data.job_post_id);
@@ -26,7 +32,7 @@ export function JobPostFullInfo({ data, className }: { data: JobPost; className?
 
   return (
     <Card className={cn("border-1 shadow-sm p-6 w-full", className)}>
-      <div className="space-y-4">
+      <div className="space-y-3">
         {/* Company header */}
         <div className="flex items-start justify-between gap-4">
           <div className="flex-1">
@@ -101,6 +107,12 @@ export function JobPostFullInfo({ data, className }: { data: JobPost; className?
             </Badge>
           )}
         </div>
+
+        {data.allowance_description && (
+          <Badge variant="secondary" className="text-xs font-medium mt-2">
+            {data.allowance_description}
+          </Badge>
+        )}
       </div>
 
       {/* Divider */}
