@@ -10,335 +10,57 @@ import { JobFeedHeader } from "@/components/page_specific/job_feed/JobFeedHeader
 import { JobPostPreview } from "@/components/page_specific/job_feed/JobPostPreview";
 import { JobPostFullInfo } from "@/components/page_specific/job_post/JobPostFullInfo";
 import MainLayout from "@/components/layout/MainLayout";
-
-// Example job data
-const EXAMPLE_JOBS: Partial<JobPost>[] = [
-  {
-    job_post_id: 1,
-    company_id: 1,
-    company_name: "JT Engineering Corps.",
-    job_title: "Industrial Engineering Intern",
-    work_arrangement: "On-site",
-    job_category: ["IT", "Engineering"],
-    job_overview:
-      "Join our engineering team to gain hands-on experience in industrial processes.",
-    job_responsibilities: [
-      "Assist in designing industrial systems",
-      "Support process improvement initiatives",
-      "Conduct technical analysis and reporting",
-    ],
-    soft_skills: ["Communication", "Teamwork", "Problem Solving"],
-    technical_skills: ["AutoCAD", "MATLAB", "Data Analysis"],
-    preferred_qualifications: "Experience with manufacturing systems",
-    is_paid: true,
-    program_required: ["BS Industrial Engineering"],
-    available_positions: 2,
-    street_name: "123 Engineering St",
-    barangay: "Rockville",
-    city_municipality: "Quezon City",
-    postal_code: "1234",
-    created_at: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000).toISOString(),
-  },
-  {
-    job_post_id: 2,
-    company_id: 2,
-    company_name: "Infor Philippines",
-    job_title: "Quality Engineering (QA) Intern",
-    work_arrangement: "Hybrid",
-    job_category: ["IT", "QA"],
-    job_overview:
-      "Help ensure product quality through comprehensive testing and analysis.",
-    job_responsibilities: [
-      "Execute test cases and document results",
-      "Identify and report software defects",
-      "Assist in test automation",
-    ],
-    soft_skills: ["Attention to Detail", "Communication", "Analytical Skills"],
-    technical_skills: ["Selenium", "Test Automation", "SQL"],
-    is_paid: true,
-    program_required: ["BS Information Technology"],
-    available_positions: 3,
-    street_name: "456 IT Avenue",
-    barangay: "Makati",
-    city_municipality: "Metro Manila",
-    postal_code: "1200",
-    created_at: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000).toISOString(),
-  },
-  {
-    job_post_id: 3,
-    company_id: 3,
-    company_name: "TechStart Solutions",
-    job_title: "Junior Web Developer Intern",
-    work_arrangement: "Remote",
-    job_category: ["IT", "Development"],
-    job_overview:
-      "Build modern web applications with a passionate development team.",
-    job_responsibilities: [
-      "Develop frontend components with React",
-      "Implement responsive designs",
-      "Collaborate with the design team",
-    ],
-    soft_skills: ["Creativity", "Collaboration", "Time Management"],
-    technical_skills: ["React", "JavaScript", "CSS"],
-    is_paid: false,
-    program_required: ["BS Computer Science", "BS Information Technology"],
-    available_positions: 5,
-    street_name: "789 Tech Park",
-    barangay: "Taguig",
-    city_municipality: "Metro Manila",
-    postal_code: "1630",
-    created_at: new Date(Date.now() - 3 * 24 * 60 * 60 * 1000).toISOString(),
-  },
-  {
-    job_post_id: 4,
-    company_id: 1,
-    company_name: "JT Engineering Corps.",
-    job_title: "Industrial Engineering Intern",
-    work_arrangement: "On-site",
-    job_category: ["IT", "Engineering"],
-    job_overview:
-      "Join our engineering team to gain hands-on experience in industrial processes.",
-    job_responsibilities: [
-      "Assist in designing industrial systems",
-      "Support process improvement initiatives",
-      "Conduct technical analysis and reporting",
-    ],
-    soft_skills: ["Communication", "Teamwork", "Problem Solving"],
-    technical_skills: ["AutoCAD", "MATLAB", "Data Analysis"],
-    preferred_qualifications: "Experience with manufacturing systems",
-    is_paid: true,
-    program_required: ["BS Industrial Engineering"],
-    available_positions: 2,
-    street_name: "123 Engineering St",
-    barangay: "Rockville",
-    city_municipality: "Quezon City",
-    postal_code: "1234",
-    created_at: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000).toISOString(),
-  },
-  {
-    job_post_id: 5,
-    company_id: 2,
-    company_name: "Infor Philippines",
-    job_title: "Quality Engineering (QA) Intern",
-    work_arrangement: "Hybrid",
-    job_category: ["IT", "QA"],
-    job_overview:
-      "Help ensure product quality through comprehensive testing and analysis.",
-    job_responsibilities: [
-      "Execute test cases and document results",
-      "Identify and report software defects",
-      "Assist in test automation",
-    ],
-    soft_skills: ["Attention to Detail", "Communication", "Analytical Skills"],
-    technical_skills: ["Selenium", "Test Automation", "SQL"],
-    is_paid: true,
-    program_required: ["BS Information Technology"],
-    available_positions: 3,
-    street_name: "456 IT Avenue",
-    barangay: "Makati",
-    city_municipality: "Metro Manila",
-    postal_code: "1200",
-    created_at: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000).toISOString(),
-  },
-  {
-    job_post_id: 6,
-    company_id: 3,
-    company_name: "TechStart Solutions",
-    job_title: "Junior Web Developer Intern",
-    work_arrangement: "Remote",
-    job_category: ["IT", "Development"],
-    job_overview:
-      "Build modern web applications with a passionate development team.",
-    job_responsibilities: [
-      "Develop frontend components with React",
-      "Implement responsive designs",
-      "Collaborate with the design team",
-    ],
-    soft_skills: ["Creativity", "Collaboration", "Time Management"],
-    technical_skills: ["React", "JavaScript", "CSS"],
-    is_paid: false,
-    program_required: ["BS Computer Science", "BS Information Technology"],
-    available_positions: 5,
-    street_name: "789 Tech Park",
-    barangay: "Taguig",
-    city_municipality: "Metro Manila",
-    postal_code: "1630",
-    created_at: new Date(Date.now() - 3 * 24 * 60 * 60 * 1000).toISOString(),
-  },
-  {
-    job_post_id: 7,
-    company_id: 1,
-    company_name: "JT Engineering Corps.",
-    job_title: "Industrial Engineering Intern",
-    work_arrangement: "On-site",
-    job_category: ["IT", "Engineering"],
-    job_overview:
-      "Join our engineering team to gain hands-on experience in industrial processes.",
-    job_responsibilities: [
-      "Assist in designing industrial systems",
-      "Support process improvement initiatives",
-      "Conduct technical analysis and reporting",
-    ],
-    soft_skills: ["Communication", "Teamwork", "Problem Solving"],
-    technical_skills: ["AutoCAD", "MATLAB", "Data Analysis"],
-    preferred_qualifications: "Experience with manufacturing systems",
-    is_paid: true,
-    program_required: ["BS Industrial Engineering"],
-    available_positions: 2,
-    street_name: "123 Engineering St",
-    barangay: "Rockville",
-    city_municipality: "Quezon City",
-    postal_code: "1234",
-    created_at: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000).toISOString(),
-  },
-  {
-    job_post_id: 8,
-    company_id: 2,
-    company_name: "Infor Philippines",
-    job_title: "Quality Engineering (QA) Intern",
-    work_arrangement: "Hybrid",
-    job_category: ["IT", "QA"],
-    job_overview:
-      "Help ensure product quality through comprehensive testing and analysis.",
-    job_responsibilities: [
-      "Execute test cases and document results",
-      "Identify and report software defects",
-      "Assist in test automation",
-    ],
-    soft_skills: ["Attention to Detail", "Communication", "Analytical Skills"],
-    technical_skills: ["Selenium", "Test Automation", "SQL"],
-    is_paid: true,
-    program_required: ["BS Information Technology"],
-    available_positions: 3,
-    street_name: "456 IT Avenue",
-    barangay: "Makati",
-    city_municipality: "Metro Manila",
-    postal_code: "1200",
-    created_at: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000).toISOString(),
-  },
-  {
-    job_post_id: 9,
-    company_id: 3,
-    company_name: "TechStart Solutions",
-    job_title: "Junior Web Developer Intern",
-    work_arrangement: "Remote",
-    job_category: ["IT", "Development"],
-    job_overview:
-      "Build modern web applications with a passionate development team.",
-    job_responsibilities: [
-      "Develop frontend components with React",
-      "Implement responsive designs",
-      "Collaborate with the design team",
-    ],
-    soft_skills: ["Creativity", "Collaboration", "Time Management"],
-    technical_skills: ["React", "JavaScript", "CSS"],
-    is_paid: false,
-    program_required: ["BS Computer Science", "BS Information Technology"],
-    available_positions: 5,
-    street_name: "789 Tech Park",
-    barangay: "Taguig",
-    city_municipality: "Metro Manila",
-    postal_code: "1630",
-    created_at: new Date(Date.now() - 3 * 24 * 60 * 60 * 1000).toISOString(),
-  },
-  {
-    job_post_id: 10,
-    company_id: 1,
-    company_name: "JT Engineering Corps.",
-    job_title: "Industrial Engineering Intern",
-    work_arrangement: "On-site",
-    job_category: ["IT", "Engineering"],
-    job_overview:
-      "Join our engineering team to gain hands-on experience in industrial processes.",
-    job_responsibilities: [
-      "Assist in designing industrial systems",
-      "Support process improvement initiatives",
-      "Conduct technical analysis and reporting",
-    ],
-    soft_skills: ["Communication", "Teamwork", "Problem Solving"],
-    technical_skills: ["AutoCAD", "MATLAB", "Data Analysis"],
-    preferred_qualifications: "Experience with manufacturing systems",
-    is_paid: true,
-    program_required: ["BS Industrial Engineering"],
-    available_positions: 2,
-    street_name: "123 Engineering St",
-    barangay: "Rockville",
-    city_municipality: "Quezon City",
-    postal_code: "1234",
-    created_at: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000).toISOString(),
-  },
-  {
-    job_post_id: 11,
-    company_id: 2,
-    company_name: "Infor Philippines",
-    job_title: "Quality Engineering (QA) Intern",
-    work_arrangement: "Hybrid",
-    job_category: ["IT", "QA"],
-    job_overview:
-      "Help ensure product quality through comprehensive testing and analysis.",
-    job_responsibilities: [
-      "Execute test cases and document results",
-      "Identify and report software defects",
-      "Assist in test automation",
-    ],
-    soft_skills: ["Attention to Detail", "Communication", "Analytical Skills"],
-    technical_skills: ["Selenium", "Test Automation", "SQL"],
-    is_paid: true,
-    program_required: ["BS Information Technology"],
-    available_positions: 3,
-    street_name: "456 IT Avenue",
-    barangay: "Makati",
-    city_municipality: "Metro Manila",
-    postal_code: "1200",
-    created_at: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000).toISOString(),
-  },
-  {
-    job_post_id: 12,
-    company_id: 3,
-    company_name: "TechStart Solutions",
-    job_title: "Junior Web Developer Intern",
-    work_arrangement: "Remote",
-    job_category: ["IT", "Development"],
-    job_overview:
-      "Build modern web applications with a passionate development team.",
-    job_responsibilities: [
-      "Develop frontend components with React",
-      "Implement responsive designs",
-      "Collaborate with the design team",
-    ],
-    soft_skills: ["Creativity", "Collaboration", "Time Management"],
-    technical_skills: ["React", "JavaScript", "CSS"],
-    is_paid: false,
-    program_required: ["BS Computer Science", "BS Information Technology"],
-    available_positions: 5,
-    street_name: "789 Tech Park",
-    barangay: "Taguig",
-    city_municipality: "Metro Manila",
-    postal_code: "1630",
-    created_at: new Date(Date.now() - 3 * 24 * 60 * 60 * 1000).toISOString(),
-  },
-];
+import LoadingGeneric from "@/components/global/LoadingGeneric";
+import { useJobPosts } from "@/hooks/query/useJobPosts";
 
 export default function FeedPage({
   params,
 }: {
   params: Promise<{ feedType: FeedType }>;
 }) {
-  const [selectedJobId, setSelectedJobId] = useState(
-    EXAMPLE_JOBS[0].job_post_id
-  );
+  const { data: jobPosts, isLoading, error } = useJobPosts();
+  const [selectedJobId, setSelectedJobId] = useState<string | null>(null);
   const searchParams = useSearchParams();
   const feedType = use(params).feedType;
 
+  // Set initial selected job when data loads
   useEffect(() => {
-    // TODO: Implement actual feed fetching based on feedType and filters
+    if (jobPosts && jobPosts.length > 0 && selectedJobId === null) {
+      setSelectedJobId(jobPosts[0].job_post_id);
+    }
+  }, [jobPosts, selectedJobId]);
+
+  useEffect(() => {
+    // TODO: Implement actual feed filtering based on feedType and filters
     console.log("Feed type:", feedType);
     console.log("Search params:", Object.fromEntries(searchParams));
   }, [feedType, searchParams]);
 
-  const selectedJob = EXAMPLE_JOBS.find(
-    (job) => job.job_post_id === selectedJobId
+  const selectedJob = jobPosts?.find(
+    (job: JobPost) => job.job_post_id === selectedJobId
   );
+
+  if (isLoading) {
+    return (
+      <MainLayout className="items-center pb-20" wrapperClassName="py-4">
+        <div className="flex items-center justify-center h-screen">
+          <LoadingGeneric />
+        </div>
+      </MainLayout>
+    );
+  }
+
+  if (error) {
+    return (
+      <MainLayout className="items-center pb-20" wrapperClassName="py-4">
+        <div className="flex items-center justify-center h-screen">
+          <p className="text-destructive">Failed to load job posts. Please try again later.</p>
+        </div>
+      </MainLayout>
+    );
+  }
+
+  
 
   return (
     <MainLayout className="items-center pb-20" wrapperClassName="py-4">
@@ -361,7 +83,7 @@ export default function FeedPage({
               maxHeight: sidebarHeight ? `${sidebarHeight}px` : undefined,
             }} */
           >
-            {EXAMPLE_JOBS.map((job) => (
+            {jobPosts.map((job: JobPost) => (
               <div
                 key={job.job_post_id}
                 onClick={() => setSelectedJobId(job.job_post_id)}
