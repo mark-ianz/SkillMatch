@@ -33,11 +33,17 @@ export function JobPostPreview({
           {data.available_positions} slot
           {data.available_positions > 1 ? "s" : ""}
         </Badge>
-        {data.job_category && data.job_category[0] && (
-          <Badge variant="secondary" className="text-xs font-medium">
-            {data.job_category[0]}
-          </Badge>
-        )}
+        {data.job_category &&
+          data.job_category.slice(0, 2).map((category, index) => (
+            <Badge
+              key={category + index}
+              variant="secondary"
+              className="text-xs font-medium"
+            >
+              {category}
+            </Badge>
+          ))}
+
         {!data.is_paid && (
           <Badge variant="outline" className="text-xs">
             Unpaid
@@ -63,6 +69,12 @@ export function JobPostPreview({
           <span>{timePosted}</span>
         </div>
       </div>
+
+      {data.allowance_description && (
+        <Badge variant="secondary" className="text-xs font-medium mt-2">
+          {data.allowance_description}
+        </Badge>
+      )}
     </div>
   );
 }
