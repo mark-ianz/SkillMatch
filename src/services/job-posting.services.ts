@@ -1,8 +1,46 @@
 import { db } from "@/lib/db";
 import { JobPostingFormData } from "@/schema/job-posting.schema";
 import { ResultSetHeader, RowDataPacket } from "mysql2";
+import { nanoid } from "nanoid";
 
 export const JobPostingServices = {
+  getAllJobPosts: async () => {
+    try {
+      const [rows] = await db.query<RowDataPacket[]>(
+        `SELECT 
+          jp.*,
+          c.company_name,
+          c.company_image,
+          c.website,
+          c.facebook_page,
+          c.company_email
+        FROM job_posts jp
+        LEFT JOIN company c ON jp.company_id = c.company_id
+        ORDER BY jp.created_at DESC`
+      );
+
+      // Normalize CSV fields to arrays
+      return rows.map((row) => ({
+        ...row,
+        is_paid: Boolean(row.is_paid),
+        job_responsibilities: row.job_responsibilities
+          ? row.job_responsibilities.split(",")
+          : [],
+        program_required: row.program_required
+          ? row.program_required.split(",")
+          : [],
+        job_category: row.job_category ? row.job_category.split(" / ") : [],
+        soft_skills: row.soft_skills ? row.soft_skills.split(",") : [],
+        technical_skills: row.technical_skills
+          ? row.technical_skills.split(",")
+          : [],
+      }));
+    } catch (error) {
+      console.error("Failed to fetch job posts:", error);
+      throw error;
+    }
+  },
+
   createJobPost: async (data: JobPostingFormData, company_id: number) => {
     const connection = await db.getConnection();
     try {
@@ -27,10 +65,13 @@ export const JobPostingServices = {
         postal_code,
       } = data;
 
+      const job_post_id = nanoid();
+
       const [result] = await connection.query<ResultSetHeader>(
-        `INSERT INTO job_posts (company_id, job_title, program_required, job_category, available_positions, job_overview, job_responsibilities, preferred_qualifications, work_arrangement, is_paid, allowance_description, soft_skills, technical_skills, street_name, barangay, city_municipality, postal_code, created_at, updated_at)
-         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW(), NOW())`,
+        `INSERT INTO job_posts (job_post_id, company_id, job_title, program_required, job_category, available_positions, job_overview, job_responsibilities, preferred_qualifications, work_arrangement, is_paid, allowance_description, soft_skills, technical_skills, street_name, barangay, city_municipality, postal_code, created_at, updated_at)
+         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW(), NOW())`,
         [
+          job_post_id,
           company_id,
           job_title,
           (program_required || []).join(","),
