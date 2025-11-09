@@ -2,3 +2,5 @@
 - type ng company post di tugma sa return pag nag post
 - feed ng posts
 - feed ng job posts
+
+- ojt skill, gawin na lang ding string sa db with "," instead of separate table pa. same rin sa job_post_skills
