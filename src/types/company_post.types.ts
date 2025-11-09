@@ -10,7 +10,7 @@ export type CompanyPost = {
   post_id: string
   company_id: number
   company_name: string
-  company_logo?: string
+  company_image?: string
   title: string
   content: string
   cover_image?: string
