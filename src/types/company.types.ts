@@ -3,6 +3,8 @@ import { Address } from "./user.types";
 
 export type Company = EmployerOnboardingStepOneSchema & {
   company_id: number;
+  industry: string[];
+  description: string;
   company_image: string | null | undefined;
   mou_path: string;
   loi_path: string;
@@ -18,6 +20,8 @@ export type CompanyProfile = Pick<
   Company,
   | "company_id"
   | "company_name"
+  | "industry"
+  | "description"
   | "company_image"
   | "website"
   | "facebook_page"
