@@ -5,14 +5,15 @@ import { Button } from "@/components/ui/button";
 import { GraduationCap, Heart, Settings } from "lucide-react";
 import { cn } from "@/lib/utils";
 import Image from "next/image";
+import ambatublow from "@/images/ambatublow.jpg"
 
 export function SidebarProfile() {
   const { name, idNumber, course, location, avatarSrc } = {
-    name: "Ken Kaneki",
-    idNumber: "23-1234",
-    course: "Bachelor of Science in Industrial Engineering (BSIE)",
+    name: "Ooh Ambatublow",
+    idNumber: "23-6967",
+    course: "Bachelor of Science in Information Technology",
     location: "Novaliches, Quezon City",
-    avatarSrc: undefined,
+    avatarSrc: ambatublow,
   };
 
   return (
