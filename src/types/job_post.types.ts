@@ -1,10 +1,10 @@
-import { CompanyAddress, CompanyProfile } from "./company.types";
+import { CompanyAddress, CompanyPreview } from "./company.types";
 
 export type WorkArrangement = "Remote" | "On-site" | "Hybrid";
 /* type ShiftType = 'Day shift' | 'Night shift' | 'Flexible hours'; */
 
-export type JobPost = CompanyProfile & CompanyAddress & {
-  job_post_id: number;
+export type JobPost = CompanyPreview & CompanyAddress & {
+  job_post_id: string;
   company_id: number;
 
   // Basic Info
