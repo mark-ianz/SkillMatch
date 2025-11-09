@@ -3,8 +3,8 @@ import { Address } from "./user.types";
 
 export type Company = EmployerOnboardingStepOneSchema & {
   company_id: number;
-  industry: string[];
-  description: string;
+  industry: string[] | null;
+  description: string | null;
   company_image: string | null | undefined;
   mou_path: string;
   loi_path: string;
