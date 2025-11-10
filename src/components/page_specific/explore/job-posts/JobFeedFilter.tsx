@@ -8,22 +8,14 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
 import { Filter, X } from "lucide-react";
 import { ExploreType, JobFeedFilters } from "@/types/job_feed.types";
-import college_courses from "@/data/college_courses.json";
-import { cn } from "@/lib/utils";
+import { cn, getAllCourses } from "@/lib/utils";
 
 interface JobFeedFilterProps {
   exploreType: ExploreType;
   className?: string;
 }
 
-const COLLEGE_LIST = Object.keys(college_courses).map((college) => ({
-  college: college,
-  courses: college_courses[college as keyof typeof college_courses].courses,
-}));
-
-const COURSES = COLLEGE_LIST.flatMap((c) =>
-  c.courses.map((course) => course.course_name)
-);
+const COURSES = getAllCourses();
 
 const LOCATION_OPTIONS = [
   "Quezon City",
