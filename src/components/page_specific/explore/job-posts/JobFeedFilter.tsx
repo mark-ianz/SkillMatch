@@ -8,7 +8,14 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
 import { Filter, X } from "lucide-react";
 import { ExploreType, JobFeedFilters } from "@/types/job_feed.types";
-import { cn, getAllCourses } from "@/lib/utils";
+import {
+  cn,
+  getAllCourses,
+  getAllIndustry,
+  getAllJobCategories,
+} from "@/lib/utils";
+import { ScrollArea } from "@/components/ui/scroll-area";
+import { Separator } from "@/components/ui/separator";
 
 interface JobFeedFilterProps {
   exploreType: ExploreType;
@@ -16,6 +23,8 @@ interface JobFeedFilterProps {
 }
 
 const COURSES = getAllCourses() as string[];
+const INDUSTRIES = getAllIndustry() as string[];
+const JOB_CATEGORIES = getAllJobCategories(false, true) as string[];
 
 const LOCATION_OPTIONS = [
   "Quezon City",
@@ -34,6 +43,8 @@ export function JobFeedFilter({ exploreType, className }: JobFeedFilterProps) {
     courses: searchParams.getAll("course") || [],
     locations: searchParams.getAll("location") || [],
     workArrangement: searchParams.getAll("arrangement") || [],
+    industries: searchParams.getAll("industry") || [],
+    jobCategories: searchParams.getAll("jobCategory") || [],
     isPaid: searchParams.get("paid") === "true" ? true : undefined,
   });
 
@@ -55,6 +66,8 @@ export function JobFeedFilter({ exploreType, className }: JobFeedFilterProps) {
     filters.courses.forEach((p) => params.append("course", p));
     filters.locations.forEach((l) => params.append("location", l));
     filters.workArrangement.forEach((w) => params.append("arrangement", w));
+    filters.industries.forEach((i) => params.append("industry", i));
+    filters.jobCategories.forEach((j) => params.append("jobCategory", j));
     if (filters.isPaid !== undefined)
       params.append("paid", String(filters.isPaid));
 
@@ -69,6 +82,8 @@ export function JobFeedFilter({ exploreType, className }: JobFeedFilterProps) {
       courses: [],
       locations: [],
       workArrangement: [],
+      industries: [],
+      jobCategories: [],
       isPaid: undefined,
     });
     router.push(`/explore/${exploreType}`);
@@ -78,11 +93,13 @@ export function JobFeedFilter({ exploreType, className }: JobFeedFilterProps) {
     filters.courses.length > 0 ||
     filters.locations.length > 0 ||
     filters.workArrangement.length > 0 ||
+    filters.industries.length > 0 ||
+    filters.jobCategories.length > 0 ||
     filters.isPaid !== undefined;
 
   return (
-    <Card className={cn("p-6 w-full", className)}>
-      <div className="flex items-center justify-between">
+    <Card className={cn("p-6 w-full gap-2", className)}>
+      <div className="flex items-center justify-between mb-2">
         <div className="flex items-center gap-2">
           <Filter className="w-4 h-4" />
           <h3 className="font-semibold">Filters</h3>
@@ -101,9 +118,9 @@ export function JobFeedFilter({ exploreType, className }: JobFeedFilterProps) {
       </div>
 
       {/* Courses Filter */}
-      <div className="space-y-3">
+      <div className="space-y-1">
         <h4 className="text-sm font-bold">Courses</h4>
-        <div className="space-y-2">
+        <div className="space-y-0.5">
           {COURSES.map((course, index) => (
             <div
               key={course + index}
@@ -116,7 +133,7 @@ export function JobFeedFilter({ exploreType, className }: JobFeedFilterProps) {
               />
               <Label
                 htmlFor={`course-${course}`}
-                className="text-sm font-normal cursor-pointer leading-tight"
+                className="font-normal cursor-pointer leading-tight"
               >
                 {course.replace("Bachelor of Science in ", "BS ")}
               </Label>
@@ -125,10 +142,12 @@ export function JobFeedFilter({ exploreType, className }: JobFeedFilterProps) {
         </div>
       </div>
 
+      <Separator />
+
       {/* Location Filter */}
-      <div className="space-y-3 border-t pt-4">
+      <div className="space-y-1">
         <h4 className="text-sm font-semibold">Location</h4>
-        <div className="space-y-2">
+        <div className="space-y-0.5">
           {LOCATION_OPTIONS.map((location) => (
             <div key={location} className="flex items-center gap-2">
               <Checkbox
@@ -140,7 +159,7 @@ export function JobFeedFilter({ exploreType, className }: JobFeedFilterProps) {
               />
               <Label
                 htmlFor={`location-${location}`}
-                className="text-sm font-normal cursor-pointer"
+                className="font-normal cursor-pointer"
               >
                 {location}
               </Label>
@@ -149,10 +168,12 @@ export function JobFeedFilter({ exploreType, className }: JobFeedFilterProps) {
         </div>
       </div>
 
+      <Separator />
+
       {/* Work Arrangement Filter */}
-      <div className="space-y-3 border-t pt-4">
+      <div className="space-y-1">
         <h4 className="text-sm font-semibold">Work Arrangement</h4>
-        <div className="space-y-2">
+        <div className="space-y-0.5">
           {WORK_ARRANGEMENT_OPTIONS.map((arrangement) => (
             <div
               key={arrangement}
@@ -167,7 +188,7 @@ export function JobFeedFilter({ exploreType, className }: JobFeedFilterProps) {
               />
               <Label
                 htmlFor={`arrangement-${arrangement}`}
-                className="text-sm font-normal cursor-pointer"
+                className="font-normal cursor-pointer"
               >
                 {arrangement}
               </Label>
@@ -176,10 +197,67 @@ export function JobFeedFilter({ exploreType, className }: JobFeedFilterProps) {
         </div>
       </div>
 
+      <Separator />
+
+      {/* Industry Filter */}
+      <div className="space-y-1">
+        <h4 className="text-sm font-semibold">Industry</h4>
+        <div className="space-y-0.5">
+          {INDUSTRIES.map((industry) => (
+            <div key={industry} className="flex align-top gap-2 justify-start">
+              <Checkbox
+                id={`industry-${industry}`}
+                checked={filters.industries.includes(industry)}
+                onCheckedChange={() =>
+                  handleFilterChange("industries", industry)
+                }
+              />
+              <Label
+                htmlFor={`industry-${industry}`}
+                className="text-sm font-normal cursor-pointer leading-tight"
+              >
+                {industry}
+              </Label>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <Separator />
+
+      {/* Job Categories Filter */}
+      <div className="space-y-1 ">
+        <h4 className="text-sm font-semibold">Job Categories</h4>
+        <ScrollArea className="h-48">
+          <div className="space-y-0.5">
+            {JOB_CATEGORIES.map((category) => (
+              <div
+                key={category}
+                className="flex align-top items-center justify-start gap-2"
+              >
+                <Checkbox
+                  id={`jobCategory-${category}`}
+                  checked={filters.jobCategories.includes(category)}
+                  onCheckedChange={() =>
+                    handleFilterChange("jobCategories", category)
+                  }
+                />
+                <Label
+                  htmlFor={`jobCategory-${category}`}
+                  className="font-normal cursor-pointer"
+                >
+                  {category}
+                </Label>
+              </div>
+            ))}
+          </div>
+        </ScrollArea>
+      </div>
+
       {/* Apply Button */}
       <Button
         onClick={handleApplyFilters}
-        className="w-full"
+        className="w-full mt-2"
         disabled={!hasActiveFilters}
       >
         Apply Filters
