@@ -134,16 +134,16 @@ export function JobPostFullInfo({ className }: { className?: string }) {
         </h2>
 
         <div className="flex flex-col gap-4">
-          {selected_job_post?.program_required &&
-            selected_job_post?.program_required.length > 0 && (
+          {selected_job_post?.courses_required &&
+            selected_job_post?.courses_required.length > 0 && (
               <div className="space-y-1">
                 <p className="text-xs font-medium text-muted-foreground">
-                  Program Required
+                  Courses Required
                 </p>
                 <div className="flex flex-wrap gap-2">
-                  {selected_job_post?.program_required.map((program, idx) => (
+                  {selected_job_post?.courses_required.map((course, idx) => (
                     <Badge key={idx} variant="outline" className="text-xs">
-                      {program}
+                      {course}
                     </Badge>
                   ))}
                 </div>

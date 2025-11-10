@@ -2,9 +2,9 @@ import { z } from "zod";
 
 export const jobPostingSchema = z.object({
   job_title: z.string().min(1, "Job title is required"),
-  program_required: z
+  courses_required: z
     .array(z.string())
-    .min(1, "At least one program is required"),
+    .min(1, "At least one course is required"),
   job_categories: z.array(z.string()),
   available_positions: z.number().min(1, "Must have at least 1 position"),
   job_overview: z.string().min(1, "Job overview is required"),

@@ -26,8 +26,8 @@ export const JobPostingServices = {
         job_responsibilities: row.job_responsibilities
           ? row.job_responsibilities.split(",")
           : [],
-        program_required: row.program_required
-          ? row.program_required.split(",")
+        courses_required: row.courses_required
+          ? row.courses_required.split(",")
           : [],
         job_categories: row.job_categories ? row.job_categories.split(" / ") : [],
         soft_skills: row.soft_skills ? row.soft_skills.split(",") : [],
@@ -48,7 +48,7 @@ export const JobPostingServices = {
 
       const {
         job_title,
-        program_required,
+        courses_required,
         job_categories,
         available_positions,
         job_overview,
@@ -68,13 +68,13 @@ export const JobPostingServices = {
       const job_post_id = nanoid();
 
       const [result] = await connection.query<ResultSetHeader>(
-        `INSERT INTO job_posts (job_post_id, company_id, job_title, program_required, job_categories, available_positions, job_overview, job_responsibilities, preferred_qualifications, work_arrangement, is_paid, allowance_description, soft_skills, technical_skills, street_name, barangay, city_municipality, postal_code, created_at, updated_at)
+        `INSERT INTO job_posts (job_post_id, company_id, job_title, courses_required, job_categories, available_positions, job_overview, job_responsibilities, preferred_qualifications, work_arrangement, is_paid, allowance_description, soft_skills, technical_skills, street_name, barangay, city_municipality, postal_code, created_at, updated_at)
          VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW(), NOW())`,
         [
           job_post_id,
           company_id,
           job_title,
-          (program_required || []).join(","),
+          (courses_required || []).join(","),
           (job_categories || []).join(","),
           available_positions,
           job_overview,
@@ -112,8 +112,8 @@ export const JobPostingServices = {
         job_responsibilities: row.job_responsibilities
           ? row.job_responsibilities.split(",")
           : [],
-        program_required: row.program_required
-          ? row.program_required.split(",")
+        courses_required: row.courses_required
+          ? row.courses_required.split(",")
           : [],
         job_categories: row.job_categories ? row.job_categories.split(",") : [],
         soft_skills: row.soft_skills ? row.soft_skills.split(",") : [],

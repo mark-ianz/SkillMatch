@@ -19,19 +19,19 @@ import { toast } from "sonner";
 
 type Props = {
   formData: Partial<JobPost>;
-  programInput: string;
-  setProgramInput: (v: string) => void;
-  addProgram: () => void;
-  removeProgram: (index: number) => void;
+  courseInput: string;
+  setCoursesInput: (v: string) => void;
+  addCourses: () => void;
+  removeCourses: (index: number) => void;
   updateField: <K extends keyof JobPost>(field: K, value: JobPost[K]) => void;
 };
 
 export default function RequirementsSection({
   formData,
-  programInput,
-  setProgramInput,
-  addProgram,
-  removeProgram,
+  courseInput,
+  setCoursesInput,
+  addCourses,
+  removeCourses,
   updateField,
 }: Props) {
   const COURSES = getAllCourses(true) as ItemList[];
@@ -41,13 +41,13 @@ export default function RequirementsSection({
 
   useEffect(() => {
     if (!selectedCourse) {
-      setProgramInput(COURSES[0].value);
+      setCoursesInput(COURSES[0].value);
     }
-  }, [COURSES, setProgramInput, selectedCourse]);
+  }, [COURSES, setCoursesInput, selectedCourse]);
 
-  function handleAddProgram() {
-    if (!formData.program_required?.includes(programInput)) {
-      addProgram();
+  function handleAddCourses() {
+    if (!formData.courses_required?.includes(courseInput)) {
+      addCourses();
       return;
     }
 
@@ -56,7 +56,7 @@ export default function RequirementsSection({
     });
   }
 
-  console.log(programInput);
+  console.log(courseInput);
 
   return (
     <Card>
@@ -76,13 +76,13 @@ export default function RequirementsSection({
               onChange={(value) => {
                 const course = COURSES.find((c) => c.value === value);
                 setSelectedCourse(course || null);
-                setProgramInput(value);
+                setCoursesInput(value);
               }}
               items={COURSES}
             />
             <Button
               type="button"
-              onClick={handleAddProgram}
+              onClick={handleAddCourses}
               variant={"default_employer"}
             >
               Add
@@ -90,7 +90,7 @@ export default function RequirementsSection({
           </div>
 
           <ul className="space-y-2 mt-3">
-            {formData.program_required?.map((prog, idx) => (
+            {formData.courses_required?.map((prog, idx) => (
               <li
                 key={idx}
                 className="flex items-center justify-between p-2 bg-muted rounded"
@@ -98,7 +98,7 @@ export default function RequirementsSection({
                 <span className="text-sm">{prog}</span>
                 <button
                   type="button"
-                  onClick={() => removeProgram(idx)}
+                  onClick={() => removeCourses(idx)}
                   className="text-destructive hover:text-destructive/80"
                 >
                   ×

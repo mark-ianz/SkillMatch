@@ -9,7 +9,7 @@ export type JobPost = CompanyPreview & CompanyAddress & {
 
   // Basic Info
   job_title: string;
-  program_required: string[]; // e.g., ["BS Computer Science", "BS Information Technology"]
+  courses_required: string[]; // e.g., ["BS Computer Science", "BS Information Technology"]
   job_categories?: string[];
   available_positions: number;
   
@@ -37,5 +37,5 @@ export type JobPostQuery = JobPost & {
   job_responsibilities: string;
   soft_skills: string;
   technical_skills: string;
-  program_required: string;
+  courses_required: string;
 };

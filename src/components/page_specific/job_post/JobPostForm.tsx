@@ -38,7 +38,7 @@ export default function JobPostingForm() {
 
   const { formData, updateField, reset } = useJobPostingStore();
   const [currentResponsibility, setCurrentResponsibility] = useState("");
-  const [programInput, setProgramInput] = useState("");
+  const [courseInput, setCoursesInput] = useState("");
   const [errors, setErrors] = useState<string[] | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [showConfirmDialog, setShowConfirmDialog] = useState(false);
@@ -76,20 +76,20 @@ export default function JobPostingForm() {
     );
   };
 
-  const addProgram = () => {
-    if (programInput.trim()) {
-      updateField("program_required", [
-        ...(formData.program_required || []),
-        programInput,
+  const addCourses = () => {
+    if (courseInput.trim()) {
+      updateField("courses_required", [
+        ...(formData.courses_required || []),
+        courseInput,
       ]);
-      setProgramInput("");
+      setCoursesInput("");
     }
   };
 
-  const removeProgram = (index: number) => {
+  const removeCourses = (index: number) => {
     updateField(
-      "program_required",
-      (formData.program_required || []).filter((_, i) => i !== index)
+      "courses_required",
+      (formData.courses_required || []).filter((_, i) => i !== index)
     );
   };
 
@@ -166,10 +166,10 @@ export default function JobPostingForm() {
           {/* Requirements */}
           <RequirementsSection
             formData={formData}
-            programInput={programInput}
-            setProgramInput={setProgramInput}
-            addProgram={addProgram}
-            removeProgram={removeProgram}
+            courseInput={courseInput}
+            setCoursesInput={setCoursesInput}
+            addCourses={addCourses}
+            removeCourses={removeCourses}
             updateField={updateField}
           />
 
