@@ -7,13 +7,11 @@ import { Input } from "@/components/ui/input";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useRouter } from "next/navigation";
 import { Search } from "lucide-react";
-import { FeedType } from "@/types/job_feed.types";
+import { useFeedStore } from "@/store/FeedStore";
 
-type JobFeedHeaderProps = {
-  feedType: FeedType;
-};
+export function JobFeedHeader() {
+  const feedType = useFeedStore((state) => state.feedType);
 
-export function JobFeedHeader({ feedType }: JobFeedHeaderProps) {
   const router = useRouter();
   const [searchQuery, setSearchQuery] = useState("");
 
@@ -49,7 +47,7 @@ export function JobFeedHeader({ feedType }: JobFeedHeaderProps) {
 
       {/* Feed Type Tabs */}
       <Tabs
-        defaultValue={feedType}
+        value={feedType}
         onValueChange={handleTabChange}
         className="w-full"
       >
