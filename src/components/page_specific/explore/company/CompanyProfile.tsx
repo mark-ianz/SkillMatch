@@ -17,7 +17,7 @@ import Image from "next/image";
 import { cn } from "@/lib/utils";
 import { useFeedStore } from "@/store/FeedStore";
 
-export function CompanyProfile({ className }: {className?: string;}) {
+export function CompanyProfile({ className }: { className?: string }) {
   const selected_company = useFeedStore((state) => state.selected_company);
 
   const handleBookmark = () => {
@@ -82,19 +82,20 @@ export function CompanyProfile({ className }: {className?: string;}) {
               </div>
             </div>
 
-            {selected_company?.industry && selected_company?.industry.length > 0 && (
-              <div className="flex flex-wrap gap-2">
-                {selected_company?.industry.map((ind, idx) => (
-                  <Badge
-                    key={idx}
-                    variant="secondary"
-                    className="text-sm font-medium px-3 py-1"
-                  >
-                    {ind}
-                  </Badge>
-                ))}
-              </div>
-            )}
+            {selected_company?.industry &&
+              selected_company?.industry.length > 0 && (
+                <div className="flex flex-wrap gap-2">
+                  {selected_company?.industry.map((ind, idx) => (
+                    <Badge
+                      key={idx}
+                      variant="secondary"
+                      className="text-sm font-medium px-3 py-1"
+                    >
+                      {ind}
+                    </Badge>
+                  ))}
+                </div>
+              )}
           </div>
         </div>
       </div>
@@ -107,7 +108,7 @@ export function CompanyProfile({ className }: {className?: string;}) {
             <h2 className="text-sm font-semibold text-skillmatch-dark uppercase tracking-wider">
               About Company
             </h2>
-            <p className="text-base text-skillmatch-dark leading-relaxed whitespace-pre-wrap">
+            <p className="text-sm text-skillmatch-dark leading-relaxed whitespace-pre-wrap">
               {selected_company?.description}
             </p>
           </div>
