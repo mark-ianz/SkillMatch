@@ -2,6 +2,7 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { api } from "@/lib/axios";
 import { JobPostingFormData } from "@/schema/job-posting.schema";
 import { toast } from "sonner";
+import { JobPost } from "@/types/job_post.types";
 
 // Query: Get all job posts
 export function useJobPosts() {
@@ -9,7 +10,7 @@ export function useJobPosts() {
     queryKey: ["job-posts"],
     queryFn: async () => {
       const { data } = await api.get("/company/job-post/all");
-      return data.job_posts;
+      return data.job_posts as JobPost[];
     },
     staleTime: 1000 * 60 * 5, // 5 minutes
   });
