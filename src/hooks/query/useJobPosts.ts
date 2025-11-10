@@ -27,7 +27,7 @@ export function useJobPosts(filters?: JobFeedFilters) {
       }
 
       const queryString = params.toString();
-      const url = queryString ? `/feed?${queryString}` : "/feed";
+      const url = queryString ? `/explore?${queryString}` : "/explore";
       
       const { data } = await api.get(url);
       return data.job_posts as JobPost[];
