@@ -15,7 +15,7 @@ interface JobFeedFilterProps {
   className?: string;
 }
 
-const COURSES = getAllCourses();
+const COURSES = getAllCourses() as string[];
 
 const LOCATION_OPTIONS = [
   "Quezon City",
