@@ -43,7 +43,7 @@ export function JobPostFullInfo({ className }: { className?: string }) {
                 className="w-12 h-12 rounded-full object-cover mb-3"
               />
             )}
-            <h1 className="text-3xl font-semibold text-foreground text-balance">
+            <h1 className="text-3xl font-semibold text-skillmatch-dark text-balance">
               {selected_job_post?.job_title}
             </h1>
             <p className="text-sm text-muted-foreground mt-2">
@@ -120,16 +120,16 @@ export function JobPostFullInfo({ className }: { className?: string }) {
       <div className="border-t" />
 
       <div className="space-y-3">
-        <h2 className="text-sm font-semibold text-foreground uppercase tracking-wide">
+        <h2 className="text-sm font-semibold text-skillmatch-dark uppercase tracking-wide">
           Overview
         </h2>
-        <p className="text-sm leading-relaxed text-foreground">
+        <p className="text-sm leading-relaxed text-skillmatch-dark">
           {selected_job_post?.job_overview}
         </p>
       </div>
 
       <div className="space-y-4">
-        <h2 className="text-sm font-semibold text-foreground uppercase tracking-wide">
+        <h2 className="text-sm font-semibold text-skillmatch-dark uppercase tracking-wide">
           Requirements
         </h2>
 
@@ -188,7 +188,7 @@ export function JobPostFullInfo({ className }: { className?: string }) {
             <p className="text-xs font-medium text-muted-foreground">
               Preferred Qualifications
             </p>
-            <p className="text-sm text-foreground">
+            <p className="text-sm text-skillmatch-dark">
               {selected_job_post?.preferred_qualifications}
             </p>
           </div>
@@ -199,14 +199,14 @@ export function JobPostFullInfo({ className }: { className?: string }) {
       <div className="border-t" />
 
       <div className="space-y-4">
-        <h2 className="text-sm font-semibold text-foreground uppercase tracking-wide">
+        <h2 className="text-sm font-semibold text-skillmatch-dark uppercase tracking-wide">
           Responsibilities
         </h2>
 
         <ul className="space-y-1">
           {selected_job_post?.job_responsibilities.map(
             (responsibility, idx) => (
-              <li key={idx} className="flex gap-3 text-sm text-foreground">
+              <li key={idx} className="flex gap-3 text-sm text-skillmatch-dark">
                 <span className="text-muted-foreground flex-shrink-0 mt-1">
                   •
                 </span>

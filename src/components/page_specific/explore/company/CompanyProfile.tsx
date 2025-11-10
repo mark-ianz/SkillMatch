@@ -104,10 +104,10 @@ export function CompanyProfile({ className }: {className?: string;}) {
       {selected_company?.description && (
         <>
           <div className="space-y-4">
-            <h2 className="text-sm font-semibold text-foreground uppercase tracking-wider">
+            <h2 className="text-sm font-semibold text-skillmatch-dark uppercase tracking-wider">
               About Company
             </h2>
-            <p className="text-base text-muted-foreground leading-relaxed whitespace-pre-wrap">
+            <p className="text-base text-skillmatch-dark leading-relaxed whitespace-pre-wrap">
               {selected_company?.description}
             </p>
           </div>
