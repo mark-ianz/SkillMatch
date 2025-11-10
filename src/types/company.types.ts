@@ -2,7 +2,7 @@ import { EmployerOnboardingStepOneSchema } from "@/schema/onboarding";
 import { Address } from "./user.types";
 
 export type Company = EmployerOnboardingStepOneSchema & {
-  company_id: number;
+  company_id: string;
   industry: string[] | null;
   description: string | null;
   company_image: string | null | undefined;
@@ -26,11 +26,12 @@ export type CompanyProfile = Pick<
   | "website"
   | "facebook_page"
   | "company_email"
+  | "created_at"
 >;
 
 export type CompanyPreview = Pick<
   Company,
-  "company_id" | "company_name" | "company_image"
+  "company_id" | "company_name" | "company_image" | "industry" | "description" | "created_at"
 >;
 
 export type CompanyAddress = Pick<
