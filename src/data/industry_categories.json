@@ -1,0 +1,109 @@
+[
+  {
+    "industry": "Information Technology / Computer Studies",
+    "job_categories": [
+      "Web Development",
+      "Software Engineering",
+      "Mobile App Development",
+      "UI/UX Design",
+      "Quality Assurance / Testing",
+      "Cybersecurity",
+      "System Administration",
+      "Cloud Engineering",
+      "DevOps Engineering",
+      "Data Analytics",
+      "Artificial Intelligence / Machine Learning",
+      "Game Development"
+    ]
+  },
+  {
+    "industry": "Business and Entrepreneurship",
+    "job_categories": [
+      "Business Development",
+      "Sales and Marketing",
+      "E-Commerce Management",
+      "Operations Management",
+      "Project Management",
+      "Product Management",
+      "Franchise Management",
+      "Startup Management",
+      "Customer Relations",
+      "Business Consulting"
+    ]
+  },
+  {
+    "industry": "Accounting and Finance",
+    "job_categories": [
+      "Accounting and Auditing",
+      "Book Keeping",
+      "Financial Analysis",
+      "Taxation",
+      "Payroll Management",
+      "Budget Planning",
+      "Corporate Finance",
+      "Banking Operations",
+      "Risk and Compliance",
+      "Internal Auditing"
+    ]
+  },
+  {
+    "industry": "Education and Training",
+    "job_categories": [
+      "Early Childhood Education",
+      "Preschool Teaching",
+      "Curriculum Development",
+      "Instructional Design",
+      "Academic Coordination",
+      "Educational Research",
+      "Child Psychology Assistance",
+      "Learning Materials Development",
+      "Parent-Teacher Facilitation",
+      "Tutoring and Mentoring"
+    ]
+  },
+  {
+    "industry": "Industrial and Manufacturing Engineering",
+    "job_categories": [
+      "Production Planning",
+      "Process Engineering",
+      "Quality Assurance and Control",
+      "Operations Research",
+      "Supply Chain and Logistics",
+      "Lean Manufacturing",
+      "Facilities Planning",
+      "Inventory Management",
+      "Manufacturing Systems Design",
+      "Automation Process Optimization"
+    ]
+  },
+  {
+    "industry": "Electronics and Electrical Engineering",
+    "job_categories": [
+      "Circuit Design and Prototyping",
+      "Embedded Systems Development",
+      "Automation and Control Systems",
+      "Telecommunications Engineering",
+      "Semiconductor Manufacturing",
+      "Instrumentation Engineering",
+      "Power Systems Design",
+      "Hardware Testing and Calibration",
+      "Robotics Development",
+      "IoT Device Integration"
+    ]
+  },
+  {
+    "industry": "Information Systems and Business Technology",
+    "job_categories": [
+      "Systems Analysis and Design",
+      "IT Project Management",
+      "ERP / SAP Administration",
+      "Business Process Automation",
+      "Database Administration",
+      "Network and Systems Security",
+      "Systems Integration",
+      "Technical Documentation",
+      "Business Intelligence",
+      "IT Consulting"
+    ]
+  }
+]
