@@ -10,7 +10,7 @@ export type JobPost = CompanyPreview & CompanyAddress & {
   // Basic Info
   job_title: string;
   program_required: string[]; // e.g., ["BS Computer Science", "BS Information Technology"]
-  job_category?: string[];
+  job_categories?: string[];
   available_positions: number;
   
   // Work Details

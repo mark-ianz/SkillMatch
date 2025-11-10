@@ -29,7 +29,7 @@ export const JobPostingServices = {
         program_required: row.program_required
           ? row.program_required.split(",")
           : [],
-        job_category: row.job_category ? row.job_category.split(" / ") : [],
+        job_categories: row.job_categories ? row.job_categories.split(" / ") : [],
         soft_skills: row.soft_skills ? row.soft_skills.split(",") : [],
         technical_skills: row.technical_skills
           ? row.technical_skills.split(",")
@@ -49,7 +49,7 @@ export const JobPostingServices = {
       const {
         job_title,
         program_required,
-        job_category,
+        job_categories,
         available_positions,
         job_overview,
         job_responsibilities,
@@ -68,14 +68,14 @@ export const JobPostingServices = {
       const job_post_id = nanoid();
 
       const [result] = await connection.query<ResultSetHeader>(
-        `INSERT INTO job_posts (job_post_id, company_id, job_title, program_required, job_category, available_positions, job_overview, job_responsibilities, preferred_qualifications, work_arrangement, is_paid, allowance_description, soft_skills, technical_skills, street_name, barangay, city_municipality, postal_code, created_at, updated_at)
+        `INSERT INTO job_posts (job_post_id, company_id, job_title, program_required, job_categories, available_positions, job_overview, job_responsibilities, preferred_qualifications, work_arrangement, is_paid, allowance_description, soft_skills, technical_skills, street_name, barangay, city_municipality, postal_code, created_at, updated_at)
          VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW(), NOW())`,
         [
           job_post_id,
           company_id,
           job_title,
           (program_required || []).join(","),
-          (job_category || []).join(","),
+          (job_categories || []).join(","),
           available_positions,
           job_overview,
           (job_responsibilities || []).join(","),
@@ -115,7 +115,7 @@ export const JobPostingServices = {
         program_required: row.program_required
           ? row.program_required.split(",")
           : [],
-        job_category: row.job_category ? row.job_category.split(",") : [],
+        job_categories: row.job_categories ? row.job_categories.split(",") : [],
         soft_skills: row.soft_skills ? row.soft_skills.split(",") : [],
         technical_skills: row.technical_skills
           ? row.technical_skills.split(",")

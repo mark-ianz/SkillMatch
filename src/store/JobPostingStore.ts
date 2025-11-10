@@ -11,7 +11,7 @@ interface JobPostingState {
 const initialState: Partial<JobPost> = {
   job_title: "",
   program_required: [],
-  job_category: [],
+  job_categories: [],
   available_positions: 1,
   job_overview: "",
   job_responsibilities: [],

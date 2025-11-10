@@ -25,8 +25,8 @@ export function JobPostPreview({
           {job.available_positions} slot
           {job.available_positions > 1 ? "s" : ""}
         </Badge>
-        {job.job_category &&
-          job.job_category.slice(0, 2).map((category, index) => (
+        {job.job_categories &&
+          job.job_categories.slice(0, 2).map((category, index) => (
             <Badge
               key={category + index}
               variant="secondary"

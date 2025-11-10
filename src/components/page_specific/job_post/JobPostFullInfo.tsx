@@ -96,8 +96,8 @@ export function JobPostFullInfo({ className }: { className?: string }) {
 
         {/* Badges */}
         <div className="flex flex-wrap gap-2">
-          {selected_job_post?.job_category &&
-            selected_job_post?.job_category.map((category, idx) => (
+          {selected_job_post?.job_categories &&
+            selected_job_post?.job_categories.map((category, idx) => (
               <Badge key={idx} variant="secondary" className="text-xs">
                 {category}
               </Badge>

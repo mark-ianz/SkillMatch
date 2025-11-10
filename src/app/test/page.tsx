@@ -30,7 +30,7 @@ export default function TestPage() {
       company_id: 8,
       job_title: "Frontend Developer Intern",
       work_arrangement: "On-site",
-      job_category: ["IT", "Web Development"],
+      job_categories: ["IT", "Web Development"],
       job_overview:
         "Assist our frontend team in building web pages and UI components.",
       job_responsibilities: [
@@ -68,7 +68,7 @@ export default function TestPage() {
       company_id: 8,
       job_title: "Marketing Intern",
       work_arrangement: "Hybrid",
-      job_category: ["Marketing", "Digital Marketing"],
+      job_categories: ["Marketing", "Digital Marketing"],
       job_overview:
         "The Marketing Intern will play an essential role in supporting the marketing team across various digital initiatives. This includes assisting in the planning and execution of social media campaigns, creating engaging content tailored for different platforms, and contributing fresh, creative ideas to strengthen brand presence. The intern will work closely with the team to ensure consistent messaging across channels, analyze engagement data to help refine strategies, and provide support in marketing operations such as email campaigns and campaign performance tracking. This role offers hands-on experience in digital marketing and exposure to real-world marketing tools and processes, making it an excellent opportunity to learn and grow in a fast-paced environment.",
       job_responsibilities: [

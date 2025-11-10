@@ -111,9 +111,9 @@ export default function RequirementsSection({
         <div className="grid gap-2">
           <Label>Job Categories</Label>
           <SearchJobCategory
-            selectedCategories={formData.job_category || []}
+            selectedCategories={formData.job_categories || []}
             onCategoriesChange={(categories) =>
-              updateField("job_category" as keyof JobPost, categories)
+              updateField("job_categories" as keyof JobPost, categories)
             }
           />
         </div>

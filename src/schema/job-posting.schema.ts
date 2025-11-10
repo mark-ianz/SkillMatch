@@ -5,7 +5,7 @@ export const jobPostingSchema = z.object({
   program_required: z
     .array(z.string())
     .min(1, "At least one program is required"),
-  job_category: z.array(z.string()),
+  job_categories: z.array(z.string()),
   available_positions: z.number().min(1, "Must have at least 1 position"),
   job_overview: z.string().min(1, "Job overview is required"),
   job_responsibilities: z
