@@ -7,7 +7,8 @@ import {
   SelectTrigger,
 } from "@/components/ui/select";
 import { capitalizeFirstLetter } from "@/lib/utils";
-import { cn } from "@/lib/utils";;
+import { cn } from "@/lib/utils";import { ItemList } from "./ComboBox";
+;
 
 type Props = {
   id: string;
@@ -15,10 +16,7 @@ type Props = {
   value: string;
   onChange: (value: string) => void;
   fallbackValue?: string;
-  items: {
-    value: string;
-    label: string;
-  }[];
+  items: ItemList[];
   containerClassName?: string;
   selectTriggerClassName?: string;
   selectContentClassName?: string;
