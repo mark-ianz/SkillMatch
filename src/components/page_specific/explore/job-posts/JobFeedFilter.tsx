@@ -63,14 +63,21 @@ export function JobFeedFilter({ exploreType, className }: JobFeedFilterProps) {
 
   const handleApplyFilters = () => {
     const params = new URLSearchParams();
-    filters.courses.forEach((p) => params.append("course", p));
-    filters.locations.forEach((l) => params.append("location", l));
-    filters.workArrangement.forEach((w) => params.append("arrangement", w));
-    filters.industries.forEach((i) => params.append("industry", i));
-    filters.jobCategories.forEach((j) => params.append("jobCategory", j));
-    if (filters.isPaid !== undefined)
-      params.append("paid", String(filters.isPaid));
-    
+
+    if (exploreType === "companies") {
+      // For companies, only apply industry filter
+      filters.industries.forEach((i) => params.append("industry", i));
+    } else {
+      // For job posts, apply all filters
+      filters.courses.forEach((p) => params.append("course", p));
+      filters.locations.forEach((l) => params.append("location", l));
+      filters.workArrangement.forEach((w) => params.append("arrangement", w));
+      filters.industries.forEach((i) => params.append("industry", i));
+      filters.jobCategories.forEach((j) => params.append("jobCategory", j));
+      if (filters.isPaid !== undefined)
+        params.append("paid", String(filters.isPaid));
+    }
+
     // Preserve search param
     const existingSearch = searchParams.get("search");
     if (existingSearch) {
@@ -92,7 +99,7 @@ export function JobFeedFilter({ exploreType, className }: JobFeedFilterProps) {
       jobCategories: [],
       isPaid: undefined,
     });
-    
+
     // Preserve search param on reset
     const existingSearch = searchParams.get("search");
     if (existingSearch) {
@@ -130,142 +137,182 @@ export function JobFeedFilter({ exploreType, className }: JobFeedFilterProps) {
         )}
       </div>
 
-      {/* Courses Filter */}
-      <div className="space-y-1">
-        <h4 className="text-sm font-bold">Courses</h4>
-        <div className="space-y-0.5">
-          {COURSES.map((course, index) => (
-            <div
-              key={course + index}
-              className="flex align-top gap-2 justify-start"
-            >
-              <Checkbox
-                id={`course-${course}`}
-                checked={filters.courses.includes(course)}
-                onCheckedChange={() => handleFilterChange("courses", course)}
-              />
-              <Label
-                htmlFor={`course-${course}`}
-                className="font-normal cursor-pointer leading-tight"
-              >
-                {course.replace("Bachelor of Science in ", "BS ")}
-              </Label>
-            </div>
-          ))}
-        </div>
-      </div>
-
-      <Separator />
-
-      {/* Location Filter */}
-      <div className="space-y-1">
-        <h4 className="text-sm font-semibold">Location</h4>
-        <div className="space-y-0.5">
-          {LOCATION_OPTIONS.map((location) => (
-            <div key={location} className="flex items-center gap-2">
-              <Checkbox
-                id={`location-${location}`}
-                checked={filters.locations.includes(location)}
-                onCheckedChange={() =>
-                  handleFilterChange("locations", location)
-                }
-              />
-              <Label
-                htmlFor={`location-${location}`}
-                className="font-normal cursor-pointer"
-              >
-                {location}
-              </Label>
-            </div>
-          ))}
-        </div>
-      </div>
-
-      <Separator />
-
-      {/* Work Arrangement Filter */}
-      <div className="space-y-1">
-        <h4 className="text-sm font-semibold">Work Arrangement</h4>
-        <div className="space-y-0.5">
-          {WORK_ARRANGEMENT_OPTIONS.map((arrangement) => (
-            <div
-              key={arrangement}
-              className="flex items-center justify-start gap-2"
-            >
-              <Checkbox
-                id={`arrangement-${arrangement}`}
-                checked={filters.workArrangement.includes(arrangement)}
-                onCheckedChange={() =>
-                  handleFilterChange("workArrangement", arrangement)
-                }
-              />
-              <Label
-                htmlFor={`arrangement-${arrangement}`}
-                className="font-normal cursor-pointer"
-              >
-                {arrangement}
-              </Label>
-            </div>
-          ))}
-        </div>
-      </div>
-
-      <Separator />
-
-      {/* Industry Filter */}
-      <div className="space-y-1">
-        <h4 className="text-sm font-semibold">Industry</h4>
-        <div className="space-y-0.5">
-          {INDUSTRIES.map((industry) => (
-            <div key={industry} className="flex align-top gap-2 justify-start">
-              <Checkbox
-                id={`industry-${industry}`}
-                checked={filters.industries.includes(industry)}
-                onCheckedChange={() =>
-                  handleFilterChange("industries", industry)
-                }
-              />
-              <Label
-                htmlFor={`industry-${industry}`}
-                className="text-sm font-normal cursor-pointer leading-tight"
-              >
-                {industry}
-              </Label>
-            </div>
-          ))}
-        </div>
-      </div>
-
-      <Separator />
-
-      {/* Job Categories Filter */}
-      <div className="space-y-1 ">
-        <h4 className="text-sm font-semibold">Job Categories</h4>
-        <ScrollArea className="h-48">
-          <div className="space-y-0.5">
-            {JOB_CATEGORIES.map((category) => (
-              <div
-                key={category}
-                className="flex align-top items-center justify-start gap-2"
-              >
-                <Checkbox
-                  id={`jobCategory-${category}`}
-                  checked={filters.jobCategories.includes(category)}
-                  onCheckedChange={() =>
-                    handleFilterChange("jobCategories", category)
-                  }
-                />
-                <Label
-                  htmlFor={`jobCategory-${category}`}
-                  className="font-normal cursor-pointer"
+      {/* Conditional rendering based on exploreType */}
+      {exploreType === "companies" ? (
+        // Company filters - Industry only
+        <>
+          <div className="space-y-1">
+            <h4 className="text-sm font-semibold">Industry</h4>
+            <div className="space-y-0.5">
+              {INDUSTRIES.map((industry) => (
+                <div
+                  key={industry}
+                  className="flex align-top gap-2 justify-start"
                 >
-                  {category}
-                </Label>
-              </div>
-            ))}
+                  <Checkbox
+                    id={`industry-${industry}`}
+                    checked={filters.industries.includes(industry)}
+                    onCheckedChange={() =>
+                      handleFilterChange("industries", industry)
+                    }
+                  />
+                  <Label
+                    htmlFor={`industry-${industry}`}
+                    className="text-sm font-normal cursor-pointer leading-tight"
+                  >
+                    {industry}
+                  </Label>
+                </div>
+              ))}
+            </div>
           </div>
-        </ScrollArea>
-      </div>
+        </>
+      ) : (
+        // Job post filters - All filters
+        <>
+          {/* Courses Filter */}
+          <div className="space-y-1">
+            <h4 className="text-sm font-bold">Courses</h4>
+            <div className="space-y-0.5">
+              {COURSES.map((course, index) => (
+                <div
+                  key={course + index}
+                  className="flex align-top gap-2 justify-start"
+                >
+                  <Checkbox
+                    id={`course-${course}`}
+                    checked={filters.courses.includes(course)}
+                    onCheckedChange={() =>
+                      handleFilterChange("courses", course)
+                    }
+                  />
+                  <Label
+                    htmlFor={`course-${course}`}
+                    className="font-normal cursor-pointer leading-tight"
+                  >
+                    {course.replace("Bachelor of Science in ", "BS ")}
+                  </Label>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <Separator />
+
+          {/* Location Filter */}
+          <div className="space-y-1">
+            <h4 className="text-sm font-semibold">Location</h4>
+            <div className="space-y-0.5">
+              {LOCATION_OPTIONS.map((location) => (
+                <div key={location} className="flex items-center gap-2">
+                  <Checkbox
+                    id={`location-${location}`}
+                    checked={filters.locations.includes(location)}
+                    onCheckedChange={() =>
+                      handleFilterChange("locations", location)
+                    }
+                  />
+                  <Label
+                    htmlFor={`location-${location}`}
+                    className="font-normal cursor-pointer"
+                  >
+                    {location}
+                  </Label>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <Separator />
+
+          {/* Work Arrangement Filter */}
+          <div className="space-y-1">
+            <h4 className="text-sm font-semibold">Work Arrangement</h4>
+            <div className="space-y-0.5">
+              {WORK_ARRANGEMENT_OPTIONS.map((arrangement) => (
+                <div
+                  key={arrangement}
+                  className="flex items-center justify-start gap-2"
+                >
+                  <Checkbox
+                    id={`arrangement-${arrangement}`}
+                    checked={filters.workArrangement.includes(arrangement)}
+                    onCheckedChange={() =>
+                      handleFilterChange("workArrangement", arrangement)
+                    }
+                  />
+                  <Label
+                    htmlFor={`arrangement-${arrangement}`}
+                    className="font-normal cursor-pointer"
+                  >
+                    {arrangement}
+                  </Label>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <Separator />
+
+          {/* Industry Filter */}
+          <div className="space-y-1">
+            <h4 className="text-sm font-semibold">Industry</h4>
+            <div className="space-y-0.5">
+              {INDUSTRIES.map((industry) => (
+                <div
+                  key={industry}
+                  className="flex align-top gap-2 justify-start"
+                >
+                  <Checkbox
+                    id={`industry-${industry}`}
+                    checked={filters.industries.includes(industry)}
+                    onCheckedChange={() =>
+                      handleFilterChange("industries", industry)
+                    }
+                  />
+                  <Label
+                    htmlFor={`industry-${industry}`}
+                    className="text-sm font-normal cursor-pointer leading-tight"
+                  >
+                    {industry}
+                  </Label>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <Separator />
+
+          {/* Job Categories Filter */}
+          <div className="space-y-1 ">
+            <h4 className="text-sm font-semibold">Job Categories</h4>
+            <ScrollArea className="h-48">
+              <div className="space-y-0.5">
+                {JOB_CATEGORIES.map((category) => (
+                  <div
+                    key={category}
+                    className="flex align-top items-center justify-start gap-2"
+                  >
+                    <Checkbox
+                      id={`jobCategory-${category}`}
+                      checked={filters.jobCategories.includes(category)}
+                      onCheckedChange={() =>
+                        handleFilterChange("jobCategories", category)
+                      }
+                    />
+                    <Label
+                      htmlFor={`jobCategory-${category}`}
+                      className="font-normal cursor-pointer"
+                    >
+                      {category}
+                    </Label>
+                  </div>
+                ))}
+              </div>
+            </ScrollArea>
+          </div>
+        </>
+      )}
 
       {/* Apply Button */}
       <Button
