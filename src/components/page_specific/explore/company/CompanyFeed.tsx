@@ -4,14 +4,25 @@ import { CompanyPreview } from "./CompanyPreview";
 import { useCompanies } from "@/hooks/query/useCompanies";
 import LoadingGeneric from "@/components/global/LoadingGeneric";
 import { useFeedStore } from "@/store/FeedStore";
+import { useSearchParams } from "next/navigation";
+import { CompanyFeedFilters } from "@/types/job_feed.types";
 
 export default function CompanyFeed() {
-  const { data: companies, isLoading, error } = useCompanies();
+  const searchParams = useSearchParams();
+  
+  // Build filters from URL params
+  const filters: CompanyFeedFilters = {
+    industries: searchParams.getAll("industry"),
+    search: searchParams.get("search") || undefined,
+  };
+
+  const { data: companies, isLoading, error } = useCompanies(filters);
   const selected_company = useFeedStore((state) => state.selected_company);
   const setSelectedCompany = useFeedStore((state) => state.setSelectedCompany);
 
-  console.log(companies)
-  //Set initial selected item when data loads
+  console.log(companies);
+  
+  // Set initial selected item when data loads
   useEffect(() => {
     if (
       companies &&

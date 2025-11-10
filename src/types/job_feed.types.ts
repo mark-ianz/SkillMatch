@@ -8,4 +8,9 @@ export type JobFeedFilters = {
   isPaid?: boolean;
 };
 
+export type CompanyFeedFilters = {
+  industries: string[];
+  search?: string;
+};
+
 export type ExploreType = "job-posts" | "companies";
