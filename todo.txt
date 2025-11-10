@@ -3,4 +3,4 @@
 - feed ng posts
 - feed ng job posts
 
-- ojt skill, gawin na lang ding string sa db with "," instead of separate table pa. same rin sa job_post_skills
+- ojt skill, gawin na lang ding string sa db with "," instead of separate table pa. same rin sa job_post_skills. pwede ma search ng user base sa skills
