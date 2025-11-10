@@ -35,8 +35,6 @@ const LOCATION_OPTIONS = [
 
 const WORK_ARRANGEMENT_OPTIONS = ["Remote", "On-site", "Hybrid"];
 
-const JOB_SKILLS = ["JavaScript", "Python", "React", "TypeScript", "SQL"];
-
 export function JobFeedFilter({ exploreType, className }: JobFeedFilterProps) {
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -44,7 +42,6 @@ export function JobFeedFilter({ exploreType, className }: JobFeedFilterProps) {
     courses: searchParams.getAll("course") || [],
     locations: searchParams.getAll("location") || [],
     workArrangement: searchParams.getAll("arrangement") || [],
-    skills: searchParams.getAll("skill") || [],
     isPaid: searchParams.get("paid") === "true" ? true : undefined,
   });
 
@@ -66,12 +63,13 @@ export function JobFeedFilter({ exploreType, className }: JobFeedFilterProps) {
     filters.courses.forEach((p) => params.append("course", p));
     filters.locations.forEach((l) => params.append("location", l));
     filters.workArrangement.forEach((w) => params.append("arrangement", w));
-    filters.skills.forEach((s) => params.append("skill", s));
     if (filters.isPaid !== undefined)
       params.append("paid", String(filters.isPaid));
 
     const queryString = params.toString();
-    router.push(`/explore/${exploreType}${queryString ? `?${queryString}` : ""}`);
+    router.push(
+      `/explore/${exploreType}${queryString ? `?${queryString}` : ""}`
+    );
   };
 
   const handleReset = () => {
@@ -79,7 +77,6 @@ export function JobFeedFilter({ exploreType, className }: JobFeedFilterProps) {
       courses: [],
       locations: [],
       workArrangement: [],
-      skills: [],
       isPaid: undefined,
     });
     router.push(`/explore/${exploreType}`);
@@ -89,7 +86,6 @@ export function JobFeedFilter({ exploreType, className }: JobFeedFilterProps) {
     filters.courses.length > 0 ||
     filters.locations.length > 0 ||
     filters.workArrangement.length > 0 ||
-    filters.skills.length > 0 ||
     filters.isPaid !== undefined;
 
   return (
@@ -124,9 +120,7 @@ export function JobFeedFilter({ exploreType, className }: JobFeedFilterProps) {
               <Checkbox
                 id={`course-${course}`}
                 checked={filters.courses.includes(course)}
-                onCheckedChange={() =>
-                  handleFilterChange("courses", course)
-                }
+                onCheckedChange={() => handleFilterChange("courses", course)}
               />
               <Label
                 htmlFor={`course-${course}`}
@@ -189,30 +183,6 @@ export function JobFeedFilter({ exploreType, className }: JobFeedFilterProps) {
           ))}
         </div>
       </div>
-
-      {/* Skills Filter (for job posts only) */}
-      {exploreType === "job-posts" && (
-        <div className="space-y-3 border-t pt-4">
-          <h4 className="text-sm font-semibold">Skills</h4>
-          <div className="space-y-2">
-            {JOB_SKILLS.map((skill) => (
-              <div key={skill} className="flex items-center gap-2">
-                <Checkbox
-                  id={`skill-${skill}`}
-                  checked={filters.skills.includes(skill)}
-                  onCheckedChange={() => handleFilterChange("skills", skill)}
-                />
-                <Label
-                  htmlFor={`skill-${skill}`}
-                  className="text-sm font-normal cursor-pointer"
-                >
-                  {skill}
-                </Label>
-              </div>
-            ))}
-          </div>
-        </div>
-      )}
 
       {/* Apply Button */}
       <Button
