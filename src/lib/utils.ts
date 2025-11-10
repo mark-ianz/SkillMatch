@@ -4,6 +4,7 @@ import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
 import { ZodError } from "zod";
 import college_courses from "@/data/college_courses.json";
+import { ItemList } from "@/components/common/input/ComboBox";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -27,11 +28,20 @@ export function getStepDetails(step: number, type: "ojt" | "employer" = "ojt") {
   }
 }
 
-export function getAllCourses() {
+export function getAllCourses(asItems?: boolean): string[] | ItemList[] {
   const COLLEGE_LIST = Object.keys(college_courses).map((college) => ({
     college: college,
     courses: college_courses[college as keyof typeof college_courses].courses,
   }));
+
+  if (asItems) {
+    return COLLEGE_LIST.flatMap((c) =>
+      c.courses.map((course) => ({
+        value: course.course_name,
+        label: course.course_name,
+      }))
+    );
+  }
 
   return COLLEGE_LIST.flatMap((c) =>
     c.courses.map((course) => course.course_name)
