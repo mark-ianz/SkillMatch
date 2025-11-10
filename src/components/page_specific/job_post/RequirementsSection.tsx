@@ -1,12 +1,21 @@
 "use client";
-import React from "react";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import React, { useEffect } from "react";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
-import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import SearchJobCategory from "@/components/common/input/SearchJobCategory";
 import SearchSkill from "@/components/common/input/SearchSkill";
 import { JobPost } from "@/types/job_post.types";
+import SelectWithLabel from "@/components/common/input/SelectWithLabel";
+import { getAllCourses } from "@/lib/utils";
+import { ItemList } from "@/components/common/input/ComboBox";
+import { toast } from "sonner";
 
 type Props = {
   formData: Partial<JobPost>;
@@ -17,34 +26,69 @@ type Props = {
   updateField: <K extends keyof JobPost>(field: K, value: JobPost[K]) => void;
 };
 
-export default function RequirementsSection({ formData, programInput, setProgramInput, addProgram, removeProgram, updateField }: Props) {
+export default function RequirementsSection({
+  formData,
+  programInput,
+  setProgramInput,
+  addProgram,
+  removeProgram,
+  updateField,
+}: Props) {
+  const COURSES = getAllCourses(true) as ItemList[];
+  const [selectedCourse, setSelectedCourse] = React.useState<ItemList | null>(
+    null
+  );
+
+  useEffect(() => {
+    if (!selectedCourse) {
+      setProgramInput(COURSES[0].value);
+    }
+  }, [COURSES, setProgramInput, selectedCourse]);
+
+  function handleAddProgram() {
+    if (!formData.program_required?.includes(programInput)) {
+      addProgram();
+      return;
+    }
+
+    toast.error("Course already added", {
+      style: { backgroundColor: "#fee2e2", color: "#b91c1c" },
+    });
+  }
+
+  console.log(programInput);
+
   return (
     <Card>
       <CardHeader>
         <CardTitle>Requirements</CardTitle>
-        <CardDescription>
-          Programs, skills, and qualifications
-        </CardDescription>
+        <CardDescription>Courses, skills, and qualifications</CardDescription>
       </CardHeader>
       <CardContent className="grid gap-4">
         <div className="grid gap-2">
-          <Label>Program Required</Label>
-          <div className="flex gap-2">
-            <Input
-              placeholder="e.g., Bachelor of Science in Computer Science"
-              value={programInput}
-              onChange={(e) => setProgramInput(e.target.value)}
-              onKeyDown={(e) => {
-                if (e.key === "Enter") {
-                  e.preventDefault();
-                  addProgram();
-                }
+          <div className="flex gap-2 items-end">
+            <SelectWithLabel
+              required={true}
+              containerClassName="w-full"
+              id="course"
+              label="Course"
+              value={selectedCourse?.value || ""}
+              onChange={(value) => {
+                const course = COURSES.find((c) => c.value === value);
+                setSelectedCourse(course || null);
+                setProgramInput(value);
               }}
+              items={COURSES}
             />
-            <Button type="button" onClick={addProgram} variant={"default_employer"}>
+            <Button
+              type="button"
+              onClick={handleAddProgram}
+              variant={"default_employer"}
+            >
               Add
             </Button>
           </div>
+
           <ul className="space-y-2 mt-3">
             {formData.program_required?.map((prog, idx) => (
               <li
