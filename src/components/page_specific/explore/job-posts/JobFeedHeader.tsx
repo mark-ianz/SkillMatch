@@ -19,13 +19,13 @@ export function JobFeedHeader() {
     e.preventDefault();
     if (searchQuery.trim()) {
       router.push(
-        `/feed/${exploreType}?search=${encodeURIComponent(searchQuery)}`
+        `/explore/${exploreType}?search=${encodeURIComponent(searchQuery)}`
       );
     }
   };
 
   const handleTabChange = (newFeedType: string) => {
-    router.push(`/feed/${newFeedType}`);
+    router.push(`/explore/${newFeedType}`);
   };
 
   return (

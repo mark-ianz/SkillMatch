@@ -71,7 +71,7 @@ export function JobFeedFilter({ exploreType, className }: JobFeedFilterProps) {
       params.append("paid", String(filters.isPaid));
 
     const queryString = params.toString();
-    router.push(`/feed/${exploreType}${queryString ? `?${queryString}` : ""}`);
+    router.push(`/explore/${exploreType}${queryString ? `?${queryString}` : ""}`);
   };
 
   const handleReset = () => {
@@ -82,7 +82,7 @@ export function JobFeedFilter({ exploreType, className }: JobFeedFilterProps) {
       skills: [],
       isPaid: undefined,
     });
-    router.push(`/feed/${exploreType}`);
+    router.push(`/explore/${exploreType}`);
   };
 
   const hasActiveFilters =
