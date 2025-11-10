@@ -34,6 +34,7 @@ export type JobPost = CompanyPreview & CompanyAddress & {
 
 export type JobPostQuery = JobPost & {
   // mga string pa lang to kase na concat sila sa query
+  job_categories: string;
   job_responsibilities: string;
   soft_skills: string;
   technical_skills: string;
