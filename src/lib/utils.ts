@@ -5,6 +5,7 @@ import { twMerge } from "tailwind-merge";
 import { ZodError } from "zod";
 import college_courses from "@/data/college_courses.json";
 import { ItemList } from "@/components/common/input/ComboBox";
+import industry_categories from "@/data/industry_categories.json";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -46,4 +47,28 @@ export function getAllCourses(asItems?: boolean): string[] | ItemList[] {
   return COLLEGE_LIST.flatMap((c) =>
     c.courses.map((course) => course.course_name)
   );
+}
+
+export function getAllIndustry(asItems?: boolean): string[] | ItemList[] {
+  if (asItems) {
+    return industry_categories.map((industry) => ({
+      value: industry.industry,
+      label: industry.industry,
+    }));
+  }
+
+  return industry_categories.map((industry) => industry.industry);
+}
+
+export function getAllJobCategories(asItems?: boolean, sort?: boolean): string[] | ItemList[] {
+  if (asItems) {
+    return industry_categories.flatMap((industry) =>
+      industry.job_categories.map((job) => ({
+        value: job,
+        label: job,
+      }))
+    );
+  }
+
+  return industry_categories.flatMap((industry) => industry.job_categories).sort((a, b) => sort ? a.localeCompare(b) : 0);
 }
