@@ -5,7 +5,7 @@ import CompanyFeed from "../company/CompanyFeed";
 import { useFeedStore } from "@/store/FeedStore";
 
 export default function Feed({}) {
-  const feedType = useFeedStore((state) => state.feedType);
+  const exploreType = useFeedStore((state) => state.exploreType);
 
   return (
     <div className="flex-3 flex flex-col space-y-4">
@@ -13,7 +13,7 @@ export default function Feed({}) {
 
       {/* Job List - Scrollable */}
       <div className="overflow-y-hidden space-y-3">
-        {feedType === "job-posts" ? <JobPostFeed /> : <CompanyFeed />}
+        {exploreType === "job-posts" ? <JobPostFeed /> : <CompanyFeed />}
       </div>
     </div>
   );

@@ -1,24 +1,24 @@
 import { CompanyProfile } from "@/types/company.types";
-import { FeedType } from "@/types/job_feed.types";
+import { ExploreType } from "@/types/job_feed.types";
 import { JobPost } from "@/types/job_post.types";
 import { create } from "zustand";
 
 interface FeedStoreState {
-  feedType: FeedType;
+  exploreType: ExploreType;
   selected_job_post: JobPost | null;
   selected_company: CompanyProfile | null;
-  setFeedType: (feedType: FeedType) => void;
+  setFeedType: (exploreType: ExploreType) => void;
   setSelectedCompany: (company: CompanyProfile | null) => void;
   setSelectedJobPost: (job_post: JobPost | null) => void;
 }
 
 export const useFeedStore = create<FeedStoreState>((set) => ({
-  feedType: "job-posts",
+  exploreType: "job-posts",
   selected_company: null,
   selected_job_post: null,
-  setFeedType: (feedType) =>
+  setFeedType: (exploreType) =>
     set({
-      feedType,
+      exploreType,
       // Clear selections when switching feed types
       selected_company: null,
       selected_job_post: null,

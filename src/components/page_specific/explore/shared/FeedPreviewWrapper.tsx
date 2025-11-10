@@ -1,23 +1,23 @@
 import { cn } from "@/lib/utils";
 import { useFeedStore } from "@/store/FeedStore";
-import { FeedType } from "@/types/job_feed.types";
+import { ExploreType } from "@/types/job_feed.types";
 import React from "react";
 
 export default function FeedPreviewWrapper({
   className,
   children,
   id,
-  feedType,
+  exploreType,
 }: {
   className?: string;
   children: React.ReactNode;
   id: string;
-  feedType: FeedType;
+  exploreType: ExploreType;
 }) {
   const selected_job_post = useFeedStore((state) => state.selected_job_post);
   const selected_company = useFeedStore((state) => state.selected_company);
 
-  const isJobFeed = feedType === "job-posts";
+  const isJobFeed = exploreType === "job-posts";
 
   let isSelected;
 

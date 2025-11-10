@@ -10,7 +10,7 @@ import { Search } from "lucide-react";
 import { useFeedStore } from "@/store/FeedStore";
 
 export function JobFeedHeader() {
-  const feedType = useFeedStore((state) => state.feedType);
+  const exploreType = useFeedStore((state) => state.exploreType);
 
   const router = useRouter();
   const [searchQuery, setSearchQuery] = useState("");
@@ -19,7 +19,7 @@ export function JobFeedHeader() {
     e.preventDefault();
     if (searchQuery.trim()) {
       router.push(
-        `/feed/${feedType}?search=${encodeURIComponent(searchQuery)}`
+        `/feed/${exploreType}?search=${encodeURIComponent(searchQuery)}`
       );
     }
   };
@@ -35,7 +35,7 @@ export function JobFeedHeader() {
         <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-muted-foreground" />
         <Input
           placeholder={
-            feedType === "job-posts"
+            exploreType === "job-posts"
               ? "Search job titles or companies..."
               : "Search companies..."
           }
@@ -47,7 +47,7 @@ export function JobFeedHeader() {
 
       {/* Feed Type Tabs */}
       <Tabs
-        value={feedType}
+        value={exploreType}
         onValueChange={handleTabChange}
         className="w-full"
       >

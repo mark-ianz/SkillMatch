@@ -6,4 +6,4 @@ export type JobFeedFilters = {
   isPaid?: boolean;
 };
 
-export type FeedType = "job-posts" | "companies";
+export type ExploreType = "job-posts" | "companies";

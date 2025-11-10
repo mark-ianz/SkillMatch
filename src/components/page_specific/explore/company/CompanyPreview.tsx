@@ -19,7 +19,7 @@ export function CompanyPreview({
   className,
 }: CompanyPreviewProps) {
   return (
-    <FeedPreviewWrapper feedType="companies" id={company.company_id} className={cn("flex gap-5", className)}>
+    <FeedPreviewWrapper exploreType="companies" id={company.company_id} className={cn("flex gap-5", className)}>
       <div className="relative w-20 h-20 rounded-xl overflow-hidden flex-shrink-0 bg-muted border border-border/50">
         {company.company_image ? (
           <Image

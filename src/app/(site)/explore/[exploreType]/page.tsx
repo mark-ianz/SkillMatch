@@ -2,7 +2,7 @@
 
 import { useEffect, use } from "react";
 import { useSearchParams } from "next/navigation";
-import { FeedType } from "@/types/job_feed.types";
+import { ExploreType } from "@/types/job_feed.types";
 import { SidebarProfile } from "@/components/page_specific/explore/shared/SidebarProfile";
 import { JobFeedFilter } from "@/components/page_specific/explore/job-posts/JobFeedFilter";
 import MainLayout from "@/components/layout/MainLayout";
@@ -13,19 +13,19 @@ import { useFeedStore } from "@/store/FeedStore";
 export default function FeedPage({
   params,
 }: {
-  params: Promise<{ feedType: FeedType }>;
+  params: Promise<{ exploreType: ExploreType }>;
 }) {
   const searchParams = useSearchParams();
-  const feedType = use(params).feedType;
+  const exploreType = use(params).exploreType;
   const setFeedType = useFeedStore((state) => state.setFeedType);
 
   useEffect(() => {
-    // Sync URL feedType with store
-    setFeedType(feedType);
-    // TODO: Implement actual feed filtering based on feedType and filters
-    console.log("Feed type:", feedType);
+    // Sync URL exploreType with store
+    setFeedType(exploreType);
+    // TODO: Implement actual feed filtering based on exploreType and filters
+    console.log("Feed type:", exploreType);
     console.log("Search params:", Object.fromEntries(searchParams));
-  }, [feedType, searchParams, setFeedType]);
+  }, [exploreType, searchParams, setFeedType]);
 
   return (
     <MainLayout className="items-center pb-20" wrapperClassName="py-4">
@@ -33,7 +33,7 @@ export default function FeedPage({
         {/* Left Sidebar */}
         <div className="flex-2 sticky space-y-6 h-fit">
           <SidebarProfile />
-          <JobFeedFilter className="sticky top-28" feedType={feedType} />
+          <JobFeedFilter className="sticky top-28" exploreType={exploreType} />
         </div>
 
         <Feed />

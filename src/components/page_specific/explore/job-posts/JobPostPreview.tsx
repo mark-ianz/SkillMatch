@@ -19,7 +19,7 @@ export function JobPostPreview({
   const fullAddress = `${job.barangay}, ${job.city_municipality}`;
 
   return (
-    <FeedPreviewWrapper feedType="job-posts" id={job.job_post_id} className={className}>
+    <FeedPreviewWrapper exploreType="job-posts" id={job.job_post_id} className={className}>
       <div className="mb-4 flex flex-wrap gap-2">
         <Badge variant="secondary" className="text-xs font-medium">
           {job.available_positions} slot

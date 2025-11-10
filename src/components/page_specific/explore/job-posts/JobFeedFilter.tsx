@@ -7,12 +7,12 @@ import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
 import { Filter, X } from "lucide-react";
-import { FeedType, JobFeedFilters } from "@/types/job_feed.types";
+import { ExploreType, JobFeedFilters } from "@/types/job_feed.types";
 import college_courses from "@/data/college_courses.json";
 import { cn } from "@/lib/utils";
 
 interface JobFeedFilterProps {
-  feedType: FeedType;
+  exploreType: ExploreType;
   className?: string;
 }
 
@@ -37,7 +37,7 @@ const WORK_ARRANGEMENT_OPTIONS = ["Remote", "On-site", "Hybrid"];
 
 const JOB_SKILLS = ["JavaScript", "Python", "React", "TypeScript", "SQL"];
 
-export function JobFeedFilter({ feedType, className }: JobFeedFilterProps) {
+export function JobFeedFilter({ exploreType, className }: JobFeedFilterProps) {
   const router = useRouter();
   const searchParams = useSearchParams();
   const [filters, setFilters] = useState<JobFeedFilters>({
@@ -71,7 +71,7 @@ export function JobFeedFilter({ feedType, className }: JobFeedFilterProps) {
       params.append("paid", String(filters.isPaid));
 
     const queryString = params.toString();
-    router.push(`/feed/${feedType}${queryString ? `?${queryString}` : ""}`);
+    router.push(`/feed/${exploreType}${queryString ? `?${queryString}` : ""}`);
   };
 
   const handleReset = () => {
@@ -82,7 +82,7 @@ export function JobFeedFilter({ feedType, className }: JobFeedFilterProps) {
       skills: [],
       isPaid: undefined,
     });
-    router.push(`/feed/${feedType}`);
+    router.push(`/feed/${exploreType}`);
   };
 
   const hasActiveFilters =
@@ -191,7 +191,7 @@ export function JobFeedFilter({ feedType, className }: JobFeedFilterProps) {
       </div>
 
       {/* Skills Filter (for job posts only) */}
-      {feedType === "job-posts" && (
+      {exploreType === "job-posts" && (
         <div className="space-y-3 border-t pt-4">
           <h4 className="text-sm font-semibold">Skills</h4>
           <div className="space-y-2">
