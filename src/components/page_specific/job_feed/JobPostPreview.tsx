@@ -1,40 +1,32 @@
 "use client";
 
 import { Badge } from "@/components/ui/badge";
-import { cn } from "@/lib/utils";
 import { JobPost } from "@/types/job_post.types";
 import { Clock, MapPin } from "lucide-react";
+import FeedPreviewWrapper from "../feed/shared/FeedPreviewWrapper";
 
 interface JobPostPreviewProps {
-  data: JobPost;
-  onClick?: () => void;
+  job: JobPost;
   timePosted?: string;
   className?: string;
 }
 
 export function JobPostPreview({
-  data,
-  onClick,
+  job,
   timePosted = "5 days ago",
   className,
 }: JobPostPreviewProps) {
-  const fullAddress = `${data.barangay}, ${data.city_municipality}`;
+  const fullAddress = `${job.barangay}, ${job.city_municipality}`;
 
   return (
-    <div
-      onClick={onClick}
-      className={cn(
-        "group cursor-pointer rounded-lg border border-border/40 bg-background p-5 transition-all hover:border-border hover:shadow-sm",
-        className
-      )}
-    >
+    <FeedPreviewWrapper feedType="job-posts" id={job.job_post_id} className={className}>
       <div className="mb-4 flex flex-wrap gap-2">
         <Badge variant="secondary" className="text-xs font-medium">
-          {data.available_positions} slot
-          {data.available_positions > 1 ? "s" : ""}
+          {job.available_positions} slot
+          {job.available_positions > 1 ? "s" : ""}
         </Badge>
-        {data.job_category &&
-          data.job_category.slice(0, 2).map((category, index) => (
+        {job.job_category &&
+          job.job_category.slice(0, 2).map((category, index) => (
             <Badge
               key={category + index}
               variant="secondary"
@@ -44,7 +36,7 @@ export function JobPostPreview({
             </Badge>
           ))}
 
-        {!data.is_paid && (
+        {!job.is_paid && (
           <Badge variant="outline" className="text-xs">
             Unpaid
           </Badge>
@@ -53,11 +45,11 @@ export function JobPostPreview({
 
       {/* Job title */}
       <h3 className="text-lg font-semibold text-foreground mb-1 group-hover:text-primary transition-colors">
-        {data.job_title}
+        {job.job_title}
       </h3>
 
       {/* Company name */}
-      <p className="text-sm text-muted-foreground mb-3">{data.company_name}</p>
+      <p className="text-sm text-muted-foreground mb-3">{job.company_name}</p>
 
       <div className="flex items-center gap-4 text-sm text-muted-foreground">
         <div className="flex items-center gap-1.5">
@@ -70,11 +62,11 @@ export function JobPostPreview({
         </div>
       </div>
 
-      {data.allowance_description && (
+      {job.allowance_description && (
         <Badge variant="secondary" className="text-xs font-medium mt-2">
-          {data.allowance_description}
+          {job.allowance_description}
         </Badge>
       )}
-    </div>
+    </FeedPreviewWrapper>
   );
 }
