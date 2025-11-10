@@ -2,37 +2,59 @@
 
 import type React from "react";
 
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Input } from "@/components/ui/input";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams, usePathname } from "next/navigation";
 import { Search } from "lucide-react";
 import { useFeedStore } from "@/store/FeedStore";
+import useDebounce from "@/hooks/useDebounce";
 
 export function JobFeedHeader() {
   const exploreType = useFeedStore((state) => state.exploreType);
   const searchParams = useSearchParams();
+  const pathname = usePathname();
   
   const router = useRouter();
   const [searchQuery, setSearchQuery] = useState(searchParams.get("search") || "");
+  const debouncedSearch = useDebounce(searchQuery, 500); // 500ms delay
+  const isInitialMount = useRef(true);
 
-  const handleSearch = (e: React.FormEvent) => {
-    e.preventDefault();
-    
-    // Preserve existing filter params
+  // Sync search query with URL when pathname changes (tab switch)
+  useEffect(() => {
+    setSearchQuery(searchParams.get("search") || "");
+  }, [pathname, searchParams]);
+
+  // Auto-search when debounced value changes
+  useEffect(() => {
+    // Skip on initial mount
+    if (isInitialMount.current) {
+      isInitialMount.current = false;
+      return;
+    }
+
+    // Build URL with current pathname (don't rely on exploreType)
     const params = new URLSearchParams(searchParams.toString());
     
-    if (searchQuery.trim()) {
-      params.set("search", searchQuery.trim());
+    if (debouncedSearch.trim()) {
+      params.set("search", debouncedSearch.trim());
     } else {
       params.delete("search");
     }
     
     const queryString = params.toString();
-    router.push(`/explore/${exploreType}${queryString ? `?${queryString}` : ""}`);
+    const newUrl = `${pathname}${queryString ? `?${queryString}` : ""}`;
+    
+    router.push(newUrl, { scroll: false });
+  }, [debouncedSearch, pathname, router, searchParams]);
+
+  const handleSearch = (e: React.FormEvent) => {
+    e.preventDefault();
+    // Form submission is now handled by debounce effect
   };
 
   const handleTabChange = (newFeedType: string) => {
+    isInitialMount.current = true; // Prevent search trigger on tab change
     router.push(`/explore/${newFeedType}`);
   };
 
