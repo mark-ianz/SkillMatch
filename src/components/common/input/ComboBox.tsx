@@ -18,10 +18,10 @@ import {
 } from "@/components/ui/popover";
 import { useState } from "react";
 
-type ItemList = { label: string; value: string }[];
+export type ItemList = { label: string; value: string };
 
 type Props = {
-  items: ItemList | undefined;
+  items: ItemList[] | undefined;
   searchFor: string;
   value: string;
   onValueChange: (value: string) => void;
