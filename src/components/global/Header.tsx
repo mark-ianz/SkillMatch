@@ -33,7 +33,7 @@ export default function Header() {
                 <NavigationMenuTrigger>Explore</NavigationMenuTrigger>
                 <NavigationMenuContent>
                   <NavigationMenuLink asChild>
-                    <Link href="/explore?category=jobs" className="w-[200px]">
+                    <Link href="/explore/job-posts" className="w-[200px]">
                       <div className="font-medium">Jobs</div>
                       <div className="text-muted-foreground">
                         Browse all job listings.
@@ -41,7 +41,7 @@ export default function Header() {
                     </Link>
                   </NavigationMenuLink>
                   <NavigationMenuLink asChild>
-                    <Link href="/companies?category=companies">
+                    <Link href="/explore/companies">
                       <div className="font-medium">Companies</div>
                       <div className="text-muted-foreground">
                         Browse all companies.
