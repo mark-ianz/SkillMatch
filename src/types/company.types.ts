@@ -16,7 +16,7 @@ export type Company = EmployerOnboardingStepOneSchema & {
   created_at: Date;
 };
 
-export type CompanyProfile = Pick<
+export type CompanyProfile = CompanyAddress & Pick<
   Company,
   | "company_id"
   | "company_name"
