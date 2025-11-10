@@ -70,6 +70,12 @@ export function JobFeedFilter({ exploreType, className }: JobFeedFilterProps) {
     filters.jobCategories.forEach((j) => params.append("jobCategory", j));
     if (filters.isPaid !== undefined)
       params.append("paid", String(filters.isPaid));
+    
+    // Preserve search param
+    const existingSearch = searchParams.get("search");
+    if (existingSearch) {
+      params.append("search", existingSearch);
+    }
 
     const queryString = params.toString();
     router.push(
@@ -86,7 +92,14 @@ export function JobFeedFilter({ exploreType, className }: JobFeedFilterProps) {
       jobCategories: [],
       isPaid: undefined,
     });
-    router.push(`/explore/${exploreType}`);
+    
+    // Preserve search param on reset
+    const existingSearch = searchParams.get("search");
+    if (existingSearch) {
+      router.push(`/explore/${exploreType}?search=${existingSearch}`);
+    } else {
+      router.push(`/explore/${exploreType}`);
+    }
   };
 
   const hasActiveFilters =

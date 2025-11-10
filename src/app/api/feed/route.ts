@@ -14,6 +14,7 @@ export async function GET(request: NextRequest) {
     const industries = searchParams.getAll("industry");
     const jobCategories = searchParams.getAll("jobCategory");
     const isPaid = searchParams.get("paid");
+    const search = searchParams.get("search");
 
     // Build dynamic WHERE clauses
     const conditions: string[] = [];
@@ -55,6 +56,17 @@ export async function GET(request: NextRequest) {
     if (isPaid !== null) {
       conditions.push(`jp.is_paid = ?`);
       values.push(isPaid === "true" ? 1 : 0);
+    }
+
+    // Handle search query (search in job title, company name, job overview)
+    if (search && search.trim()) {
+      conditions.push(`(
+        jp.job_title LIKE ? OR 
+        c.company_name LIKE ? OR 
+        jp.job_overview LIKE ?
+      )`);
+      const searchTerm = `%${search.trim()}%`;
+      values.push(searchTerm, searchTerm, searchTerm);
     }
 
     const whereClause = conditions.length > 0 ? `WHERE ${conditions.join(" AND ")}` : "";

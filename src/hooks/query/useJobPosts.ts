@@ -21,6 +21,9 @@ export function useJobPosts(filters?: JobFeedFilters) {
         if (filters.isPaid !== undefined) {
           params.append("paid", String(filters.isPaid));
         }
+        if (filters.search) {
+          params.append("search", filters.search);
+        }
       }
 
       const queryString = params.toString();

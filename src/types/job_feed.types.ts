@@ -4,6 +4,7 @@ export type JobFeedFilters = {
   workArrangement: string[];
   industries: string[];
   jobCategories: string[];
+  search?: string;
   isPaid?: boolean;
 };
 

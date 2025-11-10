@@ -19,6 +19,7 @@ export default function JobPostFeed() {
     workArrangement: searchParams.getAll("arrangement"),
     industries: searchParams.getAll("industry"),
     jobCategories: searchParams.getAll("jobCategory"),
+    search: searchParams.get("search") || undefined,
     isPaid: searchParams.get("paid") === "true" ? true : undefined,
   };
 
