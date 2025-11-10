@@ -3,7 +3,7 @@
 import { Badge } from "@/components/ui/badge";
 import { JobPost } from "@/types/job_post.types";
 import { Clock, MapPin } from "lucide-react";
-import FeedPreviewWrapper from "../feed/shared/FeedPreviewWrapper";
+import FeedPreviewWrapper from "../shared/FeedPreviewWrapper";
 
 interface JobPostPreviewProps {
   job: JobPost;

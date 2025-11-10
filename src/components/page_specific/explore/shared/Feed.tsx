@@ -1,7 +1,7 @@
 import React from "react";
-import { JobFeedHeader } from "./JobFeedHeader";
-import JobPostFeed from "./JobPostFeed";
-import CompanyFeed from "../feed/company/CompanyFeed";
+import { JobFeedHeader } from "../job-posts/JobFeedHeader";
+import JobPostFeed from "../job-posts/JobPostFeed";
+import CompanyFeed from "../company/CompanyFeed";
 import { useFeedStore } from "@/store/FeedStore";
 
 export default function Feed({}) {

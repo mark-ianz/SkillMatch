@@ -3,11 +3,11 @@
 import { useEffect, use } from "react";
 import { useSearchParams } from "next/navigation";
 import { FeedType } from "@/types/job_feed.types";
-import { SidebarProfile } from "@/components/page_specific/job_feed/SidebarProfile";
-import { JobFeedFilter } from "@/components/page_specific/job_feed/JobFeedFilter";
+import { SidebarProfile } from "@/components/page_specific/explore/shared/SidebarProfile";
+import { JobFeedFilter } from "@/components/page_specific/explore/job-posts/JobFeedFilter";
 import MainLayout from "@/components/layout/MainLayout";
-import Feed from "@/components/page_specific/job_feed/Feed";
-import FeedFullInfo from "@/components/page_specific/job_feed/FeedFullInfo";
+import Feed from "@/components/page_specific/explore/shared/Feed";
+import FeedFullInfo from "@/components/page_specific/explore/shared/FeedFullInfo";
 import { useFeedStore } from "@/store/FeedStore";
 
 export default function FeedPage({

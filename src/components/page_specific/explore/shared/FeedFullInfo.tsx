@@ -1,7 +1,7 @@
 import React from "react";
-import { JobPostFullInfo } from "../job_post/JobPostFullInfo";
+import { JobPostFullInfo } from "../../job_post/JobPostFullInfo";
 import { useFeedStore } from "@/store/FeedStore";
-import { CompanyProfile } from "../feed/company/CompanyProfile";
+import { CompanyProfile } from "../company/CompanyProfile";
 
 export default function FeedFullInfo({}) {
   const feedType = useFeedStore((state) => state.feedType);
