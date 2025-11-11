@@ -1,7 +1,7 @@
 import { CompanyProfile } from "@/types/company.types";
 import React, { useEffect } from "react";
 import { CompanyPreview } from "./CompanyPreview";
-import { useCompanies } from "@/hooks/query/useCompanies";
+import { useGetAllCompanies } from "@/hooks/query/useCompanies";
 import LoadingGeneric from "@/components/global/LoadingGeneric";
 import { useFeedStore } from "@/store/FeedStore";
 import { useSearchParams } from "next/navigation";
@@ -16,7 +16,7 @@ export default function CompanyFeed() {
     search: searchParams.get("search") || undefined,
   };
 
-  const { data: companies, isLoading, error } = useCompanies(filters);
+  const { data: companies, isLoading, error } = useGetAllCompanies(filters);
   const selected_company = useFeedStore((state) => state.selected_company);
   const setSelectedCompany = useFeedStore((state) => state.setSelectedCompany);
 
