@@ -9,7 +9,7 @@ import { CompanyFeedFilters } from "@/types/job_feed.types";
 
 export default function CompanyFeed() {
   const searchParams = useSearchParams();
-  
+
   // Build filters from URL params
   const filters: CompanyFeedFilters = {
     industries: searchParams.getAll("industry"),
@@ -21,14 +21,10 @@ export default function CompanyFeed() {
   const setSelectedCompany = useFeedStore((state) => state.setSelectedCompany);
 
   console.log(companies);
-  
+
   // Set initial selected item when data loads
   useEffect(() => {
-    if (
-      companies &&
-      companies.length > 0 &&
-      selected_company === null
-    ) {
+    if (companies && companies.length > 0 && selected_company === null) {
       setSelectedCompany(companies[0]);
     }
   }, [companies, selected_company, setSelectedCompany]);
@@ -65,9 +61,11 @@ export default function CompanyFeed() {
         <div
           key={company.company_id}
           onClick={() => setSelectedCompany(company)}
-          className={`cursor-pointer transition-all`}
         >
-          <CompanyPreview company={company} />
+          <CompanyPreview
+            company={company}
+            isSelected={selected_company?.company_id === company.company_id}
+          />
         </div>
       ))}
     </>
