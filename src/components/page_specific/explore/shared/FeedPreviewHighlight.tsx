@@ -3,7 +3,7 @@ import { useFeedStore } from "@/store/FeedStore";
 import { ExploreType } from "@/types/job_feed.types";
 import React from "react";
 
-export default function FeedPreviewWrapper({
+export default function FeedPreviewHighlight({
   className,
   children,
   id,
@@ -30,7 +30,6 @@ export default function FeedPreviewWrapper({
   return (
     <div
       className={cn(
-        "group cursor-pointer rounded-lg border border-border/40 bg-background p-5 transition-all hover:border-border hover:shadow-sm",
         className,
         isSelected && "border-skillmatch-primary-green hover:border-skillmatch-primary-green"
       )}
