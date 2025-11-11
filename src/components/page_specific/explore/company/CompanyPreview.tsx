@@ -26,7 +26,7 @@ export function CompanyPreview({
             src={company.company_image || "/placeholder.svg"}
             alt={`${company.company_name} logo`}
             fill
-            className="object-contain p-3"
+            className="object-contain"
           />
         ) : (
           <div className="w-full h-full flex items-center justify-center">

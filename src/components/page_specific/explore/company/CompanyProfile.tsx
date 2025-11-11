@@ -47,7 +47,7 @@ export function CompanyProfile({ className }: { className?: string }) {
                 src={selected_company?.company_image || "/placeholder.svg"}
                 alt={`${selected_company?.company_name} logo`}
                 fill
-                className="object-contain p-4"
+                className="object-contain"
               />
             ) : (
               <div className="w-full h-full flex items-center justify-center">
