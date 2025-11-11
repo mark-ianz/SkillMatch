@@ -36,12 +36,15 @@ async function submitStepOne(
     await connection.beginTransaction();
 
     await connection.query<ResultSetHeader>(
-      `UPDATE company SET company_name = ?, company_email = ?, telephone_number = ?, phone_number = ? WHERE company_id = ?`,
+      `UPDATE company SET company_name = ?, company_email = ?, telephone_number = ?, phone_number = ?, city = ?, barangay = ?, date_founded = ? WHERE company_id = ?`,
       [
         data.company_name,
         data.company_email,
         data.telephone_number,
         data.phone_number,
+        data.city,
+        data.barangay,
+        data.date_founded,
         company_id,
       ]
     );
@@ -55,6 +58,7 @@ async function submitStepOne(
 
     await connection.commit();
   } catch (error) {
+    console.log(error)
     await connection.rollback();
     throw error;
   } finally {
@@ -65,15 +69,18 @@ async function submitStepOne(
 async function submitStepTwo(
   company_id: string,
   _farthestStep: number,
-  data: EmployerOnboardingStepFourSchema
+  data: EmployerOnboardingStepTwoSchema
 ) {
   const connection = await db.getConnection();
   try {
     await connection.beginTransaction();
 
+    // Convert industry array to comma-separated string for storage
+    const industryString = data.industry.join(',');
+
     await connection.query<ResultSetHeader>(
-      `UPDATE company SET mou_path = ?, loi_path = ?, cp_path = ? WHERE company_id = ?`,
-      [data.mou_path, data.loi_path, data.cp_path, company_id]
+      `UPDATE company SET description = ?, industry = ?, company_image = ? WHERE company_id = ?`,
+      [data.description, industryString, data.company_image || null, company_id]
     );
 
     OnboardingSharedServices.updateStep({
@@ -93,6 +100,72 @@ async function submitStepTwo(
 }
 
 async function submitStepThree(
+  company_id: string,
+  _farthestStep: number,
+  data: EmployerOnboardingStepThreeSchema
+) {
+  const connection = await db.getConnection();
+  try {
+    await connection.beginTransaction();
+
+    await connection.query<ResultSetHeader>(
+      `UPDATE company SET website = ?, facebook_page = ?, instagram_page = ?, twitter_page = ? WHERE company_id = ?`,
+      [
+        data.website || null,
+        data.facebook_page || null,
+        data.instagram_page || null,
+        data.twitter_page || null,
+        company_id,
+      ]
+    );
+
+    OnboardingSharedServices.updateStep({
+      connection,
+      farthestStep: _farthestStep,
+      update_to_step: 4,
+      company_id,
+    });
+
+    await connection.commit();
+  } catch (error) {
+    await connection.rollback();
+    throw error;
+  } finally {
+    connection.release();
+  }
+}
+
+async function submitStepFour(
+  company_id: string,
+  _farthestStep: number,
+  data: EmployerOnboardingStepFourSchema
+) {
+  const connection = await db.getConnection();
+  try {
+    await connection.beginTransaction();
+
+    await connection.query<ResultSetHeader>(
+      `UPDATE company SET mou_path = ?, loi_path = ?, cp_path = ? WHERE company_id = ?`,
+      [data.mou_path, data.loi_path, data.cp_path, company_id]
+    );
+
+    OnboardingSharedServices.updateStep({
+      connection,
+      farthestStep: _farthestStep,
+      update_to_step: 5,
+      company_id,
+    });
+
+    await connection.commit();
+  } catch (error) {
+    await connection.rollback();
+    throw error;
+  } finally {
+    connection.release();
+  }
+}
+
+async function submitStepFive(
   company_id: string,
   _farthestStep: number,
   data: EmployerOnboardingStepFiveSchema
@@ -115,7 +188,7 @@ async function submitStepThree(
     OnboardingSharedServices.updateStep({
       connection,
       farthestStep: _farthestStep,
-      update_to_step: 4,
+      update_to_step: 6,
       company_id,
     });
 
@@ -128,7 +201,7 @@ async function submitStepThree(
   }
 }
 
-async function submitStepFour(
+async function submitStepSix(
   company_id: string,
   _farthestStep: number,
   data: OnboardingPasswordSchema
@@ -170,6 +243,8 @@ const CompanyOnboardingService = {
   submitStepTwo,
   submitStepThree,
   submitStepFour,
+  submitStepFive,
+  submitStepSix,
 };
 
 export default CompanyOnboardingService;
