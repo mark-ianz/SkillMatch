@@ -35,3 +35,22 @@ export function useUploadCompanyDocument(company_id: string | undefined | null, 
     },
   });
 }
+
+export function useUploadCompanyImage(company_id: string | undefined | null) {
+  return useMutation({
+    mutationKey: ["upload-company-image"],
+    mutationFn: async (file: File) => {
+      if (!company_id) throw new Error("Missing company_id");
+      const fd = new FormData();
+      fd.append("file", file, file.name);
+      const { data } = await api.post(
+        `/company/image/${company_id}`,
+        fd,
+        {
+          headers: { "Content-Type": "multipart/form-data" },
+        }
+      );
+      return data as UploadResult;
+    },
+  });
+}
