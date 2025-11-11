@@ -15,6 +15,7 @@ export const CompanyServices = {
           company_image,
           industry,
           description,
+          date_founded,
           created_at
         FROM company
         ORDER BY created_at DESC`

@@ -33,6 +33,7 @@ export type CompanyProfile = CompanyAddress & Pick<
   | "website"
   | "facebook_page"
   | "company_email"
+  | "date_founded"
   | "created_at"
 >;
 
