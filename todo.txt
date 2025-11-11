@@ -13,3 +13,4 @@ To-Do:
  - address
  - industry choice
 - bug when you got no result on search and you searched again with result, it will not preview the first result on the company profile.
+- on company onboarding, auto fill the input when user first onboard
