@@ -6,14 +6,23 @@ import { CompanyProfile } from "../company/CompanyProfile";
 export default function FeedFullInfo() {
   const exploreType = useFeedStore((state) => state.exploreType);
 
+  const selected_job_post = useFeedStore((state) => state.selected_job_post);
+  const selected_company = useFeedStore((state) => state.selected_company);
+
   return (
     <div className="flex-4 sticky top-28 bottom-4 pb-20 h-fit">
       <div className="max-h-[calc(100vh-9rem)] overflow-y-auto border pb-4 rounded-lg">
         {exploreType === "job-posts" && (
-          <JobPostFullInfo className="border-0 shadow-none" />
+          <JobPostFullInfo
+            job={selected_job_post}
+            className="border-0 shadow-none"
+          />
         )}
         {exploreType === "companies" && (
-          <CompanyProfile className="border-0 shadow-none" />
+          <CompanyProfile
+            company={selected_company}
+            className="border-0 shadow-none"
+          />
         )}
       </div>
     </div>
