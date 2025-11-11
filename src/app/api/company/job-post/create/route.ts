@@ -13,7 +13,7 @@ export async function POST(request: Request) {
     }
 
     // TODO: determine company_id from auth/session; for now require in body
-    const company_id = typeof body.company_id === "number" ? body.company_id : null;
+    const company_id = body.company_id
     if (!company_id) {
       return NextResponse.json({ error: "Missing company_id" }, { status: 401 });
     }
