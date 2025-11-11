@@ -61,54 +61,13 @@ export default function CompanyProfilePage() {
 
           {jobPosts.length > 0 ? (
             <ScrollArea className="h-96">
-              <div className="grid grid-cols-1 gap-4 border-b">
+              <div className="grid grid-cols-1 gap-4 pr-4">
                 {jobPosts.map((job) => (
                   <Link
                     key={job.job_post_id}
-                    href={"/view/job?id=" + job.job_post_id}
+                    href={"/view/job-post?id=" + job.job_post_id}
                   >
-                    <JobPostPreview key={job.job_post_id} job={job} />
-                  </Link>
-                ))}
-                {jobPosts.map((job) => (
-                  <Link
-                    key={job.job_post_id}
-                    href={"/view/job?id=" + job.job_post_id}
-                  >
-                    <JobPostPreview key={job.job_post_id} job={job} />
-                  </Link>
-                ))}
-
-                {jobPosts.map((job) => (
-                  <Link
-                    key={job.job_post_id}
-                    href={"/view/job?id=" + job.job_post_id}
-                  >
-                    <JobPostPreview key={job.job_post_id} job={job} />
-                  </Link>
-                ))}
-                {jobPosts.map((job) => (
-                  <Link
-                    key={job.job_post_id}
-                    href={"/view/job?id=" + job.job_post_id}
-                  >
-                    <JobPostPreview key={job.job_post_id} job={job} />
-                  </Link>
-                ))}
-                {jobPosts.map((job) => (
-                  <Link
-                    key={job.job_post_id}
-                    href={"/view/job?id=" + job.job_post_id}
-                  >
-                    <JobPostPreview key={job.job_post_id} job={job} />
-                  </Link>
-                ))}
-                {jobPosts.map((job) => (
-                  <Link
-                    key={job.job_post_id}
-                    href={"/view/job?id=" + job.job_post_id}
-                  >
-                    <JobPostPreview key={job.job_post_id} job={job} />
+                    <JobPostPreview job={job} />
                   </Link>
                 ))}
               </div>
