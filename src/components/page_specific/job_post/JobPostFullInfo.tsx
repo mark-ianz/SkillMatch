@@ -7,6 +7,7 @@ import { cn } from "@/lib/utils";
 import { JobPost } from "@/types/job_post.types";
 import { Bookmark, Briefcase, Copy, MapPin } from "lucide-react";
 import Image from "next/image";
+import { toast } from "sonner";
 
 export function JobPostFullInfo({ job, className }: { job: JobPost; className?: string }) {
   const handleApply = () => {
@@ -20,8 +21,14 @@ export function JobPostFullInfo({ job, className }: { job: JobPost; className?: 
   };
 
   const handleCopyLink = () => {
-    // TODO: Implement copy link functionality
-    console.log("Copy link clicked");
+    const baseUrl = process.env.NEXT_PUBLIC_FRONTEND_BASE_URL || window.location.origin;
+    const link = `${baseUrl}/view/job-post?id=${job?.job_post_id}`;
+    navigator.clipboard.writeText(link).then(() => {
+      toast.success("Link copied to clipboard!");
+    }).catch((err) => {
+      console.error("Failed to copy link:", err);
+      toast.error("Failed to copy link");
+    });
   };
 
   const fullAddress = `${job?.street_name}, ${job?.barangay}, ${job?.city_municipality} ${job?.postal_code}`;
