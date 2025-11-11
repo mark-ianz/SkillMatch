@@ -44,6 +44,7 @@ export async function handleSignup(
     await connection.commit();
     return true;
   } catch (error: Error | unknown) {
+    console.log(error);
     await connection.rollback();
     if ((error as MySQLError).code === "ER_DUP_ENTRY") {
       return "/signup?error=DuplicateEntry";
