@@ -59,3 +59,33 @@ export function useCreateJobPost() {
     },
   });
 }
+
+// Query: Get job post suggestions based on categories and courses
+export function useJobPostSuggestions(job_post_id: string) {
+  return useQuery({
+    queryKey: ["job-post-suggestions", job_post_id],
+    queryFn: async () => {
+      const { data } = await api.get<{ suggestions: JobPost[] }>(
+        `/job-post/${job_post_id}/suggestions`
+      );
+      return data.suggestions;
+    },
+    enabled: !!job_post_id,
+    staleTime: 1000 * 60 * 5, // 5 minutes
+  });
+}
+
+// Query: Get a single job post by ID
+export function useJobPost(job_post_id: string) {
+  return useQuery({
+    queryKey: ["job-post", job_post_id],
+    queryFn: async () => {
+      const { data } = await api.get<{ job_post: JobPost }>(
+        `/job-post/${job_post_id}`
+      );
+      return data.job_post;
+    },
+    enabled: !!job_post_id,
+    staleTime: 1000 * 60 * 5, // 5 minutes
+  });
+}
