@@ -21,6 +21,7 @@ import Image from "next/image";
 import { cn } from "@/lib/utils";
 import { CompanyProfile as CompanyProfileType } from "@/types/company.types";
 import { formatDate } from "date-fns";
+import Link from "next/link";
 
 export function CompanyProfile({
   className,
@@ -60,8 +61,10 @@ export function CompanyProfile({
           {/* Company Name and Actions */}
           <div className="flex-1 min-w-0">
             <div className="flex items-start justify-between gap-4 mb-4">
-              <h1 className="text-2xl font-bold text-foreground text-balance leading-tight">
-                {company?.company_name}
+              <h1 className="text-2xl font-semibold text-foreground text-balance leading-tight underline">
+                <Link href={"/view/company?id=" + company.company_id}>
+                  {company?.company_name}
+                </Link>
               </h1>
               <div className="flex gap-2 flex-shrink-0">
                 <Button
@@ -222,7 +225,10 @@ export function CompanyProfile({
                 Founded
               </p>
               <p className="text-sm text-foreground">
-                {formatDate(company?.date_founded || new Date(), "MMMM dd, yyyy")}
+                {formatDate(
+                  company?.date_founded || new Date(),
+                  "MMMM dd, yyyy"
+                )}
               </p>
             </div>
           </div>
