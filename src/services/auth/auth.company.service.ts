@@ -3,6 +3,7 @@ import { ResultSetHeader, RowDataPacket } from "mysql2";
 import { Account, ExtendedUser } from "@/types/user.types";
 import { Onboarding } from "@/types/onboarding.types";
 import { Pool, PoolConnection } from "mysql2/promise";
+import { nanoid } from "nanoid";
 
 /**
  * Company sign-in service: handles provider='google-company' sign-in cases.
@@ -97,17 +98,19 @@ export async function handleCompanySignIn(
 export async function insertCompanyData(
   connection: PoolConnection | Pool = db,
   user: ExtendedUser
-): Promise<number> {
+): Promise<string> {
+  const company_id = nanoid()
+
   // Create company + account + onboarding for signup flow
-  const [newCompany] = await connection.query<ResultSetHeader>(
-    "INSERT INTO `company` (`company_name`, `company_email`, `company_image`) VALUES (?, ?, ?)",
-    [user.name, user.email, user.image]
+  await connection.query<ResultSetHeader>(
+    "INSERT INTO `company` (`company_id`,`company_name`, `company_email`, `company_image`) VALUES (?, ?, ?, ?)",
+    [company_id, user.name, user.email, user.image]
   );
 
   await connection.query<ResultSetHeader>(
     "INSERT INTO `account` (`company_id`, `email`, `profile_image`, `provider`, `provider_id`, `role_id`, `status_id`) VALUES (?, ?, ?, ?, ?, ?, ?)",
     [
-      newCompany.insertId,
+      company_id,
       user.email,
       user.image,
       "google-company",
@@ -119,8 +122,8 @@ export async function insertCompanyData(
 
   await connection.query(
     "INSERT INTO `onboarding` (`company_id`,`email`, `step`) VALUES (?, ?, ?)",
-    [newCompany.insertId, user.email, 1]
+    [company_id, user.email, 1]
   );
 
-  return newCompany.insertId;
+  return company_id;
 }
