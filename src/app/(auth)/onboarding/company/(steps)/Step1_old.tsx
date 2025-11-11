@@ -1,19 +1,17 @@
 "use client";
 
-import React, { useEffect } from "react";
+import React from "react";
 import StepContainer from "@/components/page_specific/onboarding/StepContainer";
 import InputWithLabel from "@/components/common/input/InputWithLabel";
-import ComboBoxWithLabel from "@/components/common/input/ComboBoxWithLabel";
 import useCompanyStore from "@/store/CompanyStore";
 import { Button } from "@/components/ui/button";
 import RowContainer from "@/components/common/input/RowContainer";
 import { employerOnboardingStepOneSchema } from "@/schema/onboarding";
 import { ZodError } from "zod";
 import useOnboardingStore from "@/store/OnboardingStore";
-import { formatZodError, getAllCities, getBarangaysByCity } from "@/lib/utils";
+import { formatZodError } from "@/lib/utils";
 import { useUpdateStepOneOnboardingCompany } from "@/hooks/query/useOnboardingCompany";
 import { useSession } from "next-auth/react";
-import { ItemList } from "@/components/common/input/ComboBox";
 
 export default function Step1() {
   const session = useSession();
@@ -23,35 +21,20 @@ export default function Step1() {
   const company_email = useCompanyStore((s) => s.company_email || "");
   const telephone_number = useCompanyStore((s) => s.telephone_number || "");
   const phone_number = useCompanyStore((s) => s.phone_number || "");
-  const city = useCompanyStore((s) => s.city || "");
-  const barangay = useCompanyStore((s) => s.barangay || "");
-  const date_founded = useCompanyStore((s) => s.date_founded || "");
-
+  const website = useCompanyStore((s) => s.website || "");
+  const facebook_page = useCompanyStore((s) => s.facebook_page || "");
   const setCompanyName = useCompanyStore((s) => s.setCompanyName);
   const setCompanyEmail = useCompanyStore((s) => s.setCompanyEmail);
   const setTelephoneNumber = useCompanyStore((s) => s.setTelephoneNumber);
   const setPhoneNumber = useCompanyStore((s) => s.setPhoneNumber);
-  const setCity = useCompanyStore((s) => s.setCity);
-  const setBarangay = useCompanyStore((s) => s.setBarangay);
-  const setDateFounded = useCompanyStore((s) => s.setDateFounded);
+  const setWebsite = useCompanyStore((s) => s.setWebsite);
+  const setFacebookPage = useCompanyStore((s) => s.setFacebookPage);
 
   const setError = useOnboardingStore((state) => state.setError);
 
-  // Get cities and barangays
-  const cities = getAllCities(true) as ItemList[];
-  const barangays = city ? (getBarangaysByCity(city, true) as ItemList[]) : [];
-
-  // Reset barangay when city changes
-  useEffect(() => {
-    if (city && barangay) {
-      const validBarangays = getBarangaysByCity(city) as string[];
-      if (!validBarangays.includes(barangay)) {
-        setBarangay("");
-      }
-    }
-  }, [city, barangay, setBarangay]);
-
   function handleNext() {
+    console.log("first")
+    // validate the data
     try {
       // clear previous errors
       setError(null);
@@ -62,9 +45,8 @@ export default function Step1() {
         company_email: useCompanyStore.getState().company_email,
         telephone_number: useCompanyStore.getState().telephone_number,
         phone_number: useCompanyStore.getState().phone_number,
-        city: useCompanyStore.getState().city,
-        barangay: useCompanyStore.getState().barangay,
-        date_founded: useCompanyStore.getState().date_founded,
+        website: useCompanyStore.getState().website,
+        facebook_page: useCompanyStore.getState().facebook_page,
       };
       const parsed = employerOnboardingStepOneSchema.parse(data);
 
@@ -89,7 +71,6 @@ export default function Step1() {
           placeholder="Enter your company name"
           value={company_name}
           onChange={(e: React.ChangeEvent<HTMLInputElement>) => setCompanyName(e.target.value)}
-          required
         />
 
         <InputWithLabel
@@ -100,19 +81,16 @@ export default function Step1() {
           placeholder="company@domain.com"
           value={company_email}
           onChange={(e: React.ChangeEvent<HTMLInputElement>) => setCompanyEmail(e.target.value)}
-          required
         />
       </RowContainer>
-
       <RowContainer>
         <InputWithLabel
-          label="Telephone Number"
+          label="Tel. Number"
           containerClassName="grow"
           id="telephone_number"
           placeholder="Enter your telephone number"
           value={telephone_number}
           onChange={(e: React.ChangeEvent<HTMLInputElement>) => setTelephoneNumber(e.target.value)}
-          required
         />
 
         <InputWithLabel
@@ -122,47 +100,28 @@ export default function Step1() {
           placeholder="Enter your phone number"
           value={phone_number}
           onChange={(e: React.ChangeEvent<HTMLInputElement>) => setPhoneNumber(e.target.value)}
-          required
-        />
-      </RowContainer>
-
-      <RowContainer>
-        <ComboBoxWithLabel
-          containerClassName="grow"
-          id="city"
-          label="City/Municipality"
-          searchFor="city"
-          value={city}
-          items={cities}
-          onValueChange={setCity}
-          required
-        />
-
-        <ComboBoxWithLabel
-          containerClassName="grow"
-          id="barangay"
-          label="Barangay"
-          searchFor="barangay"
-          value={barangay}
-          items={barangays}
-          onValueChange={setBarangay}
-          disabled={!city}
-          required
         />
       </RowContainer>
 
       <RowContainer>
         <InputWithLabel
-          label="Date Founded"
+          label="Website"
           containerClassName="grow"
-          id="date_founded"
-          type="date"
-          value={date_founded}
-          onChange={(e: React.ChangeEvent<HTMLInputElement>) => setDateFounded(e.target.value)}
-          required
+          id="website"
+          placeholder="companywebsite.com"
+          value={website}
+          onChange={(e: React.ChangeEvent<HTMLInputElement>) => setWebsite(e.target.value)}
+        />
+
+        <InputWithLabel
+          label="Facebook Page"
+          containerClassName="grow"
+          id="facebook_page"
+          placeholder="facebook.com/companypage"
+          value={facebook_page}
+          onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFacebookPage(e.target.value)}
         />
       </RowContainer>
-
       <Button
         disabled={isPending}
         onClick={handleNext}

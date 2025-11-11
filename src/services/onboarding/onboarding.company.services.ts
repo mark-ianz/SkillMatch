@@ -4,6 +4,8 @@ import {
   EmployerOnboardingStepOneSchema,
   EmployerOnboardingStepTwoSchema,
   EmployerOnboardingStepThreeSchema,
+  EmployerOnboardingStepFiveSchema,
+  EmployerOnboardingStepFourSchema,
 } from "@/schema/onboarding";
 import OnboardingSharedServices from "./onboarding.shared.services";
 import { OnboardingPasswordSchema } from "@/schema/onboarding";
@@ -63,7 +65,7 @@ async function submitStepOne(
 async function submitStepTwo(
   company_id: string,
   _farthestStep: number,
-  data: EmployerOnboardingStepTwoSchema
+  data: EmployerOnboardingStepFourSchema
 ) {
   const connection = await db.getConnection();
   try {
@@ -93,7 +95,7 @@ async function submitStepTwo(
 async function submitStepThree(
   company_id: string,
   _farthestStep: number,
-  data: EmployerOnboardingStepThreeSchema
+  data: EmployerOnboardingStepFiveSchema
 ) {
   const connection = await db.getConnection();
   try {

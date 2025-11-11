@@ -1,115 +1,137 @@
 "use client";
 
 import React from "react";
-import FileUploadField from "@/components/common/input/FileUploadField";
+import StepContainer from "@/components/page_specific/onboarding/StepContainer";
+import InputWithLabel from "@/components/common/input/InputWithLabel";
 import useCompanyStore from "@/store/CompanyStore";
 import { Button } from "@/components/ui/button";
 import { employerOnboardingStepTwoSchema } from "@/schema/onboarding";
-import { formatZodError } from "@/lib/utils";
+import { ZodError } from "zod";
 import useOnboardingStore from "@/store/OnboardingStore";
+import { formatZodError, getAllIndustry } from "@/lib/utils";
 import { useUpdateStepTwoOnboardingCompany } from "@/hooks/query/useOnboardingCompany";
-import { useUploadCompanyDocument } from "@/hooks/query/useDocuments";
-import useRequireCompany from "@/hooks/useRequireCompany";
+import { useSession } from "next-auth/react";
+import { Checkbox } from "@/components/ui/checkbox";
+import { Label } from "@/components/ui/label";
+import { ScrollArea } from "@/components/ui/scroll-area";
+import { Card } from "@/components/ui/card";
 
 export default function Step2() {
-  const company_id = useRequireCompany();
+  const session = useSession();
+  const { mutate, isPending } = useUpdateStepTwoOnboardingCompany(session.data?.user.company_id);
 
-  const { mutate, isPending } = useUpdateStepTwoOnboardingCompany(company_id);
+  const about_company = useCompanyStore((s) => s.about_company || "");
+  const industry = useCompanyStore((s) => s.industry || []);
+  const company_image = useCompanyStore((s) => s.company_image || "");
 
-  // Document Mutate functions
-  const { mutateAsync: mutateUploadLoi } = useUploadCompanyDocument(
-    company_id,
-    "loi_path"
-  );
-  const { mutateAsync: mutateUploadMou } = useUploadCompanyDocument(
-    company_id,
-    "mou_path"
-  );
-  const { mutateAsync: mutateUploadCp } = useUploadCompanyDocument(
-    company_id,
-    "cp_path"
-  );
+  const setAboutCompany = useCompanyStore((s) => s.setAboutCompany);
+  const setIndustry = useCompanyStore((s) => s.setIndustry);
+  const setCompanyImage = useCompanyStore((s) => s.setCompanyImage);
 
-  const mou_path = useCompanyStore((s) => s.mou_path ?? null);
-  const loi_path = useCompanyStore((s) => s.loi_path ?? null);
-  const cp_path = useCompanyStore((s) => s.cp_path ?? null);
+  const setError = useOnboardingStore((state) => state.setError);
 
-  const setError = useOnboardingStore.getState().setError;
-  const setMouPath = useCompanyStore.getState().setMouPath;
-  const setLoiPath = useCompanyStore.getState().setLoiPath;
-  const setCompanyProfilePath =
-    useCompanyStore.getState().setCompanyProfilePath;
+  const INDUSTRIES = getAllIndustry() as string[];
+
+  const handleIndustryChange = (value: string) => {
+    const currentIndustry = [...industry];
+    const index = currentIndustry.indexOf(value);
+    
+    if (index > -1) {
+      currentIndustry.splice(index, 1);
+    } else {
+      currentIndustry.push(value);
+    }
+    
+    setIndustry(currentIndustry);
+  };
 
   function handleNext() {
-    setError(null);
-    // get all paths
-    const paths = {
-      mou_path: useCompanyStore.getState().mou_path,
-      loi_path: useCompanyStore.getState().loi_path,
-      cp_path: useCompanyStore.getState().cp_path,
-    };
+    try {
+      // clear previous errors
+      setError(null);
 
-    const { error, data } = employerOnboardingStepTwoSchema.safeParse(paths);
+      // get snapshot of all fields
+      const data = {
+        about_company: useCompanyStore.getState().about_company,
+        industry: useCompanyStore.getState().industry || [],
+        company_image: useCompanyStore.getState().company_image || "",
+      };
+      const parsed = employerOnboardingStepTwoSchema.parse(data);
 
-    if (!error) {
-      mutate(data);
-      return;
+      // update the user info on the backend
+      mutate(parsed);
+    } catch (error) {
+      // catch the zod error
+      if (error instanceof ZodError) {
+        setError(formatZodError(error));
+        return;
+      }
     }
-    setError(formatZodError(error));
-  }
-
-  async function handleMouUpload(file: File) {
-    const { path } = await mutateUploadMou(file);
-    setMouPath(path);
-  }
-
-  async function handleLoiUpload(file: File) {
-    const { path } = await mutateUploadLoi(file);
-    setLoiPath(path);
-  }
-
-  async function handleCpUpload(file: File) {
-    const { path } = await mutateUploadCp(file);
-    setCompanyProfilePath(path);
   }
 
   return (
-    <div className="flex flex-col gap-6">
-      <FileUploadField
-        id="mou"
-        label={"Memorandum of Understanding"}
-        accept=".pdf,.jpg,.jpeg,.png"
-        currentPath={mou_path}
-        onUpload={handleMouUpload}
-        onClear={() => setMouPath("")}
+    <StepContainer>
+      <InputWithLabel
+        label="About Company"
+        id="about_company"
+        as="textarea"
+        placeholder="Tell us about your company, what you do, and what makes you unique..."
+        value={about_company}
+        onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setAboutCompany(e.target.value)}
+        rows={6}
+        required
       />
 
-      <FileUploadField
-        id="loi"
-        label={"Letter of Intent"}
-        accept=".pdf,.jpg,.jpeg,.png"
-        currentPath={loi_path}
-        onUpload={handleLoiUpload}
-        onClear={() => setLoiPath("")}
-      />
+      <div className="flex flex-col gap-2">
+        <Label className="text-sm font-medium">
+          Industry <span className="text-red-500">*</span>
+        </Label>
+        <Card className="p-4">
+          <ScrollArea className="h-[200px]">
+            <div className="space-y-3">
+              {INDUSTRIES.map((ind) => (
+                <div key={ind} className="flex items-center space-x-2">
+                  <Checkbox
+                    id={`industry-${ind}`}
+                    checked={industry.includes(ind)}
+                    onCheckedChange={() => handleIndustryChange(ind)}
+                  />
+                  <label
+                    htmlFor={`industry-${ind}`}
+                    className="text-sm font-normal leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 cursor-pointer"
+                  >
+                    {ind}
+                  </label>
+                </div>
+              ))}
+            </div>
+          </ScrollArea>
+        </Card>
+      </div>
 
-      <FileUploadField
-        id="company_profile"
-        label={"Company Profile"}
-        accept=".pdf,.jpg,.jpeg,.png"
-        currentPath={cp_path}
-        onUpload={handleCpUpload}
-        onClear={() => setCompanyProfilePath("")}
-      />
+      <div className="flex flex-col gap-2">
+        <Label className="text-sm font-medium">
+          Company Image <span className="text-muted-foreground text-xs">(Optional - defaults to Google profile picture)</span>
+        </Label>
+        <InputWithLabel
+          label=""
+          id="company_image"
+          type="url"
+          placeholder="https://example.com/logo.png"
+          value={company_image}
+          onChange={(e: React.ChangeEvent<HTMLInputElement>) => setCompanyImage(e.target.value)}
+        />
+      </div>
+
       <Button
         disabled={isPending}
-        className="ml-auto w-24"
-        type="button"
-        variant={"default_employer"}
         onClick={handleNext}
+        variant={"default_employer"}
+        type="button"
+        className="ml-auto w-24"
       >
         Next
       </Button>
-    </div>
+    </StepContainer>
   );
 }

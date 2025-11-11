@@ -143,6 +143,26 @@ export const employerOnboardingStepOneSchema = z.object({
     .refine((val) => /^\d+$/.test(val), {
       message: "Phone number must only contain digits",
     }),
+  city: z.string().trim().min(1, { message: "City is required" }),
+  barangay: z.string().trim().min(1, { message: "Barangay is required" }),
+  date_founded: z.string().refine((val) => !isNaN(Date.parse(val)), {
+    message: "Invalid date",
+  }),
+});
+
+export const employerOnboardingStepTwoSchema = z.object({
+  about_company: z
+    .string()
+    .trim()
+    .min(10, { message: "About company must be at least 10 characters" })
+    .max(1000, { message: "About company must be at most 1000 characters" }),
+  industry: z
+    .array(z.string())
+    .min(1, { message: "At least one industry is required" }),
+  company_image: z.string().optional().or(z.literal("")),
+});
+
+export const employerOnboardingStepThreeSchema = z.object({
   website: z
     .url({ message: "Invalid website URL" })
     .optional()
@@ -151,9 +171,17 @@ export const employerOnboardingStepOneSchema = z.object({
     .url({ message: "Invalid Facebook page URL" })
     .optional()
     .or(z.literal("")),
+  instagram_page: z
+    .url({ message: "Invalid Instagram page URL" })
+    .optional()
+    .or(z.literal("")),
+  twitter_page: z
+    .url({ message: "Invalid Twitter page URL" })
+    .optional()
+    .or(z.literal("")),
 });
 
-export const employerOnboardingStepTwoSchema = z.object({
+export const employerOnboardingStepFourSchema = z.object({
   mou_path: z
     .string()
     .trim()
@@ -168,7 +196,7 @@ export const employerOnboardingStepTwoSchema = z.object({
     .min(1, { message: "File for Company Profile is required" }),
 });
 
-export const employerOnboardingStepThreeSchema = z.object({
+export const employerOnboardingStepFiveSchema = z.object({
   business_permit_path: z
     .string()
     .trim()
@@ -187,15 +215,20 @@ export const employerOnboardingStepThreeSchema = z.object({
     .min(1, { message: "File for BIR Certificate / Registration is required" }),
 });
 
-export type EmployerOnboardingStepThreeSchema = z.infer<
-  typeof employerOnboardingStepThreeSchema
->;
-
 export type EmployerOnboardingStepOneSchema = z.infer<
   typeof employerOnboardingStepOneSchema
 >;
 export type EmployerOnboardingStepTwoSchema = z.infer<
   typeof employerOnboardingStepTwoSchema
+>;
+export type EmployerOnboardingStepThreeSchema = z.infer<
+  typeof employerOnboardingStepThreeSchema
+>;
+export type EmployerOnboardingStepFourSchema = z.infer<
+  typeof employerOnboardingStepFourSchema
+>;
+export type EmployerOnboardingStepFiveSchema = z.infer<
+  typeof employerOnboardingStepFiveSchema
 >;
 
 // Submit Password

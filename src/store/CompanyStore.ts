@@ -7,8 +7,16 @@ export type CompanyStoreState = Partial<Company> & {
   setCompanyEmail: (company_email: string) => void;
   setTelephoneNumber: (telephone_number: string) => void;
   setPhoneNumber: (phone_number: string) => void;
+  setCity: (city: string) => void;
+  setBarangay: (barangay: string) => void;
+  setDateFounded: (date_founded: string) => void;
+  setAboutCompany: (about_company: string) => void;
+  setIndustry: (industry: string[]) => void;
+  setCompanyImage: (company_image: string) => void;
   setWebsite: (website: string) => void;
   setFacebookPage: (facebook_page: string) => void;
+  setInstagramPage: (instagram_page: string) => void;
+  setTwitterPage: (twitter_page: string) => void;
   setMouPath: (mou_path: string) => void;
   setLoiPath: (loi_path: string) => void;
   setCompanyProfilePath: (cp_path: string) => void;
@@ -23,8 +31,16 @@ const useCompanyStore = create<CompanyStoreState>((set) => ({
   company_email: "",
   telephone_number: "",
   phone_number: "",
+  city: "",
+  barangay: "",
+  date_founded: "",
+  about_company: "",
+  industry: [],
+  company_image: "",
   website: "",
   facebook_page: "",
+  instagram_page: "",
+  twitter_page: "",
   mou_path: "",
   loi_path: "",
   cp_path: "",
@@ -37,8 +53,16 @@ const useCompanyStore = create<CompanyStoreState>((set) => ({
   setCompanyEmail: (company_email) => set({ company_email }),
   setTelephoneNumber: (telephone_number) => set({ telephone_number }),
   setPhoneNumber: (phone_number) => set({ phone_number }),
+  setCity: (city) => set({ city }),
+  setBarangay: (barangay) => set({ barangay }),
+  setDateFounded: (date_founded) => set({ date_founded }),
+  setAboutCompany: (about_company) => set({ about_company }),
+  setIndustry: (industry) => set({ industry }),
+  setCompanyImage: (company_image) => set({ company_image }),
   setWebsite: (website) => set({ website }),
   setFacebookPage: (facebook_page) => set({ facebook_page }),
+  setInstagramPage: (instagram_page) => set({ instagram_page }),
+  setTwitterPage: (twitter_page) => set({ twitter_page }),
   setMouPath: (mou_path) => set({ mou_path }),
   setLoiPath: (loi_path) => set({ loi_path }),
   setCompanyProfilePath: (cp_path) => set({ cp_path }),
@@ -52,8 +76,16 @@ const useCompanyStore = create<CompanyStoreState>((set) => ({
       company_email: "",
       telephone_number: "",
       phone_number: "",
+      city: "",
+      barangay: "",
+      date_founded: "",
+      about_company: "",
+      industry: [],
+      company_image: "",
       website: "",
       facebook_page: "",
+      instagram_page: "",
+      twitter_page: "",
       mou_path: "",
       loi_path: "",
       cp_path: "",

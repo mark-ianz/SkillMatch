@@ -6,6 +6,7 @@ import { ZodError } from "zod";
 import college_courses from "@/data/college_courses.json";
 import { ItemList } from "@/components/common/input/ComboBox";
 import industry_categories from "@/data/industry_categories.json";
+import city_municipality from "@/data/city_municipality.json";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -71,4 +72,36 @@ export function getAllJobCategories(asItems?: boolean, sort?: boolean): string[]
   }
 
   return industry_categories.flatMap((industry) => industry.job_categories).sort((a, b) => sort ? a.localeCompare(b) : 0);
+}
+
+export function getAllCities(asItems?: boolean): string[] | ItemList[] {
+  const cities = Object.keys(city_municipality);
+
+  if (asItems) {
+    return cities.map((city) => ({
+      value: city,
+      label: city,
+    }));
+  }
+
+  return cities;
+}
+
+export function getBarangaysByCity(city: string, asItems?: boolean): string[] | ItemList[] {
+  const cityData = city_municipality[city as keyof typeof city_municipality];
+  
+  if (!cityData) {
+    return [];
+  }
+
+  const barangays = cityData.barangay_list;
+
+  if (asItems) {
+    return barangays.map((barangay) => ({
+      value: barangay,
+      label: barangay,
+    }));
+  }
+
+  return barangays;
 }

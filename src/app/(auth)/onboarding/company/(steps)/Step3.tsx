@@ -1,138 +1,118 @@
 "use client";
 
 import React from "react";
-import FileUploadField from "@/components/common/input/FileUploadField";
+import StepContainer from "@/components/page_specific/onboarding/StepContainer";
+import InputWithLabel from "@/components/common/input/InputWithLabel";
 import useCompanyStore from "@/store/CompanyStore";
 import { Button } from "@/components/ui/button";
+import RowContainer from "@/components/common/input/RowContainer";
 import { employerOnboardingStepThreeSchema } from "@/schema/onboarding";
-import { formatZodError } from "@/lib/utils";
+import { ZodError } from "zod";
 import useOnboardingStore from "@/store/OnboardingStore";
+import { formatZodError } from "@/lib/utils";
 import { useUpdateStepThreeOnboardingCompany } from "@/hooks/query/useOnboardingCompany";
-import { useUploadCompanyDocument } from "@/hooks/query/useDocuments";
-import useRequireCompany from "@/hooks/useRequireCompany";
-import LoadingGeneric from "@/components/global/LoadingGeneric";
+import { useSession } from "next-auth/react";
 
 export default function Step3() {
-  const company_id = useRequireCompany();
+  const session = useSession();
+  const { mutate, isPending } = useUpdateStepThreeOnboardingCompany(session.data?.user.company_id);
 
-  const { mutate, isPending } = useUpdateStepThreeOnboardingCompany(company_id);
+  const website = useCompanyStore((s) => s.website || "");
+  const facebook_page = useCompanyStore((s) => s.facebook_page || "");
+  const instagram_page = useCompanyStore((s) => s.instagram_page || "");
+  const twitter_page = useCompanyStore((s) => s.twitter_page || "");
 
-  const { mutateAsync: mutateUploadBusinessPermit } = useUploadCompanyDocument(
-    company_id,
-    "business_permit_path"
-  );
-  const { mutateAsync: mutateUploadMayorPermit } = useUploadCompanyDocument(
-    company_id,
-    "mayor_permit_path"
-  );
-  const { mutateAsync: mutateUploadDti } = useUploadCompanyDocument(
-    company_id,
-    "dti_permit_path"
-  );
-  const { mutateAsync: mutateUploadBir } = useUploadCompanyDocument(
-    company_id,
-    "bir_cert_of_registration_path"
-  );
+  const setWebsite = useCompanyStore((s) => s.setWebsite);
+  const setFacebookPage = useCompanyStore((s) => s.setFacebookPage);
+  const setInstagramPage = useCompanyStore((s) => s.setInstagramPage);
+  const setTwitterPage = useCompanyStore((s) => s.setTwitterPage);
 
-  const business_permit_path = useCompanyStore((s) => s.business_permit_path ?? null);
-  const mayor_permit_path = useCompanyStore((s) => s.mayor_permit_path ?? null);
-  const dti_permit_path = useCompanyStore((s) => s.dti_permit_path ?? null);
-  const bir_cert_of_registration_path = useCompanyStore((s) => s.bir_cert_of_registration_path ?? null);
-
-  const setError = useOnboardingStore.getState().setError;
-  const setBusinessPermitPath = useCompanyStore.getState().setBusinessPermitPath;
-  const setMayorPermitPath = useCompanyStore.getState().setMayorPermitPath;
-  const setDtiPermitPath = useCompanyStore.getState().setDtiPermitPath;
-  const setBirCertRegistrationPath = useCompanyStore.getState().setBirCertRegistrationPath;
-
-  if (company_id === null) return <LoadingGeneric/>;
+  const setError = useOnboardingStore((state) => state.setError);
 
   function handleNext() {
-    setError(null);
-    const paths = {
-      business_permit_path: useCompanyStore.getState().business_permit_path,
-      mayor_permit_path: useCompanyStore.getState().mayor_permit_path,
-      dti_permit_path: useCompanyStore.getState().dti_permit_path,
-      bir_cert_of_registration_path: useCompanyStore.getState().bir_cert_of_registration_path,
-    };
+    try {
+      // clear previous errors
+      setError(null);
 
-    const { error, data } = employerOnboardingStepThreeSchema.safeParse(paths);
+      // get snapshot of all fields
+      const data = {
+        website: useCompanyStore.getState().website,
+        facebook_page: useCompanyStore.getState().facebook_page,
+        instagram_page: useCompanyStore.getState().instagram_page,
+        twitter_page: useCompanyStore.getState().twitter_page,
+      };
+      const parsed = employerOnboardingStepThreeSchema.parse(data);
 
-    if (!error) {
-      mutate(data);
-      return;
+      // update the user info on the backend
+      mutate(parsed);
+    } catch (error) {
+      // catch the zod error
+      if (error instanceof ZodError) {
+        setError(formatZodError(error));
+        return;
+      }
     }
-    setError(formatZodError(error));
-  }
-
-  async function handleBusinessPermitUpload(file: File) {
-    const { path } = await mutateUploadBusinessPermit(file);
-    setBusinessPermitPath(path);
-  }
-
-  async function handleMayorPermitUpload(file: File) {
-    const { path } = await mutateUploadMayorPermit(file);
-    setMayorPermitPath(path);
-  }
-
-  async function handleDtiUpload(file: File) {
-    const { path } = await mutateUploadDti(file);
-    setDtiPermitPath(path);
-  }
-
-  async function handleBirUpload(file: File) {
-    const { path } = await mutateUploadBir(file);
-    setBirCertRegistrationPath(path);
   }
 
   return (
-    <div className="flex flex-col gap-6">
-      <FileUploadField
-        id="business_permit"
-        label={"Business Permit"}
-        accept=".pdf,.jpg,.jpeg,.png"
-        currentPath={business_permit_path}
-        onUpload={handleBusinessPermitUpload}
-        onClear={() => setBusinessPermitPath("")}
-      />
+    <StepContainer>
+      <RowContainer>
+        <InputWithLabel
+          label="Website"
+          containerClassName="grow"
+          id="website"
+          type="url"
+          placeholder="https://www.companywebsite.com"
+          value={website}
+          onChange={(e: React.ChangeEvent<HTMLInputElement>) => setWebsite(e.target.value)}
+          optional
+        />
 
-      <FileUploadField
-        id="mayor_permit"
-        label={"Mayor's Permit"}
-        accept=".pdf,.jpg,.jpeg,.png"
-        currentPath={mayor_permit_path}
-        onUpload={handleMayorPermitUpload}
-        onClear={() => setMayorPermitPath("")}
-      />
+        <InputWithLabel
+          label="Facebook Page"
+          containerClassName="grow"
+          id="facebook_page"
+          type="url"
+          placeholder="https://facebook.com/companypage"
+          value={facebook_page}
+          onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFacebookPage(e.target.value)}
+          optional
+        />
+      </RowContainer>
 
-      <FileUploadField
-        id="dti_permit"
-        label={"DTI Permit"}
-        accept=".pdf,.jpg,.jpeg,.png"
-        currentPath={dti_permit_path}
-        onUpload={handleDtiUpload}
-        onClear={() => setDtiPermitPath("")}
-      />
+      <RowContainer>
+        <InputWithLabel
+          label="Instagram Page"
+          containerClassName="grow"
+          id="instagram_page"
+          type="url"
+          placeholder="https://instagram.com/company"
+          value={instagram_page}
+          onChange={(e: React.ChangeEvent<HTMLInputElement>) => setInstagramPage(e.target.value)}
+          optional
+        />
 
-      <FileUploadField
-        id="bir_cert"
-        label={"BIR Certificate / Registration"}
-        accept=".pdf,.jpg,.jpeg,.png"
-        currentPath={bir_cert_of_registration_path}
-        onUpload={handleBirUpload}
-        onClear={() => setBirCertRegistrationPath("")}
-      />
+        <InputWithLabel
+          label="Twitter Page"
+          containerClassName="grow"
+          id="twitter_page"
+          type="url"
+          placeholder="https://twitter.com/company"
+          value={twitter_page}
+          onChange={(e: React.ChangeEvent<HTMLInputElement>) => setTwitterPage(e.target.value)}
+          optional
+        />
+      </RowContainer>
 
       <Button
         disabled={isPending}
-        className="ml-auto w-24"
-        type="button"
-        variant={"default_employer"}
         onClick={handleNext}
+        variant={"default_employer"}
+        type="button"
+        className="ml-auto w-24"
       >
         Next
       </Button>
-    </div>
+    </StepContainer>
   );
 }
-

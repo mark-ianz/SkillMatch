@@ -1,116 +1,115 @@
 "use client";
 
-import PasswordInput from "@/components/common/input/PasswordInput";
-import StepContainer from "@/components/page_specific/onboarding/StepContainer";
-import { Button } from "@/components/ui/button";
-import { api } from "@/lib/axios";
-import { formatZodError } from "@/lib/utils";
-import { onboardingPasswordSchema } from "@/schema/onboarding";
-import { useUpdateStepFourOnboardingCompany } from "@/hooks/query/useOnboardingCompany";
-import useOnboardingStore from "@/store/OnboardingStore";
-import { useSession } from "next-auth/react";
-import { useRouter } from "next/navigation";
 import React from "react";
-import { ZodError } from "zod";
+import FileUploadField from "@/components/common/input/FileUploadField";
+import useCompanyStore from "@/store/CompanyStore";
+import { Button } from "@/components/ui/button";
+import { employerOnboardingStepFourSchema } from "@/schema/onboarding";
+import { formatZodError } from "@/lib/utils";
+import useOnboardingStore from "@/store/OnboardingStore";
+import { useUpdateStepFourOnboardingCompany } from "@/hooks/query/useOnboardingCompany";
+import { useUploadCompanyDocument } from "@/hooks/query/useDocuments";
+import useRequireCompany from "@/hooks/useRequireCompany";
 
 export default function Step4() {
-  const session = useSession();
-  const company_id = session.data?.user?.company_id;
-  const router = useRouter();
-  const farthestStep = useOnboardingStore((s) => s.farthestStep);
-  const nextStep = useOnboardingStore((s) => s.nextStep);
+  const company_id = useRequireCompany();
+
   const { mutate, isPending } = useUpdateStepFourOnboardingCompany(company_id);
 
-  const password = useOnboardingStore((s) => s.password);
-  const setPassword = useOnboardingStore((s) => s.setPassword);
-  const confirm_password = useOnboardingStore((s) => s.confirm_password);
-  const setConfirmPassword = useOnboardingStore((s) => s.setConfirmPassword);
-  const setError = useOnboardingStore((s) => s.setError);
+  // Document Mutate functions
+  const { mutateAsync: mutateUploadLoi } = useUploadCompanyDocument(
+    company_id,
+    "loi_path"
+  );
+  const { mutateAsync: mutateUploadMou } = useUploadCompanyDocument(
+    company_id,
+    "mou_path"
+  );
+  const { mutateAsync: mutateUploadCp } = useUploadCompanyDocument(
+    company_id,
+    "cp_path"
+  );
 
-  async function handleSkip() {
-    // finalize on server then advance locally and redirect
-    if (!company_id) return;
-    try {
-      setError(null);
-      await api.post(
-        `/onboarding/${company_id}/submit/${farthestStep}/step-four-skip/company`
-      );
-      nextStep();
-      router.push("/profile");
-    } catch (err) {
-      console.error("Failed to finalize onboarding on skip:", err);
-      const msg = err instanceof Error ? err.message : String(err);
-      setError([msg]);
+  const mou_path = useCompanyStore((s) => s.mou_path ?? null);
+  const loi_path = useCompanyStore((s) => s.loi_path ?? null);
+  const cp_path = useCompanyStore((s) => s.cp_path ?? null);
+
+  const setError = useOnboardingStore.getState().setError;
+  const setMouPath = useCompanyStore.getState().setMouPath;
+  const setLoiPath = useCompanyStore.getState().setLoiPath;
+  const setCompanyProfilePath =
+    useCompanyStore.getState().setCompanyProfilePath;
+
+  function handleNext() {
+    setError(null);
+    // get all paths
+    const paths = {
+      mou_path: useCompanyStore.getState().mou_path,
+      loi_path: useCompanyStore.getState().loi_path,
+      cp_path: useCompanyStore.getState().cp_path,
+    };
+
+    const { error, data } = employerOnboardingStepFourSchema.safeParse(paths);
+
+    if (!error) {
+      mutate(data);
+      return;
     }
+    setError(formatZodError(error));
   }
 
-  async function handleNext() {
-    try {
-      setError(null);
-      const parsed = onboardingPasswordSchema.parse({
-        password: password.trim(),
-        confirm_password: confirm_password.trim(),
-      });
-      // call backend
-      mutate(parsed, {
-        onSuccess: () => {
-          // increment locally then navigate to profile after successful finalization
-          nextStep();
-          router.push("/profile");
-        },
-        onError: (err) => {
-          const msg = err instanceof Error ? err.message : String(err);
-          setError([msg]);
-        },
-      });
-    } catch (err) {
-      // zod validation error
-      if (err instanceof ZodError) {
-        setError(formatZodError(err));
-        return;
-      }
+  async function handleMouUpload(file: File) {
+    const { path } = await mutateUploadMou(file);
+    setMouPath(path);
+  }
 
-      // mutation or other error
-      const msg = err instanceof Error ? err.message : String(err);
-      setError([msg]);
-    }
+  async function handleLoiUpload(file: File) {
+    const { path } = await mutateUploadLoi(file);
+    setLoiPath(path);
+  }
+
+  async function handleCpUpload(file: File) {
+    const { path } = await mutateUploadCp(file);
+    setCompanyProfilePath(path);
   }
 
   return (
-    <StepContainer>
-      <div className="flex flex-col gap-4 rounded-md">
-        <PasswordInput
-          id="password"
-          label="Password"
-          value={password}
-          onChange={setPassword}
-          autoComplete="new-password"
-          required
-        />
+    <div className="flex flex-col gap-6">
+      <FileUploadField
+        id="mou"
+        label={"Memorandum of Understanding"}
+        accept=".pdf,.jpg,.jpeg,.png"
+        currentPath={mou_path}
+        onUpload={handleMouUpload}
+        onClear={() => setMouPath("")}
+      />
 
-        <PasswordInput
-          id="confirm_password"
-          label="Confirm Password"
-          value={confirm_password}
-          onChange={setConfirmPassword}
-          autoComplete="new-password"
-          required
-        />
-      </div>
-      <div className="flex items-center justify-end gap-2">
-        <Button type="button" variant={"outline"} onClick={handleSkip}>
-          Skip
-        </Button>
-        <Button
-          disabled={isPending || password.trim() === ""}
-          type="button"
-          onClick={handleNext}
-          className="w-24"
-          variant={"default_employer"}
-        >
-          {isPending ? "Saving..." : "Next"}
-        </Button>
-      </div>
-    </StepContainer>
+      <FileUploadField
+        id="loi"
+        label={"Letter of Intent"}
+        accept=".pdf,.jpg,.jpeg,.png"
+        currentPath={loi_path}
+        onUpload={handleLoiUpload}
+        onClear={() => setLoiPath("")}
+      />
+
+      <FileUploadField
+        id="company_profile"
+        label={"Company Profile"}
+        accept=".pdf,.jpg,.jpeg,.png"
+        currentPath={cp_path}
+        onUpload={handleCpUpload}
+        onClear={() => setCompanyProfilePath("")}
+      />
+      <Button
+        disabled={isPending}
+        className="ml-auto w-24"
+        type="button"
+        variant={"default_employer"}
+        onClick={handleNext}
+      >
+        Next
+      </Button>
+    </div>
   );
 }

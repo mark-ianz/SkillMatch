@@ -3,9 +3,17 @@ import { Address } from "./user.types";
 
 export type Company = EmployerOnboardingStepOneSchema & {
   company_id: string;
+  city: string;
+  barangay: string;
+  date_founded: string;
+  about_company: string;
   industry: string[] | null;
   description: string | null;
   company_image: string | null | undefined;
+  website: string;
+  facebook_page: string;
+  instagram_page: string;
+  twitter_page: string;
   mou_path: string;
   loi_path: string;
   cp_path: string;

@@ -34,22 +34,32 @@ export const steps = [
 export const employer_steps = [
   {
     step: 1,
-    title: "Company Details",
-    description: "Enter your company information",
+    title: "Company Information",
+    description: "Provide your company’s basic contact and location details",
   },
   {
     step: 2,
+    title: "Company Profile",
+    description: "Tell us more about your company and what you do",
+  },
+  {
+    step: 3,
+    title: "Online Presence",
+    description: "Link your company’s website and social media pages",
+  },
+  {
+    step: 4,
     title: "Partnership Documents",
     description: "Upload partnership documents for verification",
   },
   {
-    step: 3,
+    step: 5,
     title: "Legal Documents",
     description: "Upload legal documents for verification",
   },
   {
-    step: 4,
+    step: 6,
     title: "Password",
     description: "Set your password",
-  }
+  },
 ];

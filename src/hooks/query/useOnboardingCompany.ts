@@ -3,6 +3,8 @@ import {
   EmployerOnboardingStepOneSchema,
   EmployerOnboardingStepTwoSchema,
   EmployerOnboardingStepThreeSchema,
+  EmployerOnboardingStepFourSchema,
+  EmployerOnboardingStepFiveSchema,
   OnboardingPasswordSchema,
 } from "@/schema/onboarding";
 import useCompanyStore from "@/store/CompanyStore";
@@ -37,8 +39,16 @@ export function useGetOnboardingCompany(company_id: string | undefined) {
         company_email: data.company_email || "",
         telephone_number: data.telephone_number || "",
         phone_number: data.phone_number || "",
+        city: data.city || "",
+        barangay: data.barangay || "",
+        date_founded: data.date_founded || "",
+        about_company: data.about_company || "",
+        industry: data.industry || [],
+        company_image: data.company_image || "",
         website: data.website || "",
         facebook_page: data.facebook_page || "",
+        instagram_page: data.instagram_page || "",
+        twitter_page: data.twitter_page || "",
         mou_path: data.mou_path || "",
         loi_path: data.loi_path || "",
         cp_path: data.cp_path || "",
@@ -124,9 +134,51 @@ export function useUpdateStepFourOnboardingCompany(
 ) {
   return useMutation({
     mutationKey: ["onboarding", company_id, "step-four"],
-    mutationFn: async (data: OnboardingPasswordSchema) => {
+    mutationFn: async (stepFourData: EmployerOnboardingStepFourSchema) => {
       await api.post(
         `/onboarding/${company_id}/submit/${farthestStep}/step-four/company`,
+        {
+          ...stepFourData,
+        }
+      );
+      return;
+    },
+    onSuccess: () => {
+      // increment the step on the store
+      nextStep();
+    },
+  });
+}
+
+export function useUpdateStepFiveOnboardingCompany(
+  company_id: string | undefined | null
+) {
+  return useMutation({
+    mutationKey: ["onboarding", company_id, "step-five"],
+    mutationFn: async (stepFiveData: EmployerOnboardingStepFiveSchema) => {
+      await api.post(
+        `/onboarding/${company_id}/submit/${farthestStep}/step-five/company`,
+        {
+          ...stepFiveData,
+        }
+      );
+      return;
+    },
+    onSuccess: () => {
+      // increment the step on the store
+      nextStep();
+    },
+  });
+}
+
+export function useUpdateStepSixOnboardingCompany(
+  company_id: string | undefined | null
+) {
+  return useMutation({
+    mutationKey: ["onboarding", company_id, "step-six"],
+    mutationFn: async (data: OnboardingPasswordSchema) => {
+      await api.post(
+        `/onboarding/${company_id}/submit/${farthestStep}/step-six/company`,
         {
           ...data,
         }
