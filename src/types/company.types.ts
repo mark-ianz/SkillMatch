@@ -3,8 +3,6 @@ import { Address } from "./user.types";
 
 export type Company = EmployerOnboardingStepOneSchema & {
   company_id: string;
-  city: string;
-  barangay: string;
   date_founded: string;
   description: string;
   industry: string[] | null;
@@ -13,33 +11,35 @@ export type Company = EmployerOnboardingStepOneSchema & {
   facebook_page: string;
   instagram_page: string;
   twitter_page: string;
-  mou_path: string;
-  loi_path: string;
-  cp_path: string;
-  business_permit_path: string;
-  mayor_permit_path: string;
-  dti_permit_path: string;
-  bir_cert_of_registration_path: string;
+  mou_path: string; // private
+  loi_path: string; // private
+  cp_path: string; // private
+  business_permit_path: string; // private
+  mayor_permit_path: string; // private
+  dti_permit_path: string; // private
+  bir_cert_of_registration_path: string; // private
   created_at: Date;
 };
 
-export type CompanyProfile = CompanyAddress & Pick<
+export type CompanyProfile = Omit<
   Company,
-  | "company_id"
-  | "company_name"
-  | "industry"
-  | "description"
-  | "company_image"
-  | "website"
-  | "facebook_page"
-  | "company_email"
-  | "date_founded"
-  | "created_at"
+  | "mou_path"
+  | "loi_path"
+  | "cp_path"
+  | "business_permit_path"
+  | "mayor_permit_path"
+  | "dti_permit_path"
+  | "bir_cert_of_registration_path"
 >;
 
 export type CompanyPreview = Pick<
   Company,
-  "company_id" | "company_name" | "company_image" | "industry" | "description" | "created_at"
+  | "company_id"
+  | "company_name"
+  | "company_image"
+  | "industry"
+  | "description"
+  | "created_at"
 >;
 
 export type CompanyAddress = Pick<
