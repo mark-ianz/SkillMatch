@@ -4,16 +4,14 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
-import { useFeedStore } from "@/store/FeedStore";
+import { JobPost } from "@/types/job_post.types";
 import { Bookmark, Briefcase, Copy, MapPin } from "lucide-react";
 import Image from "next/image";
 
-export function JobPostFullInfo({ className }: { className?: string }) {
-  const selected_job_post = useFeedStore((state) => state.selected_job_post);
-
+export function JobPostFullInfo({ job, className }: { job: JobPost; className?: string }) {
   const handleApply = () => {
     // TODO: Implement apply functionality
-    console.log("Apply clicked for job:", selected_job_post?.job_post_id);
+    console.log("Apply clicked for job:", job?.job_post_id);
   };
 
   const handleBookmark = () => {
@@ -26,7 +24,7 @@ export function JobPostFullInfo({ className }: { className?: string }) {
     console.log("Copy link clicked");
   };
 
-  const fullAddress = `${selected_job_post?.street_name}, ${selected_job_post?.barangay}, ${selected_job_post?.city_municipality} ${selected_job_post?.postal_code}`;
+  const fullAddress = `${job?.street_name}, ${job?.barangay}, ${job?.city_municipality} ${job?.postal_code}`;
 
   return (
     <Card className={cn("border-1 shadow-sm p-6 w-full", className)}>
@@ -34,20 +32,20 @@ export function JobPostFullInfo({ className }: { className?: string }) {
         {/* Company header */}
         <div className="flex items-start justify-between gap-4">
           <div className="flex-1">
-            {selected_job_post?.company_image && (
+            {job?.company_image && (
               <Image
                 width={48}
                 height={48}
-                src={selected_job_post?.company_image || "/placeholder.svg"}
-                alt={selected_job_post?.company_name}
+                src={job?.company_image || "/placeholder.svg"}
+                alt={job?.company_name}
                 className="w-12 h-12 rounded-full object-cover mb-3"
               />
             )}
             <h1 className="text-3xl font-semibold text-skillmatch-dark text-balance">
-              {selected_job_post?.job_title}
+              {job?.job_title}
             </h1>
             <p className="text-sm text-muted-foreground mt-2">
-              {selected_job_post?.company_name}
+              {job?.company_name}
             </p>
           </div>
 
@@ -80,14 +78,14 @@ export function JobPostFullInfo({ className }: { className?: string }) {
           </div>
           <div className="flex items-center gap-2">
             <Briefcase className="w-4 h-4" />
-            <span>{selected_job_post?.work_arrangement}</span>
+            <span>{job?.work_arrangement}</span>
           </div>
           <div className="flex items-center gap-2">
             <Briefcase className="w-4 h-4" />
             <span>
-              {selected_job_post?.available_positions} position
-              {selected_job_post?.available_positions &&
-              selected_job_post?.available_positions > 1
+              {job?.available_positions} position
+              {job?.available_positions &&
+              job?.available_positions > 1
                 ? "s"
                 : ""}
             </span>
@@ -96,22 +94,22 @@ export function JobPostFullInfo({ className }: { className?: string }) {
 
         {/* Badges */}
         <div className="flex flex-wrap gap-2">
-          {selected_job_post?.job_categories &&
-            selected_job_post?.job_categories.map((category, idx) => (
+          {job?.job_categories &&
+            job?.job_categories.map((category, idx) => (
               <Badge key={idx} variant="secondary" className="text-xs">
                 {category}
               </Badge>
             ))}
-          {!selected_job_post?.is_paid && (
+          {!job?.is_paid && (
             <Badge variant="outline" className="text-xs">
               Unpaid
             </Badge>
           )}
         </div>
 
-        {selected_job_post?.allowance_description && (
+        {job?.allowance_description && (
           <Badge variant="secondary" className="text-xs font-medium mt-2">
-            {selected_job_post.allowance_description}
+            {job.allowance_description}
           </Badge>
         )}
       </div>
@@ -124,7 +122,7 @@ export function JobPostFullInfo({ className }: { className?: string }) {
           Overview
         </h2>
         <p className="text-sm leading-relaxed text-skillmatch-dark">
-          {selected_job_post?.job_overview}
+          {job?.job_overview}
         </p>
       </div>
 
@@ -134,14 +132,14 @@ export function JobPostFullInfo({ className }: { className?: string }) {
         </h2>
 
         <div className="flex flex-col gap-4">
-          {selected_job_post?.courses_required &&
-            selected_job_post?.courses_required.length > 0 && (
+          {job?.courses_required &&
+            job?.courses_required.length > 0 && (
               <div className="space-y-1">
                 <p className="text-xs font-medium text-muted-foreground">
                   Courses Required
                 </p>
                 <div className="flex flex-wrap gap-2">
-                  {selected_job_post?.courses_required.map((course, idx) => (
+                  {job?.courses_required.map((course, idx) => (
                     <Badge key={idx} variant="outline" className="text-xs">
                       {course}
                     </Badge>
@@ -150,14 +148,14 @@ export function JobPostFullInfo({ className }: { className?: string }) {
               </div>
             )}
 
-          {selected_job_post?.technical_skills &&
-            selected_job_post?.technical_skills.length > 0 && (
+          {job?.technical_skills &&
+            job?.technical_skills.length > 0 && (
               <div className="space-y-1">
                 <p className="text-xs font-medium text-muted-foreground">
                   Technical Skills
                 </p>
                 <div className="flex flex-wrap gap-2">
-                  {selected_job_post?.technical_skills.map((skill, idx) => (
+                  {job?.technical_skills.map((skill, idx) => (
                     <Badge key={idx} variant="outline" className="text-xs">
                       {skill}
                     </Badge>
@@ -166,14 +164,14 @@ export function JobPostFullInfo({ className }: { className?: string }) {
               </div>
             )}
 
-          {selected_job_post?.soft_skills &&
-            selected_job_post?.soft_skills.length > 0 && (
+          {job?.soft_skills &&
+            job?.soft_skills.length > 0 && (
               <div className="space-y-1">
                 <p className="text-xs font-medium text-muted-foreground">
                   Soft Skills
                 </p>
                 <div className="flex flex-wrap gap-2">
-                  {selected_job_post?.soft_skills.map((skill, idx) => (
+                  {job?.soft_skills.map((skill, idx) => (
                     <Badge key={idx} variant="outline" className="text-xs">
                       {skill}
                     </Badge>
@@ -183,13 +181,13 @@ export function JobPostFullInfo({ className }: { className?: string }) {
             )}
         </div>
 
-        {selected_job_post?.preferred_qualifications && (
+        {job?.preferred_qualifications && (
           <div className="space-y-2 pt-2">
             <p className="text-xs font-medium text-muted-foreground">
               Preferred Qualifications
             </p>
             <p className="text-sm text-skillmatch-dark">
-              {selected_job_post?.preferred_qualifications}
+              {job?.preferred_qualifications}
             </p>
           </div>
         )}
@@ -204,7 +202,7 @@ export function JobPostFullInfo({ className }: { className?: string }) {
         </h2>
 
         <ul className="space-y-1">
-          {selected_job_post?.job_responsibilities.map(
+          {job?.job_responsibilities.map(
             (responsibility, idx) => (
               <li key={idx} className="flex gap-3 text-sm text-skillmatch-dark">
                 <span className="text-muted-foreground flex-shrink-0 mt-1">
