@@ -2,6 +2,7 @@ import { useQuery } from "@tanstack/react-query";
 import { api } from "@/lib/axios";
 import { CompanyProfile } from "@/types/company.types";
 import { CompanyFeedFilters } from "@/types/job_feed.types";
+import { JobPost } from "@/types/job_post.types";
 
 export const useGetAllCompanies = (filters?: CompanyFeedFilters) => {
   return useQuery<CompanyProfile[]>({
@@ -22,6 +23,24 @@ export const useGetAllCompanies = (filters?: CompanyFeedFilters) => {
       const { data } = await api.get<{ companies: CompanyProfile[] }>(url);
       return data.companies;
     },
+    staleTime: 1000 * 60 * 5, // 5 minutes
+  });
+};
+
+export const useGetCompanyWithJobs = (company_id: string) => {
+  return useQuery<{
+    company_profile: CompanyProfile;
+    job_posted: JobPost[];
+  }>({
+    queryKey: ["company", company_id, "with-jobs"],
+    queryFn: async () => {
+      const { data } = await api.get<{
+        company_profile: CompanyProfile;
+        job_posted: JobPost[];
+      }>(`/company/${company_id}`);
+      return data;
+    },
+    enabled: !!company_id,
     staleTime: 1000 * 60 * 5, // 5 minutes
   });
 };
