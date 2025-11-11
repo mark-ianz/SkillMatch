@@ -37,7 +37,7 @@ export async function GET(request: NextRequest) {
       values.push(...arrangements);
     }
 
-    // Handle industries (company table, might be JSON array in DB)
+    // Handle industries
     if (industries.length > 0) {
       const industryConditions = industries.map(() => "FIND_IN_SET(?, c.industry) > 0 OR JSON_CONTAINS(c.industry, JSON_QUOTE(?))");
       conditions.push(`(${industryConditions.join(" OR ")})`);
@@ -53,26 +53,29 @@ export async function GET(request: NextRequest) {
       values.push(...jobCategories);
     }
 
-    if (isPaid !== null) {
+    if (isPaid !== null && isPaid !== undefined) {
       conditions.push(`jp.is_paid = ?`);
       values.push(isPaid === "true" ? 1 : 0);
     }
 
-    // Handle search query (search in job title, company name, job overview)
+    // Handle search query (search in job title, company name, job overview, technical skills, responsibilities, and preferred qualifications)
     if (search && search.trim()) {
       conditions.push(`(
         jp.job_title LIKE ? OR 
         c.company_name LIKE ? OR 
-        jp.job_overview LIKE ?
+        jp.job_overview LIKE ? OR
+        jp.technical_skills LIKE ? OR
+        jp.job_responsibilities LIKE ? OR
+        jp.preferred_qualifications LIKE ?
       )`);
       const searchTerm = `%${search.trim()}%`;
-      values.push(searchTerm, searchTerm, searchTerm);
+      console.log(searchTerm)
+      values.push(searchTerm, searchTerm, searchTerm, searchTerm, searchTerm, searchTerm);
     }
 
     const whereClause = conditions.length > 0 ? `WHERE ${conditions.join(" AND ")}` : "";
 
-    const [rows] = await db.query<(RowDataPacket & JobPostQuery)[]>(
-      `
+    const query = `
       SELECT
         c.company_name,
         c.company_image,
@@ -85,11 +88,11 @@ export async function GET(request: NextRequest) {
       JOIN company c ON jp.company_id = c.company_id
       ${whereClause}
       ORDER BY jp.created_at DESC;
-    `,
-      values
-    );
+    `;
 
-    const formattedRows = rows.map((post) => ({
+    const [rows] = await db.query<(RowDataPacket & JobPostQuery)[]>(query, values);
+
+    const formattedRows = rows.map((post: RowDataPacket & JobPostQuery) => ({
       ...post,
       is_paid: Boolean(post.is_paid),
       job_responsibilities: post.job_responsibilities.split(","),
