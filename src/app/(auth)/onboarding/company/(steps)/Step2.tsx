@@ -2,7 +2,7 @@
 
 import React from "react";
 import StepContainer from "@/components/page_specific/onboarding/StepContainer";
-import InputWithLabel from "@/components/common/input/InputWithLabel";
+import FileUploadField from "@/components/common/input/FileUploadField";
 import useCompanyStore from "@/store/CompanyStore";
 import { Button } from "@/components/ui/button";
 import { employerOnboardingStepTwoSchema } from "@/schema/onboarding";
@@ -10,21 +10,29 @@ import { ZodError } from "zod";
 import useOnboardingStore from "@/store/OnboardingStore";
 import { formatZodError, getAllIndustry } from "@/lib/utils";
 import { useUpdateStepTwoOnboardingCompany } from "@/hooks/query/useOnboardingCompany";
+import { useUploadCompanyImage } from "@/hooks/query/useDocuments";
 import { useSession } from "next-auth/react";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
-import { ScrollArea } from "@/components/ui/scroll-area";
 import { Card } from "@/components/ui/card";
+import { ScrollArea } from "@/components/ui/scroll-area";
+import useRequireCompany from "@/hooks/useRequireCompany";
+import { Textarea } from "@/components/ui/textarea";
 
 export default function Step2() {
   const session = useSession();
-  const { mutate, isPending } = useUpdateStepTwoOnboardingCompany(session.data?.user.company_id);
+  const company_id = useRequireCompany();
+  const { mutate, isPending } = useUpdateStepTwoOnboardingCompany(
+    session.data?.user.company_id
+  );
 
-  const about_company = useCompanyStore((s) => s.about_company || "");
+  const { mutateAsync: mutateUploadImage } = useUploadCompanyImage(company_id);
+
+  const description = useCompanyStore((s) => s.description || "");
   const industry = useCompanyStore((s) => s.industry || []);
   const company_image = useCompanyStore((s) => s.company_image || "");
 
-  const setAboutCompany = useCompanyStore((s) => s.setAboutCompany);
+  const setDescription = useCompanyStore((s) => s.setDescription);
   const setIndustry = useCompanyStore((s) => s.setIndustry);
   const setCompanyImage = useCompanyStore((s) => s.setCompanyImage);
 
@@ -35,15 +43,20 @@ export default function Step2() {
   const handleIndustryChange = (value: string) => {
     const currentIndustry = [...industry];
     const index = currentIndustry.indexOf(value);
-    
+
     if (index > -1) {
       currentIndustry.splice(index, 1);
     } else {
       currentIndustry.push(value);
     }
-    
+
     setIndustry(currentIndustry);
   };
+
+  async function handleImageUpload(file: File) {
+    const { path } = await mutateUploadImage(file);
+    setCompanyImage(path);
+  }
 
   function handleNext() {
     try {
@@ -52,7 +65,7 @@ export default function Step2() {
 
       // get snapshot of all fields
       const data = {
-        about_company: useCompanyStore.getState().about_company,
+        description: useCompanyStore.getState().description,
         industry: useCompanyStore.getState().industry || [],
         company_image: useCompanyStore.getState().company_image || "",
       };
@@ -71,16 +84,21 @@ export default function Step2() {
 
   return (
     <StepContainer>
-      <InputWithLabel
-        label="About Company"
-        id="about_company"
-        as="textarea"
-        placeholder="Tell us about your company, what you do, and what makes you unique..."
-        value={about_company}
-        onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setAboutCompany(e.target.value)}
-        rows={6}
-        required
-      />
+      <div className="flex flex-col gap-2">
+        <Label htmlFor="description" className="text-sm font-medium">
+          Description <span className="text-red-500">*</span>
+        </Label>
+        <Textarea
+          id="description"
+          placeholder="Tell us about your company, what you do, and what makes you unique..."
+          value={description}
+          onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) =>
+            setDescription(e.target.value)
+          }
+          rows={6}
+          required
+        />
+      </div>
 
       <div className="flex flex-col gap-2">
         <Label className="text-sm font-medium">
@@ -109,19 +127,14 @@ export default function Step2() {
         </Card>
       </div>
 
-      <div className="flex flex-col gap-2">
-        <Label className="text-sm font-medium">
-          Company Image <span className="text-muted-foreground text-xs">(Optional - defaults to Google profile picture)</span>
-        </Label>
-        <InputWithLabel
-          label=""
-          id="company_image"
-          type="url"
-          placeholder="https://example.com/logo.png"
-          value={company_image}
-          onChange={(e: React.ChangeEvent<HTMLInputElement>) => setCompanyImage(e.target.value)}
-        />
-      </div>
+      <FileUploadField
+        id="company_image"
+        label="Company Image (Optional - defaults to Google profile picture)"
+        accept="image/jpeg,image/png,image/jpg,image/webp"
+        currentPath={company_image}
+        onUpload={handleImageUpload}
+        onClear={() => setCompanyImage("")}
+      />
 
       <Button
         disabled={isPending}
