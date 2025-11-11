@@ -7,9 +7,9 @@ export async function POST(
   context: { params: { company_id: string } }
 ) {
   const params = await context.params;
-  const company_id = Number(params.company_id);
+  const company_id = params.company_id;
 
-  if (!company_id || isNaN(company_id)) {
+  if (!company_id) {
     return NextResponse.json(
       { error: "Invalid or missing company_id" },
       { status: 400 }

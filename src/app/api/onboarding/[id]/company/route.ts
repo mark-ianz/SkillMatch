@@ -15,7 +15,7 @@ export async function GET(
   }
 
   const onboardingData = await CompanyOnboardingService.getOnboardingCompany(
-    Number(params.id)
+    params.id
   );
 
   if (!onboardingData) {

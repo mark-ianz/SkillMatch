@@ -11,7 +11,7 @@ export async function POST(
   const body = await req.json();
 
   // Validate ID parameter
-  if (!params.id || isNaN(Number(params.id))) {
+  if (!params.id) {
     return NextResponse.json({ error: "Invalid or missing ID parameter" }, { status: 400 });
   }
 
@@ -28,7 +28,7 @@ export async function POST(
 
 
   try {
-    await CompanyOnboardingService.submitStepTwo(Number(params.id), params.farthestStep, data);
+    await CompanyOnboardingService.submitStepTwo(params.id, params.farthestStep, data);
     return NextResponse.json({ status: 204 });
   } catch (err) {
     console.error("Error submitting employer onboarding step one:", err);

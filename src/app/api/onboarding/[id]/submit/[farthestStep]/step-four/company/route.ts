@@ -1,5 +1,5 @@
 import { formatZodError } from "@/lib/utils";
-import { onboardingPasswordSchema } from "@/schema/onboarding";
+import { employerOnboardingStepFourSchema } from "@/schema/onboarding";
 import CompanyOnboardingService from "@/services/onboarding/onboarding.company.services";
 import { NextResponse } from "next/server";
 
@@ -11,7 +11,7 @@ export async function POST(
   const body = await req.json();
 
   // Validate ID parameter
-  if (!params.id || isNaN(Number(params.id))) {
+  if (!params.id) {
     return NextResponse.json({ error: "Invalid or missing ID parameter" }, { status: 400 });
   }
 
@@ -21,14 +21,14 @@ export async function POST(
   }
 
   // Validate request body
-  const { data, success, error } = onboardingPasswordSchema.safeParse(body);
+  const { data, success, error } = employerOnboardingStepFourSchema.safeParse(body);
   if (!success) {
     return NextResponse.json({ error: formatZodError(error) }, { status: 422 });
   }
 
   try {
-    await CompanyOnboardingService.submitStepFour(Number(params.id), params.farthestStep, data);
-    return NextResponse.json({ ok: true }, { status: 200 });
+    await CompanyOnboardingService.submitStepFour(String(params.id), params.farthestStep, data);
+    return NextResponse.json({ status: 204 });
   } catch (err) {
     console.error("Error submitting company onboarding step four:", err);
     return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
