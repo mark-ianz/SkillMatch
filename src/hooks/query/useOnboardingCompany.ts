@@ -13,7 +13,7 @@ import { useMutation, useQuery } from "@tanstack/react-query";
 const nextStep = useOnboardingStore.getState().nextStep;
 const farthestStep = useOnboardingStore.getState().farthestStep;
 
-export function useGetOnboardingCompany(company_id: number | undefined) {
+export function useGetOnboardingCompany(company_id: string | undefined) {
   const setCompany = useCompanyStore((state) => state.setCompany);
 
   // Onboarding step state
@@ -57,7 +57,7 @@ export function useGetOnboardingCompany(company_id: number | undefined) {
 }
 
 export function useUpdateStepOneOnboardingCompany(
-  company_id: number | undefined | null
+  company_id: string | undefined | null
 ) {
   return useMutation({
     mutationKey: ["onboarding", company_id, "step-one"],
@@ -78,7 +78,7 @@ export function useUpdateStepOneOnboardingCompany(
 }
 
 export function useUpdateStepTwoOnboardingCompany(
-  company_id: number | undefined | null
+  company_id: string | undefined | null
 ) {
   return useMutation({
     mutationKey: ["onboarding", company_id, "step-two"],
@@ -99,7 +99,7 @@ export function useUpdateStepTwoOnboardingCompany(
 }
 
 export function useUpdateStepThreeOnboardingCompany(
-  company_id: number | undefined | null
+  company_id: string | undefined | null
 ) {
   return useMutation({
     mutationKey: ["onboarding", company_id, "step-three"],
@@ -120,7 +120,7 @@ export function useUpdateStepThreeOnboardingCompany(
 }
 
 export function useUpdateStepFourOnboardingCompany(
-  company_id: number | undefined | null
+  company_id: string | undefined | null
 ) {
   return useMutation({
     mutationKey: ["onboarding", company_id, "step-four"],

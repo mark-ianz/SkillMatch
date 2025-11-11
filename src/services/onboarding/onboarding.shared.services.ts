@@ -56,7 +56,7 @@ async function updateStep({
   update_to_step: number;
   farthestStep: number;
   user_id?: number;
-  company_id?: number;
+  company_id?: string;
 }) {
   // Since onboarding can be for both OJT and Company, we need to handle both cases
 

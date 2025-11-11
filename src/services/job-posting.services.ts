@@ -41,7 +41,7 @@ export const JobPostingServices = {
     }
   },
 
-  createJobPost: async (data: JobPostingFormData, company_id: number) => {
+  createJobPost: async (data: JobPostingFormData, company_id: string) => {
     const connection = await db.getConnection();
     try {
       await connection.beginTransaction();

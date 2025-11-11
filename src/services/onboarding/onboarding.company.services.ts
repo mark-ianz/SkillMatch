@@ -10,7 +10,7 @@ import { OnboardingPasswordSchema } from "@/schema/onboarding";
 import bcrypt from "bcrypt";
 import { OnboardingCompanyFullInfo } from "@/types/onboarding.types";
 
-async function getOnboardingCompany(company_id: number) {
+async function getOnboardingCompany(company_id: string) {
   const [rows] = await db.query<(OnboardingCompanyFullInfo & RowDataPacket)[]>(
     `SELECT o.*, c.*, a.email, a.role_id, a.status_id, a.profile_image FROM 
         onboarding AS o
@@ -25,7 +25,7 @@ async function getOnboardingCompany(company_id: number) {
 }
 
 async function submitStepOne(
-  company_id: number,
+  company_id: string,
   _farthestStep: number,
   data: EmployerOnboardingStepOneSchema
 ) {
@@ -61,7 +61,7 @@ async function submitStepOne(
 }
 
 async function submitStepTwo(
-  company_id: number,
+  company_id: string,
   _farthestStep: number,
   data: EmployerOnboardingStepTwoSchema
 ) {
@@ -91,7 +91,7 @@ async function submitStepTwo(
 }
 
 async function submitStepThree(
-  company_id: number,
+  company_id: string,
   _farthestStep: number,
   data: EmployerOnboardingStepThreeSchema
 ) {
@@ -127,7 +127,7 @@ async function submitStepThree(
 }
 
 async function submitStepFour(
-  company_id: number,
+  company_id: string,
   _farthestStep: number,
   data: OnboardingPasswordSchema
 ) {

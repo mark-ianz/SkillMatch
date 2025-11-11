@@ -56,7 +56,7 @@ async function uploadCoverImage(file: File): Promise<string> {
 export const CompanyPostServices = {
   createCompanyPost: async (
     data: CompanyPostFormData,
-    company_id: number,
+    company_id: string,
     coverImageFile?: File | null
   ) => {
     const connection = await db.getConnection();

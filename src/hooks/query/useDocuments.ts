@@ -17,7 +17,7 @@ export function useUploadResume(user_id: number) {
   });
 }
 
-export function useUploadCompanyDocument(company_id: number | undefined | null, type?: string) {
+export function useUploadCompanyDocument(company_id: string | undefined | null, type?: string) {
   return useMutation({
     mutationKey: ["upload-company-document", type],
     mutationFn: async (file: File) => {

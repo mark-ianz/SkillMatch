@@ -8,7 +8,7 @@ export type Reaction = {
 
 export type CompanyPost = {
   post_id: string
-  company_id: number
+  company_id: string
   company_name: string
   company_image?: string
   title: string

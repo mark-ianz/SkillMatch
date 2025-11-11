@@ -42,7 +42,7 @@ export function useCreateJobPost() {
 
   return useMutation({
     mutationFn: async (
-      payload: JobPostingFormData & { company_id: number | null }
+      payload: JobPostingFormData & { company_id: string | null }
     ) => {
       const { data } = await api.post("/company/job-post/create", payload);
       return data.job_post;

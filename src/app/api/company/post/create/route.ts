@@ -14,7 +14,7 @@ export async function POST(request: Request) {
     let body: {
       title?: unknown;
       content?: unknown;
-      company_id?: number | null;
+      company_id?: string | null;
     };
     let coverImageFile: File | null = null;
 
@@ -25,9 +25,7 @@ export async function POST(request: Request) {
       body = {
         title: formData.get("title"),
         content: formData.get("content"),
-        company_id: formData.get("company_id") 
-          ? Number(formData.get("company_id")) 
-          : null,
+        company_id: formData.get("company_id") as string | null,
       };
       
       // Extract file if present
@@ -50,7 +48,7 @@ export async function POST(request: Request) {
     // TODO: determine company_id from auth/session
     // for now require in body
     const company_id =
-      typeof body.company_id === "number" ? body.company_id : null;
+      typeof body.company_id === "string" ? body.company_id : null;
     if (!company_id) {
       return NextResponse.json(
         { error: "Missing company_id" },

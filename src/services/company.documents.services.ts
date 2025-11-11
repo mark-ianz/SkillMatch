@@ -56,7 +56,7 @@ async function upload_local(request: Request) {
 }
 
 /* async function upload_path_to_db(
-  company_id: number,
+  company_id: string,
   field: string,
   publicPath: string
 ) {

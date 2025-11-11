@@ -5,7 +5,7 @@ export type WorkArrangement = "Remote" | "On-site" | "Hybrid";
 
 export type JobPost = CompanyPreview & CompanyAddress & {
   job_post_id: string;
-  company_id: number;
+  company_id: string;
 
   // Basic Info
   job_title: string;

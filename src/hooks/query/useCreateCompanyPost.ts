@@ -6,7 +6,7 @@ import { toast } from "sonner";
 import { CompanyPost } from "@/types/company_post.types";
 
 type CreateCompanyPostPayload = CompanyPostFormData & {
-  company_id: number | null;
+  company_id: string | null;
   cover_image_file?: File | null;
 };
 

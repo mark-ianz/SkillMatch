@@ -27,7 +27,7 @@ export type Address = {
 export type Account = {
   acccount_id: number;
   user_id: number | null;
-  company_id: number | null;
+  company_id: string | null;
   email: string;
   profile_image?: string;
   provider: "google" | "local" | "linkedin";
@@ -51,7 +51,7 @@ export type AcademicDetails = {
 export type ExtendedInfo = {
   user_id?: number;
   role_id: number;
-  company_id?: number;
+  company_id?: string;
   status_id?: number;
 };
 
