@@ -3,7 +3,7 @@ import { api } from "@/lib/axios";
 import { CompanyProfile } from "@/types/company.types";
 import { CompanyFeedFilters } from "@/types/job_feed.types";
 
-export const useCompanies = (filters?: CompanyFeedFilters) => {
+export const useGetAllCompanies = (filters?: CompanyFeedFilters) => {
   return useQuery<CompanyProfile[]>({
     queryKey: ["companies", filters],
     queryFn: async () => {
@@ -17,7 +17,7 @@ export const useCompanies = (filters?: CompanyFeedFilters) => {
       }
 
       const queryString = params.toString();
-      const url = queryString ? `/company/feed?${queryString}` : "/company/feed";
+      const url = queryString ? `/company/all?${queryString}` : "/company/all";
 
       const { data } = await api.get<{ companies: CompanyProfile[] }>(url);
       return data.companies;
