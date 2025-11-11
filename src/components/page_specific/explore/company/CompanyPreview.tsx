@@ -3,7 +3,6 @@
 import { Building2, Globe } from "lucide-react";
 import Image from "next/image";
 import { Badge } from "@/components/ui/badge";
-import FeedPreviewWrapper from "../shared/FeedPreviewHighlight";
 import { cn } from "@/lib/utils";
 import { CompanyProfile } from "@/types/company.types";
 
@@ -11,15 +10,25 @@ interface CompanyPreviewProps {
   company: CompanyProfile;
   timePosted?: string;
   className?: string;
+  isSelected?: boolean;
 }
 
 export function CompanyPreview({
   company,
   timePosted,
   className,
+  isSelected = false,
 }: CompanyPreviewProps) {
   return (
-    <FeedPreviewWrapper exploreType="companies" id={company.company_id} className={cn("flex gap-5", className)}>
+    <div
+      className={cn(
+        "flex gap-5 group cursor-pointer rounded-lg border bg-background p-5 transition-all hover:shadow-sm",
+        isSelected
+          ? "border-skillmatch-primary-green hover:border-skillmatch-primary-green"
+          : "border-border/40 hover:border-border",
+        className
+      )}
+    >
       <div className="relative w-20 h-20 rounded-xl overflow-hidden flex-shrink-0 bg-muted border border-border/50">
         {company.company_image ? (
           <Image
@@ -77,6 +86,6 @@ export function CompanyPreview({
           </div>
         )}
       </div>
-    </FeedPreviewWrapper>
+    </div>
   );
 }
