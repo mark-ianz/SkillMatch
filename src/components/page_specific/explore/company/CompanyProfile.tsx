@@ -106,7 +106,7 @@ export function CompanyProfile({ className }: { className?: string }) {
         <>
           <div className="space-y-4">
             <h2 className="text-sm font-semibold text-skillmatch-dark uppercase tracking-wider">
-              Description
+              About Company
             </h2>
             <p className="text-sm text-skillmatch-dark leading-relaxed whitespace-pre-wrap">
               {selected_company?.description}
@@ -173,6 +173,34 @@ export function CompanyProfile({ className }: { className?: string }) {
                 >
                   View Facebook Page
                 </a>
+              </div>
+            </div>
+          )}
+        </div>
+      </div>
+
+      <Separator />
+
+      <div className="space-y-5">
+        <h2 className="text-sm font-semibold text-foreground uppercase tracking-wider">
+          Timeline
+        </h2>
+
+        <div className="space-y-4">
+          {selected_company?.date_founded && (
+            <div className="flex items-start gap-4">
+              <div className="mt-0.5 p-2 rounded-lg bg-muted">
+                <Building2 className="w-4 h-4 text-muted-foreground" />
+              </div>
+              <div className="flex-1 min-w-0">
+                <p className="text-xs text-muted-foreground mb-1">Founded</p>
+                <p className="text-sm text-foreground">
+                  {new Date(selected_company?.date_founded).toLocaleDateString("en-US", {
+                    year: "numeric",
+                    month: "long",
+                    day: "numeric",
+                  })}
+                </p>
               </div>
             </div>
           )}
