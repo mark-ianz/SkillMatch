@@ -8,7 +8,6 @@ import LoadingGeneric from "@/components/global/LoadingGeneric";
 import { useFeedStore } from "@/store/FeedStore";
 import { useSearchParams } from "next/navigation";
 import { JobFeedFilters } from "@/types/job_feed.types";
-import FeedPreviewHighlight from "../shared/FeedPreviewHighlight";
 
 export default function JobPostFeed() {
   const searchParams = useSearchParams();
@@ -69,11 +68,11 @@ export default function JobPostFeed() {
         <div
           key={job.job_post_id}
           onClick={() => setSelectedJobPost(job)}
-          className={`cursor-pointer transition-all`}
         >
-          <FeedPreviewHighlight exploreType="job-posts" id={job.job_post_id}>
-            <JobPostPreview job={job} />
-          </FeedPreviewHighlight>
+          <JobPostPreview
+            job={job}
+            isSelected={selected_job_post?.job_post_id === job.job_post_id}
+          />
         </div>
       ))}
     </>

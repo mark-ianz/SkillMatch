@@ -9,16 +9,24 @@ import { cn } from "@/lib/utils";
 interface JobPostPreviewProps {
   job: JobPost;
   className?: string;
+  isSelected?: boolean;
 }
 
-export function JobPostPreview({ job, className }: JobPostPreviewProps) {
+export function JobPostPreview({
+  job,
+  className,
+  isSelected = false,
+}: JobPostPreviewProps) {
   const fullAddress = `${job.barangay}, ${job.city_municipality}`;
 
   return (
     <div
       className={cn(
-        "group cursor-pointer rounded-lg border border-border/40 bg-background p-5 transition-all hover:border-border hover:shadow-sm",
-        className
+        "group shadow-sm cursor-pointer rounded-lg border border-border/40 bg-background p-5 transition-all hover:border-border hover:shadow-sm",
+        className,
+        isSelected
+          ? "border-skillmatch-primary-green hover:border-skillmatch-primary-green"
+          : "border-border/40 hover:border-border"
       )}
     >
       <div className="mb-4 flex flex-wrap gap-2">
