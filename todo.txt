@@ -1,6 +1,15 @@
+Done:
 - wrap na ng layout yung create-post tsaka post-job nangyan
 - type ng company post di tugma sa return pag nag post
 - feed ng posts
 - feed ng job posts
-
 - ojt skill, gawin na lang ding string sa db with "," instead of separate table pa. same rin sa job_post_skills. pwede ma search ng user base sa skills
+
+
+To-Do:
+- add these fields when company is onboarding:
+ - about
+ - image
+ - address
+ - industry choice
+- bug when you got no result on search and you searched again with result, it will not preview the first result on the company profile.
