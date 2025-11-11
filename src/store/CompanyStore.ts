@@ -10,7 +10,7 @@ export type CompanyStoreState = Partial<Company> & {
   setCity: (city: string) => void;
   setBarangay: (barangay: string) => void;
   setDateFounded: (date_founded: string) => void;
-  setAboutCompany: (about_company: string) => void;
+  setDescription: (description: string) => void;
   setIndustry: (industry: string[]) => void;
   setCompanyImage: (company_image: string) => void;
   setWebsite: (website: string) => void;
@@ -34,7 +34,7 @@ const useCompanyStore = create<CompanyStoreState>((set) => ({
   city: "",
   barangay: "",
   date_founded: "",
-  about_company: "",
+  description: "",
   industry: [],
   company_image: "",
   website: "",
@@ -56,7 +56,7 @@ const useCompanyStore = create<CompanyStoreState>((set) => ({
   setCity: (city) => set({ city }),
   setBarangay: (barangay) => set({ barangay }),
   setDateFounded: (date_founded) => set({ date_founded }),
-  setAboutCompany: (about_company) => set({ about_company }),
+  setDescription: (description) => set({ description }),
   setIndustry: (industry) => set({ industry }),
   setCompanyImage: (company_image) => set({ company_image }),
   setWebsite: (website) => set({ website }),
@@ -79,7 +79,7 @@ const useCompanyStore = create<CompanyStoreState>((set) => ({
       city: "",
       barangay: "",
       date_founded: "",
-      about_company: "",
+      description: "",
       industry: [],
       company_image: "",
       website: "",

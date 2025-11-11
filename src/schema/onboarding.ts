@@ -151,11 +151,11 @@ export const employerOnboardingStepOneSchema = z.object({
 });
 
 export const employerOnboardingStepTwoSchema = z.object({
-  about_company: z
+  description: z
     .string()
     .trim()
-    .min(10, { message: "About company must be at least 10 characters" })
-    .max(1000, { message: "About company must be at most 1000 characters" }),
+    .min(10, { message: "Description must be at least 10 characters" })
+    .max(1000, { message: "Description must be at most 1000 characters" }),
   industry: z
     .array(z.string())
     .min(1, { message: "At least one industry is required" }),

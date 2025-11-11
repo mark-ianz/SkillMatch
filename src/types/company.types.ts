@@ -6,9 +6,8 @@ export type Company = EmployerOnboardingStepOneSchema & {
   city: string;
   barangay: string;
   date_founded: string;
-  about_company: string;
+  description: string;
   industry: string[] | null;
-  description: string | null;
   company_image: string | null | undefined;
   website: string;
   facebook_page: string;

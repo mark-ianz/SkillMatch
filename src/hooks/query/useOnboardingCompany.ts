@@ -42,7 +42,7 @@ export function useGetOnboardingCompany(company_id: string | undefined) {
         city: data.city || "",
         barangay: data.barangay || "",
         date_founded: data.date_founded || "",
-        about_company: data.about_company || "",
+        description: data.description || "",
         industry: data.industry || [],
         company_image: data.company_image || "",
         website: data.website || "",
