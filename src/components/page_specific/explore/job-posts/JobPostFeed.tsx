@@ -8,10 +8,11 @@ import LoadingGeneric from "@/components/global/LoadingGeneric";
 import { useFeedStore } from "@/store/FeedStore";
 import { useSearchParams } from "next/navigation";
 import { JobFeedFilters } from "@/types/job_feed.types";
+import FeedPreviewHighlight from "../shared/FeedPreviewHighlight";
 
 export default function JobPostFeed() {
   const searchParams = useSearchParams();
-  
+
   // Build filters from URL params
   const filters: JobFeedFilters = {
     courses: searchParams.getAll("course"),
@@ -28,7 +29,7 @@ export default function JobPostFeed() {
   const setSelectedJobPost = useFeedStore((state) => state.setSelectedJobPost);
 
   console.log(job_posts);
-  
+
   // Set initial selected item when data loads
   useEffect(() => {
     if (job_posts && job_posts.length > 0 && selected_job_post === null) {
@@ -70,7 +71,9 @@ export default function JobPostFeed() {
           onClick={() => setSelectedJobPost(job)}
           className={`cursor-pointer transition-all`}
         >
-          <JobPostPreview job={job} />
+          <FeedPreviewHighlight exploreType="job-posts" id={job.job_post_id}>
+            <JobPostPreview job={job} />
+          </FeedPreviewHighlight>
         </div>
       ))}
     </>

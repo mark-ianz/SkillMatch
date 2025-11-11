@@ -3,7 +3,7 @@
 import { Building2, Globe } from "lucide-react";
 import Image from "next/image";
 import { Badge } from "@/components/ui/badge";
-import FeedPreviewWrapper from "../shared/FeedPreviewWrapper";
+import FeedPreviewWrapper from "../shared/FeedPreviewHighlight";
 import { cn } from "@/lib/utils";
 import { CompanyProfile } from "@/types/company.types";
 
