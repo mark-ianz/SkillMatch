@@ -3,23 +3,24 @@
 import { Badge } from "@/components/ui/badge";
 import { JobPost } from "@/types/job_post.types";
 import { Clock, MapPin } from "lucide-react";
-import FeedPreviewWrapper from "../shared/FeedPreviewWrapper";
+import DateDifference from "@/components/common/DateDifference";
+import { cn } from "@/lib/utils";
 
 interface JobPostPreviewProps {
   job: JobPost;
-  timePosted?: string;
   className?: string;
 }
 
-export function JobPostPreview({
-  job,
-  timePosted = "5 days ago",
-  className,
-}: JobPostPreviewProps) {
+export function JobPostPreview({ job, className }: JobPostPreviewProps) {
   const fullAddress = `${job.barangay}, ${job.city_municipality}`;
 
   return (
-    <FeedPreviewWrapper exploreType="job-posts" id={job.job_post_id} className={className}>
+    <div
+      className={cn(
+        "group cursor-pointer rounded-lg border border-border/40 bg-background p-5 transition-all hover:border-border hover:shadow-sm",
+        className
+      )}
+    >
       <div className="mb-4 flex flex-wrap gap-2">
         <Badge variant="secondary" className="text-xs font-medium">
           {job.available_positions} slot
@@ -51,14 +52,14 @@ export function JobPostPreview({
       {/* Company name */}
       <p className="text-sm text-muted-foreground mb-3">{job.company_name}</p>
 
-      <div className="flex items-center gap-4 text-sm text-muted-foreground">
+      <div className="flex items-center gap-4 text-sm text-muted-foreground flex-wrap">
         <div className="flex items-center gap-1.5">
           <MapPin className="w-4 h-4" />
           <span>{fullAddress}</span>
         </div>
         <div className="flex items-center gap-1.5">
           <Clock className="w-4 h-4" />
-          <span>{timePosted}</span>
+          <DateDifference date={job.created_at} />
         </div>
       </div>
 
@@ -67,6 +68,6 @@ export function JobPostPreview({
           {job.allowance_description}
         </Badge>
       )}
-    </FeedPreviewWrapper>
+    </div>
   );
 }
