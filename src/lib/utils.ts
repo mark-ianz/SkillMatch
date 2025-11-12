@@ -61,7 +61,10 @@ export function getAllIndustry(asItems?: boolean): string[] | ItemList[] {
   return industry_categories.map((industry) => industry.industry);
 }
 
-export function getAllJobCategories(asItems?: boolean, sort?: boolean): string[] | ItemList[] {
+export function getAllJobCategories(
+  asItems?: boolean,
+  sort?: boolean
+): string[] | ItemList[] {
   if (asItems) {
     return industry_categories.flatMap((industry) =>
       industry.job_categories.map((job) => ({
@@ -71,7 +74,9 @@ export function getAllJobCategories(asItems?: boolean, sort?: boolean): string[]
     );
   }
 
-  return industry_categories.flatMap((industry) => industry.job_categories).sort((a, b) => sort ? a.localeCompare(b) : 0);
+  return industry_categories
+    .flatMap((industry) => industry.job_categories)
+    .sort((a, b) => (sort ? a.localeCompare(b) : 0));
 }
 
 export function getAllCities(asItems?: boolean): string[] | ItemList[] {
@@ -87,9 +92,12 @@ export function getAllCities(asItems?: boolean): string[] | ItemList[] {
   return cities;
 }
 
-export function getBarangaysByCity(city: string, asItems?: boolean): string[] | ItemList[] {
+export function getBarangaysByCity(
+  city: string,
+  asItems?: boolean
+): string[] | ItemList[] {
   const cityData = city_municipality[city as keyof typeof city_municipality];
-  
+
   if (!cityData) {
     return [];
   }
@@ -104,4 +112,19 @@ export function getBarangaysByCity(city: string, asItems?: boolean): string[] | 
   }
 
   return barangays;
+}
+
+export function getRoleName(role_id: number) {
+  switch (role_id) {
+    case 3:
+      return "OJT";
+    case 4:
+      return "Company";
+    case 2:
+      return "Spards";
+    case 1:
+      return "Admin";
+    default:
+      return "OJT";
+  }
 }
