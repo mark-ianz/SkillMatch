@@ -73,26 +73,24 @@ export default function SearchJobCategory({
     };
   }, []);
 
-  function handleSelectCategory(categoryId: string) {
-    if (selectedCategories.includes(categoryId)) {
-      onCategoriesChange(selectedCategories.filter((id) => id !== categoryId));
+  function handleSelectCategory(categoryName: string) {
+    if (selectedCategories.includes(categoryName)) {
+      onCategoriesChange(selectedCategories.filter((name) => name !== categoryName));
     } else {
       if (selectedCategories.length >= maxCategories) {
         return;
       }
-      onCategoriesChange([...selectedCategories, categoryId]);
+      onCategoriesChange([...selectedCategories, categoryName]);
     }
     setIsOpen(false);
     setSearchQuery("");
   }
 
-  function handleRemoveCategory(categoryId: string) {
-    onCategoriesChange(selectedCategories.filter((id) => id !== categoryId));
+  function handleRemoveCategory(categoryName: string) {
+    onCategoriesChange(selectedCategories.filter((name) => name !== categoryName));
   }
 
-  const selectedCategoryNames = selectedCategories.map(
-    (id) => JOB_CATEGORIES.find((cat) => cat.category_id === id)?.category_name
-  );
+  const selectedCategoryNames = selectedCategories;
 
   return (
     <div ref={containerRef} className="w-full">
@@ -140,9 +138,9 @@ export default function SearchJobCategory({
                 {results.map((category) => (
                   <button
                     key={category.category_id}
-                    onClick={() => handleSelectCategory(category.category_id)}
+                    onClick={() => handleSelectCategory(category.category_name)}
                     className={`w-full px-4 py-2 text-left text-sm transition-colors ${
-                      selectedCategories.includes(category.category_id)
+                      selectedCategories.includes(category.category_name)
                         ? "bg-accent text-accent-foreground"
                         : "hover:bg-accent hover:text-accent-foreground"
                     }`}
