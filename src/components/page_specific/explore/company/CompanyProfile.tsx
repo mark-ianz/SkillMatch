@@ -22,6 +22,7 @@ import { cn } from "@/lib/utils";
 import { CompanyProfile as CompanyProfileType } from "@/types/company.types";
 import { formatDate } from "date-fns";
 import Link from "next/link";
+import CompanyEmptyImage from "./CompanyEmptyImage";
 
 export function CompanyProfile({
   className,
@@ -46,15 +47,13 @@ export function CompanyProfile({
           <div className="relative w-24 h-24 rounded-xl overflow-hidden flex-shrink-0 bg-muted border border-border">
             {company?.company_image ? (
               <Image
-                src={company?.company_image || "/placeholder.svg"}
+                src={company?.company_image}
                 alt={`${company?.company_name} logo`}
                 fill
                 className="object-contain"
               />
             ) : (
-              <div className="w-full h-full flex items-center justify-center">
-                <Building2 className="w-12 h-12 text-muted-foreground/40" />
-              </div>
+              <CompanyEmptyImage />
             )}
           </div>
 
