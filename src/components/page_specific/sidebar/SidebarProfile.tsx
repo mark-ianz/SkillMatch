@@ -1,12 +1,14 @@
 "use client";
 
 import { Card } from "@/components/ui/card";
-import { cn } from "@/lib/utils";
+import { cn, getRoleName } from "@/lib/utils";
 import Image from "next/image";
 import ambatublow from "@/images/ambatublow.jpg";
 import OJTShortcut from "./OJTShortcut";
 import CompanyShortcut from "./CompanyShortcut";
 import { Building2 } from "lucide-react";
+import { useSession } from "next-auth/react";
+import LoadingGeneric from "@/components/global/LoadingGeneric";
 
 const image_url = ambatublow.src;
 
@@ -60,8 +62,14 @@ function EmptyProfileImage({ isOjt }: { isOjt: boolean }) {
   );
 }
 
-export default function SidebarProfile({ type }: { type: "ojt" | "company" }) {
-  const isOjt = type === "ojt";
+export default function SidebarProfile() {
+  const role_id = useSession().data?.user.role_id;
+
+  if (!role_id) {
+    return <LoadingGeneric />;
+  }
+
+  const isOjt = getRoleName(role_id) === "OJT";
   const data: ProfileData = isOjt ? OJT_DUMMY : COMPANY_DUMMY;
 
   return (
