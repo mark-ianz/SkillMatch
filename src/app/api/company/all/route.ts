@@ -39,12 +39,18 @@ export async function GET(request: NextRequest) {
         c.company_id,
         c.company_name,
         c.company_email,
+        c.telephone_number,
+        c.phone_number,
+        c.city_municipality,
+        c.barangay,
+        c.date_founded,
+        c.description,
+        c.industry,
+        c.company_image,
         c.website,
         c.facebook_page,
-        c.company_image,
-        c.industry,
-        c.description,
-        c.date_founded,
+        c.instagram_page,
+        c.twitter_page,
         c.created_at
       FROM company c
       ${whereClause}
