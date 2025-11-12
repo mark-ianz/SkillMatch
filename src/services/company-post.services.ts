@@ -102,6 +102,92 @@ export const CompanyPostServices = {
       connection.release();
     }
   },
+
+  getCompanyPostsFeed: async (userCourse?: string, companyIndustries?: string[]) => {
+    const connection = await db.getConnection();
+    try {
+      let query = `
+        SELECT 
+          cp.post_id,
+          cp.company_id,
+          cp.title,
+          cp.content,
+          cp.cover_image,
+          cp.created_at,
+          c.company_name,
+          c.company_image
+        FROM company_posts cp
+        INNER JOIN company c ON cp.company_id = c.company_id
+        ORDER BY cp.created_at DESC
+      `;
+
+      const params: string[] = [];
+
+      // If user has a course (OJT), prioritize posts from companies with matching job posts
+      if (userCourse) {
+        query = `
+          SELECT 
+            cp.post_id,
+            cp.company_id,
+            cp.title,
+            cp.content,
+            cp.cover_image,
+            cp.created_at,
+            c.company_name,
+            c.company_image,
+            (
+              SELECT COUNT(*) 
+              FROM job_posts jp 
+              WHERE jp.company_id = cp.company_id 
+              AND FIND_IN_SET(?, jp.courses_required) > 0
+            ) as course_match_count
+          FROM company_posts cp
+          INNER JOIN company c ON cp.company_id = c.company_id
+          ORDER BY course_match_count DESC, cp.created_at DESC
+        `;
+        params.push(userCourse);
+      }
+      
+      // If company user with industries, prioritize posts from companies with matching industries
+      if (companyIndustries && companyIndustries.length > 0) {
+        const industryConditions = companyIndustries.map(() => 
+          `FIND_IN_SET(?, c.industry) > 0`
+        ).join(' OR ');
+        
+        query = `
+          SELECT 
+            cp.post_id,
+            cp.company_id,
+            cp.title,
+            cp.content,
+            cp.cover_image,
+            cp.created_at,
+            c.company_name,
+            c.company_image,
+            CASE 
+              WHEN ${industryConditions} THEN 1
+              ELSE 0
+            END as industry_match
+          FROM company_posts cp
+          INNER JOIN company c ON cp.company_id = c.company_id
+          ORDER BY industry_match DESC, cp.created_at DESC
+        `;
+        params.push(...companyIndustries);
+      }
+
+      const [rows] = await connection.query<(RowDataPacket & CompanyPost)[]>(
+        query,
+        params
+      );
+
+      return rows as CompanyPost[];
+    } catch (error) {
+      console.error("Error fetching company posts feed:", error);
+      throw error;
+    } finally {
+      connection.release();
+    }
+  },
 };
 
 export default CompanyPostServices;
