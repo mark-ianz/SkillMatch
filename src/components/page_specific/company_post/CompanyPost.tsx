@@ -2,18 +2,20 @@
 
 import { useState } from "react";
 import Image from "next/image";
+import Link from "next/link";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Share2 } from "lucide-react";
+import { Bookmark } from "lucide-react";
 import type {
   CompanyPost as CompanyPostType,
   PostReactions,
   ReactionType,
 } from "@/types/company_post.types";
-import { formatDistanceToNow } from "date-fns";
 import { ReactionButton } from "./ReactionButton";
 import { ReactionsModal } from "./ReactionsModal";
-import placeholder_image from "@/images/placeholder_image.avif"
+import placeholder_image from "@/images/placeholder_image.avif";
+import { CopyLinkButton } from "@/components/common/button/CopyLinkButton";
+import DateDifference from "@/components/common/DateDifference";
 
 interface CompanyPostProps {
   post: CompanyPostType;
@@ -49,30 +51,20 @@ export function CompanyPost({ post }: CompanyPostProps) {
     setUserReaction(reaction);
   };
 
-  const handleShare = async () => {
-    try {
-      if (navigator.share) {
-        await navigator.share({
-          title: post.title,
-          text: post.content.substring(0, 100),
-          url: window.location.href,
-        });
-      } else {
-        await navigator.clipboard.writeText(window.location.href);
-        // Optional: show toast notification
-      }
-    } catch (error) {
-      console.error("Share failed:", error);
-    }
+  const handleSavePost = () => {
+    // TODO: Implement save post functionality
+    console.log("Save post clicked for:", post.post_id);
   };
 
   const totalReactions = Object.values(reactions).reduce(
     (a, b) => a + (b || 0),
     0
   );
-  const createdAt = formatDistanceToNow(new Date(post.created_at), {
-    addSuffix: true,
-  });
+
+  const baseUrl =
+    process.env.NEXT_PUBLIC_FRONTEND_BASE_URL ||
+    (typeof window !== "undefined" ? window.location.origin : "");
+  const postUrl = `${baseUrl}/feed/view?id=${post.post_id}`;
 
   return (
     <>
@@ -80,10 +72,16 @@ export function CompanyPost({ post }: CompanyPostProps) {
         <CardHeader>
           <div className="flex items-start justify-between">
             <div className="flex-1">
-              <h3 className="font-semibold text-base text-card-foreground">
+              <Link
+                href={`/view/company?id=${post.company_id}`}
+                className="font-semibold text-base text-card-foreground hover:text-primary transition-colors"
+              >
                 {post.company_name}
-              </h3>
-              <p className="text-xs text-muted-foreground">{createdAt}</p>
+              </Link>
+              <DateDifference
+                className="text-xs text-muted-foreground"
+                date={post.created_at}
+              />
             </div>
           </div>
         </CardHeader>
@@ -110,7 +108,7 @@ export function CompanyPost({ post }: CompanyPostProps) {
             </div>
           )}
 
-          <div className="flex items-center gap-2 pt-3 border-t">
+          <div className="flex items-center gap-2 pt-3 border-t justify-between">
             <ReactionButton
               userReaction={userReaction}
               onReact={handleReact}
@@ -118,15 +116,26 @@ export function CompanyPost({ post }: CompanyPostProps) {
               onShowReactionsModal={() => setShowReactionsModal(true)}
             />
 
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={handleShare}
-              className="gap-2 h-8 text-muted-foreground hover:text-foreground"
-            >
-              <Share2 className="w-4 h-4" />
-              <span className="text-xs">Share</span>
-            </Button>
+            <div>
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={handleSavePost}
+                className="gap-2 h-8 text-skillmatch-muted-dark hover:text-foreground"
+              >
+                <Bookmark className="w-4 h-4" />
+                <span className="text-xs">Save</span>
+              </Button>
+
+              <CopyLinkButton
+                url={postUrl}
+                size="sm"
+                showIcon={true}
+                showText={true}
+                text="Copy Link"
+                className="gap-2 h-8 text-xs"
+              />
+            </div>
           </div>
         </CardContent>
       </Card>
