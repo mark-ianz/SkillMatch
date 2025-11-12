@@ -1,10 +1,11 @@
 "use client";
 
-import { Building2, Globe } from "lucide-react";
+import { Globe } from "lucide-react";
 import Image from "next/image";
 import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
 import { CompanyProfile } from "@/types/company.types";
+import CompanyEmptyImage from "./CompanyEmptyImage";
 
 interface CompanyPreviewProps {
   company: CompanyProfile;
@@ -32,15 +33,13 @@ export function CompanyPreview({
       <div className="relative w-20 h-20 rounded-xl overflow-hidden flex-shrink-0 bg-muted border border-border/50">
         {company.company_image ? (
           <Image
-            src={company.company_image || "/placeholder.svg"}
+            src={company.company_image}
             alt={`${company.company_name} logo`}
             fill
             className="object-contain"
           />
         ) : (
-          <div className="w-full h-full flex items-center justify-center">
-            <Building2 className="w-10 h-10 text-muted-foreground/40" />
-          </div>
+          <CompanyEmptyImage />
         )}
       </div>
 
