@@ -6,11 +6,9 @@ import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 import {
   Bookmark,
-  Copy,
   Globe,
   Mail,
   Facebook,
-  Building2,
   Calendar,
   Instagram,
   Twitter,
@@ -23,6 +21,7 @@ import { CompanyProfile as CompanyProfileType } from "@/types/company.types";
 import { formatDate } from "date-fns";
 import Link from "next/link";
 import CompanyEmptyImage from "./CompanyEmptyImage";
+import { CopyLinkButton } from "@/components/common/button/CopyLinkButton";
 
 export function CompanyProfile({
   className,
@@ -35,9 +34,8 @@ export function CompanyProfile({
     console.log("Bookmark clicked");
   };
 
-  const handleCopyLink = () => {
-    console.log("Copy link clicked");
-  };
+  const baseUrl = process.env.NEXT_PUBLIC_FRONTEND_BASE_URL || (typeof window !== 'undefined' ? window.location.origin : '');
+  const companyUrl = `${baseUrl}/view/company?id=${company.company_id}`;
 
   return (
     <Card className={cn("p-6 shadow-sm", className)}>
@@ -74,14 +72,7 @@ export function CompanyProfile({
                 >
                   <Bookmark className="w-4 h-4" />
                 </Button>
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  onClick={handleCopyLink}
-                  className="h-9 w-9"
-                >
-                  <Copy className="w-4 h-4" />
-                </Button>
+                <CopyLinkButton url={companyUrl} size="icon" className="h-9 w-9" />
               </div>
             </div>
 
