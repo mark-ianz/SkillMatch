@@ -5,9 +5,9 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
 import { JobPost } from "@/types/job_post.types";
-import { Bookmark, Briefcase, Copy, MapPin } from "lucide-react";
+import { Bookmark, Briefcase, MapPin } from "lucide-react";
 import Image from "next/image";
-import { toast } from "sonner";
+import { CopyLinkButton } from "@/components/common/button/CopyLinkButton";
 
 export function JobPostFullInfo({ job, className }: { job: JobPost; className?: string }) {
   const handleApply = () => {
@@ -20,18 +20,10 @@ export function JobPostFullInfo({ job, className }: { job: JobPost; className?: 
     console.log("Bookmark clicked");
   };
 
-  const handleCopyLink = () => {
-    const baseUrl = process.env.NEXT_PUBLIC_FRONTEND_BASE_URL || window.location.origin;
-    const link = `${baseUrl}/view/job-post?id=${job?.job_post_id}`;
-    navigator.clipboard.writeText(link).then(() => {
-      toast.success("Link copied to clipboard!");
-    }).catch((err) => {
-      console.error("Failed to copy link:", err);
-      toast.error("Failed to copy link");
-    });
-  };
-
   const fullAddress = `${job?.street_name}, ${job?.barangay}, ${job?.city_municipality} ${job?.postal_code}`;
+  
+  const baseUrl = process.env.NEXT_PUBLIC_FRONTEND_BASE_URL || (typeof window !== 'undefined' ? window.location.origin : '');
+  const jobPostUrl = `${baseUrl}/view/job-post?id=${job?.job_post_id}`;
 
   return (
     <Card className={cn("border-1 shadow-sm p-6 w-full", className)}>
@@ -66,14 +58,7 @@ export function JobPostFullInfo({ job, className }: { job: JobPost; className?: 
             >
               <Bookmark className="w-5 h-5" />
             </Button>
-            <Button
-              variant="ghost"
-              size="icon"
-              onClick={handleCopyLink}
-              className="rounded-lg h-10 w-10"
-            >
-              <Copy className="w-5 h-5" />
-            </Button>
+            <CopyLinkButton url={jobPostUrl} />
           </div>
         </div>
 
