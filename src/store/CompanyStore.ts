@@ -7,7 +7,7 @@ export type CompanyStoreState = Partial<Company> & {
   setCompanyEmail: (company_email: string) => void;
   setTelephoneNumber: (telephone_number: string) => void;
   setPhoneNumber: (phone_number: string) => void;
-  setCity: (city: string) => void;
+  setCityMunicipality: (city_municipality: string) => void;
   setBarangay: (barangay: string) => void;
   setDateFounded: (date_founded: string) => void;
   setDescription: (description: string) => void;
@@ -31,7 +31,7 @@ const useCompanyStore = create<CompanyStoreState>((set) => ({
   company_email: "",
   telephone_number: "",
   phone_number: "",
-  city: "",
+  city_municipality: "",
   barangay: "",
   date_founded: "",
   description: "",
@@ -53,7 +53,7 @@ const useCompanyStore = create<CompanyStoreState>((set) => ({
   setCompanyEmail: (company_email) => set({ company_email }),
   setTelephoneNumber: (telephone_number) => set({ telephone_number }),
   setPhoneNumber: (phone_number) => set({ phone_number }),
-  setCity: (city) => set({ city }),
+  setCityMunicipality: (city_municipality) => set({ city_municipality }),
   setBarangay: (barangay) => set({ barangay }),
   setDateFounded: (date_founded) => set({ date_founded }),
   setDescription: (description) => set({ description }),
@@ -76,7 +76,7 @@ const useCompanyStore = create<CompanyStoreState>((set) => ({
       company_email: "",
       telephone_number: "",
       phone_number: "",
-      city: "",
+      city_municipality: "",
       barangay: "",
       date_founded: "",
       description: "",

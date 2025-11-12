@@ -40,7 +40,7 @@ export async function GET(
         c.industry,
         c.description,
         c.barangay,
-        c.city
+        c.city_municipality
       FROM job_posts jp
       JOIN company c ON jp.company_id = c.company_id
       WHERE jp.job_post_id = ?`,

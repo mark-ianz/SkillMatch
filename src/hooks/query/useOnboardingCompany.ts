@@ -39,7 +39,7 @@ export function useGetOnboardingCompany(company_id: string | undefined) {
         company_email: data.company_email || "",
         telephone_number: data.telephone_number || "",
         phone_number: data.phone_number || "",
-        city: data.city || "",
+        city_municipality: data.city_municipality || "",
         barangay: data.barangay || "",
         date_founded: data.date_founded || "",
         description: data.description || "",

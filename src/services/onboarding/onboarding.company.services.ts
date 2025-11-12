@@ -36,13 +36,13 @@ async function submitStepOne(
     await connection.beginTransaction();
 
     await connection.query<ResultSetHeader>(
-      `UPDATE company SET company_name = ?, company_email = ?, telephone_number = ?, phone_number = ?, city = ?, barangay = ?, date_founded = ? WHERE company_id = ?`,
+      `UPDATE company SET company_name = ?, company_email = ?, telephone_number = ?, phone_number = ?, city_municipality = ?, barangay = ?, date_founded = ? WHERE company_id = ?`,
       [
         data.company_name,
         data.company_email,
         data.telephone_number,
         data.phone_number,
-        data.city,
+        data.city_municipality,
         data.barangay,
         data.date_founded,
         company_id,

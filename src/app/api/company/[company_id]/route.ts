@@ -27,7 +27,7 @@ export async function GET(
         telephone_number,
         phone_number,
         barangay,
-        city,
+        city_municipality,
         date_founded,
         description,
         industry,
@@ -65,7 +65,7 @@ export async function GET(
         c.industry,
         c.description,
         c.barangay,
-        c.city
+        c.city_municipality
       FROM job_posts jp
       JOIN company c ON jp.company_id = c.company_id
       WHERE jp.company_id = ?

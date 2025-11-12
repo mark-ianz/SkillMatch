@@ -143,7 +143,10 @@ export const employerOnboardingStepOneSchema = z.object({
     .refine((val) => /^\d+$/.test(val), {
       message: "Phone number must only contain digits",
     }),
-  city: z.string().trim().min(1, { message: "City is required" }),
+  city_municipality: z
+    .string()
+    .trim()
+    .min(1, { message: "City/Municipality is required" }),
   barangay: z.string().trim().min(1, { message: "Barangay is required" }),
   date_founded: z.string().refine((val) => !isNaN(Date.parse(val)), {
     message: "Invalid date",

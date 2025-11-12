@@ -23,7 +23,7 @@ export default function Step1() {
   const company_email = useCompanyStore((s) => s.company_email || "");
   const telephone_number = useCompanyStore((s) => s.telephone_number || "");
   const phone_number = useCompanyStore((s) => s.phone_number || "");
-  const city = useCompanyStore((s) => s.city || "");
+  const city_municipality = useCompanyStore((s) => s.city_municipality || "");
   const barangay = useCompanyStore((s) => s.barangay || "");
   const date_founded = useCompanyStore((s) => s.date_founded || "");
 
@@ -31,7 +31,7 @@ export default function Step1() {
   const setCompanyEmail = useCompanyStore((s) => s.setCompanyEmail);
   const setTelephoneNumber = useCompanyStore((s) => s.setTelephoneNumber);
   const setPhoneNumber = useCompanyStore((s) => s.setPhoneNumber);
-  const setCity = useCompanyStore((s) => s.setCity);
+  const setCityMunicipality = useCompanyStore((s) => s.setCityMunicipality);
   const setBarangay = useCompanyStore((s) => s.setBarangay);
   const setDateFounded = useCompanyStore((s) => s.setDateFounded);
 
@@ -39,17 +39,17 @@ export default function Step1() {
 
   // Get cities and barangays
   const cities = getAllCities(true) as ItemList[];
-  const barangays = city ? (getBarangaysByCity(city, true) as ItemList[]) : [];
+  const barangays = city_municipality ? (getBarangaysByCity(city_municipality, true) as ItemList[]) : [];
 
-  // Reset barangay when city changes
+  // Reset barangay when city_municipality changes
   useEffect(() => {
-    if (city && barangay) {
-      const validBarangays = getBarangaysByCity(city) as string[];
+    if (city_municipality && barangay) {
+      const validBarangays = getBarangaysByCity(city_municipality) as string[];
       if (!validBarangays.includes(barangay)) {
         setBarangay("");
       }
     }
-  }, [city, barangay, setBarangay]);
+  }, [city_municipality, barangay, setBarangay]);
 
   function handleNext() {
     try {
@@ -62,7 +62,7 @@ export default function Step1() {
         company_email: useCompanyStore.getState().company_email,
         telephone_number: useCompanyStore.getState().telephone_number,
         phone_number: useCompanyStore.getState().phone_number,
-        city: useCompanyStore.getState().city,
+        city_municipality: useCompanyStore.getState().city_municipality,
         barangay: useCompanyStore.getState().barangay,
         date_founded: useCompanyStore.getState().date_founded,
       };
@@ -129,12 +129,12 @@ export default function Step1() {
       <RowContainer>
         <ComboBoxWithLabel
           containerClassName="grow"
-          id="city"
+          id="city_municipality"
           label="City/Municipality"
-          searchFor="city"
-          value={city}
+          searchFor="city_municipality"
+          value={city_municipality}
           items={cities}
-          onValueChange={setCity}
+          onValueChange={setCityMunicipality}
           required
         />
 
@@ -146,7 +146,7 @@ export default function Step1() {
           value={barangay}
           items={barangays}
           onValueChange={setBarangay}
-          disabled={!city}
+          disabled={!city_municipality}
           required
         />
       </RowContainer>

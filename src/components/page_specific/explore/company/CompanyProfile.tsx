@@ -189,7 +189,7 @@ export function CompanyProfile({
               <p className="text-xs text-muted-foreground mb-1 uppercase tracking-wider">
                 Location
               </p>
-              <p className="text-sm text-foreground">{`${company?.barangay}, ${company?.city}`}</p>
+              <p className="text-sm text-foreground">{`${company?.barangay}, ${company?.city_municipality}`}</p>
             </div>
           </div>
 

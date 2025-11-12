@@ -9,9 +9,9 @@ export const createUserInputSchema = onboardingStepOneSchema
     barangay: z
       .string({ error: "Barangay must be a string" })
       .min(1, { error: "Barangay is required" }),
-    city: z
-      .string({ error: "City must be a string" })
-      .min(1, { error: "City is required" }),
+    city_municipality: z
+      .string({ error: "City/Municipality must be a string" })
+      .min(1, { error: "City/Municipality is required" }),
     municipality: z
       .string({ error: "Municipality must be a string" })
       .min(1, { error: "Municipality is required" }),
