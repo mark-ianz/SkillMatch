@@ -3,12 +3,13 @@
 import { useEffect, use } from "react";
 import { useSearchParams } from "next/navigation";
 import { ExploreType } from "@/types/job_feed.types";
-import { SidebarProfile } from "@/components/page_specific/explore/shared/SidebarProfile";
 import { JobFeedFilter } from "@/components/page_specific/explore/job-posts/JobFeedFilter";
 import MainLayout from "@/components/layout/MainLayout";
 import Feed from "@/components/page_specific/explore/shared/Feed";
 import FeedFullInfo from "@/components/page_specific/explore/shared/FeedFullInfo";
 import { useFeedStore } from "@/store/FeedStore";
+import SidebarProfile from "@/components/page_specific/sidebar/SidebarProfile";
+import { SessionProvider } from "next-auth/react";
 
 export default function FeedPage({
   params,
@@ -32,7 +33,9 @@ export default function FeedPage({
       <div className="flex gap-6 w-full mt-4">
         {/* Left Sidebar */}
         <div className="flex-2 sticky space-y-6 h-fit">
-          <SidebarProfile />
+          <SessionProvider>
+            <SidebarProfile />
+          </SessionProvider>
           <JobFeedFilter className="sticky top-28" exploreType={exploreType} />
         </div>
 
