@@ -1,12 +1,12 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import { usePathname, useRouter } from "next/navigation";
+import { Roles } from "@/types/role.types";
+import { useRouter } from "next/navigation";
 import React from "react";
 
-export default function JoinNowButton() {
+export default function JoinNowButton({ role }: { role: Roles }) {
   const router = useRouter();
-  const path = usePathname();
 
   const handleJoinNow = () => {
     router.push("/signin");
@@ -14,7 +14,7 @@ export default function JoinNowButton() {
 
   return (
     <Button
-      variant={path.includes("company") ? "default_employer" : "default"}
+      variant={role === "Company" ? "default_employer" : "default"}
       onClick={handleJoinNow}
     >
       Join Now
