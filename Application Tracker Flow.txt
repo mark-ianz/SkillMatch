@@ -1,0 +1,23 @@
+Company:
+	- may different tabs sila each job posts:
+		1. To Review: mga applicants na di pa na viview ng company (walang action na ginagawa)
+		2. Shortlisted: ito yung applicants na neither dinecline nor inofferan ng job, PERO nireview ng company and nilagay sila dito as a potential fit.
+		3. Offered: dito naman yung mga applicants na sinendan ng offer to proceed or recede.
+		4. Offer Accepted: mga applicants na nag accept sa offer ng company to proceed. may option na dito yung company:
+			- schedule an interview: may mag popopup na modal na iaask yung company for a message (optional), date and time, and a generate google meet link button. then isesend na sa applicant. pag na sent na sa applicant, then yung button is magiging 'Interviewed' and if cinlick, mag popopup yung interview information.
+			- mark as hired
+			- decline (with optional reason)
+		5. Offer Declined: applicants na dinecline yung offer and nag recede (with optional reasons).
+		6. Rejected: mga nireject ng company at any stage
+		7. Hired
+		8. All: lahat ng applicants kahit anong status and sorted by the date na na update yung application nila.
+OJT:
+	- same siya sa company for tabs, pero dito is from all the jobs na inapplyan niya.
+		1. Applied: sinendan ng application
+		2. Shortlisted
+		3. Offered: inaccept yung application niya and inofferan ng company to either proced or recede.
+		4. Offer Accepted: mga offer na inaccept ng ojt, pag na accept sila, wala pang content to kasi di pa nakakapag set ng interview yung company e. pero once na nag schedule na, mag nonotif sa notification nila and pwede nila icheck uli sa tab na to.
+		5. Offer Declined: mga offer na dinecline ng ojt.
+		6. Rejected: pag dinecline ka ng company at any stage.
+		7. Hired.
+		8. All
