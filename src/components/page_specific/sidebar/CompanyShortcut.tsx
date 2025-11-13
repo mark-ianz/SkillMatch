@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button";
-import { Briefcase, Users, Bookmark, Settings, PlusCircle, LucideIcon, FileText } from "lucide-react";
+import { Briefcase, Users, Settings, PlusCircle, LucideIcon, FileText } from "lucide-react";
 import Link from "next/link";
 
 interface Shortcut {
