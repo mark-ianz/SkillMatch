@@ -1,0 +1,34 @@
+"use client";
+
+import { useEffect } from "react";
+import { useSession } from "next-auth/react";
+import useSessionStore from "@/store/SessionStore";
+import { getRoleName } from "@/lib/utils";
+
+// this component is responsible for syncing the user session from server session to zustand store
+export function SessionSync() {
+  const { data: session, status } = useSession();
+  const setSession = useSessionStore((state) => state.setSession);
+  const clearSession = useSessionStore((state) => state.clearSession);
+
+  useEffect(() => {
+    if (status === "authenticated" && session?.user) {
+      const user = session.user;
+
+      setSession({
+        email: user.email || null,
+        name: user.name || null,
+        image: user.image || null,
+        user_id: user.user_id,
+        company_id: user.company_id,
+        role_id: user.role_id,
+        role_name: user.role_id ? getRoleName(user.role_id) : null,
+        status_id: user.status_id,
+      });
+    } else if (status === "unauthenticated") {
+      clearSession();
+    }
+  }, [session, status, setSession, clearSession]);
+
+  return null;
+}
