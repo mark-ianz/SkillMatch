@@ -4,22 +4,16 @@ import Link from "next/link";
 import React from "react";
 import LogoOnly from "./LogoOnly";
 import TextLogo from "./TextLogo";
-import { usePathname } from "next/navigation";
+import { Roles } from "@/types/role.types";
 
-export default function DynamicLogo() {
-  const pathName = usePathname();
-
+export default function DynamicLogo({ role = "OJT" }: { role: Roles }) {
   const text = {
     ojt: "For OJT",
     company: "For Companies",
     admin: "For Admin",
-  }
+  };
 
-  const isOJT = !pathName?.includes("/company") || pathName.includes("/ojt");
-  const isCompany = pathName?.includes("/company");
-  const isAdmin = pathName?.includes("/admin");
-
-  const role = isOJT ? "ojt" : isCompany ? "company" : isAdmin ? "admin" : "ojt";
+  const textToDisplay = text[role.toLowerCase() as keyof typeof text];
 
   return (
     <div className="flex items-center gap-4">
@@ -30,7 +24,9 @@ export default function DynamicLogo() {
         <LogoOnly />
         <TextLogo className="text-skillmatch-dark" />
       </Link>
-      <p className="text-sm italic text-skillmatch-muted-dark">{text[role]}</p>
+      <p className="text-sm italic text-skillmatch-muted-dark">
+        {textToDisplay}
+      </p>
     </div>
   );
 }
