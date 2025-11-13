@@ -7,6 +7,7 @@ import college_courses from "@/data/college_courses.json";
 import { ItemList } from "@/components/common/input/ComboBox";
 import industry_categories from "@/data/industry_categories.json";
 import city_municipality from "@/data/city_municipality.json";
+import { Roles } from "@/types/role.types";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -114,7 +115,7 @@ export function getBarangaysByCity(
   return barangays;
 }
 
-export function getRoleName(role_id: number) {
+export function getRoleName(role_id: number): Roles {
   switch (role_id) {
     case 3:
       return "OJT";
