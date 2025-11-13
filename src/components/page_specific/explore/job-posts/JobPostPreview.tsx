@@ -53,14 +53,14 @@ export function JobPostPreview({
       </div>
 
       {/* Job title */}
-      <h3 className="text-lg font-semibold text-foreground mb-1 group-hover:text-primary transition-colors">
+      <h3 className="text-lg font-semibold text-foreground group-hover:text-primary transition-colors">
         {job.job_title}
       </h3>
 
       {/* Company name */}
-      <p className="text-sm text-muted-foreground mb-3">{job.company_name}</p>
+      <p className="text-sm text-muted-foreground mb-4">{job.company_name}</p>
 
-      <div className="flex items-center gap-4 text-sm text-muted-foreground flex-wrap">
+      <div className="flex items-center gap-4 text-xs text-muted-foreground flex-wrap">
         <div className="flex items-center gap-1.5">
           <MapPin className="w-4 h-4" />
           <span>{fullAddress}</span>
