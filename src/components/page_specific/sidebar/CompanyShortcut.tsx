@@ -35,12 +35,6 @@ const shortcuts: Shortcut[] = [
     variant: "ghost",
   },
   {
-    href: "/company/saved-students",
-    icon: Bookmark,
-    label: "Saved Students",
-    variant: "ghost",
-  },
-  {
     href: "/company/settings",
     icon: Settings,
     label: "Settings",
