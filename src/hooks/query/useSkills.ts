@@ -1,5 +1,5 @@
 import { api } from "@/lib/axios";
-import useOnboardingStore from "@/store/OnboardingStore";
+import useOnboardingStore from "@/store/onboarding/shared.onboarding.store";
 import { Skill, SkillQuery } from "@/types/skill.types";
 import { useMutation, useQuery } from "@tanstack/react-query";
 

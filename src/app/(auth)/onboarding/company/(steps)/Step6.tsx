@@ -7,7 +7,7 @@ import { api } from "@/lib/axios";
 import { formatZodError } from "@/lib/utils";
 import { onboardingPasswordSchema } from "@/schema/onboarding";
 import { useUpdateStepSixOnboardingCompany } from "@/hooks/query/useOnboardingCompany";
-import useOnboardingStore from "@/store/OnboardingStore";
+import useOnboardingStore from "@/store/onboarding/shared.onboarding.store";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import React from "react";

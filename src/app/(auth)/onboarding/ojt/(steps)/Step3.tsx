@@ -10,8 +10,8 @@ import { useSession } from "next-auth/react";
 import { onboardingStepThreeSchema } from "@/schema/onboarding";
 import { ZodError } from "zod";
 import { formatZodError } from "@/lib/utils";
-import useOJTProfileStore from "@/store/OJTProfileStore";
-import useOnboardingStore from "@/store/OnboardingStore";
+import useOJTProfileStore from "@/store/onboarding/ojt.onboarding.store";
+import useOnboardingStore from "@/store/onboarding/shared.onboarding.store";
 
 export default function Step3() {
   const session = useSession();

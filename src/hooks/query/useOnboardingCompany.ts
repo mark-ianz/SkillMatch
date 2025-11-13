@@ -7,8 +7,8 @@ import {
   EmployerOnboardingStepFiveSchema,
   OnboardingPasswordSchema,
 } from "@/schema/onboarding";
-import useCompanyStore from "@/store/CompanyStore";
-import useOnboardingStore from "@/store/OnboardingStore";
+import useCompanyStore from "@/store/onboarding/company.onboarding.store";
+import useOnboardingStore from "@/store/onboarding/shared.onboarding.store";
 import { OnboardingCompanyFullInfo } from "@/types/onboarding.types";
 import { useMutation, useQuery } from "@tanstack/react-query";
 

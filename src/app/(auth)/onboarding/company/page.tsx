@@ -2,7 +2,7 @@
 
 import React from "react";
 import Step1 from "./(steps)/Step1";
-import useOnboardingStore from "@/store/OnboardingStore";
+import useOnboardingStore from "@/store/onboarding/shared.onboarding.store";
 import Step2 from "./(steps)/Step2";
 import Step3 from "./(steps)/Step3";
 import { useSession } from "next-auth/react";

@@ -3,11 +3,11 @@
 import React from "react";
 import StepContainer from "@/components/page_specific/onboarding/StepContainer";
 import FileUploadField from "@/components/common/input/FileUploadField";
-import useCompanyStore from "@/store/CompanyStore";
+import useCompanyStore from "@/store/onboarding/company.onboarding.store";
 import { Button } from "@/components/ui/button";
 import { employerOnboardingStepTwoSchema } from "@/schema/onboarding";
 import { ZodError } from "zod";
-import useOnboardingStore from "@/store/OnboardingStore";
+import useOnboardingStore from "@/store/onboarding/shared.onboarding.store";
 import { formatZodError, getAllIndustry } from "@/lib/utils";
 import { useUpdateStepTwoOnboardingCompany } from "@/hooks/query/useOnboardingCompany";
 import { useUploadCompanyImage } from "@/hooks/query/useDocuments";

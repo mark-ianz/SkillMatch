@@ -11,7 +11,7 @@ import { useEffect, useState } from "react";
 import { useSession } from "next-auth/react";
 import LoadingGeneric from "@/components/global/LoadingGeneric";
 import { redirect, RedirectType, usePathname } from "next/navigation";
-import useOnboardingStore from "@/store/OnboardingStore";
+import useOnboardingStore from "@/store/onboarding/shared.onboarding.store";
 
 export default function OnboardingLayout({
   children,

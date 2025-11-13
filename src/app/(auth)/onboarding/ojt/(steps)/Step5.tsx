@@ -8,8 +8,8 @@ import SkipStep from "@/components/page_specific/onboarding/SkipStep";
 import { useSession } from "next-auth/react";
 import { useUpdateStepFiveOnboardingOJT } from "@/hooks/query/useOnboardingOJT";
 import { api } from "@/lib/axios";
-import useOJTProfileStore from "@/store/OJTProfileStore";
-import useOnboardingStore from "@/store/OnboardingStore";
+import useOJTProfileStore from "@/store/onboarding/ojt.onboarding.store";
+import useOnboardingStore from "@/store/onboarding/shared.onboarding.store";
 import FileUploadField from "@/components/common/input/FileUploadField";
 
 export default function Step5() {

@@ -2,11 +2,11 @@
 
 import React from "react";
 import FileUploadField from "@/components/common/input/FileUploadField";
-import useCompanyStore from "@/store/CompanyStore";
+import useCompanyStore from "@/store/onboarding/company.onboarding.store";
 import { Button } from "@/components/ui/button";
 import { employerOnboardingStepFiveSchema } from "@/schema/onboarding";
 import { formatZodError } from "@/lib/utils";
-import useOnboardingStore from "@/store/OnboardingStore";
+import useOnboardingStore from "@/store/onboarding/shared.onboarding.store";
 import { useUpdateStepFiveOnboardingCompany } from "@/hooks/query/useOnboardingCompany";
 import { useUploadCompanyDocument } from "@/hooks/query/useDocuments";
 import useRequireCompany from "@/hooks/useRequireCompany";

@@ -2,7 +2,7 @@ import { Button } from "@/components/ui/button";
 import React from "react";
 import { useSession } from "next-auth/react";
 import { api } from "@/lib/axios";
-import useOnboardingStore from "@/store/OnboardingStore";
+import useOnboardingStore from "@/store/onboarding/shared.onboarding.store";
 
 export default function SkipStep() {
   const nextStep = useOnboardingStore((state) => state.nextStep);

@@ -10,8 +10,8 @@ import { formatZodError } from "@/lib/utils";
 import RowContainer from "@/components/common/input/RowContainer";
 import StepContainer from "@/components/page_specific/onboarding/StepContainer";
 import { useUpdateStepOneOnboardingOJT } from "@/hooks/query/useOnboardingOJT";
-import useOnboardingStore from "@/store/OnboardingStore";
-import useUserStore from "@/store/UserStore";
+import useOnboardingStore from "@/store/onboarding/shared.onboarding.store";
+import useUserStore from "@/store/onboarding/UserStore";
 
 export default function Step1() {
   const session = useSession();

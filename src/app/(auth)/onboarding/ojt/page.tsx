@@ -9,7 +9,7 @@ import Step5 from "./(steps)/Step5";
 import Step6 from "./(steps)/Step6";
 import { useSession } from "next-auth/react";
 import { useGetOnboardingOJT } from "@/hooks/query/useOnboardingOJT";
-import useOnboardingStore from "@/store/OnboardingStore";
+import useOnboardingStore from "@/store/onboarding/shared.onboarding.store";
 
 export default function FormInputs() {
   const session = useSession();

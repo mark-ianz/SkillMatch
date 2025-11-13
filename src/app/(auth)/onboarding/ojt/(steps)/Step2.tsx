@@ -10,8 +10,8 @@ import { useUpdateStepTwoOnboardingOJT } from "@/hooks/query/useOnboardingOJT";
 import { useSession } from "next-auth/react";
 import { ZodError } from "zod";
 import { formatZodError } from "@/lib/utils";
-import useUserStore from "@/store/UserStore";
-import useOnboardingStore from "@/store/OnboardingStore";
+import useUserStore from "@/store/onboarding/UserStore";
+import useOnboardingStore from "@/store/onboarding/shared.onboarding.store";
 
 export default function Step2() {
   const session = useSession();

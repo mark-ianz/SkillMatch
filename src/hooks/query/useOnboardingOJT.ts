@@ -6,9 +6,8 @@ import {
   OnboardingStepThreeSchema,
   OnboardingStepTwoSchema,
 } from "@/schema/onboarding";
-import useUserStore from "@/store/UserStore";
-import useOJTProfileStore from "@/store/OJTProfileStore";
-import useOnboardingStore from "@/store/OnboardingStore";
+import useOJTProfileStore from "@/store/onboarding/ojt.onboarding.store";
+import useOnboardingStore from "@/store/onboarding/shared.onboarding.store";
 import { OnboardingStudentFullInfo } from "@/types/onboarding.types";
 
 type UploadResult = { path: string };
@@ -17,7 +16,7 @@ const nextStep = useOnboardingStore.getState().nextStep;
 const farthestStep = useOnboardingStore.getState().farthestStep;
 
 export function useGetOnboardingOJT(userId: number | undefined) {
-  const setUser = useUserStore((state) => state.setUser);
+  const setUser = useOJTProfileStore((state) => state.setUser);
   const setOJTProfile = useOJTProfileStore((state) => state.setOJTProfile);
   const setAcademicDetails = useOJTProfileStore(
     (state) => state.setAcademicDetails

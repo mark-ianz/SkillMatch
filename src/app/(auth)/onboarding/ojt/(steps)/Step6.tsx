@@ -11,7 +11,7 @@ import { formatZodError } from "@/lib/utils";
 import PasswordInput from "@/components/common/input/PasswordInput";
 import { api } from "@/lib/axios";
 import { onboardingPasswordSchema } from "@/schema/onboarding";
-import useOnboardingStore from "@/store/OnboardingStore";
+import useOnboardingStore from "@/store/onboarding/shared.onboarding.store";
 
 export default function Step6() {
   const password = useOnboardingStore((s) => s.password);

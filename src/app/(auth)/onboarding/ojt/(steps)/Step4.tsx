@@ -5,8 +5,8 @@ import { Button } from "@/components/ui/button";
 import { useUpdateUserSkills } from "@/hooks/query/useSkills";
 import { formatZodError } from "@/lib/utils";
 import { updateSkillSchema } from "@/schema/skill";
-import useOJTProfileStore from "@/store/OJTProfileStore";
-import useOnboardingStore from "@/store/OnboardingStore";
+import useOJTProfileStore from "@/store/onboarding/ojt.onboarding.store";
+import useOnboardingStore from "@/store/onboarding/shared.onboarding.store";
 
 import { Skill } from "@/types/skill.types";
 import { X } from "lucide-react";

@@ -3,12 +3,12 @@
 import React from "react";
 import StepContainer from "@/components/page_specific/onboarding/StepContainer";
 import InputWithLabel from "@/components/common/input/InputWithLabel";
-import useCompanyStore from "@/store/CompanyStore";
+import useCompanyStore from "@/store/onboarding/company.onboarding.store";
 import { Button } from "@/components/ui/button";
 import RowContainer from "@/components/common/input/RowContainer";
 import { employerOnboardingStepOneSchema } from "@/schema/onboarding";
 import { ZodError } from "zod";
-import useOnboardingStore from "@/store/OnboardingStore";
+import useOnboardingStore from "@/store/onboarding/shared.onboarding.store";
 import { formatZodError } from "@/lib/utils";
 import { useUpdateStepOneOnboardingCompany } from "@/hooks/query/useOnboardingCompany";
 import { useSession } from "next-auth/react";

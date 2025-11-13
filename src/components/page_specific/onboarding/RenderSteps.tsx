@@ -2,7 +2,7 @@ import { Check } from "lucide-react";
 import React from "react";
 import { cn } from "@/lib/utils";
 import { employer_steps, steps } from "@/const/steps";
-import useOnboardingStore from "@/store/OnboardingStore";
+import useOnboardingStore from "@/store/onboarding/shared.onboarding.store";
 
 export default function RenderSteps({ type }: { type: "ojt" | "employer" }) {
   const farthestStep = useOnboardingStore((state) => state.farthestStep);
