@@ -5,5 +5,10 @@ export type OJTProfile = AcademicDetails & {
   user_id: number;
   resume_path: string | null;
   visibility: "public" | "private";
+  skills: string[]; // processed na to, and array na
   created_at: Date;
-}
+};
+
+export type OJTProfileQuery = Omit<OJTProfile, "skills"> & {
+  skills: string; // comma separated string
+};
