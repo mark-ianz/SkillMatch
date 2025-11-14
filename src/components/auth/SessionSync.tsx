@@ -24,6 +24,7 @@ export function SessionSync() {
         role_id: user.role_id,
         role_name: user.role_id ? getRoleName(user.role_id) : null,
         status_id: user.status_id,
+        loading: false,
       });
     } else if (status === "unauthenticated") {
       clearSession();
@@ -31,4 +32,4 @@ export function SessionSync() {
   }, [session, status, setSession, clearSession]);
 
   return null;
-}
+} 
