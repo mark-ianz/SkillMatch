@@ -8,9 +8,21 @@ import LoadingGeneric from "@/components/global/LoadingGeneric";
 import { useFeedStore } from "@/store/FeedStore";
 import { useSearchParams } from "next/navigation";
 import { JobFeedFilters } from "@/types/job_feed.types";
+import useSessionStore from "@/store/SessionStore";
 
 export default function JobPostFeed() {
   const searchParams = useSearchParams();
+  const user_id = useSessionStore((state) => state.user_id);
+  const role_name = useSessionStore((state) => state.role_name);
+
+  const isSessionLoading = useSessionStore((state) => state.loading);
+
+  console.log("JobPostFeed - Session Check:", { 
+    user_id, 
+    role_name, 
+    sessionStatus: isSessionLoading,
+    isSessionLoading 
+  });
 
   // Build filters from URL params
   const filters: JobFeedFilters = {
@@ -23,20 +35,26 @@ export default function JobPostFeed() {
     isPaid: searchParams.get("paid") === "true" ? true : undefined,
   };
 
-  const { data: job_posts, isLoading, error } = useJobPosts(filters);
+  const {
+    data: job_posts,
+    isLoading,
+    error,
+  } = useJobPosts(filters, user_id, role_name, isSessionLoading);
   const selected_job_post = useFeedStore((state) => state.selected_job_post);
   const setSelectedJobPost = useFeedStore((state) => state.setSelectedJobPost);
 
-  console.log(job_posts);
+  console.log("JobPostFeed - User Info:", { user_id, role_name });
+  console.log("JobPostFeed - Job Posts:", job_posts);
 
   // Set initial selected item when data loads
   useEffect(() => {
     if (job_posts && job_posts.length > 0 && selected_job_post === null) {
+      console.log("Setting initial job post:", job_posts[0].job_title);
       setSelectedJobPost(job_posts[0]);
     }
   }, [job_posts, selected_job_post, setSelectedJobPost]);
 
-  if (isLoading) {
+  if (isLoading || isSessionLoading) {
     return (
       <div className="flex items-center justify-center">
         <LoadingGeneric />
@@ -65,10 +83,7 @@ export default function JobPostFeed() {
   return (
     <>
       {job_posts!.map((job: JobPost) => (
-        <div
-          key={job.job_post_id}
-          onClick={() => setSelectedJobPost(job)}
-        >
+        <div key={job.job_post_id} onClick={() => setSelectedJobPost(job)}>
           <JobPostPreview
             job={job}
             isSelected={selected_job_post?.job_post_id === job.job_post_id}
