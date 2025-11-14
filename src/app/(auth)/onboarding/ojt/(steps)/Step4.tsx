@@ -1,4 +1,4 @@
-import SearchSkill from "@/components/common/input/SearchSkill_old";
+import SearchSkill from "@/components/common/input/SearchSkill";
 import SkipStep from "@/components/page_specific/onboarding/SkipStep";
 import StepContainer from "@/components/page_specific/onboarding/StepContainer";
 import { Button } from "@/components/ui/button";
@@ -8,8 +8,6 @@ import { updateSkillSchema } from "@/schema/skill";
 import useOJTProfileStore from "@/store/onboarding/ojt.onboarding.store";
 import useOnboardingStore from "@/store/onboarding/shared.onboarding.store";
 
-import { Skill } from "@/types/skill.types";
-import { X } from "lucide-react";
 import { useSession } from "next-auth/react";
 
 const MAXIMUM_SKILLS = parseInt(
@@ -19,6 +17,7 @@ const MAXIMUM_SKILLS = parseInt(
 export default function Step4() {
   const session = useSession();
   const skills = useOJTProfileStore((state) => state.skills);
+  const setSkills = useOJTProfileStore((state) => state.setSkills);
   const setError = useOnboardingStore.getState().setError;
 
   const { mutate, isPending } = useUpdateUserSkills(
@@ -41,11 +40,37 @@ export default function Step4() {
     }
   }
 
+  // Convert skill objects to skill names for the new SearchSkill component
+  const selectedSkillNames = skills.map((skill) => skill.skill_name);
+
+  // Handle skill changes from the new SearchSkill component
+  function handleSkillsChange(skillNames: string[]) {
+    // Convert skill names back to skill objects
+    // We need to preserve skill_id for existing skills and create new ones for new skills
+    const updatedSkills = skillNames.map((name) => {
+      const existingSkill = skills.find((s) => s.skill_name === name);
+      if (existingSkill) {
+        return existingSkill;
+      }
+      // For newly added skills, we'll use a temporary ID
+      // The backend will assign proper IDs when saved
+      return {
+        skill_id: 0, // Temporary ID for new skills
+        skill_name: name,
+      };
+    });
+    setSkills(updatedSkills);
+  }
+
   return (
     <StepContainer>
       <div className="flex flex-col gap-4 border rounded-md shadow-sm p-4 ">
-        <SearchSkill />
-        <RenderSkills />
+        <SearchSkill
+          selectedSkills={selectedSkillNames}
+          onSkillsChange={handleSkillsChange}
+          maxSkills={MAXIMUM_SKILLS}
+          skillType="technical"
+        />
         <p className="text-xs text-skillmatch-secondary-dark/50 mt-4">
           Maximum of {MAXIMUM_SKILLS} skills. {skills.length}/{MAXIMUM_SKILLS}
         </p>
@@ -62,40 +87,5 @@ export default function Step4() {
         </Button>
       </div>
     </StepContainer>
-  );
-}
-
-function RenderSkills() {
-  const skills = useOJTProfileStore((state) => state.skills);
-  return (
-    skills.length > 0 && (
-      <div className="flex flex-wrap gap-2">
-        {skills.map((skill) => (
-          <SkillList key={skill.skill_id} skill={skill} />
-        ))}
-      </div>
-    )
-  );
-}
-
-function SkillList({ skill }: { skill: Skill }) {
-  const removeSkill = useOJTProfileStore((state) => state.removeSkill);
-  const skills = useOJTProfileStore((state) => state.skills);
-
-  function handleRemoveSkill() {
-    removeSkill(skill.skill_id);
-    console.log(skills);
-  }
-
-  return (
-    <div className="flex gap-4 items-center justify-center text-sm text-center border py-1 pl-4 pr-2 rounded-md border-skillmatch-primary-green text-skillmatch-primary-green">
-      <p>{skill.skill_name}</p>
-      <div
-        className="hover:bg-accent p-1 rounded-full cursor-pointer w-fit ml-auto"
-        onClick={handleRemoveSkill}
-      >
-        <X className="w-4 h-4 text-skillmatch-muted-green" />
-      </div>
-    </div>
   );
 }
