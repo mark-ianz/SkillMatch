@@ -77,8 +77,6 @@ export const authConfig: NextAuthOptions = {
     async jwt({ token, user }) {
       // First time jwt callback is run, user object is available
       try {
-        console.log("JWT Callback, token:", token);
-        console.log("JWT Callback, user:", user);
         if (user) {
           token.email = user.email;
           token.name = user.name;
@@ -95,7 +93,6 @@ export const authConfig: NextAuthOptions = {
       }
     },
     async session({ session, token }) {
-      console.debug("Session Callback, session:", session);
       if (session.user) {
         session.user.email = (token as ExtendedToken).email;
         session.user.name = (token as ExtendedToken).name;
