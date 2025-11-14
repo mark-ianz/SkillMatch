@@ -1,0 +1,83 @@
+VALUES 
+	('[Generated nanoid]', -- Generate kayo ng nanoid, https://nanoid.yuuniworks.com/ length is 21 characters.
+      'company_id', -- Empty niyo to, ako na maglalagay
+      '[Job Title]', 
+      '[On-Site]', -- May 3 choices dito, ['On-Site', 'Hybrid', 'Remote'];
+      '[Categories]', -- Check yung industry_categories.json, lahat ng 'job_categories' yung choices. 
+      '[Job Overview]', -- Description to ng job, at least 50 words
+      '[Available Positions]', -- Number
+      '[Courses Required]', -- Check college_courses.json, lahat ng 'course_name' is yung choices. ang string format neto is "Course 1, Course 2, Course 3".
+      '[Responsibilities]', -- Separated with comma to, example: "Responsibility 1, Responsibility 2, Responsibility 3". All in one string pero separated with comma. 
+      '[Technical Skills]', -- Separated din to with comma. "skill 1, skill 2, skill 3, skill 4".
+      '[Soft Skills]', -- Separated din to with comma. "soft skill 1, soft skill 2, soft skill 3, soft skill 4" .
+      '[Preferred Qualifications]', -- Optional lang to pero mas better if meron, example: "Experience with Tailwind CSS or Figma, basic knowledge of deployment (Vercel)".
+      '[Street Name]', -- Kahit ano basta may street number.
+      '[City/Municipality]', -- Mga city lang to sa NCR. Check city_municipality.json. Fold niyo lahat ng object by pressing 'Cntrl K + 0' para ma fold lahat. 
+      '[Barangay]', -- Makikita niyo rin sa loob ng city_municipality.json. Naka list lahat ng barangay kada city. Doon kayo mamili base sa city na pinili niyo
+      '[Postal Code]', -- 4 Numerical Charaters 
+      current_timestamp(), -- Keep
+      current_timestamp() -- Keep
+	)
+
+-- Uncommented
+
+VALUES 
+     ('[Generated nanoid]', -- If iinsert, pakitanggal yung bracket.
+      'company_id',
+      '[Job Title]', 
+      '[On-Site]',
+      '[Categories]', 
+      '[Job Overview]',
+      '[Available Positions]',
+      '[Courses Required]',
+      '[Responsibilities]',
+      '[Technical Skills]',
+      '[Soft Skills]',
+      '[Preferred Qualifications]',
+      '[Street Name]',
+      '[City/Municipality]',
+      '[Barangay]', 
+      '[Postal Code]', 
+      current_timestamp(),
+      current_timestamp()
+     )
+
+INSERT INTO `job_posts` 
+	(`job_post_id`, 
+     `company_id`, 
+     `job_title`, 
+     `work_arrangement`, 
+     `job_categories`, 
+     `job_overview`, 
+     `available_positions`, 
+     `courses_required`, 
+     `job_responsibilities`, 
+     `technical_skills`, 
+     `soft_skills`, 
+     `preferred_qualifications`, 
+     `street_name`, 
+     `city_municipality`, 
+     `barangay`, 
+     `postal_code`, 
+     `created_at`, 
+     `updated_at`) 
+	VALUES 
+	('[Generated nanoid]', -- Generate kayo ng nanoid, https://nanoid.yuuniworks.com/ length is 21 characters.
+      'company_id', -- Empty niyo to, ako na maglalagay
+      '[Job Title]', 
+      '[On-Site]', -- May 3 choices dito, ['On-Site', 'Hybrid', 'Remote'];
+      '[Categories]', -- Check yung industry_categories.json, lahat ng 'job_categories' yung choices. 
+      '[Job Overview]', -- Description to ng job, at least 50 words
+      '[Available Positions]', -- Number
+      '[Courses Required]', -- Check college_courses.json, lahat ng 'course_name' is yung choices. ang string format neto is "Course 1, Course 2, Course 3".
+      '[Responsibilities]', -- Separated with comma to, example: "Responsibility 1, Responsibility 2, Responsibility 3". All in one string pero separated with comma. 
+      '[Technical Skills]', -- Separated din to with comma. "skill 1, skill 2, skill 3, skill 4".
+      '[Soft Skills]', -- Separated din to with comma. "soft skill 1, soft skill 2, soft skill 3, soft skill 4" .
+      '[Preferred Qualifications]' -- Optional lang to pero mas better if meron, example: "Experience with Tailwind CSS or Figma, basic knowledge of deployment (Vercel)".
+      '[Street Name]' -- Kahit ano basta may street number.
+      '[City/Municipality]' -- Mga city lang to sa NCR. Check city_municipality.json. Fold niyo lahat ng object by pressing 'Cntrl K + 0' para ma fold lahat. 
+      '[Barangay]' -- Makikita niyo rin sa loob ng city_municipality.json. Naka list lahat ng barangay kada city. Doon kayo mamili base sa city na pinili niyo, 
+      '[Postal Code]' -- 4 Numerical Charaters, 
+      current_timestamp(), -- Keep
+      current_timestamp() -- Keep
+	)
