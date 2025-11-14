@@ -13,7 +13,7 @@ import { handleSignup } from "@/services/auth/auth.shared.service";
 export const authConfig: NextAuthOptions = {
   providers: [
     GoogleProvider({
-      id: "google-ojt",
+      id: "google-ojt-signin",
       clientId: process.env.GOOGLE_CLIENT_ID!,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
     }),
@@ -23,7 +23,7 @@ export const authConfig: NextAuthOptions = {
       clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
     }),
     GoogleProvider({
-      id: "google-company",
+      id: "google-company-signin",
       clientId: process.env.GOOGLE_CLIENT_ID!,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
     }),
@@ -43,7 +43,7 @@ export const authConfig: NextAuthOptions = {
           return res;
         }
 
-        if (account?.provider === "google-company") {
+        if (account?.provider === "google-company-signin") {
           // Company sign-in flow
           const res = await handleCompanySignIn(user as ExtendedUser);
           return res;
@@ -56,7 +56,7 @@ export const authConfig: NextAuthOptions = {
           return res;
         }
 
-        if (account?.provider === "google-ojt") {
+        if (account?.provider === "google-ojt-signin") {
           // OJT sign-in flow
           const res = await handleOJTSignIn(user as ExtendedUser);
           console.log("res", res);

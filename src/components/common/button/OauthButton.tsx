@@ -17,8 +17,8 @@ export default function OauthButton({
   callbackUrl?: string;
   className?: string;
   provider:
-    | "google-ojt"
-    | "google-company"
+    | "google-ojt-signin"
+    | "google-company-signin"
     | "google-company-signup"
     | "google-ojt-signup"
     | "linkedIn";

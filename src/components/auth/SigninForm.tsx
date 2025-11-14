@@ -50,7 +50,7 @@ export function SigninForm({ mode }: SigninFormProps) {
           <OauthButton
             variant={isOJT ? "default" : "default_employer"}
             text={buttonText}
-            provider={isOJT ? "google-ojt" : "google-company"}
+            provider={isOJT ? "google-ojt-signin" : "google-company-signin"}
             callbackUrl={isOJT ? "/onboarding/ojt" : "/onboarding/company"}
             className="w-[400px]"
           />
