@@ -8,8 +8,18 @@ import { JobPost } from "@/types/job_post.types";
 import { Bookmark, Briefcase, MapPin } from "lucide-react";
 import Image from "next/image";
 import { CopyLinkButton } from "@/components/common/button/CopyLinkButton";
+import { Separator } from "@/components/ui/separator";
+import MatchedBadges from "../explore/job-posts/sub-components/MatchedBadges";
+import AllowanceDescription from "../explore/job-posts/sub-components/AllowanceDescription";
+import JobCategories from "../explore/job-posts/sub-components/JobCategories";
 
-export function JobPostFullInfo({ job, className }: { job: JobPost; className?: string }) {
+export function JobPostFullInfo({
+  job,
+  className,
+}: {
+  job: JobPost;
+  className?: string;
+}) {
   const handleApply = () => {
     // TODO: Implement apply functionality
     console.log("Apply clicked for job:", job?.job_post_id);
@@ -21,8 +31,10 @@ export function JobPostFullInfo({ job, className }: { job: JobPost; className?: 
   };
 
   const fullAddress = `${job?.street_name}, ${job?.barangay}, ${job?.city_municipality} ${job?.postal_code}`;
-  
-  const baseUrl = process.env.NEXT_PUBLIC_FRONTEND_BASE_URL || (typeof window !== 'undefined' ? window.location.origin : '');
+
+  const baseUrl =
+    process.env.NEXT_PUBLIC_FRONTEND_BASE_URL ||
+    (typeof window !== "undefined" ? window.location.origin : "");
   const jobPostUrl = `${baseUrl}/view/job-post?id=${job?.job_post_id}`;
 
   return (
@@ -75,9 +87,8 @@ export function JobPostFullInfo({ job, className }: { job: JobPost; className?: 
           <div className="flex items-center gap-2">
             <Briefcase className="w-4 h-4" />
             <span>
-              {job?.available_positions} position
-              {job?.available_positions &&
-              job?.available_positions > 1
+              {job?.available_positions} slot
+              {job?.available_positions && job?.available_positions > 1
                 ? "s"
                 : ""}
             </span>
@@ -86,12 +97,7 @@ export function JobPostFullInfo({ job, className }: { job: JobPost; className?: 
 
         {/* Badges */}
         <div className="flex flex-wrap gap-2">
-          {job?.job_categories &&
-            job?.job_categories.map((category, idx) => (
-              <Badge key={idx} variant="secondary" className="text-xs">
-                {category}
-              </Badge>
-            ))}
+          <JobCategories job_categories={job.job_categories}  className="text-sm"/>
           {!job?.is_paid && (
             <Badge variant="outline" className="text-xs">
               Unpaid
@@ -99,15 +105,19 @@ export function JobPostFullInfo({ job, className }: { job: JobPost; className?: 
           )}
         </div>
 
-        {job?.allowance_description && (
-          <Badge variant="secondary" className="text-xs font-medium mt-2">
-            {job.allowance_description}
-          </Badge>
-        )}
+        <AllowanceDescription
+          className="text-sm"
+          allowance_description={job.allowance_description}
+        />
+        <MatchedBadges
+          badgeClassName="text-sm"
+          course_matched={job.course_matched}
+          skill_match_count={job.skill_match_count}
+        />
       </div>
 
       {/* Divider */}
-      <div className="border-t" />
+      <Separator />
 
       <div className="space-y-3">
         <h2 className="text-sm font-semibold text-skillmatch-dark uppercase tracking-wide">
@@ -124,53 +134,50 @@ export function JobPostFullInfo({ job, className }: { job: JobPost; className?: 
         </h2>
 
         <div className="flex flex-col gap-4">
-          {job?.courses_required &&
-            job?.courses_required.length > 0 && (
-              <div className="space-y-1">
-                <p className="text-xs font-medium text-muted-foreground">
-                  Courses Required
-                </p>
-                <div className="flex flex-wrap gap-2">
-                  {job?.courses_required.map((course, idx) => (
-                    <Badge key={idx} variant="outline" className="text-xs">
-                      {course}
-                    </Badge>
-                  ))}
-                </div>
+          {job?.courses_required && job?.courses_required.length > 0 && (
+            <div className="space-y-1">
+              <p className="text-xs font-medium text-muted-foreground">
+                Courses Required
+              </p>
+              <div className="flex flex-wrap gap-2">
+                {job?.courses_required.map((course, idx) => (
+                  <Badge key={idx} variant="outline" className="text-xs">
+                    {course}
+                  </Badge>
+                ))}
               </div>
-            )}
+            </div>
+          )}
 
-          {job?.technical_skills &&
-            job?.technical_skills.length > 0 && (
-              <div className="space-y-1">
-                <p className="text-xs font-medium text-muted-foreground">
-                  Technical Skills
-                </p>
-                <div className="flex flex-wrap gap-2">
-                  {job?.technical_skills.map((skill, idx) => (
-                    <Badge key={idx} variant="outline" className="text-xs">
-                      {skill}
-                    </Badge>
-                  ))}
-                </div>
+          {job?.technical_skills && job?.technical_skills.length > 0 && (
+            <div className="space-y-1">
+              <p className="text-xs font-medium text-muted-foreground">
+                Technical Skills
+              </p>
+              <div className="flex flex-wrap gap-2">
+                {job?.technical_skills.map((skill, idx) => (
+                  <Badge key={idx} variant="outline" className="text-xs">
+                    {skill}
+                  </Badge>
+                ))}
               </div>
-            )}
+            </div>
+          )}
 
-          {job?.soft_skills &&
-            job?.soft_skills.length > 0 && (
-              <div className="space-y-1">
-                <p className="text-xs font-medium text-muted-foreground">
-                  Soft Skills
-                </p>
-                <div className="flex flex-wrap gap-2">
-                  {job?.soft_skills.map((skill, idx) => (
-                    <Badge key={idx} variant="outline" className="text-xs">
-                      {skill}
-                    </Badge>
-                  ))}
-                </div>
+          {job?.soft_skills && job?.soft_skills.length > 0 && (
+            <div className="space-y-1">
+              <p className="text-xs font-medium text-muted-foreground">
+                Soft Skills
+              </p>
+              <div className="flex flex-wrap gap-2">
+                {job?.soft_skills.map((skill, idx) => (
+                  <Badge key={idx} variant="outline" className="text-xs">
+                    {skill}
+                  </Badge>
+                ))}
               </div>
-            )}
+            </div>
+          )}
         </div>
 
         {job?.preferred_qualifications && (
@@ -186,7 +193,7 @@ export function JobPostFullInfo({ job, className }: { job: JobPost; className?: 
       </div>
 
       {/* Divider */}
-      <div className="border-t" />
+      <Separator />
 
       <div className="space-y-4">
         <h2 className="text-sm font-semibold text-skillmatch-dark uppercase tracking-wide">
@@ -194,21 +201,19 @@ export function JobPostFullInfo({ job, className }: { job: JobPost; className?: 
         </h2>
 
         <ul className="space-y-1">
-          {job?.job_responsibilities.map(
-            (responsibility, idx) => (
-              <li key={idx} className="flex gap-3 text-sm text-skillmatch-dark">
-                <span className="text-muted-foreground flex-shrink-0 mt-1">
-                  •
-                </span>
-                <span className="leading-relaxed">{responsibility}</span>
-              </li>
-            )
-          )}
+          {job?.job_responsibilities.map((responsibility, idx) => (
+            <li key={idx} className="flex gap-3 text-sm text-skillmatch-dark">
+              <span className="text-muted-foreground flex-shrink-0 mt-1">
+                •
+              </span>
+              <span className="leading-relaxed">{responsibility}</span>
+            </li>
+          ))}
         </ul>
       </div>
 
       {/* Divider */}
-      <div className="border-t" />
+      <Separator />
 
       <Button
         onClick={handleApply}
