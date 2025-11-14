@@ -35,19 +35,20 @@ export const SkillServices = {
     }
   },
   updateSkills: async (user_id: string, skills: Skill[]) => {
-    // create connection
     const connection = await db.getConnection();
     try {
       await connection.beginTransaction();
 
-      // delete all previous skills
-      await db.query(`DELETE FROM ojt_skill WHERE user_id = ?`, [user_id]);
+      // Convert skills array to comma-separated string
+      const skillsString = skills.map((skill) => skill.skill_name).join(", ");
 
-      const values = skills.map((skill) => [user_id, skill.skill_id]);
+      // Update the skills column in ojt_profile
+      await connection.query(
+        `UPDATE ojt_profile SET skills = ? WHERE user_id = ?`,
+        [skillsString, user_id]
+      );
 
-      await db.query(`INSERT INTO ojt_skill (user_id, skill_id) VALUES ?`, [
-        values,
-      ]);
+      await connection.commit();
     } catch (error) {
       await connection.rollback();
       throw error;
@@ -56,21 +57,21 @@ export const SkillServices = {
     }
   },
   getUserSkills: async (user_id: string | number) => {
-    const [rows] = await db.query<(RowDataPacket & { skill_id: number })[]>(
-      `SELECT ojt_skill.skill_id FROM ojt_skill WHERE ojt_skill.user_id = ?`,
+    const [rows] = await db.query<(RowDataPacket & { skills: string | null })[]>(
+      `SELECT skills FROM ojt_profile WHERE user_id = ?`,
       [user_id]
     );
-    const skill_ids = rows.map((row) => row.skill_id);
 
-    if (skill_ids.length === 0) {
+    if (rows.length === 0 || !rows[0].skills) {
       return [];
     }
 
-    const [skillRows] = await db.query(
-      `SELECT * FROM skill WHERE skill_id IN (?)`,
-      [skill_ids]
-    );
+    // Split comma-separated string into array and trim whitespace
+    const skillNames = rows[0].skills
+      .split(",")
+      .map((skill) => skill.trim())
+      .filter((skill) => skill.length > 0);
 
-    return skillRows as Skill[];
+    return skillNames;
   },
 };

@@ -37,8 +37,8 @@ export async function GET (_: Request, context: { params: { user_id: string } })
   }
 
   try {
-    const skills = await SkillServices.getUserSkills(user_id);
-    return NextResponse.json(skills);
+    const skillNames = await SkillServices.getUserSkills(user_id);
+    return NextResponse.json({ skills: skillNames });
   } catch {
     return NextResponse.json(
       { error: "Failed to retrieve skills" },
