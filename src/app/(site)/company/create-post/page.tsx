@@ -1,6 +1,6 @@
 "use client";
 
-import QueryClientProviderWrapper from "@/components/global/QueryClientProviderWrapper";
+import QueryClientProviderWrapper from "@/components/providers/QueryClientProviderWrapper";
 import MainLayout from "@/components/layout/MainLayout";
 import CompanyPostForm from "@/components/page_specific/company_post/CompanyPostForm";
 import { SessionProvider } from "next-auth/react";

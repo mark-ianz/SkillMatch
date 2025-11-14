@@ -5,7 +5,7 @@ import SidebarProfile from "@/components/page_specific/sidebar/SidebarProfile";
 import { CompanyPostsFeed } from "@/components/page_specific/feed/CompanyPostsFeed";
 import { SuggestedCompanies } from "@/components/page_specific/feed/SuggestedCompanies";
 import { SessionProvider } from "next-auth/react";
-import QueryClientProviderWrapper from "@/components/global/QueryClientProviderWrapper";
+import QueryClientProviderWrapper from "@/components/providers/QueryClientProviderWrapper";
 
 export default function FeedPage() {
   return (
