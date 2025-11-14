@@ -1,6 +1,6 @@
 "use client";
 
-import QueryClientProviderWrapper from "@/components/providers/QueryClientProviderWrapper";
+import ClientProviders from "@/components/providers/ClientProviders";
 import React from "react";
 
 export default function layout({
@@ -8,5 +8,5 @@ export default function layout({
 }: {
   children: React.ReactNode;
 }) {
-  return <QueryClientProviderWrapper>{children}</QueryClientProviderWrapper>;
+  return <ClientProviders>{children}</ClientProviders>;
 }
