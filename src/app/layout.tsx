@@ -18,7 +18,9 @@ const geistMono = Geist_Mono({
 const sansation = Sansation({
   variable: "--font-sansation",
   subsets: ["latin"],
-  weight: ["400", "700"],
+  weight: ["400", "700","300"],
+  adjustFontFallback: false,
+  fallback: ['system-ui', 'arial']
 });
 
 export const metadata: Metadata = {
