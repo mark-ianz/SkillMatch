@@ -27,6 +27,10 @@ export type JobPost = CompanyPreview & CompanyAddress & {
   created_at: string; // ISO string
   updated_at: string; // ISO string
 
+  // Skill matching (optional, added for OJT users)
+  skill_match_count?: number;
+  course_matched?: boolean;
+
   /* shift_type: ShiftType; */
   /* hours_per_week?: number; */
   /* working_days?: string; */
