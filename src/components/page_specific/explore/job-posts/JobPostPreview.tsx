@@ -46,7 +46,7 @@ export function JobPostPreview({
         <DatePosted created_at={job.created_at} />
       </div>
 
-      <AllowanceDescription allowance_description={job.allowance_description} />
+      <AllowanceDescription className="mt-2" allowance_description={job.allowance_description} />
     </div>
   );
 }
