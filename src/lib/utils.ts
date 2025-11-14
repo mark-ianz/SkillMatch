@@ -51,6 +51,24 @@ export function getAllCourses(asItems?: boolean): string[] | ItemList[] {
   );
 }
 
+export function getCourseByAbbr(abbr: string): string | null {
+  const COLLEGE_LIST = Object.keys(college_courses).map((college) => ({
+    college: college,
+    courses: college_courses[college as keyof typeof college_courses].courses,
+  }));
+
+  for (const college of COLLEGE_LIST) {
+    const course = college.courses.find(
+      (c) => c.abbr.toLowerCase() === abbr.toLowerCase()
+    );
+    if (course) {
+      return course.course_name;
+    }
+  }
+
+  return null;
+}
+
 export function getAllIndustry(asItems?: boolean): string[] | ItemList[] {
   if (asItems) {
     return industry_categories.map((industry) => ({
