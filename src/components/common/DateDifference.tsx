@@ -14,8 +14,6 @@ type Props = {
 
 export default function DateDifference({ date, className }: Props) {
   const parsedDate = new Date(date);
-
-  console.log(parsedDate)
   return (
     <TooltipProvider>
       <Tooltip delayDuration={200}>
