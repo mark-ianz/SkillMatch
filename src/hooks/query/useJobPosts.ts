@@ -6,9 +6,14 @@ import { JobPost } from "@/types/job_post.types";
 import { JobFeedFilters } from "@/types/job_feed.types";
 
 // Query: Get all job posts with optional filters
-export function useJobPosts(filters?: JobFeedFilters) {
+export function useJobPosts(
+  filters?: JobFeedFilters, 
+  userId?: number, 
+  roleName?: string | null,
+  isSessionLoading?: boolean
+) {
   return useQuery({
-    queryKey: ["job-posts", filters],
+    queryKey: ["job-posts", filters, userId, roleName],
     queryFn: async () => {
       const params = new URLSearchParams();
       
@@ -26,12 +31,21 @@ export function useJobPosts(filters?: JobFeedFilters) {
         }
       }
 
+      // Add userId and roleName for skill matching
+      if (userId) {
+        params.append("userId", String(userId));
+      }
+      if (roleName) {
+        params.append("roleName", roleName);
+      }
+
       const queryString = params.toString();
       const url = queryString ? `/explore?${queryString}` : "/explore";
       
       const { data } = await api.get(url);
       return data.job_posts as JobPost[];
     },
+    enabled: !isSessionLoading, // Wait for session to load before fetching
     staleTime: 1000 * 60 * 5, // 5 minutes
   });
 }
