@@ -11,7 +11,7 @@ import RowContainer from "@/components/common/input/RowContainer";
 import StepContainer from "@/components/page_specific/onboarding/StepContainer";
 import { useUpdateStepOneOnboardingOJT } from "@/hooks/query/useOnboardingOJT";
 import useOnboardingStore from "@/store/onboarding/shared.onboarding.store";
-import useUserStore from "@/store/onboarding/UserStore";
+import useOJTProfileStore from "@/store/onboarding/ojt.onboarding.store";
 
 export default function Step1() {
   const session = useSession();
@@ -22,32 +22,32 @@ export default function Step1() {
   );
 
   // Signup Store Values
-  const first_name = useUserStore((state) => state.first_name);
-  const middle_name = useUserStore((state) => state.middle_name);
-  const last_name = useUserStore((state) => state.last_name);
-  const email = useUserStore((state) => state.email);
-  const birthdate = useUserStore((state) => state.birthdate);
-  const phone_number = useUserStore((state) => state.phone_number);
-  const gender = useUserStore((state) => state.gender);
+  const first_name = useOJTProfileStore((state) => state.first_name);
+  const middle_name = useOJTProfileStore((state) => state.middle_name);
+  const last_name = useOJTProfileStore((state) => state.last_name);
+  const email = useOJTProfileStore((state) => state.email);
+  const birthdate = useOJTProfileStore((state) => state.birthdate);
+  const phone_number = useOJTProfileStore((state) => state.phone_number);
+  const gender = useOJTProfileStore((state) => state.gender);
 
   // Signup Store Setters
-  const setFirstName = useUserStore((state) => state.setFirstName);
-  const setMiddleName = useUserStore((state) => state.setMiddleName);
-  const setLastName = useUserStore((state) => state.setLastName);
-  const setEmail = useUserStore((state) => state.setEmail);
-  const setPhoneNumber = useUserStore((state) => state.setPhoneNumber);
-  const setGender = useUserStore((state) => state.setGender);
+  const setFirstName = useOJTProfileStore((state) => state.setFirstName);
+  const setMiddleName = useOJTProfileStore((state) => state.setMiddleName);
+  const setLastName = useOJTProfileStore((state) => state.setLastName);
+  const setEmail = useOJTProfileStore((state) => state.setEmail);
+  const setPhoneNumber = useOJTProfileStore((state) => state.setPhoneNumber);
+  const setGender = useOJTProfileStore((state) => state.setGender);
 
   // Submit handler
   async function handleNextStep() {
     // get all the current data from Step 1 on the store
-    const first_name = useUserStore.getState().first_name;
-    const middle_name = useUserStore.getState().middle_name;
-    const last_name = useUserStore.getState().last_name;
-    const email = useUserStore.getState().email;
-    const phone_number = useUserStore.getState().phone_number;
-    const gender = useUserStore.getState().gender;
-    const birthdate = useUserStore.getState().birthdate;
+    const first_name = useOJTProfileStore.getState().first_name;
+    const middle_name = useOJTProfileStore.getState().middle_name;
+    const last_name = useOJTProfileStore.getState().last_name;
+    const email = useOJTProfileStore.getState().email;
+    const phone_number = useOJTProfileStore.getState().phone_number;
+    const gender = useOJTProfileStore.getState().gender;
+    const birthdate = useOJTProfileStore.getState().birthdate;
 
     // validate the data
     try {

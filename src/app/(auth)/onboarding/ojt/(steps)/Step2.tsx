@@ -10,8 +10,8 @@ import { useUpdateStepTwoOnboardingOJT } from "@/hooks/query/useOnboardingOJT";
 import { useSession } from "next-auth/react";
 import { ZodError } from "zod";
 import { formatZodError } from "@/lib/utils";
-import useUserStore from "@/store/onboarding/UserStore";
 import useOnboardingStore from "@/store/onboarding/shared.onboarding.store";
+import useOJTProfileStore from "@/store/onboarding/ojt.onboarding.store";
 
 export default function Step2() {
   const session = useSession();
@@ -20,31 +20,31 @@ export default function Step2() {
     session.data?.user.user_id
   );
 
-  const house_number = useUserStore((state) => state.house_number);
-  const subdivision = useUserStore((state) => state.subdivision);
-  const postal_code = useUserStore((state) => state.postal_code);
-  const street_name = useUserStore((state) => state.street_name);
-  const barangay = useUserStore((state) => state.barangay);
-  const city_municipality = useUserStore((state) => state.city_municipality);
+  const house_number = useOJTProfileStore((state) => state.house_number);
+  const subdivision = useOJTProfileStore((state) => state.subdivision);
+  const postal_code = useOJTProfileStore((state) => state.postal_code);
+  const street_name = useOJTProfileStore((state) => state.street_name);
+  const barangay = useOJTProfileStore((state) => state.barangay);
+  const city_municipality = useOJTProfileStore((state) => state.city_municipality);
 
-  const setStreetName = useUserStore((state) => state.setStreetName);
-  const setHouseNumber = useUserStore((state) => state.setHouseNumber);
-  const setSubdivision = useUserStore((state) => state.setSubdivision);
-  const setPostalCode = useUserStore((state) => state.setPostalCode);
+  const setStreetName = useOJTProfileStore((state) => state.setStreetName);
+  const setHouseNumber = useOJTProfileStore((state) => state.setHouseNumber);
+  const setSubdivision = useOJTProfileStore((state) => state.setSubdivision);
+  const setPostalCode = useOJTProfileStore((state) => state.setPostalCode);
   const setError = useOnboardingStore((state) => state.setError);
-  const setBarangay = useUserStore((state) => state.setBarangay);
-  const setCityMunicipality = useUserStore(
+  const setBarangay = useOJTProfileStore((state) => state.setBarangay);
+  const setCityMunicipality = useOJTProfileStore(
     (state) => state.setCityMunicipality
   );
 
   // Submit handler
   async function handleNextStep() {
     // get all the current data from Step 2 on the store
-    const house_number = useUserStore.getState().house_number;
-    const subdivision = useUserStore.getState().subdivision;
-    const postal_code = useUserStore.getState().postal_code;
-    const city_municipality = useUserStore.getState().city_municipality;
-    const barangay = useUserStore.getState().barangay;
+    const house_number = useOJTProfileStore.getState().house_number;
+    const subdivision = useOJTProfileStore.getState().subdivision;
+    const postal_code = useOJTProfileStore.getState().postal_code;
+    const city_municipality = useOJTProfileStore.getState().city_municipality;
+    const barangay = useOJTProfileStore.getState().barangay;
     // validate the data
 
     try {

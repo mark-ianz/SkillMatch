@@ -1,15 +1,18 @@
 import { create } from "zustand";
-import { OJTProfile } from "@/types/ojt_profile.types";
 import { AcademicDetails, Account, User } from "@/types/user.types";
 import { Skill } from "@/types/skill.types";
 
-export type OJTProfileStoreState = Partial<OJTProfile> &
-  Partial<User> &
+export type OJTOnboardingStoreState = Partial<User> &
   Partial<Account> &
-  AcademicDetails & {
+  Partial<AcademicDetails> & {
+    user_id: number | undefined;
     email: string | undefined;
     skills: Skill[];
-    
+    ojt_id: number | undefined;
+    resume_path: string | null;
+    visibility: "public" | "private";
+    created_at: Date | undefined;
+
     // User methods
     setUser: (user: Partial<User> & Partial<Account>) => void;
     clearUser: () => void;
@@ -26,23 +29,25 @@ export type OJTProfileStoreState = Partial<OJTProfile> &
     setBarangay: (barangay: string) => void;
     setPostalCode: (postal_code: string) => void;
     setCityMunicipality: (city_municipality: string) => void;
-    
+
     // OJT Profile methods
-    setOJTProfile: (profile: Partial<OJTProfile>) => void;
+    setOJTProfile: (profile: Partial<OJTOnboardingStoreState>) => void;
     setAcademicDetails: (details: Partial<AcademicDetails>) => void;
     setSkills: (skills: Skill[]) => void;
     addSkill: (skill: Skill) => void;
     removeSkill: (skill_id: number) => void;
     clearOJTProfile: () => void;
-    setResumePath: (resume_path: string) => void;
+    setResumePath: (resume_path: string | null) => void;
     clearResume: () => void;
-    setCollege: (college: string) => void;
+    setCollege: (college: string | null) => void;
     setCourse: (course: string) => void;
-    setYearLevel: (year_level: "3rd year" | "4th year") => void;
-    setExpectedGraduationYear: (expected_graduation_year: string) => void;
+    setYearLevel: (year_level: "3rd year" | "4th year" | null) => void;
+    setExpectedGraduationYear: (
+      expected_graduation_year: string | null
+    ) => void;
   };
 
-const useOJTProfileStore = create<OJTProfileStoreState>((set) => ({
+const useOJTProfileStore = create<OJTOnboardingStoreState>((set) => ({
   // User Information
   user_id: undefined,
   first_name: "",
