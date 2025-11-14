@@ -75,31 +75,67 @@ export function useCreateJobPost() {
 }
 
 // Query: Get job post suggestions based on categories and courses
-export function useJobPostSuggestions(job_post_id: string) {
+export function useJobPostSuggestions(
+  job_post_id: string,
+  userId?: number,
+  roleName?: string | null,
+  isSessionLoading?: boolean
+) {
   return useQuery({
-    queryKey: ["job-post-suggestions", job_post_id],
+    queryKey: ["job-post-suggestions", job_post_id, userId, roleName],
     queryFn: async () => {
-      const { data } = await api.get<{ suggestions: JobPost[] }>(
-        `/job-post/${job_post_id}/suggestions`
-      );
+      const params = new URLSearchParams();
+
+      // Add userId and roleName for skill matching
+      if (userId) {
+        params.append("userId", String(userId));
+      }
+      if (roleName) {
+        params.append("roleName", roleName);
+      }
+
+      const queryString = params.toString();
+      const url = queryString
+        ? `/job-post/${job_post_id}/suggestions?${queryString}`
+        : `/job-post/${job_post_id}/suggestions`;
+
+      const { data } = await api.get<{ suggestions: JobPost[] }>(url);
       return data.suggestions;
     },
-    enabled: !!job_post_id,
+    enabled: !!job_post_id && !isSessionLoading,
     staleTime: 1000 * 60 * 5, // 5 minutes
   });
 }
 
 // Query: Get a single job post by ID
-export function useJobPost(job_post_id: string) {
+export function useJobPost(
+  job_post_id: string,
+  userId?: number,
+  roleName?: string | null,
+  isSessionLoading?: boolean
+) {
   return useQuery({
-    queryKey: ["job-post", job_post_id],
+    queryKey: ["job-post", job_post_id, userId, roleName],
     queryFn: async () => {
-      const { data } = await api.get<{ job_post: JobPost }>(
-        `/job-post/${job_post_id}`
-      );
+      const params = new URLSearchParams();
+
+      // Add userId and roleName for skill matching
+      if (userId) {
+        params.append("userId", String(userId));
+      }
+      if (roleName) {
+        params.append("roleName", roleName);
+      }
+
+      const queryString = params.toString();
+      const url = queryString
+        ? `/job-post/${job_post_id}?${queryString}`
+        : `/job-post/${job_post_id}`;
+
+      const { data } = await api.get<{ job_post: JobPost }>(url);
       return data.job_post;
     },
-    enabled: !!job_post_id,
+    enabled: !!job_post_id && !isSessionLoading,
     staleTime: 1000 * 60 * 5, // 5 minutes
   });
 }
