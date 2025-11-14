@@ -2,6 +2,8 @@ import { db } from "@/lib/db";
 import { JobPostingFormData } from "@/schema/job-posting.schema";
 import { ResultSetHeader, RowDataPacket } from "mysql2";
 import { nanoid } from "nanoid";
+import { getCourseByAbbr } from "@/lib/utils";
+import { JobPost } from "@/types/job_post.types";
 
 export const JobPostingServices = {
   getAllJobPosts: async () => {
@@ -126,6 +128,316 @@ export const JobPostingServices = {
       throw error;
     } finally {
       connection.release();
+    }
+  },
+
+  getJobPostById: async (
+    job_post_id: string,
+    userId?: number | string,
+    roleName?: string
+  ): Promise<JobPost | null> => {
+    try {
+      // Fetch user skills and course if OJT user
+      let userSkills: string[] = [];
+      let userCourse: string | null = null;
+      if (userId && roleName === "OJT") {
+        try {
+          const [profileRows] = await db.query<
+            (RowDataPacket & { skills: string | null; course: string | null })[]
+          >(`SELECT skills, course FROM ojt_profile WHERE user_id = ?`, [
+            userId,
+          ]);
+
+          if (profileRows.length > 0) {
+            // Get skills
+            if (profileRows[0].skills) {
+              userSkills = profileRows[0].skills
+                .split(",")
+                .map((skill) => skill.trim().toLowerCase())
+                .filter((skill) => skill.length > 0);
+            }
+            // Get course abbreviation and convert to full course name
+            if (profileRows[0].course) {
+              const courseAbbr = profileRows[0].course;
+              userCourse = getCourseByAbbr(courseAbbr);
+            }
+          }
+        } catch (error) {
+          console.error("Error fetching user profile:", error);
+        }
+      }
+
+      const [rows] = await db.query<RowDataPacket[]>(
+        `SELECT 
+          jp.job_post_id,
+          jp.company_id,
+          jp.job_title,
+          jp.courses_required,
+          jp.job_categories,
+          jp.available_positions,
+          jp.job_overview,
+          jp.job_responsibilities,
+          jp.preferred_qualifications,
+          jp.work_arrangement,
+          jp.is_paid,
+          jp.allowance_description,
+          jp.soft_skills,
+          jp.technical_skills,
+          jp.created_at,
+          jp.updated_at,
+          c.company_name,
+          c.company_image,
+          c.industry,
+          c.description,
+          c.barangay,
+          c.city_municipality
+        FROM job_posts jp
+        JOIN company c ON jp.company_id = c.company_id
+        WHERE jp.job_post_id = ?`,
+        [job_post_id]
+      );
+
+      if (rows.length === 0) {
+        return null;
+      }
+
+      const row = rows[0];
+      const technicalSkillsArray = row.technical_skills
+        ? row.technical_skills.split(",").map((s: string) => s.trim())
+        : [];
+
+      const coursesRequiredArray = row.courses_required
+        ? row.courses_required.split(",").map((c: string) => c.trim())
+        : [];
+
+      // Calculate skill match count for OJT users
+      let matchCount = 0;
+      if (userSkills.length > 0) {
+        const postSkillsLowerCase = technicalSkillsArray.map((s: string) =>
+          s.toLowerCase()
+        );
+        matchCount = userSkills.filter((userSkill) =>
+          postSkillsLowerCase.includes(userSkill)
+        ).length;
+      }
+
+      // Check if user's course matches any of the required courses
+      const courseMatched = userCourse
+        ? coursesRequiredArray.some(
+            (requiredCourse: string) =>
+              requiredCourse.toLowerCase() === userCourse.toLowerCase()
+          )
+        : false;
+
+      return {
+        ...row,
+        courses_required: coursesRequiredArray,
+        job_categories: row.job_categories
+          ? row.job_categories.split(",").map((cat: string) => cat.trim())
+          : [],
+        job_responsibilities: row.job_responsibilities
+          ? row.job_responsibilities
+              .split(",")
+              .map((resp: string) => resp.trim())
+          : [],
+        soft_skills: row.soft_skills
+          ? row.soft_skills.split(",").map((skill: string) => skill.trim())
+          : [],
+        technical_skills: technicalSkillsArray,
+        industry: row.industry
+          ? row.industry.split(",").map((ind: string) => ind.trim())
+          : null,
+        is_paid: Boolean(row.is_paid),
+        skill_match_count: matchCount,
+        course_matched: courseMatched,
+      } as JobPost;
+    } catch (error) {
+      console.error("Error fetching job post:", error);
+      throw error;
+    }
+  },
+
+  getJobPostSuggestions: async (
+    job_post_id: string,
+    userId?: number | string,
+    roleName?: string
+  ): Promise<JobPost[]> => {
+    try {
+      // Fetch user skills and course if OJT user
+      let userSkills: string[] = [];
+      let userCourse: string | null = null;
+      if (userId && roleName === "OJT") {
+        try {
+          const [profileRows] = await db.query<
+            (RowDataPacket & { skills: string | null; course: string | null })[]
+          >(`SELECT skills, course FROM ojt_profile WHERE user_id = ?`, [
+            userId,
+          ]);
+
+          if (profileRows.length > 0) {
+            // Get skills
+            if (profileRows[0].skills) {
+              userSkills = profileRows[0].skills
+                .split(",")
+                .map((skill) => skill.trim().toLowerCase())
+                .filter((skill) => skill.length > 0);
+            }
+            // Get course abbreviation and convert to full course name
+            if (profileRows[0].course) {
+              const courseAbbr = profileRows[0].course;
+              userCourse = getCourseByAbbr(courseAbbr);
+            }
+          }
+        } catch (error) {
+          console.error("Error fetching user profile:", error);
+        }
+      }
+
+      // Get current job post to extract categories and courses
+      const [currentJobRows] = await db.query<RowDataPacket[]>(
+        `SELECT job_categories, courses_required FROM job_posts WHERE job_post_id = ?`,
+        [job_post_id]
+      );
+
+      if (currentJobRows.length === 0) {
+        return [];
+      }
+
+      const currentJob = currentJobRows[0];
+      const categories = currentJob.job_categories
+        ? currentJob.job_categories.split(",").map((c: string) => c.trim())
+        : [];
+      const courses = currentJob.courses_required
+        ? currentJob.courses_required.split(",").map((c: string) => c.trim())
+        : [];
+
+      // Build dynamic WHERE clauses for LIKE searches
+      const conditions: string[] = [];
+      const values: string[] = [];
+
+      // Add category conditions
+      categories.forEach((category: string) => {
+        conditions.push("jp.job_categories LIKE ?");
+        values.push(`%${category}%`);
+      });
+
+      // Add course conditions
+      courses.forEach((course: string) => {
+        conditions.push("jp.courses_required LIKE ?");
+        values.push(`%${course}%`);
+      });
+
+      if (conditions.length === 0) {
+        return [];
+      }
+
+      const whereClause = `(${conditions.join(" OR ")}) AND jp.job_post_id != ?`;
+      values.push(job_post_id);
+
+      // Fetch suggestions
+      const [rows] = await db.query<RowDataPacket[]>(
+        `SELECT 
+          jp.job_post_id,
+          jp.company_id,
+          jp.job_title,
+          jp.courses_required,
+          jp.job_categories,
+          jp.available_positions,
+          jp.job_overview,
+          jp.job_responsibilities,
+          jp.preferred_qualifications,
+          jp.work_arrangement,
+          jp.is_paid,
+          jp.allowance_description,
+          jp.soft_skills,
+          jp.technical_skills,
+          jp.created_at,
+          jp.updated_at,
+          c.company_name,
+          c.company_image,
+          c.industry,
+          c.description,
+          c.barangay,
+          c.city_municipality
+        FROM job_posts jp
+        JOIN company c ON jp.company_id = c.company_id
+        WHERE ${whereClause}
+        ORDER BY jp.created_at DESC
+        LIMIT 10`,
+        values
+      );
+
+      const suggestions = rows.map((row) => {
+        const technicalSkillsArray = row.technical_skills
+          ? row.technical_skills.split(",").map((skill: string) => skill.trim())
+          : [];
+
+        const coursesRequiredArray = row.courses_required
+          ? row.courses_required
+              .split(",")
+              .map((course: string) => course.trim())
+          : [];
+
+        // Calculate skill match count for OJT users
+        let matchCount = 0;
+        if (userSkills.length > 0) {
+          const postSkillsLowerCase = technicalSkillsArray.map((s: string) =>
+            s.toLowerCase()
+          );
+          matchCount = userSkills.filter((userSkill) =>
+            postSkillsLowerCase.includes(userSkill)
+          ).length;
+        }
+
+        // Check if user's course matches any of the required courses
+        const courseMatched = userCourse
+          ? coursesRequiredArray.some(
+              (requiredCourse: string) =>
+                requiredCourse.toLowerCase() === userCourse.toLowerCase()
+            )
+          : false;
+
+        return {
+          ...row,
+          courses_required: coursesRequiredArray,
+          job_categories: row.job_categories
+            ? row.job_categories.split(",").map((cat: string) => cat.trim())
+            : [],
+          job_responsibilities: row.job_responsibilities
+            ? row.job_responsibilities
+                .split(",")
+                .map((resp: string) => resp.trim())
+            : [],
+          soft_skills: row.soft_skills
+            ? row.soft_skills.split(",").map((skill: string) => skill.trim())
+            : [],
+          technical_skills: technicalSkillsArray,
+          industry: row.industry
+            ? row.industry.split(",").map((ind: string) => ind.trim())
+            : null,
+          is_paid: Boolean(row.is_paid),
+          skill_match_count: matchCount,
+          course_matched: courseMatched,
+        };
+      }) as JobPost[];
+
+      // Sort by course match and skill match count if OJT user
+      const sortedSuggestions =
+        userCourse || userSkills.length > 0
+          ? suggestions.sort((a, b) => {
+              // First priority: course matched
+              if (a.course_matched && !b.course_matched) return -1;
+              if (!a.course_matched && b.course_matched) return 1;
+
+              // Second priority: skill match count
+              return (b.skill_match_count || 0) - (a.skill_match_count || 0);
+            })
+          : suggestions;
+
+      return sortedSuggestions;
+    } catch (error) {
+      console.error("Error fetching job suggestions:", error);
+      throw error;
     }
   },
 };

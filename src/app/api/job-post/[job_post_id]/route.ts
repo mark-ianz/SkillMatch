@@ -1,7 +1,5 @@
-import { db } from "@/lib/db";
 import { NextRequest, NextResponse } from "next/server";
-import { RowDataPacket } from "mysql2";
-import { JobPost } from "@/types/job_post.types";
+import { JobPostingServices } from "@/services/job-posting.services";
 
 export async function GET(
   request: NextRequest,
@@ -9,6 +7,9 @@ export async function GET(
 ) {
   try {
     const { job_post_id } = params;
+    const searchParams = request.nextUrl.searchParams;
+    const userId = searchParams.get("userId");
+    const roleName = searchParams.get("roleName");
 
     if (!job_post_id) {
       return NextResponse.json(
@@ -17,64 +18,18 @@ export async function GET(
       );
     }
 
-    const [rows] = await db.query<RowDataPacket[]>(
-      `SELECT 
-        jp.job_post_id,
-        jp.company_id,
-        jp.job_title,
-        jp.courses_required,
-        jp.job_categories,
-        jp.available_positions,
-        jp.job_overview,
-        jp.job_responsibilities,
-        jp.preferred_qualifications,
-        jp.work_arrangement,
-        jp.is_paid,
-        jp.allowance_description,
-        jp.soft_skills,
-        jp.technical_skills,
-        jp.created_at,
-        jp.updated_at,
-        c.company_name,
-        c.company_image,
-        c.industry,
-        c.description,
-        c.barangay,
-        c.city_municipality
-      FROM job_posts jp
-      JOIN company c ON jp.company_id = c.company_id
-      WHERE jp.job_post_id = ?`,
-      [job_post_id]
+    const jobPost = await JobPostingServices.getJobPostById(
+      job_post_id,
+      userId || undefined,
+      roleName || undefined
     );
 
-    if (rows.length === 0) {
+    if (!jobPost) {
       return NextResponse.json(
         { success: false, message: "Job post not found" },
         { status: 404 }
       );
     }
-
-    const jobPost = {
-      ...rows[0],
-      courses_required: rows[0].courses_required
-        ? rows[0].courses_required.split(",").map((course: string) => course.trim())
-        : [],
-      job_categories: rows[0].job_categories
-        ? rows[0].job_categories.split(",").map((cat: string) => cat.trim())
-        : [],
-      job_responsibilities: rows[0].job_responsibilities
-        ? rows[0].job_responsibilities.split(",").map((resp: string) => resp.trim())
-        : [],
-      soft_skills: rows[0].soft_skills
-        ? rows[0].soft_skills.split(",").map((skill: string) => skill.trim())
-        : [],
-      technical_skills: rows[0].technical_skills
-        ? rows[0].technical_skills.split(",").map((skill: string) => skill.trim())
-        : [],
-      industry: rows[0].industry
-        ? rows[0].industry.split(",").map((ind: string) => ind.trim())
-        : null,
-    } as JobPost;
 
     return NextResponse.json({ job_post: jobPost }, { status: 200 });
   } catch (error) {
