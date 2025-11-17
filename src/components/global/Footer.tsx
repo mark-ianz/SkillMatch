@@ -20,10 +20,10 @@ export default function Footer() {
             </div>
 
             <p className="text-sm text-skillmatch-light/80 max-w-sm">
-              SkillMatch is a platform that connects students, job seekers, and
-              employers through verified opportunities. We make it simple to
-              build profiles, discover jobs and OJT programs, and create
-              meaningful connections that lead to real career growth.
+              Connecting QCU students with verified partner companies for
+              meaningful on-the-job training experiences. Empowering the next
+              generation of professionals through quality internship
+              opportunities and industry partnerships.
             </p>
           </div>
 
@@ -71,7 +71,7 @@ export default function Footer() {
                     <br /> Novaliches, Quezon City, Philippines
                   </div>
                 </div>
-    
+
                 <div className="flex items-center gap-3">
                   <Mail className="w-5 h-5 text-skillmatch-light/80" />
                   <a className="underline" href="mailto:qcu@qcu.edu.ph">
