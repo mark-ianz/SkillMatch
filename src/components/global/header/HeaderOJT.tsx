@@ -3,7 +3,7 @@ import { Button } from "../../ui/button";
 import React from "react";
 import DynamicLogo from "../DynamicLogo";
 import NavigationMenuOJT from "./NavigationMenuOJT";
-import { Link } from "lucide-react";
+import Link  from "next/link";
 
 export default async function HeaderOJT() {
   return (
