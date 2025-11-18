@@ -49,7 +49,7 @@ export function CompanyPost({ post }: CompanyPostProps) {
 
   return (
     <>
-      <Card className="w-full h-fit max-w-2xl">
+      <Card className="w-full h-fit">
         <CardHeader>
           <div className="flex items-start justify-between">
             <div className="flex-1">
