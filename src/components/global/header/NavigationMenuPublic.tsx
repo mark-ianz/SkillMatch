@@ -7,13 +7,8 @@ import {
   NavigationMenuList,
   NavigationMenuTrigger,
 } from "../../ui/navigation-menu";
-import { getServerSession } from "next-auth";
-import { authConfig } from "@/lib/auth";
 
-export default async function NavigationMenuOJT() {
-  const session = await getServerSession(authConfig);
-  const isAuth = !!session;
-
+export default function NavigationMenuPublic() {
   return (
     <NavigationMenu viewport={false}>
       <NavigationMenuList>
@@ -39,28 +34,11 @@ export default async function NavigationMenuOJT() {
             </NavigationMenuLink>
           </NavigationMenuContent>
         </NavigationMenuItem>
-        {!isAuth && (
-          <>
-            <NavigationMenuItem>
-              <NavigationMenuLink href="/#features" className="bg-transparent">
-                Features
-              </NavigationMenuLink>
-            </NavigationMenuItem>
-            <NavigationMenuItem>
-              <NavigationMenuLink
-                href="/#how-it-works"
-                className="bg-transparent"
-              >
-                How It Works
-              </NavigationMenuLink>
-            </NavigationMenuItem>
-            <NavigationMenuItem>
-              <NavigationMenuLink href="/company" className="bg-transparent">
-                For Companies
-              </NavigationMenuLink>
-            </NavigationMenuItem>
-          </>
-        )}
+        <NavigationMenuItem>
+          <NavigationMenuLink href="/about" className="bg-transparent">
+            About
+          </NavigationMenuLink>
+        </NavigationMenuItem>
       </NavigationMenuList>
     </NavigationMenu>
   );
