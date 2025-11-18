@@ -5,13 +5,13 @@ import { useGetAllCompanies } from "@/hooks/query/useCompanies";
 import LoadingGeneric from "@/components/global/LoadingGeneric";
 import { useExploreStore } from "@/store/ExploreStore";
 import { useSearchParams } from "next/navigation";
-import { CompanyFeedFilters } from "@/types/job_feed.types";
+import { CompanyExploreFilters } from "@/types/job_explore.types";
 
-export default function CompanyFeed() {
+export default function CompanyExplore() {
   const searchParams = useSearchParams();
 
   // Build filters from URL params
-  const filters: CompanyFeedFilters = {
+  const filters: CompanyExploreFilters = {
     industries: searchParams.getAll("industry"),
     search: searchParams.get("search") || undefined,
   };

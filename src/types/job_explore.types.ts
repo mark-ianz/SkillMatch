@@ -1,4 +1,4 @@
-export type JobFeedFilters = {
+export type JobExploreFilters = {
   courses: string[];
   locations: string[];
   workArrangement: string[];
@@ -8,7 +8,7 @@ export type JobFeedFilters = {
   isPaid?: boolean;
 };
 
-export type CompanyFeedFilters = {
+export type CompanyExploreFilters = {
   industries: string[];
   search?: string;
 };

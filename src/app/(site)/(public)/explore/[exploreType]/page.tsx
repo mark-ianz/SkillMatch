@@ -2,11 +2,11 @@
 
 import { useEffect, use } from "react";
 import { useSearchParams } from "next/navigation";
-import { ExploreType } from "@/types/job_feed.types";
-import { JobFeedFilter } from "@/components/page_specific/explore/job-posts/JobFeedFilter";
+import { ExploreType } from "@/types/job_explore.types";
+import { JobExploreFilter } from "@/components/page_specific/explore/job-posts/JobExploreFilter";
 import MainLayout from "@/components/layout/MainLayout";
-import Feed from "@/components/page_specific/explore/shared/Feed";
-import FeedFullInfo from "@/components/page_specific/explore/shared/FeedFullInfo";
+import Feed from "@/components/page_specific/explore/shared/Explore";
+import FeedFullInfo from "@/components/page_specific/explore/shared/ExploreFullInfo";
 import SidebarProfile from "@/components/page_specific/sidebar/SidebarProfile";
 import { SessionProvider } from "next-auth/react";
 import { useExploreStore } from "@/store/ExploreStore";
@@ -36,7 +36,7 @@ export default function FeedPage({
           <SessionProvider>
             <SidebarProfile />
           </SessionProvider>
-          <JobFeedFilter className="sticky top-28" exploreType={exploreType} />
+          <JobExploreFilter className="sticky top-28" exploreType={exploreType} />
         </div>
 
         <Feed />

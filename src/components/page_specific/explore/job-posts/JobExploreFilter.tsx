@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
 import { Filter, X } from "lucide-react";
-import { ExploreType, JobFeedFilters } from "@/types/job_feed.types";
+import { ExploreType, JobExploreFilters } from "@/types/job_explore.types";
 import {
   cn,
   getAllCourses,
@@ -17,7 +17,7 @@ import {
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Separator } from "@/components/ui/separator";
 
-interface JobFeedFilterProps {
+interface JobExploreFilterProps {
   exploreType: ExploreType;
   className?: string;
 }
@@ -36,10 +36,10 @@ const LOCATION_OPTIONS = [
 
 const WORK_ARRANGEMENT_OPTIONS = ["Remote", "On-site", "Hybrid"];
 
-export function JobFeedFilter({ exploreType, className }: JobFeedFilterProps) {
+export function JobExploreFilter({ exploreType, className }: JobExploreFilterProps) {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const [filters, setFilters] = useState<JobFeedFilters>({
+  const [filters, setFilters] = useState<JobExploreFilters>({
     courses: searchParams.getAll("course") || [],
     locations: searchParams.getAll("location") || [],
     workArrangement: searchParams.getAll("arrangement") || [],
@@ -48,7 +48,7 @@ export function JobFeedFilter({ exploreType, className }: JobFeedFilterProps) {
     isPaid: searchParams.get("paid") === "true" ? true : undefined,
   });
 
-  const handleFilterChange = (type: keyof JobFeedFilters, value: string) => {
+  const handleFilterChange = (type: keyof JobExploreFilters, value: string) => {
     setFilters((prev) => {
       if (Array.isArray(prev[type])) {
         const array = prev[type] as string[];

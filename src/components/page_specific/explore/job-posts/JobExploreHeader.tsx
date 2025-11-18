@@ -10,7 +10,7 @@ import { Search } from "lucide-react";
 import { useExploreStore } from "@/store/ExploreStore";
 import useDebounce from "@/hooks/useDebounce";
 
-export function JobFeedHeader() {
+export function JobExploreHeader() {
   const exploreType = useExploreStore((state) => state.exploreType);
   const searchParams = useSearchParams();
   const pathname = usePathname();

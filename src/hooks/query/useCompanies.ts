@@ -1,7 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import { api } from "@/lib/axios";
 import { CompanyProfile } from "@/types/company.types";
-import { CompanyFeedFilters } from "@/types/job_feed.types";
+import { CompanyFeedFilters } from "@/types/job_explore.types";
 import { JobPost } from "@/types/job_post.types";
 
 export const useGetAllCompanies = (filters?: CompanyFeedFilters) => {

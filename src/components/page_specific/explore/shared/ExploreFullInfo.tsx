@@ -3,7 +3,7 @@ import { JobPostFullInfo } from "../../job_post/JobPostFullInfo";
 import { useExploreStore } from "@/store/ExploreStore";
 import { CompanyProfile } from "../company/CompanyProfile";
 
-export default function FeedFullInfo() {
+export default function ExploreFullInfo() {
   const exploreType = useExploreStore((state) => state.exploreType);
 
   const selected_job_post = useExploreStore((state) => state.selected_job_post);

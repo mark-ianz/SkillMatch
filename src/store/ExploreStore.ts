@@ -1,5 +1,5 @@
 import { CompanyProfile } from "@/types/company.types";
-import { ExploreType } from "@/types/job_feed.types";
+import { ExploreType } from "@/types/job_explore.types";
 import { JobPost } from "@/types/job_post.types";
 import { create } from "zustand";
 

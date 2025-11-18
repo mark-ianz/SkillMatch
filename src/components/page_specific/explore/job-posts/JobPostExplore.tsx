@@ -7,10 +7,10 @@ import { useJobPosts } from "@/hooks/query/useJobPosts";
 import LoadingGeneric from "@/components/global/LoadingGeneric";
 import { useExploreStore } from "@/store/ExploreStore";
 import { useSearchParams } from "next/navigation";
-import { JobFeedFilters } from "@/types/job_feed.types";
+import { JobExploreFilters } from "@/types/job_explore.types";
 import useSessionStore from "@/store/SessionStore";
 
-export default function JobPostFeed() {
+export default function JobPostExplore() {
   const searchParams = useSearchParams();
   const user_id = useSessionStore((state) => state.user_id);
   const role_name = useSessionStore((state) => state.role_name);
@@ -25,7 +25,7 @@ export default function JobPostFeed() {
   });
 
   // Build filters from URL params
-  const filters: JobFeedFilters = {
+  const filters: JobExploreFilters = {
     courses: searchParams.getAll("course"),
     locations: searchParams.getAll("location"),
     workArrangement: searchParams.getAll("arrangement"),

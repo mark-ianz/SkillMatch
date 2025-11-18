@@ -3,7 +3,7 @@ import { api } from "@/lib/axios";
 import { JobPostingFormData } from "@/schema/job-posting.schema";
 import { toast } from "sonner";
 import { JobPost } from "@/types/job_post.types";
-import { JobFeedFilters } from "@/types/job_feed.types";
+import { JobFeedFilters } from "@/types/job_explore.types";
 
 // Query: Get all job posts with optional filters
 export function useJobPosts(
