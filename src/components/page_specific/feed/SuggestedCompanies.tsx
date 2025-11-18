@@ -31,15 +31,15 @@ export function SuggestedCompanies() {
             <Loader2 className="w-6 h-6 animate-spin text-muted-foreground" />
           </div>
         ) : companies && companies.length > 0 ? (
-          <div className="space-y-3">
+          <div className="flex flex-col gap-4">
             {companies.map((company) => (
               <Link
                 key={company.company_id}
-                href={`/company/${company.company_id}`}
+                href={`/view/company?id=${company.company_id}`}
               >
                 <CompanyPreview
                   company={company}
-                  className="hover:border-primary transition-colors"
+                  className="hover:border-skillmatch-primary-green transition-colors"
                 />
               </Link>
             ))}
