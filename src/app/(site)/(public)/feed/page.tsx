@@ -6,6 +6,8 @@ import { CompanyPostsFeed } from "@/components/page_specific/feed/CompanyPostsFe
 import { SuggestedCompanies } from "@/components/page_specific/feed/SuggestedCompanies";
 import { SessionProvider } from "next-auth/react";
 import QueryClientProviderWrapper from "@/components/providers/QueryClientProviderWrapper";
+import { PlusCircleIcon } from "lucide-react";
+import Link from "next/link";
 
 export default function FeedPage() {
   return (
@@ -13,8 +15,14 @@ export default function FeedPage() {
       <MainLayout className="items-center pb-20" wrapperClassName="py-4">
         <div className="flex gap-6 w-full mt-4 max-w-[1400px] mx-auto">
           {/* Left Sidebar - Profile */}
-          <div className="w-80 flex-shrink-0 sticky top-4 h-fit">
-            <SidebarProfile />
+          <div>
+            <Link href="/company/create-post" className="border-2 p-4 rounded-md border-dashed flex flex-col items-center justify-center mb-6 cursor-pointer hover:bg-muted/50 transition-colors border-skillmatch-primary-blue text-skillmatch-primary-blue">
+              <p>Create new post</p>
+              <PlusCircleIcon />
+            </Link>
+            <div className="w-80 flex-shrink-0 sticky top-24 h-fit">
+              <SidebarProfile />
+            </div>
           </div>
 
           {/* Middle Section - Company Posts Feed */}
