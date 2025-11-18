@@ -12,7 +12,7 @@ To-Do:
 - company posts feed
 - dynamic header
 - make the job categories required on job posts
-
+- make the view path a server component
 
 
 TEMPORARY LANG YUNG CHECKING NG STATES USING USESESSION, DAPAT IISTORE YAN SA STORE AFTER FETCHING DATA.
