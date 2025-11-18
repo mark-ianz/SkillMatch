@@ -6,15 +6,14 @@ import { Roles } from "@/types/role.types";
 import { Badge } from "../ui/badge";
 import { cn } from "@/lib/utils";
 
-export default function DynamicLogo({ role}: { role: Roles }) {
-  
+export default function DynamicLogo({ role }: { role?: Roles }) {
   const text = {
     ojt: "For OJT",
     company: "For Companies",
     admin: "For Admin",
   };
 
-  const textToDisplay = text[role.toLowerCase() as keyof typeof text];
+  const textToDisplay = text[role?.toLowerCase() as keyof typeof text];
 
   return (
     <div className="flex items-center gap-4">
@@ -25,16 +24,18 @@ export default function DynamicLogo({ role}: { role: Roles }) {
         <LogoOnly />
         <TextLogo className="text-skillmatch-dark" />
       </Link>
-      <Badge
-        variant="secondary"
-        className={cn(
-          "m-0 hidden sm:inline-flex border-skillmatch-primary-green",
-          role === "Company" && "border-skillmatch-primary-blue",
-          role === "Admin" && "border-skillmatch-primary-purple"
-        )}
-      >
-        {textToDisplay}
-      </Badge>
+      {role && (
+        <Badge
+          variant="secondary"
+          className={cn(
+            "m-0 hidden sm:inline-flex border-skillmatch-primary-green",
+            role === "Company" && "border-skillmatch-primary-blue",
+            role === "Admin" && "border-skillmatch-primary-purple"
+          )}
+        >
+          {textToDisplay}
+        </Badge>
+      )}
     </div>
   );
 }
