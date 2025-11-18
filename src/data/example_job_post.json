@@ -1,0 +1,58 @@
+{
+  "company_name": "TechNova Solutions Inc.",
+  "company_image": null,
+  "website": "https://www.technovasolutions.com",
+  "facebook_page": "https://www.facebook.com/technovasolutions",
+  "company_email": "contact@technovasolutions.com",
+  "industry": "Information Technology,Software Development,Consulting",
+  "job_post_id": "aB1cD2eF3gH4iJ5kL6mN",
+  "company_id": "aB1cD2eF3gH4iJ5kL6mN",
+  "job_title": "Next.js Developer Intern",
+  "work_arrangement": "Hybrid",
+  "job_categories": [
+    "Information Technology / Web Development"
+  ],
+  "job_overview": "A Next.js Developer Intern assists in building and improving web applications using Next.js and modern web technologies. The intern collaborates with senior developers, contributes to UI components, integrates APIs, and learns best practices in real-world development.",
+  "available_positions": 2,
+  "courses_required": [
+    "Bachelor of Science in Information Technology",
+    "Bachelor of Science in Computer Science",
+    "Bachelor of Science in Information Systems"
+  ],
+  "job_responsibilities": [
+    "Assist in building responsive UI using Next.js and React",
+    " Help integrate API endpoints and handle data fetching",
+    " Debug and test application features across browsers",
+    " Collaborate with the development team and follow Agile workflows",
+    " Maintain documentation and follow coding standards."
+  ],
+  "technical_skills": [
+    "react",
+    "next.js",
+    "javascript",
+    "typescript",
+    "html",
+    "css",
+    "tailwind css",
+    "git",
+    "api handling",
+    "restful api"
+  ],
+  "soft_skills": [
+    "communication",
+    " teamwork",
+    " problem solving",
+    " adaptability"
+  ],
+  "preferred_qualifications": "Experience with Tailwind CSS or Figma, basic knowledge of deployment (Vercel)",
+  "is_paid": true,
+  "allowance_description": "₱6,000 monthly allowance",
+  "street_name": "Tech Park Ave.",
+  "city_municipality": "Quezon City",
+  "barangay": "Bagumbayan",
+  "postal_code": "1110",
+  "created_at": "2025-11-09T22:08:12.000Z",
+  "updated_at": "2025-11-14T18:08:15.000Z",
+  "skill_match_count": 3,
+  "course_matched": true
+}
