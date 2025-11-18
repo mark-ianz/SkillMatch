@@ -2,10 +2,10 @@ import React from "react";
 import { JobFeedHeader } from "../job-posts/JobFeedHeader";
 import JobPostFeed from "../job-posts/JobPostFeed";
 import CompanyFeed from "../company/CompanyFeed";
-import { useFeedStore } from "@/store/FeedStore";
+import { useExploreStore } from "@/store/ExploreStore";
 
 export default function Feed({}) {
-  const exploreType = useFeedStore((state) => state.exploreType);
+  const exploreType = useExploreStore((state) => state.exploreType);
 
   return (
     <div className="flex-3 flex flex-col space-y-4">

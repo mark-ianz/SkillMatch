@@ -7,9 +7,9 @@ import { JobFeedFilter } from "@/components/page_specific/explore/job-posts/JobF
 import MainLayout from "@/components/layout/MainLayout";
 import Feed from "@/components/page_specific/explore/shared/Feed";
 import FeedFullInfo from "@/components/page_specific/explore/shared/FeedFullInfo";
-import { useFeedStore } from "@/store/FeedStore";
 import SidebarProfile from "@/components/page_specific/sidebar/SidebarProfile";
 import { SessionProvider } from "next-auth/react";
+import { useExploreStore } from "@/store/ExploreStore";
 
 export default function FeedPage({
   params,
@@ -18,7 +18,7 @@ export default function FeedPage({
 }) {
   const searchParams = useSearchParams();
   const exploreType = use(params).exploreType;
-  const setFeedType = useFeedStore((state) => state.setFeedType);
+  const setFeedType = useExploreStore((state) => state.setFeedType);
 
   useEffect(() => {
     // Sync URL exploreType with store

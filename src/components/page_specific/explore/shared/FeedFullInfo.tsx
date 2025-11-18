@@ -1,13 +1,13 @@
 import React from "react";
 import { JobPostFullInfo } from "../../job_post/JobPostFullInfo";
-import { useFeedStore } from "@/store/FeedStore";
+import { useExploreStore } from "@/store/ExploreStore";
 import { CompanyProfile } from "../company/CompanyProfile";
 
 export default function FeedFullInfo() {
-  const exploreType = useFeedStore((state) => state.exploreType);
+  const exploreType = useExploreStore((state) => state.exploreType);
 
-  const selected_job_post = useFeedStore((state) => state.selected_job_post);
-  const selected_company = useFeedStore((state) => state.selected_company);
+  const selected_job_post = useExploreStore((state) => state.selected_job_post);
+  const selected_company = useExploreStore((state) => state.selected_company);
 
   if (!selected_job_post && exploreType === "job-posts") {
     return (

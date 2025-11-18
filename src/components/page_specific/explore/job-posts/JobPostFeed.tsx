@@ -5,7 +5,7 @@ import React, { useEffect } from "react";
 import { JobPostPreview } from "./JobPostPreview";
 import { useJobPosts } from "@/hooks/query/useJobPosts";
 import LoadingGeneric from "@/components/global/LoadingGeneric";
-import { useFeedStore } from "@/store/FeedStore";
+import { useExploreStore } from "@/store/ExploreStore";
 import { useSearchParams } from "next/navigation";
 import { JobFeedFilters } from "@/types/job_feed.types";
 import useSessionStore from "@/store/SessionStore";
@@ -40,8 +40,8 @@ export default function JobPostFeed() {
     isLoading,
     error,
   } = useJobPosts(filters, user_id, role_name, isSessionLoading);
-  const selected_job_post = useFeedStore((state) => state.selected_job_post);
-  const setSelectedJobPost = useFeedStore((state) => state.setSelectedJobPost);
+  const selected_job_post = useExploreStore((state) => state.selected_job_post);
+  const setSelectedJobPost = useExploreStore((state) => state.setSelectedJobPost);
 
   console.log("JobPostFeed - User Info:", { user_id, role_name });
   console.log("JobPostFeed - Job Posts:", job_posts);

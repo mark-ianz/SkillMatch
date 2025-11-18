@@ -3,7 +3,7 @@ import { ExploreType } from "@/types/job_feed.types";
 import { JobPost } from "@/types/job_post.types";
 import { create } from "zustand";
 
-interface FeedStoreState {
+interface ExploreStoreState {
   exploreType: ExploreType;
   selected_job_post: JobPost | null;
   selected_company: CompanyProfile | null;
@@ -12,7 +12,7 @@ interface FeedStoreState {
   setSelectedJobPost: (job_post: JobPost | null) => void;
 }
 
-export const useFeedStore = create<FeedStoreState>((set) => ({
+export const useExploreStore = create<ExploreStoreState>((set) => ({
   exploreType: "job-posts",
   selected_company: null,
   selected_job_post: null,

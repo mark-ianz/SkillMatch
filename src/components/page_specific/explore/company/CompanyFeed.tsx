@@ -3,7 +3,7 @@ import React, { useEffect } from "react";
 import { CompanyPreview } from "./CompanyPreview";
 import { useGetAllCompanies } from "@/hooks/query/useCompanies";
 import LoadingGeneric from "@/components/global/LoadingGeneric";
-import { useFeedStore } from "@/store/FeedStore";
+import { useExploreStore } from "@/store/ExploreStore";
 import { useSearchParams } from "next/navigation";
 import { CompanyFeedFilters } from "@/types/job_feed.types";
 
@@ -17,8 +17,8 @@ export default function CompanyFeed() {
   };
 
   const { data: companies, isLoading, error } = useGetAllCompanies(filters);
-  const selected_company = useFeedStore((state) => state.selected_company);
-  const setSelectedCompany = useFeedStore((state) => state.setSelectedCompany);
+  const selected_company = useExploreStore((state) => state.selected_company);
+  const setSelectedCompany = useExploreStore((state) => state.setSelectedCompany);
 
   console.log(companies);
 

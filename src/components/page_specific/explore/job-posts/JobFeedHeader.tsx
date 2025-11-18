@@ -7,11 +7,11 @@ import { Input } from "@/components/ui/input";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useRouter, useSearchParams, usePathname } from "next/navigation";
 import { Search } from "lucide-react";
-import { useFeedStore } from "@/store/FeedStore";
+import { useExploreStore } from "@/store/ExploreStore";
 import useDebounce from "@/hooks/useDebounce";
 
 export function JobFeedHeader() {
-  const exploreType = useFeedStore((state) => state.exploreType);
+  const exploreType = useExploreStore((state) => state.exploreType);
   const searchParams = useSearchParams();
   const pathname = usePathname();
   
