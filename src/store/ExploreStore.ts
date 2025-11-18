@@ -7,7 +7,7 @@ interface ExploreStoreState {
   exploreType: ExploreType;
   selected_job_post: JobPost | null;
   selected_company: CompanyProfile | null;
-  setFeedType: (exploreType: ExploreType) => void;
+  setExploreType: (exploreType: ExploreType) => void;
   setSelectedCompany: (company: CompanyProfile | null) => void;
   setSelectedJobPost: (job_post: JobPost | null) => void;
 }
@@ -16,10 +16,10 @@ export const useExploreStore = create<ExploreStoreState>((set) => ({
   exploreType: "job-posts",
   selected_company: null,
   selected_job_post: null,
-  setFeedType: (exploreType) =>
+  setExploreType: (exploreType) =>
     set({
       exploreType,
-      // Clear selections when switching feed types
+      // Clear selections when switching Explore types
       selected_company: null,
       selected_job_post: null,
     }),
