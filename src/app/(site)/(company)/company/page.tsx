@@ -18,50 +18,6 @@ import Link from "next/link";
 export default function CompanyLandingPage() {
   return (
     <div className="min-h-screen bg-background">
-      {/* Navigation */}
-      <nav className="border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 sticky top-0 z-50">
-        <div className="container mx-auto px-4 lg:px-8">
-          <div className="flex items-center justify-between h-16">
-            <div className="flex items-center gap-2">
-              <Building2 className="h-6 w-6 text-primary" />
-              <span className="text-xl font-bold">SkillMatch</span>
-              <Badge variant="secondary" className="ml-2 hidden sm:inline-flex">
-                For Companies
-              </Badge>
-            </div>
-            <div className="flex items-center gap-4">
-              <Link
-                href="#benefits"
-                className="text-sm font-medium hover:text-primary transition-colors hidden md:inline-flex"
-              >
-                Benefits
-              </Link>
-              <Link
-                href="#how-it-works"
-                className="text-sm font-medium hover:text-primary transition-colors hidden md:inline-flex"
-              >
-                How It Works
-              </Link>
-              <Link
-                href="/"
-                className="text-sm font-medium hover:text-primary transition-colors"
-              >
-                For Students
-              </Link>
-              <Button variant="outline" size="sm">
-                Sign In
-              </Button>
-              <Button
-                size="sm"
-                className=" bg-skillmatch-primary-blue text-skillmatch-light hover:bg-skillmatch-primary-blue/90"
-              >
-                Post a Job
-              </Button>
-            </div>
-          </div>
-        </div>
-      </nav>
-
       {/* Hero Section */}
       <section className="py-20 lg:py-32 relative overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-br from-skillmatch-primary-blue/15 to-background" />
