@@ -7,8 +7,8 @@ import ambatublow from "@/images/ambatublow.jpg";
 import OJTShortcut from "./OJTShortcut";
 import CompanyShortcut from "./CompanyShortcut";
 import { Building2 } from "lucide-react";
-import { useSession } from "next-auth/react";
 import LoadingGeneric from "@/components/global/LoadingGeneric";
+import { useSession } from "next-auth/react";
 
 const image_url = ambatublow.src;
 
@@ -63,7 +63,13 @@ function EmptyProfileImage({ isOjt }: { isOjt: boolean }) {
 }
 
 export default function SidebarProfile() {
-  const role_id = useSession().data?.user.role_id;
+  const { data: session, status } = useSession();
+  
+  if (status === "loading") {
+    return <LoadingGeneric />;
+  }
+
+  const role_id = session?.user.role_id;
 
   if (!role_id) {
     return <LoadingGeneric />;
