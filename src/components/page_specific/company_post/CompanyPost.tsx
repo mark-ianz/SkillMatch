@@ -12,6 +12,10 @@ import { ReactionsModal } from "./ReactionsModal";
 import placeholder_image from "@/images/placeholder_image.avif";
 import { CopyLinkButton } from "@/components/common/button/CopyLinkButton";
 import DateDifference from "@/components/common/DateDifference";
+import { useSession } from "next-auth/react";
+import { SignInPromptDialog } from "@/components/common/SignInPromptDialog";
+import { useIsPostSaved, useSavePost, useUnsavePost } from "@/hooks/query/useSavedItems";
+import { cn } from "@/lib/utils";
 
 interface CompanyPostProps {
   post: CompanyPostType;
@@ -19,10 +23,23 @@ interface CompanyPostProps {
 
 export function CompanyPost({ post }: CompanyPostProps) {
   const [showReactionsModal, setShowReactionsModal] = useState(false);
+  const [showSignInDialog, setShowSignInDialog] = useState(false);
+  const { data: session } = useSession();
+  const isSaved = useIsPostSaved(post.post_id);
+  const savePostMutation = useSavePost();
+  const unsavePostMutation = useUnsavePost();
 
   const handleSavePost = () => {
-    // TODO: Implement save post functionality
-    console.log("Save post clicked for:", post.post_id);
+    if (!session) {
+      setShowSignInDialog(true);
+      return;
+    }
+
+    if (isSaved) {
+      unsavePostMutation.mutate(post.post_id);
+    } else {
+      savePostMutation.mutate(post.post_id);
+    }
   };
 
   const baseUrl =
@@ -83,10 +100,11 @@ export function CompanyPost({ post }: CompanyPostProps) {
                 variant="ghost"
                 size="sm"
                 onClick={handleSavePost}
+                disabled={savePostMutation.isPending || unsavePostMutation.isPending}
                 className="gap-2 h-8 text-skillmatch-muted-dark hover:text-foreground"
               >
-                <Bookmark className="w-4 h-4" />
-                <span className="text-xs">Save</span>
+                <Bookmark className={cn("w-4 h-4", isSaved && "fill-current")} />
+                <span className="text-xs">{isSaved ? "Saved" : "Save"}</span>
               </Button>
 
               <CopyLinkButton
@@ -106,6 +124,13 @@ export function CompanyPost({ post }: CompanyPostProps) {
         open={showReactionsModal}
         onOpenChange={setShowReactionsModal}
         post_id={post.post_id}
+      />
+
+      <SignInPromptDialog
+        open={showSignInDialog}
+        onOpenChange={setShowSignInDialog}
+        title="Save this post for later"
+        description="Sign in to save posts and access them anytime from your saved items."
       />
     </>
   );

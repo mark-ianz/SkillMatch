@@ -3,6 +3,7 @@ import axios from "axios";
 import { JobPost } from "@/types/job_post.types";
 import { CompanyProfile } from "@/types/company.types";
 import { CompanyPost } from "@/types/company_post.types";
+import { toast } from "sonner";
 
 interface SavedJob extends JobPost {
   saved_at: string;
@@ -44,6 +45,10 @@ export function useSaveJob() {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["saved-jobs"] });
+      toast.success("Job saved successfully");
+    },
+    onError: () => {
+      toast.error("Failed to save job");
     },
   });
 }
@@ -58,6 +63,10 @@ export function useUnsaveJob() {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["saved-jobs"] });
+      toast.success("Job removed from saved items");
+    },
+    onError: () => {
+      toast.error("Failed to remove job");
     },
   });
 }
@@ -89,6 +98,10 @@ export function useSaveCompany() {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["saved-companies"] });
+      toast.success("Company saved successfully");
+    },
+    onError: () => {
+      toast.error("Failed to save company");
     },
   });
 }
@@ -103,6 +116,10 @@ export function useUnsaveCompany() {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["saved-companies"] });
+      toast.success("Company removed from saved items");
+    },
+    onError: () => {
+      toast.error("Failed to remove company");
     },
   });
 }
@@ -119,6 +136,11 @@ export function useSavedPosts() {
   });
 }
 
+export function useIsPostSaved(post_id: string) {
+  const { data: savedPosts } = useSavedPosts();
+  return savedPosts?.some((post) => post.post_id === post_id) || false;
+}
+
 export function useSavePost() {
   const queryClient = useQueryClient();
 
@@ -129,6 +151,10 @@ export function useSavePost() {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["saved-posts"] });
+      toast.success("Post saved successfully");
+    },
+    onError: () => {
+      toast.error("Failed to save post");
     },
   });
 }
@@ -143,6 +169,10 @@ export function useUnsavePost() {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["saved-posts"] });
+      toast.success("Post removed from saved items");
+    },
+    onError: () => {
+      toast.error("Failed to remove post");
     },
   });
 }
