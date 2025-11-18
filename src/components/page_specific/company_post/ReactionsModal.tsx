@@ -6,7 +6,9 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { PostReactions, ReactionType } from "@/types/company_post.types";
+import { ReactionType } from "@/types/company_post.types";
+import { useReactions } from "@/hooks/query/useReactions";
+import LoadingGeneric from "@/components/global/LoadingGeneric";
 
 const REACTIONS: Record<ReactionType, { emoji: string; label: string }> = {
   like: { emoji: "👍", label: "Like" },
@@ -20,18 +22,18 @@ const REACTIONS: Record<ReactionType, { emoji: string; label: string }> = {
 interface ReactionsModalProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
-  reactions: PostReactions;
+  post_id: string;
 }
 
 export function ReactionsModal({
   open,
   onOpenChange,
-  reactions,
+  post_id,
 }: ReactionsModalProps) {
-  const totalReactions = Object.values(reactions).reduce(
-    (a, b) => a + (b || 0),
-    0
-  );
+  const { data: reactionData, isLoading } = useReactions(post_id);
+
+  const reactions = reactionData?.counts || {};
+  const totalReactions = reactionData?.totalReactions || 0;
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
@@ -39,31 +41,42 @@ export function ReactionsModal({
         <DialogHeader>
           <DialogTitle>Reactions ({totalReactions})</DialogTitle>
         </DialogHeader>
-        <div className="space-y-3">
-          {(Object.keys(REACTIONS) as ReactionType[]).map((reactionType) => {
-            const count = reactions[reactionType] || 0;
-            if (count === 0) return null;
+        {isLoading ? (
+          <div className="flex items-center justify-center py-8">
+            <LoadingGeneric />
+          </div>
+        ) : (
+          <div className="space-y-3">
+            {(Object.keys(REACTIONS) as ReactionType[]).map((reactionType) => {
+              const count = reactions[reactionType] || 0;
+              if (count === 0) return null;
 
-            return (
-              <div
-                key={reactionType}
-                className="flex items-center justify-between p-3 rounded-lg bg-muted"
-              >
-                <div className="flex items-center gap-2">
-                  <span className="text-2xl">
-                    {REACTIONS[reactionType].emoji}
-                  </span>
-                  <span className="font-medium">
-                    {REACTIONS[reactionType].label}
+              return (
+                <div
+                  key={reactionType}
+                  className="flex items-center justify-between p-3 rounded-lg bg-muted"
+                >
+                  <div className="flex items-center gap-2">
+                    <span className="text-2xl">
+                      {REACTIONS[reactionType].emoji}
+                    </span>
+                    <span className="font-medium">
+                      {REACTIONS[reactionType].label}
+                    </span>
+                  </div>
+                  <span className="text-sm text-muted-foreground font-semibold">
+                    {count}
                   </span>
                 </div>
-                <span className="text-sm text-muted-foreground font-semibold">
-                  {count}
-                </span>
-              </div>
-            );
-          })}
-        </div>
+              );
+            })}
+            {totalReactions === 0 && (
+              <p className="text-center text-muted-foreground py-8">
+                No reactions yet
+              </p>
+            )}
+          </div>
+        )}
       </DialogContent>
     </Dialog>
   );

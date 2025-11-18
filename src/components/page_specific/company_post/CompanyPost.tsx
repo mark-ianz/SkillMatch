@@ -6,11 +6,7 @@ import Link from "next/link";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Bookmark } from "lucide-react";
-import type {
-  CompanyPost as CompanyPostType,
-  PostReactions,
-  ReactionType,
-} from "@/types/company_post.types";
+import type { CompanyPost as CompanyPostType } from "@/types/company_post.types";
 import { ReactionButton } from "./ReactionButton";
 import { ReactionsModal } from "./ReactionsModal";
 import placeholder_image from "@/images/placeholder_image.avif";
@@ -22,44 +18,12 @@ interface CompanyPostProps {
 }
 
 export function CompanyPost({ post }: CompanyPostProps) {
-  const [userReaction, setUserReaction] = useState<ReactionType | null>(null);
-  const [reactions, setReactions] = useState<PostReactions>({
-    like: 2,
-    insightful: 1,
-    supportive: 0,
-    exciting: 3,
-    interested: 0,
-    curious: 1,
-  });
   const [showReactionsModal, setShowReactionsModal] = useState(false);
-
-  const handleReact = (reaction: ReactionType | null) => {
-    if (userReaction) {
-      setReactions((prev) => ({
-        ...prev,
-        [userReaction]: Math.max(0, (prev[userReaction] || 0) - 1),
-      }));
-    }
-
-    if (reaction) {
-      setReactions((prev) => ({
-        ...prev,
-        [reaction]: (prev[reaction] || 0) + 1,
-      }));
-    }
-
-    setUserReaction(reaction);
-  };
 
   const handleSavePost = () => {
     // TODO: Implement save post functionality
     console.log("Save post clicked for:", post.post_id);
   };
-
-  const totalReactions = Object.values(reactions).reduce(
-    (a, b) => a + (b || 0),
-    0
-  );
 
   const baseUrl =
     process.env.NEXT_PUBLIC_FRONTEND_BASE_URL ||
@@ -110,9 +74,7 @@ export function CompanyPost({ post }: CompanyPostProps) {
 
           <div className="flex items-center gap-2 pt-3 border-t justify-between">
             <ReactionButton
-              userReaction={userReaction}
-              onReact={handleReact}
-              totalReactions={totalReactions}
+              post_id={post.post_id}
               onShowReactionsModal={() => setShowReactionsModal(true)}
             />
 
@@ -143,7 +105,7 @@ export function CompanyPost({ post }: CompanyPostProps) {
       <ReactionsModal
         open={showReactionsModal}
         onOpenChange={setShowReactionsModal}
-        reactions={reactions}
+        post_id={post.post_id}
       />
     </>
   );

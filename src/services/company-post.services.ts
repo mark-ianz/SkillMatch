@@ -5,7 +5,7 @@ import { db } from "@/lib/db";
 import { CompanyPostFormData } from "@/schema/company-post.schema";
 import { ResultSetHeader, RowDataPacket } from "mysql2";
 import { ServiceError } from "@/lib/errors";
-import { CompanyPost } from "@/types/company_post.types";
+import { CompanyPost, ReactionType } from "@/types/company_post.types";
 
 const ALLOWED_IMAGE_TYPES = [
   "image/jpeg",
@@ -183,6 +183,179 @@ export const CompanyPostServices = {
       return rows as CompanyPost[];
     } catch (error) {
       console.error("Error fetching company posts feed:", error);
+      throw error;
+    } finally {
+      connection.release();
+    }
+  },
+
+  // Add or update a reaction to a post
+  addOrUpdateReaction: async (
+    post_id: string,
+    reaction_type: ReactionType,
+    user_id?: string,
+    company_id?: string
+  ) => {
+    const connection = await db.getConnection();
+    try {
+      await connection.beginTransaction();
+
+      if (!user_id && !company_id) {
+        throw new ServiceError("Either user_id or company_id must be provided", 400);
+      }
+
+      const reaction_id = nanoid();
+
+      // Check if reaction already exists
+      const whereClause = user_id 
+        ? "post_id = ? AND user_id = ?"
+        : "post_id = ? AND company_id = ?";
+      const whereParams = user_id 
+        ? [post_id, user_id]
+        : [post_id, company_id];
+
+      const [existing] = await connection.query<RowDataPacket[]>(
+        `SELECT reaction_id FROM company_post_reactions WHERE ${whereClause}`,
+        whereParams
+      );
+
+      if (existing.length > 0) {
+        // Update existing reaction
+        await connection.query<ResultSetHeader>(
+          `UPDATE company_post_reactions SET reaction_type = ? WHERE ${whereClause}`,
+          [reaction_type, ...whereParams]
+        );
+      } else {
+        // Insert new reaction
+        await connection.query<ResultSetHeader>(
+          `INSERT INTO company_post_reactions (reaction_id, post_id, user_id, company_id, reaction_type, created_at)
+           VALUES (?, ?, ?, ?, ?, NOW())`,
+          [reaction_id, post_id, user_id || null, company_id || null, reaction_type]
+        );
+      }
+
+      await connection.commit();
+
+      return { success: true };
+    } catch (error) {
+      await connection.rollback();
+      console.error("Error adding/updating reaction:", error);
+      throw error;
+    } finally {
+      connection.release();
+    }
+  },
+
+  // Remove a reaction from a post
+  removeReaction: async (
+    post_id: string,
+    user_id?: string,
+    company_id?: string
+  ) => {
+    const connection = await db.getConnection();
+    try {
+      const whereClause = user_id 
+        ? "post_id = ? AND user_id = ?"
+        : "post_id = ? AND company_id = ?";
+      const whereParams = user_id 
+        ? [post_id, user_id]
+        : [post_id, company_id];
+
+      await connection.query<ResultSetHeader>(
+        `DELETE FROM company_post_reactions WHERE ${whereClause}`,
+        whereParams
+      );
+
+      return { success: true };
+    } catch (error) {
+      console.error("Error removing reaction:", error);
+      throw error;
+    } finally {
+      connection.release();
+    }
+  },
+
+  // Get reaction counts for a post
+  getReactionCounts: async (post_id: string) => {
+    const connection = await db.getConnection();
+    try {
+      const [rows] = await connection.query<RowDataPacket[]>(
+        `SELECT reaction_type, COUNT(*) as count
+         FROM company_post_reactions
+         WHERE post_id = ?
+         GROUP BY reaction_type`,
+        [post_id]
+      );
+
+      const counts: Record<string, number> = {};
+      rows.forEach((row) => {
+        counts[row.reaction_type] = row.count;
+      });
+
+      return counts;
+    } catch (error) {
+      console.error("Error fetching reaction counts:", error);
+      throw error;
+    } finally {
+      connection.release();
+    }
+  },
+
+  // Get user's reaction for a post
+  getUserReaction: async (
+    post_id: string,
+    user_id?: string,
+    company_id?: string
+  ): Promise<ReactionType | null> => {
+    const connection = await db.getConnection();
+    try {
+      const whereClause = user_id 
+        ? "post_id = ? AND user_id = ?"
+        : "post_id = ? AND company_id = ?";
+      const whereParams = user_id 
+        ? [post_id, user_id]
+        : [post_id, company_id];
+
+      const [rows] = await connection.query<RowDataPacket[]>(
+        `SELECT reaction_type FROM company_post_reactions WHERE ${whereClause}`,
+        whereParams
+      );
+
+      return rows.length > 0 ? rows[0].reaction_type : null;
+    } catch (error) {
+      console.error("Error fetching user reaction:", error);
+      throw error;
+    } finally {
+      connection.release();
+    }
+  },
+
+  // Get all reactions with user details for a post
+  getReactionsWithUsers: async (post_id: string) => {
+    const connection = await db.getConnection();
+    try {
+      const [rows] = await connection.query<RowDataPacket[]>(
+        `SELECT 
+          cpr.reaction_type,
+          cpr.created_at,
+          u.user_id,
+          u.first_name,
+          u.last_name,
+          u.profile_picture,
+          c.company_id,
+          c.company_name,
+          c.company_image
+         FROM company_post_reactions cpr
+         LEFT JOIN qcu_user u ON cpr.user_id = u.user_id
+         LEFT JOIN company c ON cpr.company_id = c.company_id
+         WHERE cpr.post_id = ?
+         ORDER BY cpr.created_at DESC`,
+        [post_id]
+      );
+
+      return rows;
+    } catch (error) {
+      console.error("Error fetching reactions with users:", error);
       throw error;
     } finally {
       connection.release();
