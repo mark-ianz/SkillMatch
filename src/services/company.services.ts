@@ -1,4 +1,5 @@
 import { db } from "@/lib/db";
+import { getCourseByAbbr } from "@/lib/utils";
 import { CompanyProfile } from "@/types/company.types";
 import { RowDataPacket } from "mysql2";
 
@@ -32,6 +33,8 @@ export const CompanyServices = {
   },
 
   getSuggestedCompaniesForOJT: async (userCourse: string): Promise<CompanyProfile[]> => {
+    const full_course = getCourseByAbbr(userCourse);
+
     const connection = await db.getConnection();
     try {
       // Get companies that have job posts matching the user's course
@@ -57,7 +60,7 @@ export const CompanyServices = {
         LIMIT 10
       `;
 
-      const [rows] = await connection.query<RowDataPacket[]>(query, [userCourse]);
+      const [rows] = await connection.query<RowDataPacket[]>(query, [full_course]);
 
       return rows.map((row) => ({
         company_id: row.company_id,
