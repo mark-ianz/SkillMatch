@@ -15,14 +15,21 @@ export async function GET(
 
     // Get reaction counts (public)
     const counts = await CompanyPostServices.getReactionCounts(post_id);
-    const totalReactions = Object.values(counts).reduce((sum, count) => sum + count, 0);
+    const totalReactions = Object.values(counts).reduce(
+      (sum, count) => sum + count,
+      0
+    );
 
     // Get user's reaction if authenticated
     let userReaction: ReactionType | null = null;
     if (session?.user) {
-      const userId = session.user.role_id === 3 ? undefined : session.user.user_id?.toString();
-      const companyId = session.user.role_id === 4 ? session.user.company_id : undefined;
-      
+      const userId =
+        session.user.role_id === 3
+          ? undefined
+          : session.user.user_id?.toString();
+      const companyId =
+        session.user.role_id === 4 ? session.user.company_id : undefined;
+
       userReaction = await CompanyPostServices.getUserReaction(
         post_id,
         userId,
@@ -56,10 +63,7 @@ export async function POST(
     const session = await getServerSession(authConfig);
 
     if (!session?.user) {
-      return NextResponse.json(
-        { message: "Unauthorized" },
-        { status: 401 }
-      );
+      return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
     }
 
     const { post_id } = await params;
@@ -88,9 +92,11 @@ export async function POST(
       );
     }
 
-    const userId = session.user.role_id === 3 ? undefined : session.user.user_id?.toString();
-    const companyId = session.user.role_id === 4 ? session.user.company_id : undefined;
-
+    const userId =
+      session.user.role_id === 3 ? session.user.user_id?.toString() : undefined;
+    const companyId =
+      session.user.role_id === 4 ? session.user.company_id : undefined;
+    console.log(session);
     await CompanyPostServices.addOrUpdateReaction(
       post_id,
       reaction_type,
@@ -100,7 +106,10 @@ export async function POST(
 
     // Get updated counts
     const counts = await CompanyPostServices.getReactionCounts(post_id);
-    const totalReactions = Object.values(counts).reduce((sum, count) => sum + count, 0);
+    const totalReactions = Object.values(counts).reduce(
+      (sum, count) => sum + count,
+      0
+    );
 
     return NextResponse.json(
       {
@@ -129,21 +138,23 @@ export async function DELETE(
     const session = await getServerSession(authConfig);
 
     if (!session?.user) {
-      return NextResponse.json(
-        { message: "Unauthorized" },
-        { status: 401 }
-      );
+      return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
     }
 
     const { post_id } = await params;
-    const userId = session.user.role_id === 3 ? undefined : session.user.user_id?.toString();
-    const companyId = session.user.role_id === 4 ? session.user.company_id : undefined;
+    const userId =
+      session.user.role_id === 3 ? undefined : session.user.user_id?.toString();
+    const companyId =
+      session.user.role_id === 4 ? session.user.company_id : undefined;
 
     await CompanyPostServices.removeReaction(post_id, userId, companyId);
 
     // Get updated counts
     const counts = await CompanyPostServices.getReactionCounts(post_id);
-    const totalReactions = Object.values(counts).reduce((sum, count) => sum + count, 0);
+    const totalReactions = Object.values(counts).reduce(
+      (sum, count) => sum + count,
+      0
+    );
 
     return NextResponse.json(
       {
