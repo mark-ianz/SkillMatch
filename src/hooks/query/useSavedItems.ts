@@ -29,6 +29,11 @@ export function useSavedJobs() {
   });
 }
 
+export function useIsJobSaved(job_post_id: string) {
+  const { data: savedJobs } = useSavedJobs();
+  return savedJobs?.some((job) => job.job_post_id === job_post_id) || false;
+}
+
 export function useSaveJob() {
   const queryClient = useQueryClient();
 
@@ -67,6 +72,11 @@ export function useSavedCompanies() {
       return data.savedCompanies;
     },
   });
+}
+
+export function useIsCompanySaved(company_id: string) {
+  const { data: savedCompanies } = useSavedCompanies();
+  return savedCompanies?.some((company) => company.company_id === company_id) || false;
 }
 
 export function useSaveCompany() {

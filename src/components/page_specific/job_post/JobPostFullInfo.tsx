@@ -12,6 +12,14 @@ import { Separator } from "@/components/ui/separator";
 import MatchedBadges from "../explore/job-posts/sub-components/MatchedBadges";
 import AllowanceDescription from "../explore/job-posts/sub-components/AllowanceDescription";
 import JobCategories from "../explore/job-posts/sub-components/JobCategories";
+import {
+  useIsJobSaved,
+  useSaveJob,
+  useUnsaveJob,
+} from "@/hooks/query/useSavedItems";
+import { useSession } from "next-auth/react";
+import { SignInPromptDialog } from "@/components/common/SignInPromptDialog";
+import { useState } from "react";
 
 export function JobPostFullInfo({
   job,
@@ -20,14 +28,28 @@ export function JobPostFullInfo({
   job: JobPost;
   className?: string;
 }) {
+  const { data: session } = useSession();
+  const [showSignInDialog, setShowSignInDialog] = useState(false);
+  const isSaved = useIsJobSaved(job?.job_post_id);
+  const saveJobMutation = useSaveJob();
+  const unsaveJobMutation = useUnsaveJob();
+
   const handleApply = () => {
     // TODO: Implement apply functionality
     console.log("Apply clicked for job:", job?.job_post_id);
   };
 
-  const handleBookmark = () => {
-    // TODO: Implement bookmark functionality
-    console.log("Bookmark clicked");
+  const handleSave = () => {
+    if (!session) {
+      setShowSignInDialog(true);
+      return;
+    }
+
+    if (isSaved) {
+      unsaveJobMutation.mutate(job?.job_post_id);
+    } else {
+      saveJobMutation.mutate(job?.job_post_id);
+    }
   };
 
   const fullAddress = `${job?.street_name}, ${job?.barangay}, ${job?.city_municipality} ${job?.postal_code}`;
@@ -65,14 +87,24 @@ export function JobPostFullInfo({
             <Button
               variant="ghost"
               size="icon"
-              onClick={handleBookmark}
+              onClick={handleSave}
+              disabled={
+                saveJobMutation.isPending || unsaveJobMutation.isPending
+              }
               className="rounded-lg h-10 w-10"
             >
-              <Bookmark className="w-5 h-5" />
+              <Bookmark className={cn("w-5 h-5", isSaved && "fill-current")} />
             </Button>
             <CopyLinkButton url={jobPostUrl} />
           </div>
         </div>
+
+        <SignInPromptDialog
+          open={showSignInDialog}
+          onOpenChange={setShowSignInDialog}
+          title="Save this job for later"
+          description="Sign in to save jobs and access them anytime from your saved items."
+        />
 
         {/* Job meta information */}
         <div className="flex flex-wrap gap-4 text-sm text-muted-foreground">
@@ -97,7 +129,10 @@ export function JobPostFullInfo({
 
         {/* Badges */}
         <div className="flex flex-wrap gap-2">
-          <JobCategories job_categories={job.job_categories}  className="text-sm"/>
+          <JobCategories
+            job_categories={job.job_categories}
+            className="text-sm"
+          />
           {!job?.is_paid && (
             <Badge variant="outline" className="text-xs">
               Unpaid
