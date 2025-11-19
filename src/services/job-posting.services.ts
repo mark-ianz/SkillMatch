@@ -31,7 +31,9 @@ export const JobPostingServices = {
         courses_required: row.courses_required
           ? row.courses_required.split(",")
           : [],
-        job_categories: row.job_categories ? row.job_categories.split(" / ") : [],
+        job_categories: row.job_categories
+          ? row.job_categories.split(" / ")
+          : [],
         soft_skills: row.soft_skills ? row.soft_skills.split(",") : [],
         technical_skills: row.technical_skills
           ? row.technical_skills.split(",")
@@ -185,12 +187,14 @@ export const JobPostingServices = {
           jp.technical_skills,
           jp.created_at,
           jp.updated_at,
+          jp.street_name,
+          jp.barangay,
+          jp.city_municipality,
+          jp.postal_code,
           c.company_name,
           c.company_image,
           c.industry,
-          c.description,
-          c.barangay,
-          c.city_municipality
+          c.description
         FROM job_posts jp
         JOIN company c ON jp.company_id = c.company_id
         WHERE jp.job_post_id = ?`,
@@ -331,7 +335,9 @@ export const JobPostingServices = {
         return [];
       }
 
-      const whereClause = `(${conditions.join(" OR ")}) AND jp.job_post_id != ?`;
+      const whereClause = `(${conditions.join(
+        " OR "
+      )}) AND jp.job_post_id != ?`;
       values.push(job_post_id);
 
       // Fetch suggestions
@@ -353,12 +359,14 @@ export const JobPostingServices = {
           jp.technical_skills,
           jp.created_at,
           jp.updated_at,
+          jp.street_name,
+          jp.barangay,
+          jp.city_municipality,
+          jp.postal_code,
           c.company_name,
           c.company_image,
           c.industry,
-          c.description,
-          c.barangay,
-          c.city_municipality
+          c.description
         FROM job_posts jp
         JOIN company c ON jp.company_id = c.company_id
         WHERE ${whereClause}
