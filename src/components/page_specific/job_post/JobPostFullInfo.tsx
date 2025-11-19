@@ -20,6 +20,7 @@ import {
 import { useSession } from "next-auth/react";
 import { SignInPromptDialog } from "@/components/common/SignInPromptDialog";
 import { useState } from "react";
+import Location from "../explore/job-posts/sub-components/Location";
 
 export function JobPostFullInfo({
   job,
@@ -51,8 +52,6 @@ export function JobPostFullInfo({
       saveJobMutation.mutate(job?.job_post_id);
     }
   };
-
-  const fullAddress = `${job?.street_name}, ${job?.barangay}, ${job?.city_municipality} ${job?.postal_code}`;
 
   const baseUrl =
     process.env.NEXT_PUBLIC_FRONTEND_BASE_URL ||
@@ -108,10 +107,10 @@ export function JobPostFullInfo({
 
         {/* Job meta information */}
         <div className="flex flex-wrap gap-4 text-sm text-muted-foreground">
-          <div className="flex items-center gap-2">
-            <MapPin className="w-4 h-4" />
-            <span>{fullAddress}</span>
-          </div>
+          <Location
+            barangay={job.barangay}
+            city_municipality={job.city_municipality}
+          />
           <div className="flex items-center gap-2">
             <Briefcase className="w-4 h-4" />
             <span>{job?.work_arrangement}</span>
