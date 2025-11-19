@@ -26,7 +26,8 @@ export default function SavedPage() {
   const router = useRouter();
 
   const { data: savedJobs, isLoading: jobsLoading } = useSavedJobs();
-  const { data: savedCompanies, isLoading: companiesLoading } = useSavedCompanies();
+  const { data: savedCompanies, isLoading: companiesLoading } =
+    useSavedCompanies();
   const { data: savedPosts, isLoading: postsLoading } = useSavedPosts();
 
   const unsaveJob = useUnsaveJob();
@@ -52,10 +53,7 @@ export default function SavedPage() {
   };
 
   return (
-    <MainLayout
-      className="items-center"
-      wrapperClassName="items-start flex-col"
-    >
+    <div className="max-w-5xl container">
       <div className="mb-8">
         <h1 className="text-3xl font-bold mb-2">Saved Items</h1>
         <p className="text-muted-foreground">
@@ -91,7 +89,10 @@ export default function SavedPage() {
               <CardContent className="flex flex-col items-center justify-center py-12">
                 <Bookmark className="h-12 w-12 text-muted-foreground/50 mb-4" />
                 <p className="text-muted-foreground mb-4">No saved jobs yet</p>
-                <Button onClick={() => router.push("/explore")} variant="outline">
+                <Button
+                  onClick={() => router.push("/explore")}
+                  variant="outline"
+                >
                   Browse Jobs
                 </Button>
               </CardContent>
@@ -180,6 +181,6 @@ export default function SavedPage() {
           )}
         </TabsContent>
       </Tabs>
-    </MainLayout>
+    </div>
   );
 }
