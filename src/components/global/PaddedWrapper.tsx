@@ -8,7 +8,7 @@ type Props = {
 
 export default function PaddedWrapper({ children, className }: Props) {
   return (
-    <div className={cn("flex items-center w-8/12", className)}>
+    <div className={cn("flex items-center", className)}>
       {children}
     </div>
   )
