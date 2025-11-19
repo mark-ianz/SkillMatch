@@ -12,13 +12,13 @@ import { redirect } from "next/navigation";
 import { getRoleName } from "@/lib/utils";
 
 interface JobPostPageProps {
-  searchParams: {
-    id?: string;
-  };
+  params: Promise<{
+    job_post_id?: string;
+  }>;
 }
 
-export default async function JobPostPage({ searchParams }: JobPostPageProps) {
-  const job_post_id = searchParams.id;
+export default async function JobPostPage({ params }: JobPostPageProps) {
+  const { job_post_id } = await params;
 
   if (!job_post_id) {
     redirect("/explore");
@@ -28,9 +28,9 @@ export default async function JobPostPage({ searchParams }: JobPostPageProps) {
   const session = await getServerSession(authConfig);
   const user_id = session?.user?.user_id;
 
-  if (!session?.user?.role_id) {
+  /* if (!session?.user?.role_id) {
     redirect("/signup");
-  }
+  } */
 
   const role_name = getRoleName(session?.user?.role_id);
 
