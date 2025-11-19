@@ -1,5 +1,6 @@
 import Footer from "@/components/global/Footer";
 import HeaderCompany from "@/components/global/header/HeaderCompany";
+import MainLayout from "@/components/layout/MainLayout";
 import React from "react";
 
 export default function LayoutCompany({
@@ -10,7 +11,12 @@ export default function LayoutCompany({
   return (
     <>
       <HeaderCompany />
-      {children}
+      <MainLayout
+        className="items-center"
+        wrapperClassName="items-center flex-col w-full"
+      >
+        {children}
+      </MainLayout>
       <Footer />
     </>
   );
