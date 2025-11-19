@@ -4,6 +4,7 @@ import { ResultSetHeader, RowDataPacket } from "mysql2";
 import { nanoid } from "nanoid";
 import { getCourseByAbbr } from "@/lib/utils";
 import { JobPost } from "@/types/job_post.types";
+import { getStatusName } from "@/types/status.types";
 
 export const JobPostingServices = {
   getAllJobPosts: async () => {
@@ -25,6 +26,9 @@ export const JobPostingServices = {
       return rows.map((row) => ({
         ...row,
         is_paid: Boolean(row.is_paid),
+        job_post_status: row.job_post_status_id
+          ? getStatusName(row.job_post_status_id)
+          : undefined,
         job_responsibilities: row.job_responsibilities
           ? row.job_responsibilities.split(",")
           : [],
@@ -113,6 +117,9 @@ export const JobPostingServices = {
       return {
         ...row,
         is_paid: Boolean(row.is_paid),
+        job_post_status: row.job_post_status_id
+          ? getStatusName(row.job_post_status_id)
+          : undefined,
         job_responsibilities: row.job_responsibilities
           ? row.job_responsibilities.split(",")
           : [],
@@ -236,6 +243,9 @@ export const JobPostingServices = {
       return {
         ...row,
         courses_required: coursesRequiredArray,
+        job_post_status: row.job_post_status_id
+          ? getStatusName(row.job_post_status_id)
+          : undefined,
         job_categories: row.job_categories
           ? row.job_categories.split(",").map((cat: string) => cat.trim())
           : [],
@@ -408,6 +418,9 @@ export const JobPostingServices = {
         return {
           ...row,
           courses_required: coursesRequiredArray,
+          job_post_status: row.job_post_status_id
+            ? getStatusName(row.job_post_status_id)
+            : undefined,
           job_categories: row.job_categories
             ? row.job_categories.split(",").map((cat: string) => cat.trim())
             : [],

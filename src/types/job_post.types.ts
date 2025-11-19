@@ -1,4 +1,5 @@
 import { CompanyAddress, CompanyPreview } from "./company.types";
+import { JobPostStatusId, StatusName } from "./status.types";
 
 export type WorkArrangement = "Remote" | "On-site" | "Hybrid";
 /* type ShiftType = 'Day shift' | 'Night shift' | 'Flexible hours'; */
@@ -12,6 +13,8 @@ export type JobPost = CompanyPreview & CompanyAddress & {
   courses_required: string[]; // e.g., ["BS Computer Science", "BS Information Technology"]
   job_categories: string[];
   available_positions: number;
+  job_post_status_id: JobPostStatusId; // 1-active, 2-pending, 3-rejected, 4-disabled, 5-filled, 6-closed, 7-onboarding
+  job_post_status?: StatusName; // Computed field from job_post_status_id
   
   // Work Details
   job_overview: string;
