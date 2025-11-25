@@ -6,7 +6,6 @@ import JobPreviewHeader from "./sub-components/JobPreviewHeader";
 import Location from "./sub-components/Location";
 import DatePosted from "./sub-components/DatePosted";
 import { StatusBadge } from "@/components/common/StatusBadge";
-import Link from "next/link";
 
 interface JobPostPreviewProps {
   job: JobPost;
@@ -40,12 +39,9 @@ export function JobPostPreview({
       </div>
 
       {/* Company name and Status */}
-      <Link
-        href={`/view/company/${job?.company_id}`}
-        className="text-sm text-muted-foreground mb-4 hover:underline block"
-      >
+      <p className="text-sm text-muted-foreground mb-4">
         {job.company_name}
-      </Link>
+      </p>
 
       <div className="flex items-center gap-4 text-xs text-muted-foreground flex-wrap">
         <Location
