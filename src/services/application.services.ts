@@ -13,13 +13,24 @@ export const ApplicationServices = {
   applyToJob: async (
     user_id: number,
     job_post_id: string,
+    required_hours: number,
+    preferred_schedule: string,
     resume_path?: string
   ): Promise<Application> => {
     try {
       const [result] = await db.query<ResultSetHeader>(
-        `INSERT INTO applications (user_id, job_post_id, resume_path, applied_date, created_at, updated_at)
-         VALUES (?, ?, ?, NOW(), NOW(), NOW())`,
-        [user_id, job_post_id, resume_path || null]
+        `INSERT INTO applications (
+          user_id, 
+          job_post_id, 
+          required_hours, 
+          preferred_schedule, 
+          resume_path, 
+          applied_date, 
+          created_at, 
+          updated_at
+        )
+        VALUES (?, ?, ?, ?, ?, NOW(), NOW(), NOW())`,
+        [user_id, job_post_id, required_hours, preferred_schedule, resume_path || null]
       );
 
       const [rows] = await db.query<(RowDataPacket & Application)[]>(
