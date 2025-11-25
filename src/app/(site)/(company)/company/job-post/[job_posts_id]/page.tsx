@@ -6,11 +6,6 @@ import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
-  MapPin,
-  Calendar,
-  Users,
-  Briefcase,
-  DollarSign,
   ArrowLeft,
   Mail,
   Phone,
@@ -22,8 +17,17 @@ import {
   CheckCircle2,
   XCircle,
   Send,
+  MapPin,
+  Briefcase,
+  Users,
+  Edit,
+  CloverIcon as CloseIcon,
+  Building2,
+  Globe,
+  Calendar,
 } from "lucide-react";
 import Link from "next/link";
+import Image from "next/image";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -32,50 +36,11 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { useState } from "react";
+import { Separator } from "@/components/ui/separator";
+import { mockCompany } from "@/lib/mock-data/company";
+import { mockJobPost } from "@/lib/mock-data/job-post";
 import { ScheduleInterviewDialog } from "@/components/page_specific/company/view_job_post/ScheduleInterviewDialog";
-
-// Sample job post data
-const jobPost = {
-  job_post_id: "aB1cD2eF3gH4iJ5kL6mN",
-  job_title: "Next.js Developer Intern",
-  work_arrangement: "Hybrid",
-  job_categories: ["Information Technology / Web Development"],
-  job_overview:
-    "A Next.js Developer Intern assists in building and improving web applications using Next.js and modern web technologies. The intern collaborates with senior developers, contributes to UI components, integrates APIs, and learns best practices in real-world development.",
-  available_positions: 2,
-  courses_required: [
-    "Bachelor of Science in Information Technology",
-    "Bachelor of Science in Computer Science",
-    "Bachelor of Science in Information Systems",
-  ],
-  job_responsibilities: [
-    "Assist in building responsive UI using Next.js and React",
-    "Help integrate API endpoints and handle data fetching",
-    "Debug and test application features across browsers",
-    "Collaborate with the development team and follow Agile workflows",
-    "Maintain documentation and follow coding standards.",
-  ],
-  technical_skills: [
-    "react",
-    "next.js",
-    "javascript",
-    "typescript",
-    "html",
-    "css",
-    "tailwind css",
-    "git",
-    "api handling",
-    "restful api",
-  ],
-  soft_skills: ["communication", "teamwork", "problem solving", "adaptability"],
-  preferred_qualifications:
-    "Experience with Tailwind CSS or Figma, basic knowledge of deployment (Vercel)",
-  is_paid: true,
-  allowance_description: "₱6,000 monthly allowance",
-  city_municipality: "Quezon City",
-  barangay: "Bagumbayan",
-  created_at: "2025-11-09T22:08:12.000Z",
-};
+import Location from "@/components/page_specific/explore/job-posts/sub-components/Location";
 
 // Sample applicants organized by status
 const applicantsByStatus = {
@@ -132,7 +97,6 @@ const applicantsByStatus = {
   OFFER_ACCEPTED: [],
   OFFER_DECLINED: [],
   REJECTED: [],
-  HIRED: [],
 };
 
 // Populate status-specific arrays
@@ -176,7 +140,6 @@ const statusConfig = {
     color: "text-gray-600",
   },
   REJECTED: { label: "Rejected", icon: XCircle, color: "text-red-600" },
-  HIRED: { label: "Hired", icon: CheckCircle2, color: "text-emerald-600" },
 };
 
 export default function JobDetailsPage() {
@@ -330,9 +293,8 @@ export default function JobDetailsPage() {
   };
 
   return (
-    <div className="container max-w-5xl bg-background">
-
-      <div>
+    <div className="min-h-screen bg-background">
+      <main className="container py-8 px-4 max-w-7xl">
         {/* Back Button */}
         <Link href="/company/jobs">
           <Button variant="ghost" className="mb-4">
@@ -341,107 +303,264 @@ export default function JobDetailsPage() {
           </Button>
         </Link>
 
-        {/* Job Details Section */}
-        <Card className="mb-8">
-          <CardHeader>
-            <div className="flex flex-col gap-4 md:flex-row md:items-start md:justify-between">
-              <div className="flex-1">
-                <CardTitle className="text-2xl mb-2">
-                  {jobPost.job_title}
-                </CardTitle>
-                <div className="flex flex-wrap items-center gap-2 mb-4">
-                  <Badge className="bg-green-600">Active</Badge>
-                  <Badge variant="outline">
-                    <Briefcase className="mr-1 h-3 w-3" />
-                    {jobPost.work_arrangement}
+        <Card className="mb-8 shadow-sm">
+          <CardContent className="p-6">
+            <div className="space-y-6">
+              {/* Improved Company Header */}
+              <div className="flex items-start justify-between gap-4">
+                <div className="flex items-start gap-4 flex-1">
+                  {/* Company Logo */}
+                  <div className="relative">
+                    <Image
+                      width={80}
+                      height={80}
+                      src={mockCompany.company_image || "/placeholder.svg"}
+                      alt={mockCompany.company_name}
+                      className="w-20 h-20 rounded-lg object-cover border shadow-sm"
+                    />
+                  </div>
+
+                  {/* Company Info & Job Title */}
+                  <div className="flex-1">
+                    <div className="flex items-center gap-2 mb-1">
+                      <h3 className="text-sm font-medium text-muted-foreground">
+                        {mockCompany.company_name}
+                      </h3>
+                      <Badge variant="secondary" className="text-xs">
+                        <Building2 className="mr-1 h-3 w-3" />
+                        {mockCompany.industry}
+                      </Badge>
+                    </div>
+                    <h1 className="text-3xl font-semibold text-balance mb-3">
+                      {mockJobPost.job_title}
+                    </h1>
+
+                    {/* Company Quick Info */}
+                    <div className="flex flex-wrap items-center gap-4 text-sm text-muted-foreground">
+                      <Location
+                        barangay={mockCompany.barangay}
+                        city_municipality={mockCompany.city_municipality}
+                      />
+                      <div className="flex items-center gap-1.5">
+                        <Calendar className="h-4 w-4" />
+                        <span>Est. {mockCompany.date_founded}</span>
+                      </div>
+                      <a
+                        href={mockCompany.website}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="flex items-center gap-1.5 hover:text-foreground transition-colors"
+                      >
+                        <Globe className="h-4 w-4" />
+                        <span className="hover:underline">Website</span>
+                      </a>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Action buttons */}
+                <div className="flex gap-2">
+                  <Button variant="outline" size="sm">
+                    <Edit className="mr-2 h-4 w-4" />
+                    Edit Job
+                  </Button>
+                  <Button variant="outline" size="sm">
+                    <CloseIcon className="mr-2 h-4 w-4" />
+                    Close Posting
+                  </Button>
+                </div>
+              </div>
+
+              {/* Job Status & Details */}
+              <div className="flex flex-wrap items-center gap-2">
+                <Badge className="bg-green-600">Active</Badge>
+                <Badge variant="outline">
+                  <Briefcase className="mr-1 h-3 w-3" />
+                  {mockJobPost.work_arrangement}
+                </Badge>
+                <Badge variant="outline">
+                  {mockJobPost.is_paid ? "Paid" : "Unpaid"}
+                </Badge>
+                <Badge variant="outline">
+                  {mockJobPost.available_positions}{" "}
+                  {mockJobPost.available_positions === 1
+                    ? "Position"
+                    : "Positions"}
+                </Badge>
+                {mockJobPost.job_categories.map((category, idx) => (
+                  <Badge key={idx} variant="secondary" className="text-xs">
+                    {category}
                   </Badge>
-                  {jobPost.is_paid && (
-                    <Badge variant="outline">
-                      <DollarSign className="mr-1 h-3 w-3" />
-                      Paid
-                    </Badge>
+                ))}
+              </div>
+
+              <Separator />
+
+              {/* Quick Stats */}
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+                <div className="text-center p-4 bg-blue-50 rounded-lg border border-blue-100">
+                  <p className="text-2xl font-bold text-blue-600">
+                    {applicantsByStatus.ALL.length}
+                  </p>
+                  <p className="text-xs text-muted-foreground mt-1">
+                    Total Applicants
+                  </p>
+                </div>
+                <div className="text-center p-4 bg-purple-50 rounded-lg border border-purple-100">
+                  <p className="text-2xl font-bold text-purple-600">
+                    {applicantsByStatus.SHORTLISTED.length}
+                  </p>
+                  <p className="text-xs text-muted-foreground mt-1">
+                    Shortlisted
+                  </p>
+                </div>
+                <div className="text-center p-4 bg-indigo-50 rounded-lg border border-indigo-100">
+                  <p className="text-2xl font-bold text-indigo-600">
+                    {applicantsByStatus.INTERVIEW_SCHEDULED.length}
+                  </p>
+                  <p className="text-xs text-muted-foreground mt-1">
+                    Interviews
+                  </p>
+                </div>
+              </div>
+
+              <Separator />
+
+              {/* Job Overview */}
+              <div className="space-y-3">
+                <h2 className="text-sm font-semibold uppercase tracking-wide">
+                  Overview
+                </h2>
+                <p className="text-sm leading-relaxed text-muted-foreground">
+                  {mockJobPost.job_overview}
+                </p>
+              </div>
+
+              {/* Job Details Grid */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div className="space-y-3">
+                  <h3 className="text-sm font-semibold uppercase tracking-wide">
+                    Location
+                  </h3>
+                  <div className="flex items-start gap-2 text-sm text-muted-foreground">
+                    <MapPin className="h-4 w-4 mt-0.5 flex-shrink-0" />
+                    <span>
+                      {mockJobPost.barangay}, {mockJobPost.city_municipality}
+                    </span>
+                  </div>
+                </div>
+                <div className="space-y-3">
+                  <h3 className="text-sm font-semibold uppercase tracking-wide">
+                    Allowance
+                  </h3>
+                  <p className="text-sm text-muted-foreground">
+                    {mockJobPost.allowance_description}
+                  </p>
+                </div>
+              </div>
+
+              <Separator />
+
+              {/* Requirements Section */}
+              <div className="space-y-4">
+                <h2 className="text-sm font-semibold uppercase tracking-wide">
+                  Requirements
+                </h2>
+
+                {/* Technical Skills */}
+                {mockJobPost.technical_skills.length > 0 && (
+                  <div className="space-y-2">
+                    <p className="text-xs font-medium text-muted-foreground">
+                      Technical Skills
+                    </p>
+                    <div className="flex flex-wrap gap-2">
+                      {mockJobPost.technical_skills.map((skill, index) => (
+                        <Badge
+                          key={index}
+                          variant="outline"
+                          className="text-xs"
+                        >
+                          {skill}
+                        </Badge>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+                {/* Soft Skills */}
+                {mockJobPost.soft_skills.length > 0 && (
+                  <div className="space-y-2">
+                    <p className="text-xs font-medium text-muted-foreground">
+                      Soft Skills
+                    </p>
+                    <div className="flex flex-wrap gap-2">
+                      {mockJobPost.soft_skills.map((skill, index) => (
+                        <Badge
+                          key={index}
+                          variant="outline"
+                          className="text-xs"
+                        >
+                          {skill}
+                        </Badge>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+                {/* Courses Required */}
+                <div className="space-y-2">
+                  <p className="text-xs font-medium text-muted-foreground">
+                    Courses Required
+                  </p>
+                  <ul className="space-y-1">
+                    {mockJobPost.courses_required.map((course, index) => (
+                      <li
+                        key={index}
+                        className="flex gap-2 text-sm text-muted-foreground"
+                      >
+                        <span className="flex-shrink-0">•</span>
+                        <span>{course}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+
+                {/* Preferred Qualifications */}
+                {mockJobPost.preferred_qualifications && (
+                  <div className="space-y-2 pt-2">
+                    <p className="text-xs font-medium text-muted-foreground">
+                      Preferred Qualifications
+                    </p>
+                    <p className="text-sm text-muted-foreground">
+                      {mockJobPost.preferred_qualifications}
+                    </p>
+                  </div>
+                )}
+              </div>
+
+              <Separator />
+
+              {/* Responsibilities */}
+              <div className="space-y-4">
+                <h2 className="text-sm font-semibold uppercase tracking-wide">
+                  Responsibilities
+                </h2>
+                <ul className="space-y-2">
+                  {mockJobPost.job_responsibilities.map(
+                    (responsibility, idx) => (
+                      <li
+                        key={idx}
+                        className="flex gap-3 text-sm text-muted-foreground"
+                      >
+                        <span className="flex-shrink-0 mt-1">•</span>
+                        <span className="leading-relaxed">
+                          {responsibility}
+                        </span>
+                      </li>
+                    )
                   )}
-                </div>
+                </ul>
               </div>
-              <div className="flex gap-2">
-                <Button variant="outline">Edit Job</Button>
-                <Button variant="outline">Close Posting</Button>
-              </div>
-            </div>
-          </CardHeader>
-          <CardContent className="space-y-6">
-            {/* Quick Stats */}
-            <div className="grid grid-cols-1 sm:grid-cols-4 gap-4">
-              <div className="text-center p-4 bg-muted/50 rounded-lg">
-                <p className="text-2xl font-bold text-green-600">
-                  {applicantsByStatus.ALL.length}
-                </p>
-                <p className="text-sm text-muted-foreground">
-                  Total Applicants
-                </p>
-              </div>
-              <div className="text-center p-4 bg-muted/50 rounded-lg">
-                <p className="text-2xl font-bold">
-                  {jobPost.available_positions}
-                </p>
-                <p className="text-sm text-muted-foreground">Positions</p>
-              </div>
-              <div className="text-center p-4 bg-muted/50 rounded-lg">
-                <p className="text-2xl font-bold">
-                  {applicantsByStatus.SHORTLISTED.length}
-                </p>
-                <p className="text-sm text-muted-foreground">Shortlisted</p>
-              </div>
-              <div className="text-center p-4 bg-muted/50 rounded-lg">
-                <p className="text-2xl font-bold">
-                  {applicantsByStatus.HIRED.length}
-                </p>
-                <p className="text-sm text-muted-foreground">Hired</p>
-              </div>
-            </div>
-
-            {/* Job Information */}
-            <div>
-              <h3 className="font-semibold mb-3">Job Overview</h3>
-              <p className="text-muted-foreground">{jobPost.job_overview}</p>
-            </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div>
-                <h3 className="font-semibold mb-3">Location</h3>
-                <div className="flex items-start gap-2 text-muted-foreground">
-                  <MapPin className="h-4 w-4 mt-1 flex-shrink-0" />
-                  <span>
-                    {jobPost.barangay}, {jobPost.city_municipality}
-                  </span>
-                </div>
-              </div>
-              <div>
-                <h3 className="font-semibold mb-3">Allowance</h3>
-                <p className="text-muted-foreground">
-                  {jobPost.allowance_description}
-                </p>
-              </div>
-            </div>
-
-            <div>
-              <h3 className="font-semibold mb-3">Technical Skills Required</h3>
-              <div className="flex flex-wrap gap-2">
-                {jobPost.technical_skills.map((skill, index) => (
-                  <Badge key={index} variant="secondary">
-                    {skill}
-                  </Badge>
-                ))}
-              </div>
-            </div>
-
-            <div>
-              <h3 className="font-semibold mb-3">Courses Required</h3>
-              <ul className="list-disc list-inside space-y-1 text-muted-foreground">
-                {jobPost.courses_required.map((course, index) => (
-                  <li key={index}>{course}</li>
-                ))}
-              </ul>
             </div>
           </CardContent>
         </Card>
@@ -449,7 +568,7 @@ export default function JobDetailsPage() {
         {/* Applicants Section with Tabs */}
         <Card>
           <CardHeader>
-            <CardTitle>Applicants</CardTitle>
+            <CardTitle>Applicants Management</CardTitle>
           </CardHeader>
           <CardContent>
             <Tabs defaultValue="ALL" className="w-full">
@@ -505,12 +624,6 @@ export default function JobDetailsPage() {
                     {applicantsByStatus.OFFER_SENT.length}
                   </Badge>
                 </TabsTrigger>
-                <TabsTrigger value="HIRED" className="flex items-center gap-2">
-                  Hired
-                  <Badge variant="secondary" className="ml-1">
-                    {applicantsByStatus.HIRED.length}
-                  </Badge>
-                </TabsTrigger>
                 <TabsTrigger
                   value="REJECTED"
                   className="flex items-center gap-2"
@@ -546,7 +659,7 @@ export default function JobDetailsPage() {
             </Tabs>
           </CardContent>
         </Card>
-      </div>
+      </main>
 
       <ScheduleInterviewDialog
         open={scheduleDialogOpen}
