@@ -2,10 +2,11 @@
 
 import { JobPost } from "@/types/job_post.types";
 import { cn } from "@/lib/utils";
-import AllowanceDescription from "./sub-components/AllowanceDescription";
 import JobPreviewHeader from "./sub-components/JobPreviewHeader";
 import Location from "./sub-components/Location";
 import DatePosted from "./sub-components/DatePosted";
+import { StatusBadge } from "@/components/common/StatusBadge";
+import Link from "next/link";
 
 interface JobPostPreviewProps {
   job: JobPost;
@@ -31,12 +32,20 @@ export function JobPostPreview({
       <JobPreviewHeader job={job} />
 
       {/* Job title */}
-      <h3 className="text-lg font-semibold text-foreground group-hover:text-primary transition-colors">
-        {job.job_title}
-      </h3>
+      <div className="flex items-center gap-2">
+        <h3 className="text-lg font-semibold text-foreground group-hover:text-primary transition-colors">
+          {job.job_title}
+        </h3>
+        {job.job_post_status && <StatusBadge status={job.job_post_status} />}
+      </div>
 
-      {/* Company name */}
-      <p className="text-sm text-muted-foreground mb-4">{job.company_name}</p>
+      {/* Company name and Status */}
+      <Link
+        href={`/view/company/${job?.company_id}`}
+        className="text-sm text-muted-foreground mb-4 hover:underline block"
+      >
+        {job.company_name}
+      </Link>
 
       <div className="flex items-center gap-4 text-xs text-muted-foreground flex-wrap">
         <Location
@@ -45,8 +54,6 @@ export function JobPostPreview({
         />
         <DatePosted created_at={job.created_at} />
       </div>
-
-      <AllowanceDescription className="mt-2" allowance_description={job.allowance_description} />
     </div>
   );
 }
