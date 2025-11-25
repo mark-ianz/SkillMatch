@@ -35,11 +35,25 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
     }
 
-    const { job_post_id, resume_path } = await request.json();
+    const { job_post_id, required_hours, preferred_schedule, resume_path } = await request.json();
 
     if (!job_post_id) {
       return NextResponse.json(
         { message: "Job post ID is required" },
+        { status: 400 }
+      );
+    }
+
+    if (!required_hours || required_hours <= 0) {
+      return NextResponse.json(
+        { message: "Required hours must be a positive number" },
+        { status: 400 }
+      );
+    }
+
+    if (!preferred_schedule || preferred_schedule.trim() === "") {
+      return NextResponse.json(
+        { message: "Preferred schedule is required" },
         { status: 400 }
       );
     }
@@ -60,6 +74,8 @@ export async function POST(request: NextRequest) {
     const application = await ApplicationServices.applyToJob(
       session.user.user_id,
       job_post_id,
+      Number(required_hours),
+      preferred_schedule,
       resume_path
     );
 
