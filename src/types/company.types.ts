@@ -1,8 +1,13 @@
-import { EmployerOnboardingStepOneSchema } from "@/schema/onboarding";
 import { Address } from "./user.types";
 
-export type Company = EmployerOnboardingStepOneSchema & {
+export type Company =  {
   company_id: string;
+  company_name: string;
+  company_email: string;
+  telephone_number: string;
+  phone_number: string;
+  city_municipality: string;
+  barangay: string;
   date_founded: string;
   description: string;
   industry: string[] | null;
@@ -18,7 +23,7 @@ export type Company = EmployerOnboardingStepOneSchema & {
   mayor_permit_path: string; // private
   dti_permit_path: string; // private
   bir_cert_of_registration_path: string; // private
-  created_at: Date;
+  created_at: string;
 };
 
 export type CompanyProfile = Omit<
