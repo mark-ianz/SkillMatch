@@ -5,12 +5,11 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
 import { JobPost } from "@/types/job_post.types";
-import { Bookmark, Briefcase, MapPin } from "lucide-react";
+import { Bookmark, Briefcase } from "lucide-react";
 import Image from "next/image";
 import { CopyLinkButton } from "@/components/common/button/CopyLinkButton";
 import { Separator } from "@/components/ui/separator";
 import MatchedBadges from "../explore/job-posts/sub-components/MatchedBadges";
-import AllowanceDescription from "../explore/job-posts/sub-components/AllowanceDescription";
 import JobCategories from "../explore/job-posts/sub-components/JobCategories";
 import {
   useIsJobSaved,
@@ -21,6 +20,8 @@ import { useSession } from "next-auth/react";
 import { SignInPromptDialog } from "@/components/common/SignInPromptDialog";
 import { useState } from "react";
 import Location from "../explore/job-posts/sub-components/Location";
+import { StatusBadge } from "@/components/common/StatusBadge";
+import Link from "next/link";
 
 export function JobPostFullInfo({
   job,
@@ -61,28 +62,35 @@ export function JobPostFullInfo({
   return (
     <Card className={cn("border-1 shadow-sm p-6 w-full", className)}>
       <div className="space-y-3">
-        {/* Company header */}
-        <div className="flex items-start justify-between gap-4">
-          <div className="flex-1">
+        <div className="flex flex-col md:flex-row md:items-start gap-6">
+          {/* Company logo and info */}
+          <div className="flex gap-4 flex-1">
             {job?.company_image && (
               <Image
-                width={48}
-                height={48}
+                width={80}
+                height={80}
                 src={job?.company_image || "/placeholder.svg"}
                 alt={job?.company_name}
-                className="w-12 h-12 rounded-full object-cover mb-3"
+                className="w-20 h-20 rounded-xl object-cover border-2 border-border"
               />
             )}
-            <h1 className="text-3xl font-semibold text-skillmatch-dark text-balance">
-              {job?.job_title}
-            </h1>
-            <p className="text-sm text-muted-foreground mt-2">
-              {job?.company_name}
-            </p>
+            <div className="flex-1">
+              <div className="flex items-center gap-2 flex-wrap">
+                <h1 className="text-3xl font-semibold text-skillmatch-dark text-balance">
+                  {job?.job_title}
+                </h1>
+                {job?.job_post_status && (
+                  <StatusBadge status={job.job_post_status} />
+                )}
+              </div>
+              <Link href={`/view/company/${job?.company_id}`} className="text-lg font-medium text-foreground hover:underline">
+                {job?.company_name}
+              </Link>
+            </div>
           </div>
 
           {/* Action buttons */}
-          <div className="flex gap-2">
+          <div className="flex gap-2 md:self-start">
             <Button
               variant="ghost"
               size="icon"
@@ -105,49 +113,47 @@ export function JobPostFullInfo({
           description="Sign in to save jobs and access them anytime from your saved items."
         />
 
-        {/* Job meta information */}
-        <div className="flex flex-wrap gap-4 text-sm text-muted-foreground">
-          <Location
-            barangay={job.barangay}
-            city_municipality={job.city_municipality}
-          />
-          <div className="flex items-center gap-2">
-            <Briefcase className="w-4 h-4" />
-            <span>{job?.work_arrangement}</span>
+        <div className="space-y-2">
+          {/* Job meta information */}
+          <div className="flex flex-wrap gap-4 text-sm text-muted-foreground">
+            <Location
+              barangay={job.barangay}
+              city_municipality={job.city_municipality}
+            />
+            <div className="flex items-center gap-2">
+              <Briefcase className="w-4 h-4" />
+              <span>{job?.work_arrangement}</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <Briefcase className="w-4 h-4" />
+              <span>
+                {job?.available_positions} slot
+                {job?.available_positions && job?.available_positions > 1
+                  ? "s"
+                  : ""}
+              </span>
+            </div>
           </div>
-          <div className="flex items-center gap-2">
-            <Briefcase className="w-4 h-4" />
-            <span>
-              {job?.available_positions} slot
-              {job?.available_positions && job?.available_positions > 1
-                ? "s"
-                : ""}
-            </span>
+
+          {/* Badges */}
+          <div className="flex flex-wrap gap-2">
+            <JobCategories
+              job_categories={job.job_categories}
+              className="text-sm"
+            />
+            {!job?.is_paid && (
+              <Badge variant="outline" className="text-xs">
+                Unpaid
+              </Badge>
+            )}
           </div>
-        </div>
 
-        {/* Badges */}
-        <div className="flex flex-wrap gap-2">
-          <JobCategories
-            job_categories={job.job_categories}
-            className="text-sm"
+          <MatchedBadges
+            badgeClassName="text-sm"
+            course_matched={job.course_matched}
+            skill_match_count={job.skill_match_count}
           />
-          {!job?.is_paid && (
-            <Badge variant="outline" className="text-xs">
-              Unpaid
-            </Badge>
-          )}
         </div>
-
-        <AllowanceDescription
-          className="text-sm"
-          allowance_description={job.allowance_description}
-        />
-        <MatchedBadges
-          badgeClassName="text-sm"
-          course_matched={job.course_matched}
-          skill_match_count={job.skill_match_count}
-        />
       </div>
 
       {/* Divider */}
