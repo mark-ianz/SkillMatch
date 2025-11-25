@@ -45,7 +45,12 @@ export function useApplyToJob() {
   const qc = useQueryClient();
 
   return useMutation({
-    mutationFn: async (payload: { job_post_id: string; resume_path?: string }) => {
+    mutationFn: async (payload: { 
+      job_post_id: string; 
+      required_hours: number;
+      preferred_schedule: string;
+      resume_path?: string;
+    }) => {
       const { data } = await api.post<{ application: Application; message: string }>(
         "/applications",
         payload
