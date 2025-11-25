@@ -180,6 +180,7 @@ export const JobPostingServices = {
         `SELECT 
           jp.job_post_id,
           jp.company_id,
+          job_post_status_id,
           jp.job_title,
           jp.courses_required,
           jp.job_categories,
@@ -355,6 +356,7 @@ export const JobPostingServices = {
         `SELECT 
           jp.job_post_id,
           jp.company_id,
+          jp.job_post_status_id,
           jp.job_title,
           jp.courses_required,
           jp.job_categories,
