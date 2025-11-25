@@ -17,12 +17,6 @@ export default function JobPreviewHeader({ job }: { job: JobPost }) {
         {job.available_positions > 1 ? "s" : ""}
       </Badge>
       <JobCategories job_categories={job.job_categories} />
-
-      {!job.is_paid && (
-        <Badge variant="outline" className="text-xs">
-          Unpaid
-        </Badge>
-      )}
     </div>
   );
 }
