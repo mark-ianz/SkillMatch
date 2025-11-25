@@ -31,6 +31,10 @@ export interface Application {
   applied_date: string;
   last_update: string;
   
+  // Internship requirements
+  required_hours: number;
+  preferred_schedule: string; // Comma-separated days (e.g., "Monday,Wednesday,Friday")
+  
   // Interview details
   interview_date?: string | null;
   interview_type?: "virtual" | "in-person" | null;
