@@ -22,6 +22,7 @@ import { useState } from "react";
 import Location from "../explore/job-posts/sub-components/Location";
 import { StatusBadge } from "@/components/common/StatusBadge";
 import Link from "next/link";
+import { JobApplicationDialog } from "./JobApplicationDialog";
 
 export function JobPostFullInfo({
   job,
@@ -36,9 +37,17 @@ export function JobPostFullInfo({
   const saveJobMutation = useSaveJob();
   const unsaveJobMutation = useUnsaveJob();
 
+  const [isApplicationDialogOpen, setIsApplicationDialogOpen] = useState(false);
+
   const handleApply = () => {
     // TODO: Implement apply functionality
+    setIsApplicationDialogOpen(true);
     console.log("Apply clicked for job:", job?.job_post_id);
+  };
+
+  const handleApplicationSubmit = () => {
+    // TODO: Implement apply functionality
+    console.log("Application submitted:", job?.job_post_id);
   };
 
   const handleSave = () => {
@@ -60,207 +69,221 @@ export function JobPostFullInfo({
   const jobPostUrl = `${baseUrl}/view/job-post?id=${job?.job_post_id}`;
 
   return (
-    <Card className={cn("border-1 shadow-sm p-6 w-full", className)}>
-      <div className="space-y-3">
-        <div className="flex flex-col md:flex-row md:items-start gap-6">
-          {/* Company logo and info */}
-          <div className="flex gap-4 flex-1">
-            {job?.company_image && (
-              <Image
-                width={80}
-                height={80}
-                src={job?.company_image || "/placeholder.svg"}
-                alt={job?.company_name}
-                className="w-20 h-20 rounded-xl object-cover border-2 border-border"
-              />
-            )}
-            <div className="flex-1">
-              <div className="flex items-center gap-2 flex-wrap">
-                <h1 className="text-3xl font-semibold text-skillmatch-dark text-balance">
-                  {job?.job_title}
-                </h1>
-                {job?.job_post_status && (
-                  <StatusBadge status={job.job_post_status} />
-                )}
+    <>
+      <Card className={cn("border-1 shadow-sm p-6 w-full", className)}>
+        <div className="space-y-3">
+          <div className="flex flex-col md:flex-row md:items-start gap-6">
+            {/* Company logo and info */}
+            <div className="flex gap-4 flex-1">
+              {job?.company_image && (
+                <Image
+                  width={80}
+                  height={80}
+                  src={job?.company_image || "/placeholder.svg"}
+                  alt={job?.company_name}
+                  className="w-20 h-20 rounded-xl object-cover border-2 border-border"
+                />
+              )}
+              <div className="flex-1">
+                <div className="flex items-center gap-2 flex-wrap">
+                  <h1 className="text-3xl font-semibold text-skillmatch-dark text-balance">
+                    {job?.job_title}
+                  </h1>
+                  {job?.job_post_status && (
+                    <StatusBadge status={job.job_post_status} />
+                  )}
+                </div>
+                <Link
+                  href={`/view/company/${job?.company_id}`}
+                  className="text-lg font-medium text-foreground hover:underline"
+                >
+                  {job?.company_name}
+                </Link>
               </div>
-              <Link href={`/view/company/${job?.company_id}`} className="text-lg font-medium text-foreground hover:underline">
-                {job?.company_name}
-              </Link>
+            </div>
+
+            {/* Action buttons */}
+            <div className="flex gap-2 md:self-start">
+              <Button
+                variant="ghost"
+                size="icon"
+                onClick={handleSave}
+                disabled={
+                  saveJobMutation.isPending || unsaveJobMutation.isPending
+                }
+                className="rounded-lg h-10 w-10"
+              >
+                <Bookmark
+                  className={cn("w-5 h-5", isSaved && "fill-current")}
+                />
+              </Button>
+              <CopyLinkButton url={jobPostUrl} />
             </div>
           </div>
 
-          {/* Action buttons */}
-          <div className="flex gap-2 md:self-start">
-            <Button
-              variant="ghost"
-              size="icon"
-              onClick={handleSave}
-              disabled={
-                saveJobMutation.isPending || unsaveJobMutation.isPending
-              }
-              className="rounded-lg h-10 w-10"
-            >
-              <Bookmark className={cn("w-5 h-5", isSaved && "fill-current")} />
-            </Button>
-            <CopyLinkButton url={jobPostUrl} />
-          </div>
-        </div>
-
-        <SignInPromptDialog
-          open={showSignInDialog}
-          onOpenChange={setShowSignInDialog}
-          title="Save this job for later"
-          description="Sign in to save jobs and access them anytime from your saved items."
-        />
-
-        <div className="space-y-2">
-          {/* Job meta information */}
-          <div className="flex flex-wrap gap-4 text-sm text-muted-foreground">
-            <Location
-              barangay={job.barangay}
-              city_municipality={job.city_municipality}
-            />
-            <div className="flex items-center gap-2">
-              <Briefcase className="w-4 h-4" />
-              <span>{job?.work_arrangement}</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <Briefcase className="w-4 h-4" />
-              <span>
-                {job?.available_positions} slot
-                {job?.available_positions && job?.available_positions > 1
-                  ? "s"
-                  : ""}
-              </span>
-            </div>
-          </div>
-
-          {/* Badges */}
-          <div className="flex flex-wrap gap-2">
-            <JobCategories
-              job_categories={job.job_categories}
-              className="text-sm"
-            />
-            {!job?.is_paid && (
-              <Badge variant="outline" className="text-xs">
-                Unpaid
-              </Badge>
-            )}
-          </div>
-
-          <MatchedBadges
-            badgeClassName="text-sm"
-            course_matched={job.course_matched}
-            skill_match_count={job.skill_match_count}
+          <SignInPromptDialog
+            open={showSignInDialog}
+            onOpenChange={setShowSignInDialog}
+            title="Save this job for later"
+            description="Sign in to save jobs and access them anytime from your saved items."
           />
-        </div>
-      </div>
 
-      {/* Divider */}
-      <Separator />
-
-      <div className="space-y-3">
-        <h2 className="text-sm font-semibold text-skillmatch-dark uppercase tracking-wide">
-          Overview
-        </h2>
-        <p className="text-sm leading-relaxed text-skillmatch-dark">
-          {job?.job_overview}
-        </p>
-      </div>
-
-      <div className="space-y-4">
-        <h2 className="text-sm font-semibold text-skillmatch-dark uppercase tracking-wide">
-          Requirements
-        </h2>
-
-        <div className="flex flex-col gap-4">
-          {job?.courses_required && job?.courses_required.length > 0 && (
-            <div className="space-y-1">
-              <p className="text-xs font-medium text-muted-foreground">
-                Courses Required
-              </p>
-              <div className="flex flex-wrap gap-2">
-                {job?.courses_required.map((course, idx) => (
-                  <Badge key={idx} variant="outline" className="text-xs">
-                    {course}
-                  </Badge>
-                ))}
+          <div className="space-y-2">
+            {/* Job meta information */}
+            <div className="flex flex-wrap gap-4 text-sm text-muted-foreground">
+              <Location
+                barangay={job.barangay}
+                city_municipality={job.city_municipality}
+              />
+              <div className="flex items-center gap-2">
+                <Briefcase className="w-4 h-4" />
+                <span>{job?.work_arrangement}</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <Briefcase className="w-4 h-4" />
+                <span>
+                  {job?.available_positions} slot
+                  {job?.available_positions && job?.available_positions > 1
+                    ? "s"
+                    : ""}
+                </span>
               </div>
             </div>
-          )}
 
-          {job?.technical_skills && job?.technical_skills.length > 0 && (
-            <div className="space-y-1">
-              <p className="text-xs font-medium text-muted-foreground">
-                Technical Skills
-              </p>
-              <div className="flex flex-wrap gap-2">
-                {job?.technical_skills.map((skill, idx) => (
-                  <Badge key={idx} variant="outline" className="text-xs">
-                    {skill}
-                  </Badge>
-                ))}
-              </div>
+            {/* Badges */}
+            <div className="flex flex-wrap gap-2">
+              <JobCategories
+                job_categories={job.job_categories}
+                className="text-sm"
+              />
+              {!job?.is_paid && (
+                <Badge variant="outline" className="text-xs">
+                  Unpaid
+                </Badge>
+              )}
             </div>
-          )}
 
-          {job?.soft_skills && job?.soft_skills.length > 0 && (
-            <div className="space-y-1">
-              <p className="text-xs font-medium text-muted-foreground">
-                Soft Skills
-              </p>
-              <div className="flex flex-wrap gap-2">
-                {job?.soft_skills.map((skill, idx) => (
-                  <Badge key={idx} variant="outline" className="text-xs">
-                    {skill}
-                  </Badge>
-                ))}
-              </div>
-            </div>
-          )}
-        </div>
-
-        {job?.preferred_qualifications && (
-          <div className="space-y-2 pt-2">
-            <p className="text-xs font-medium text-muted-foreground">
-              Preferred Qualifications
-            </p>
-            <p className="text-sm text-skillmatch-dark">
-              {job?.preferred_qualifications}
-            </p>
+            <MatchedBadges
+              badgeClassName="text-sm"
+              course_matched={job.course_matched}
+              skill_match_count={job.skill_match_count}
+            />
           </div>
-        )}
-      </div>
+        </div>
 
-      {/* Divider */}
-      <Separator />
+        {/* Divider */}
+        <Separator />
 
-      <div className="space-y-4">
-        <h2 className="text-sm font-semibold text-skillmatch-dark uppercase tracking-wide">
-          Responsibilities
-        </h2>
+        <div className="space-y-3">
+          <h2 className="text-sm font-semibold text-skillmatch-dark uppercase tracking-wide">
+            Overview
+          </h2>
+          <p className="text-sm leading-relaxed text-skillmatch-dark">
+            {job?.job_overview}
+          </p>
+        </div>
 
-        <ul className="space-y-1">
-          {job?.job_responsibilities.map((responsibility, idx) => (
-            <li key={idx} className="flex gap-3 text-sm text-skillmatch-dark">
-              <span className="text-muted-foreground flex-shrink-0 mt-1">
-                •
-              </span>
-              <span className="leading-relaxed">{responsibility}</span>
-            </li>
-          ))}
-        </ul>
-      </div>
+        <div className="space-y-4">
+          <h2 className="text-sm font-semibold text-skillmatch-dark uppercase tracking-wide">
+            Requirements
+          </h2>
 
-      {/* Divider */}
-      <Separator />
+          <div className="flex flex-col gap-4">
+            {job?.courses_required && job?.courses_required.length > 0 && (
+              <div className="space-y-1">
+                <p className="text-xs font-medium text-muted-foreground">
+                  Courses Required
+                </p>
+                <div className="flex flex-wrap gap-2">
+                  {job?.courses_required.map((course, idx) => (
+                    <Badge key={idx} variant="outline" className="text-xs">
+                      {course}
+                    </Badge>
+                  ))}
+                </div>
+              </div>
+            )}
 
-      <Button
-        onClick={handleApply}
-        className="w-full h-11 text-base font-medium"
-      >
-        Apply Now
-      </Button>
-    </Card>
+            {job?.technical_skills && job?.technical_skills.length > 0 && (
+              <div className="space-y-1">
+                <p className="text-xs font-medium text-muted-foreground">
+                  Technical Skills
+                </p>
+                <div className="flex flex-wrap gap-2">
+                  {job?.technical_skills.map((skill, idx) => (
+                    <Badge key={idx} variant="outline" className="text-xs">
+                      {skill}
+                    </Badge>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {job?.soft_skills && job?.soft_skills.length > 0 && (
+              <div className="space-y-1">
+                <p className="text-xs font-medium text-muted-foreground">
+                  Soft Skills
+                </p>
+                <div className="flex flex-wrap gap-2">
+                  {job?.soft_skills.map((skill, idx) => (
+                    <Badge key={idx} variant="outline" className="text-xs">
+                      {skill}
+                    </Badge>
+                  ))}
+                </div>
+              </div>
+            )}
+          </div>
+
+          {job?.preferred_qualifications && (
+            <div className="space-y-2 pt-2">
+              <p className="text-xs font-medium text-muted-foreground">
+                Preferred Qualifications
+              </p>
+              <p className="text-sm text-skillmatch-dark">
+                {job?.preferred_qualifications}
+              </p>
+            </div>
+          )}
+        </div>
+
+        {/* Divider */}
+        <Separator />
+
+        <div className="space-y-4">
+          <h2 className="text-sm font-semibold text-skillmatch-dark uppercase tracking-wide">
+            Responsibilities
+          </h2>
+
+          <ul className="space-y-1">
+            {job?.job_responsibilities.map((responsibility, idx) => (
+              <li key={idx} className="flex gap-3 text-sm text-skillmatch-dark">
+                <span className="text-muted-foreground flex-shrink-0 mt-1">
+                  •
+                </span>
+                <span className="leading-relaxed">{responsibility}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+
+        {/* Divider */}
+        <Separator />
+
+        <Button
+          onClick={handleApply}
+          className="w-full h-11 text-base font-medium"
+        >
+          Apply Now
+        </Button>
+      </Card>
+      <JobApplicationDialog
+        open={isApplicationDialogOpen}
+        onOpenChange={setIsApplicationDialogOpen}
+        companyName={job.company_name}
+        jobTitle={job.job_title}
+        onSubmit={handleApplicationSubmit}
+      />
+    </>
   );
 }
