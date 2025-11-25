@@ -13,6 +13,6 @@ To-Do:
 - dynamic header
 - make the job categories required on job posts
 - make the view path a server component
-
+- nag ooverlap na yung mga same name na variable sa database pati sa types tanginang yan
 
 TEMPORARY LANG YUNG CHECKING NG STATES USING USESESSION, DAPAT IISTORE YAN SA STORE AFTER FETCHING DATA.
