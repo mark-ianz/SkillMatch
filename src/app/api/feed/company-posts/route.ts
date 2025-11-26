@@ -27,7 +27,7 @@ export async function GET() {
       }
 
       // If Company user, get their industries
-      if (session.user.role_id === 2) {
+      if (session.user.role_id === 4) {
         const [companyRows] = await db.query<RowDataPacket[]>(
           `SELECT industry FROM company WHERE company_id = ?`,
           [session.user.user_id]

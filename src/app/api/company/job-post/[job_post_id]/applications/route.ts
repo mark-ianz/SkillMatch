@@ -16,7 +16,7 @@ export async function GET(
     }
 
     // Check if user is a company
-    if (session.user.role_id !== 2) {
+    if (session.user.role_id !== 4) {
       return NextResponse.json(
         { message: "Access denied. Company role required." },
         { status: 403 }
