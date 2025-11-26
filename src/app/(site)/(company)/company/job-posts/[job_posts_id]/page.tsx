@@ -694,6 +694,24 @@ export default function JobDetailsPage() {
                   </Badge>
                 </TabsTrigger>
                 <TabsTrigger
+                  value="OFFER_ACCEPTED"
+                  className="flex items-center gap-2"
+                >
+                  Accepted
+                  <Badge variant="secondary" className="ml-1 bg-green-100 text-green-700">
+                    {applicantsByStatus.OFFER_ACCEPTED.length}
+                  </Badge>
+                </TabsTrigger>
+                <TabsTrigger
+                  value="OFFER_DECLINED"
+                  className="flex items-center gap-2"
+                >
+                  Declined
+                  <Badge variant="secondary" className="ml-1">
+                    {applicantsByStatus.OFFER_DECLINED.length}
+                  </Badge>
+                </TabsTrigger>
+                <TabsTrigger
                   value="REJECTED"
                   className="flex items-center gap-2"
                 >
