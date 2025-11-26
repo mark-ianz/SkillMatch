@@ -190,11 +190,12 @@ export const ApplicationServices = {
           a.*,
           u.first_name,
           u.last_name,
-          u.email as user_email,
+          acc.email as user_email,
           op.course,
           op.skills
         FROM applications a
         JOIN user u ON a.user_id = u.user_id
+        JOIN account acc ON u.user_id = acc.user_id
         LEFT JOIN ojt_profile op ON u.user_id = op.user_id
         WHERE a.job_post_id = ?
         ORDER BY a.applied_date DESC`,
