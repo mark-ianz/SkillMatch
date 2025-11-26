@@ -24,8 +24,6 @@ import {
   Users,
   Edit,
   Building2,
-  Globe,
-  Calendar,
   AlertCircle,
 } from "lucide-react";
 import Link from "next/link";
@@ -39,11 +37,10 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { useState } from "react";
 import { Separator } from "@/components/ui/separator";
-import { mockCompany } from "@/lib/mock-data/company";
-import { mockJobPost } from "@/lib/mock-data/job-post";
 import { ScheduleInterviewDialog } from "@/components/page_specific/company/view_job_post/ScheduleInterviewDialog";
 import Location from "@/components/page_specific/explore/job-posts/sub-components/Location";
 import { useJobPostApplications, useScheduleInterview, useUpdateCompanyStatus, useSendOffer, useRejectApplication } from "@/hooks/query/useApplications";
+import { useJobPost } from "@/hooks/query/useJobPosts";
 import { ApplicationWithUserDetails } from "@/types/application.types";
 
 // Status configuration matching database IDs
@@ -62,10 +59,13 @@ export default function JobDetailsPage() {
   const params = useParams();
   const job_post_id = params.job_posts_id as string;
   
+  // Fetch job post data
+  const { data: jobPost, isLoading: isLoadingJobPost, error: jobPostError } = useJobPost(job_post_id);
+  
   // Fetch applicants data
   const { data: applicants, isLoading, error } = useJobPostApplications(job_post_id);
   
-  console.log(applicants, error)
+  console.log(applicants, error, jobPost)
   // Mutations
   const scheduleInterviewMutation = useScheduleInterview();
   const updateStatusMutation = useUpdateCompanyStatus();
@@ -164,7 +164,7 @@ export default function JobDetailsPage() {
   const applicantsByStatus = organizeByStatus(applicants);
 
   // Loading state
-  if (isLoading) {
+  if (isLoading || isLoadingJobPost) {
     return (
       <div className="min-h-screen bg-gradient-to-b from-green-50 to-white">
         <div className="border-b bg-white">
@@ -181,7 +181,7 @@ export default function JobDetailsPage() {
   }
 
   // Error state
-  if (error) {
+  if (error || jobPostError) {
     return (
       <div className="min-h-screen bg-gradient-to-b from-green-50 to-white">
         <div className="border-b bg-white">
@@ -198,7 +198,33 @@ export default function JobDetailsPage() {
           <Alert variant="destructive">
             <AlertCircle className="h-4 w-4" />
             <AlertDescription>
-              Failed to load job post applications. Please try again.
+              {jobPostError ? 'Failed to load job post details.' : 'Failed to load job post applications.'} Please try again.
+            </AlertDescription>
+          </Alert>
+        </div>
+      </div>
+    );
+  }
+
+  // No job post found
+  if (!jobPost) {
+    return (
+      <div className="min-h-screen bg-gradient-to-b from-green-50 to-white">
+        <div className="border-b bg-white">
+          <div className="container mx-auto px-4 py-4">
+            <Link href="/company/job-posts">
+              <Button variant="ghost" size="sm">
+                <ArrowLeft className="h-4 w-4 mr-2" />
+                Back to Job Posts
+              </Button>
+            </Link>
+          </div>
+        </div>
+        <div className="container mx-auto px-4 py-8">
+          <Alert>
+            <AlertCircle className="h-4 w-4" />
+            <AlertDescription>
+              Job post not found.
             </AlertDescription>
           </Alert>
         </div>
@@ -362,46 +388,39 @@ export default function JobDetailsPage() {
                     <Image
                       width={80}
                       height={80}
-                      src={mockCompany.company_image || "/placeholder.svg"}
-                      alt={mockCompany.company_name}
+                      src={jobPost.company_image || "/placeholder.svg"}
+                      alt={jobPost.company_name}
                       className="w-20 h-20 rounded-lg object-cover border shadow-sm"
                     />
                   </div>
 
                   {/* Company Info & Job Title */}
                   <div className="flex-1">
-                    <div className="flex items-center gap-2 mb-1">
+                    <div className="flex items-center gap-2 mb-1 flex-wrap">
                       <h3 className="text-sm font-medium text-muted-foreground">
-                        {mockCompany.company_name}
+                        {jobPost.company_name}
                       </h3>
-                      <Badge variant="secondary" className="text-xs">
-                        <Building2 className="mr-1 h-3 w-3" />
-                        {mockCompany.industry}
-                      </Badge>
+                      {jobPost.industry && jobPost.industry.length > 0 && (
+                        <>
+                          {jobPost.industry.map((ind, idx) => (
+                            <Badge key={idx} variant="secondary" className="text-xs">
+                              <Building2 className="mr-1 h-3 w-3" />
+                              {ind}
+                            </Badge>
+                          ))}
+                        </>
+                      )}
                     </div>
                     <h1 className="text-3xl font-semibold text-balance mb-3">
-                      {mockJobPost.job_title}
+                      {jobPost.job_title}
                     </h1>
 
                     {/* Company Quick Info */}
                     <div className="flex flex-wrap items-center gap-4 text-sm text-muted-foreground">
                       <Location
-                        barangay={mockCompany.barangay}
-                        city_municipality={mockCompany.city_municipality}
+                        barangay={jobPost.barangay}
+                        city_municipality={jobPost.city_municipality}
                       />
-                      <div className="flex items-center gap-1.5">
-                        <Calendar className="h-4 w-4" />
-                        <span>Est. {mockCompany.date_founded}</span>
-                      </div>
-                      <a
-                        href={mockCompany.website}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="flex items-center gap-1.5 hover:text-foreground transition-colors"
-                      >
-                        <Globe className="h-4 w-4" />
-                        <span className="hover:underline">Website</span>
-                      </a>
                     </div>
                   </div>
                 </div>
@@ -424,18 +443,18 @@ export default function JobDetailsPage() {
                 <Badge className="bg-green-600">Active</Badge>
                 <Badge variant="outline">
                   <Briefcase className="mr-1 h-3 w-3" />
-                  {mockJobPost.work_arrangement}
+                  {jobPost.work_arrangement}
                 </Badge>
                 <Badge variant="outline">
-                  {mockJobPost.is_paid ? "Paid" : "Unpaid"}
+                  {jobPost.is_paid ? "Paid" : "Unpaid"}
                 </Badge>
                 <Badge variant="outline">
-                  {mockJobPost.available_positions}{" "}
-                  {mockJobPost.available_positions === 1
+                  {jobPost.available_positions}{" "}
+                  {jobPost.available_positions === 1
                     ? "Position"
                     : "Positions"}
                 </Badge>
-                {mockJobPost.job_categories.map((category, idx) => (
+                {jobPost.job_categories.map((category, idx) => (
                   <Badge key={idx} variant="secondary" className="text-xs">
                     {category}
                   </Badge>
@@ -480,7 +499,7 @@ export default function JobDetailsPage() {
                   Overview
                 </h2>
                 <p className="text-sm leading-relaxed text-muted-foreground">
-                  {mockJobPost.job_overview}
+                  {jobPost.job_overview}
                 </p>
               </div>
 
@@ -493,7 +512,7 @@ export default function JobDetailsPage() {
                   <div className="flex items-start gap-2 text-sm text-muted-foreground">
                     <MapPin className="h-4 w-4 mt-0.5 flex-shrink-0" />
                     <span>
-                      {mockJobPost.barangay}, {mockJobPost.city_municipality}
+                      {jobPost.barangay}, {jobPost.city_municipality}
                     </span>
                   </div>
                 </div>
@@ -502,7 +521,7 @@ export default function JobDetailsPage() {
                     Allowance
                   </h3>
                   <p className="text-sm text-muted-foreground">
-                    {mockJobPost.allowance_description}
+                    {jobPost.allowance_description || "Not specified"}
                   </p>
                 </div>
               </div>
@@ -516,13 +535,13 @@ export default function JobDetailsPage() {
                 </h2>
 
                 {/* Technical Skills */}
-                {mockJobPost.technical_skills.length > 0 && (
+                {jobPost.technical_skills.length > 0 && (
                   <div className="space-y-2">
                     <p className="text-xs font-medium text-muted-foreground">
                       Technical Skills
                     </p>
                     <div className="flex flex-wrap gap-2">
-                      {mockJobPost.technical_skills.map((skill, index) => (
+                      {jobPost.technical_skills.map((skill, index) => (
                         <Badge
                           key={index}
                           variant="outline"
@@ -536,13 +555,13 @@ export default function JobDetailsPage() {
                 )}
 
                 {/* Soft Skills */}
-                {mockJobPost.soft_skills.length > 0 && (
+                {jobPost.soft_skills.length > 0 && (
                   <div className="space-y-2">
                     <p className="text-xs font-medium text-muted-foreground">
                       Soft Skills
                     </p>
                     <div className="flex flex-wrap gap-2">
-                      {mockJobPost.soft_skills.map((skill, index) => (
+                      {jobPost.soft_skills.map((skill, index) => (
                         <Badge
                           key={index}
                           variant="outline"
@@ -561,7 +580,7 @@ export default function JobDetailsPage() {
                     Courses Required
                   </p>
                   <ul className="space-y-1">
-                    {mockJobPost.courses_required.map((course, index) => (
+                    {jobPost.courses_required.map((course, index) => (
                       <li
                         key={index}
                         className="flex gap-2 text-sm text-muted-foreground"
@@ -574,13 +593,13 @@ export default function JobDetailsPage() {
                 </div>
 
                 {/* Preferred Qualifications */}
-                {mockJobPost.preferred_qualifications && (
+                {jobPost.preferred_qualifications && (
                   <div className="space-y-2 pt-2">
                     <p className="text-xs font-medium text-muted-foreground">
                       Preferred Qualifications
                     </p>
                     <p className="text-sm text-muted-foreground">
-                      {mockJobPost.preferred_qualifications}
+                      {jobPost.preferred_qualifications}
                     </p>
                   </div>
                 )}
@@ -594,7 +613,7 @@ export default function JobDetailsPage() {
                   Responsibilities
                 </h2>
                 <ul className="space-y-2">
-                  {mockJobPost.job_responsibilities.map(
+                  {jobPost.job_responsibilities.map(
                     (responsibility, idx) => (
                       <li
                         key={idx}
