@@ -7,6 +7,7 @@ import {
   ApplicationWithJobDetails,
   ApplicationWithUserDetails,
   CompanyApplicationStatusId,
+  JobPostWithApplicationStats,
 } from "@/types/application.types";
 
 // ==================== USER HOOKS ====================
@@ -112,6 +113,20 @@ export function useRespondToOffer() {
 }
 
 // ==================== COMPANY HOOKS ====================
+
+// Query: Get all job posts for company with application statistics
+export function useCompanyJobPostsWithStats() {
+  return useQuery({
+    queryKey: ["company-job-posts-stats"],
+    queryFn: async () => {
+      const { data } = await api.get<{ jobPosts: JobPostWithApplicationStats[] }>(
+        "/company/job-posts"
+      );
+      return data.jobPosts;
+    },
+    staleTime: 1000 * 60 * 5, // 5 minutes
+  });
+}
 
 // Query: Get all applications for a job post
 export function useJobPostApplications(job_post_id: string) {

@@ -7,6 +7,7 @@ import {
   ApplicationWithUserDetails,
   ApplicationStatusId,
   CompanyApplicationStatusId,
+  JobPostWithApplicationStats,
 } from "@/types/application.types";
 
 export const ApplicationServices = {
@@ -206,6 +207,46 @@ export const ApplicationServices = {
       }));
     } catch (error) {
       console.error("Error fetching job post applications:", error);
+      throw error;
+    }
+  },
+
+  // COMPANY: Get all job posts for a company with application statistics
+  getCompanyJobPostsWithStats: async (
+    company_id: string
+  ): Promise<JobPostWithApplicationStats[]> => {
+    try {
+      const [rows] = await db.query<(RowDataPacket & JobPostWithApplicationStats)[]>(
+        `SELECT 
+          jp.job_post_id,
+          jp.job_title,
+          jp.work_arrangement,
+          jp.available_positions,
+          jp.job_post_status_id,
+          jp.created_at,
+          jp.updated_at,
+          jp.is_paid,
+          jp.allowance_description,
+          COUNT(a.application_id) as total_applications,
+          SUM(CASE WHEN a.company_status_id = 8 THEN 1 ELSE 0 END) as new_applications,
+          SUM(CASE WHEN a.company_status_id = 13 THEN 1 ELSE 0 END) as shortlisted,
+          SUM(CASE WHEN a.company_status_id = 14 THEN 1 ELSE 0 END) as on_hold,
+          SUM(CASE WHEN a.company_status_id = 9 THEN 1 ELSE 0 END) as interview_scheduled,
+          SUM(CASE WHEN a.company_status_id = 10 THEN 1 ELSE 0 END) as offer_sent,
+          SUM(CASE WHEN a.application_status_id = 11 THEN 1 ELSE 0 END) as offer_accepted,
+          SUM(CASE WHEN a.application_status_id = 12 THEN 1 ELSE 0 END) as offer_declined,
+          SUM(CASE WHEN a.company_status_id = 3 THEN 1 ELSE 0 END) as rejected
+        FROM job_posts jp
+        LEFT JOIN applications a ON jp.job_post_id = a.job_post_id
+        WHERE jp.company_id = ?
+        GROUP BY jp.job_post_id
+        ORDER BY jp.created_at DESC`,
+        [company_id]
+      );
+
+      return rows;
+    } catch (error) {
+      console.error("Error fetching company job posts with stats:", error);
       throw error;
     }
   },

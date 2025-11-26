@@ -75,6 +75,30 @@ export interface ApplicationWithUserDetails extends Application {
   skills?: string | null;
 }
 
+// Job post with application statistics (for company dashboard)
+export interface JobPostWithApplicationStats {
+  job_post_id: string;
+  job_title: string;
+  work_arrangement: string;
+  available_positions: number;
+  job_post_status_id: number;
+  created_at: string;
+  updated_at: string;
+  is_paid: boolean;
+  allowance_description?: string | null;
+  
+  // Application statistics
+  total_applications: number;
+  new_applications: number;      // status_id = 8 (applied)
+  shortlisted: number;            // status_id = 13
+  on_hold: number;                // status_id = 14
+  interview_scheduled: number;    // status_id = 9
+  offer_sent: number;             // status_id = 10
+  offer_accepted: number;         // status_id = 11 (from application_status_id)
+  offer_declined: number;         // status_id = 12 (from application_status_id)
+  rejected: number;               // status_id = 3
+}
+
 // Helper functions
 export const getApplicationStatusName = (status_id: ApplicationStatusId): ApplicationStatusName => {
   const statusMap: Record<ApplicationStatusId, ApplicationStatusName> = {
