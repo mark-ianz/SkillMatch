@@ -1,12 +1,8 @@
 import { Card, CardContent } from "@/components/ui/card";
-
-interface Application {
-  id: string;
-  status: string;
-}
+import { ApplicationWithJobDetails } from "@/types/application.types";
 
 interface ApplicationStatsProps {
-  applications: Application[];
+  applications: ApplicationWithJobDetails[];
 }
 
 export function ApplicationStats({ applications }: ApplicationStatsProps) {
@@ -15,7 +11,7 @@ export function ApplicationStats({ applications }: ApplicationStatsProps) {
       <Card>
         <CardContent className="p-4 text-center">
           <p className="text-2xl font-bold text-blue-600">
-            {applications.filter((a) => a.status === "APPLIED").length}
+            {applications.filter((a) => a.application_status_id === 8).length}
           </p>
           <p className="text-xs text-muted-foreground">Pending</p>
         </CardContent>
@@ -24,7 +20,7 @@ export function ApplicationStats({ applications }: ApplicationStatsProps) {
         <CardContent className="p-4 text-center">
           <p className="text-2xl font-bold text-indigo-600">
             {
-              applications.filter((a) => a.status === "INTERVIEW_SCHEDULED")
+              applications.filter((a) => a.application_status_id === 9)
                 .length
             }
           </p>
@@ -34,7 +30,7 @@ export function ApplicationStats({ applications }: ApplicationStatsProps) {
       <Card>
         <CardContent className="p-4 text-center">
           <p className="text-2xl font-bold text-orange-600">
-            {applications.filter((a) => a.status === "OFFER_SENT").length}
+            {applications.filter((a) => a.application_status_id === 10).length}
           </p>
           <p className="text-xs text-muted-foreground">Offers</p>
         </CardContent>
@@ -44,7 +40,7 @@ export function ApplicationStats({ applications }: ApplicationStatsProps) {
           <p className="text-2xl font-bold text-green-600">
             {
               applications.filter(
-                (a) => a.status === "OFFER_ACCEPTED" || a.status === "HIRED"
+                (a) => a.application_status_id === 11
               ).length
             }
           </p>

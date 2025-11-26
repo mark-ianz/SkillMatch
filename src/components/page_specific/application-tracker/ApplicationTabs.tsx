@@ -3,23 +3,7 @@ import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { FileText } from "lucide-react";
 import { ApplicationCard } from "./ApplicationCard";
-
-interface Application {
-  id: string;
-  job_title: string;
-  company_name: string;
-  company_image: string;
-  work_arrangement: string;
-  city_municipality: string;
-  barangay: string;
-  applied_date: string;
-  status: string;
-  last_update: string;
-  interview_date?: string;
-  interview_type?: string;
-  interview_link?: string;
-  offer_deadline?: string;
-}
+import { ApplicationWithJobDetails } from "@/types/application.types";
 
 interface StatusConfig {
   label: string;
@@ -29,7 +13,7 @@ interface StatusConfig {
 }
 
 interface ApplicationTabsProps {
-  applications: Application[];
+  applications: ApplicationWithJobDetails[];
   statusConfig: Record<string, StatusConfig>;
   activeTab: string;
   onTabChange: (value: string) => void;
@@ -44,7 +28,7 @@ export function ApplicationTabs({
   const filteredApplications =
     activeTab === "ALL"
       ? applications
-      : applications.filter((app) => app.status === activeTab);
+      : applications.filter((app) => app.application_status_id.toString() === activeTab);
 
   return (
     <Tabs value={activeTab} onValueChange={onTabChange} className="w-full">
@@ -55,37 +39,37 @@ export function ApplicationTabs({
             {applications.length}
           </Badge>
         </TabsTrigger>
-        <TabsTrigger value="APPLIED">
+        <TabsTrigger value="8">
           Applied
           <Badge variant="secondary" className="ml-2">
-            {applications.filter((a) => a.status === "APPLIED").length}
+            {applications.filter((a) => a.application_status_id === 8).length}
           </Badge>
         </TabsTrigger>
-        <TabsTrigger value="INTERVIEW_SCHEDULED">
+        <TabsTrigger value="9">
           Interview
           <Badge variant="secondary" className="ml-2">
             {
-              applications.filter((a) => a.status === "INTERVIEW_SCHEDULED")
+              applications.filter((a) => a.application_status_id === 9)
                 .length
             }
           </Badge>
         </TabsTrigger>
-        <TabsTrigger value="OFFER_SENT">
+        <TabsTrigger value="10">
           Offers
           <Badge variant="secondary" className="ml-2">
-            {applications.filter((a) => a.status === "OFFER_SENT").length}
+            {applications.filter((a) => a.application_status_id === 10).length}
           </Badge>
         </TabsTrigger>
-        <TabsTrigger value="OFFER_ACCEPTED">
+        <TabsTrigger value="11">
           Accepted
           <Badge variant="secondary" className="ml-2">
-            {applications.filter((a) => a.status === "OFFER_ACCEPTED").length}
+            {applications.filter((a) => a.application_status_id === 11).length}
           </Badge>
         </TabsTrigger>
-        <TabsTrigger value="REJECTED">
+        <TabsTrigger value="3">
           Rejected
           <Badge variant="secondary" className="ml-2">
-            {applications.filter((a) => a.status === "REJECTED").length}
+            {applications.filter((a) => a.application_status_id === 3).length}
           </Badge>
         </TabsTrigger>
       </TabsList>
@@ -112,11 +96,11 @@ export function ApplicationTabs({
           <div className="space-y-4">
             {filteredApplications.map((application) => {
               const config =
-                statusConfig[application.status as keyof typeof statusConfig];
+                statusConfig[application.application_status_id.toString() as keyof typeof statusConfig];
 
               return (
                 <ApplicationCard
-                  key={application.id}
+                  key={application.application_id}
                   application={application}
                   statusConfig={config}
                 />

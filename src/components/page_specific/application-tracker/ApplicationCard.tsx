@@ -11,23 +11,7 @@ import {
   ExternalLink,
 } from "lucide-react";
 import Link from "next/link";
-
-interface Application {
-  id: string;
-  job_title: string;
-  company_name: string;
-  company_image: string;
-  work_arrangement: string;
-  city_municipality: string;
-  barangay: string;
-  applied_date: string;
-  status: string;
-  last_update: string;
-  interview_date?: string;
-  interview_type?: string;
-  interview_link?: string;
-  offer_deadline?: string;
-}
+import { ApplicationWithJobDetails, getApplicationStatusName } from "@/types/application.types";
 
 interface StatusConfig {
   label: string;
@@ -37,7 +21,7 @@ interface StatusConfig {
 }
 
 interface ApplicationCardProps {
-  application: Application;
+  application: ApplicationWithJobDetails;
   statusConfig: StatusConfig;
 }
 
@@ -70,7 +54,7 @@ export function ApplicationCard({
           {/* Application Details */}
           <div className="flex-1 space-y-3">
             <div>
-              <Link href={`/jobs/${application.id}`}>
+              <Link target="_blank" href={`/view/job-post/${application.job_post_id}`}>
                 <h3 className="text-lg font-semibold hover:text-green-600 transition-colors">
                   {application.job_title}
                 </h3>
@@ -128,7 +112,7 @@ export function ApplicationCard({
             </div>
 
             {/* Interview Details */}
-            {application.status === "INTERVIEW_SCHEDULED" &&
+            {application.application_status_id === 9 &&
               application.interview_date && (
                 <div className="mt-3 p-3 bg-indigo-50 rounded-lg border border-indigo-200">
                   <div className="flex items-start justify-between gap-2">
@@ -175,7 +159,7 @@ export function ApplicationCard({
               )}
 
             {/* Offer Details */}
-            {application.status === "OFFER_SENT" &&
+            {application.application_status_id === 10 &&
               application.offer_deadline && (
                 <div className="mt-3 p-3 bg-orange-50 rounded-lg border border-orange-200">
                   <div className="flex items-start justify-between gap-2">
@@ -211,7 +195,7 @@ export function ApplicationCard({
               )}
 
             {/* Success Message */}
-            {application.status === "OFFER_ACCEPTED" && (
+            {application.application_status_id === 11 && (
               <div className="mt-3 p-3 bg-green-50 rounded-lg border border-green-200">
                 <p className="text-sm font-semibold text-green-900">
                   Offer Accepted!
@@ -225,7 +209,7 @@ export function ApplicationCard({
 
           {/* Action Button */}
           <div className="md:ml-auto">
-            <Link href={`/applications/${application.id}`}>
+            <Link href={`/applications/${application.application_id}`}>
               <Button variant="outline" size="sm">
                 View Details
               </Button>
