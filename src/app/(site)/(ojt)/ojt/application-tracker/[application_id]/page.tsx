@@ -1,12 +1,22 @@
 "use client";
 
 import { useParams, useRouter } from "next/navigation";
-import { useApplication } from "@/hooks/query/useApplications";
+import { useApplication, useRespondToOffer } from "@/hooks/query/useApplications";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Separator } from "@/components/ui/separator";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import { Textarea } from "@/components/ui/textarea";
+import { Label } from "@/components/ui/label";
 import {
   ArrowLeft,
   Building2,
@@ -21,6 +31,7 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 import { statusConfig } from "@/components/page_specific/application-tracker/applicationStatusConfig";
+import { useState } from "react";
 
 export default function ApplicationDetailsPage() {
   const params = useParams();
@@ -28,6 +39,32 @@ export default function ApplicationDetailsPage() {
   const application_id = params.application_id as string;
 
   const { data: application, isLoading } = useApplication(application_id);
+  const respondToOfferMutation = useRespondToOffer();
+
+  const [showDeclineDialog, setShowDeclineDialog] = useState(false);
+  const [declineMessage, setDeclineMessage] = useState("");
+
+  const handleAcceptOffer = () => {
+    respondToOfferMutation.mutate({
+      application_id,
+      response: "accept",
+    });
+  };
+
+  const handleDeclineOffer = () => {
+    respondToOfferMutation.mutate(
+      {
+        application_id,
+        response: "decline",
+      },
+      {
+        onSuccess: () => {
+          setShowDeclineDialog(false);
+          setDeclineMessage("");
+        },
+      }
+    );
+  };
 
   if (isLoading) {
     return (
@@ -263,10 +300,22 @@ export default function ApplicationDetailsPage() {
                   )}
                   {application.application_status_id === 10 && (
                     <div className="flex gap-2 mt-3">
-                      <Button size="sm" className="bg-green-600 hover:bg-green-700">
-                        Accept Offer
+                      <Button
+                        size="sm"
+                        className="bg-green-600 hover:bg-green-700"
+                        onClick={handleAcceptOffer}
+                        disabled={respondToOfferMutation.isPending}
+                      >
+                        <CheckCircle2 className="mr-2 h-4 w-4" />
+                        {respondToOfferMutation.isPending ? "Accepting..." : "Accept Offer"}
                       </Button>
-                      <Button size="sm" variant="outline">
+                      <Button
+                        size="sm"
+                        variant="outline"
+                        onClick={() => setShowDeclineDialog(true)}
+                        disabled={respondToOfferMutation.isPending}
+                      >
+                        <XCircle className="mr-2 h-4 w-4" />
                         Decline Offer
                       </Button>
                     </div>
@@ -424,6 +473,52 @@ export default function ApplicationDetailsPage() {
           </div>
         </CardContent>
       </Card>
+
+      {/* Decline Offer Dialog */}
+      <Dialog open={showDeclineDialog} onOpenChange={setShowDeclineDialog}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Decline Job Offer</DialogTitle>
+            <DialogDescription>
+              Are you sure you want to decline this offer from {application?.company_name}?
+              This action cannot be undone.
+            </DialogDescription>
+          </DialogHeader>
+          <div className="space-y-4 py-4">
+            <div className="space-y-2">
+              <Label htmlFor="decline-message">
+                Message (Optional)
+              </Label>
+              <Textarea
+                id="decline-message"
+                placeholder="Share your reason for declining (optional)..."
+                value={declineMessage}
+                onChange={(e) => setDeclineMessage(e.target.value)}
+                rows={4}
+              />
+            </div>
+          </div>
+          <DialogFooter>
+            <Button
+              variant="outline"
+              onClick={() => {
+                setShowDeclineDialog(false);
+                setDeclineMessage("");
+              }}
+              disabled={respondToOfferMutation.isPending}
+            >
+              Cancel
+            </Button>
+            <Button
+              variant="destructive"
+              onClick={handleDeclineOffer}
+              disabled={respondToOfferMutation.isPending}
+            >
+              {respondToOfferMutation.isPending ? "Declining..." : "Decline Offer"}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }
