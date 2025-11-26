@@ -131,10 +131,8 @@ export default function JobDetailsPage() {
 
   // Organize applicants by status
   const organizeByStatus = (apps: ApplicationWithUserDetails[] | undefined) => {
-    if (!apps) return {};
-
     const organized: Record<string, ApplicationWithUserDetails[]> = {
-      ALL: apps,
+      ALL: [],
       APPLIED: [],
       SHORTLISTED: [],
       ON_HOLD: [],
@@ -144,6 +142,10 @@ export default function JobDetailsPage() {
       OFFER_DECLINED: [],
       REJECTED: [],
     };
+
+    if (!apps || apps.length === 0) return organized;
+
+    organized.ALL = apps;
 
     apps.forEach((app) => {
       const config = statusConfig[app.company_status_id as keyof typeof statusConfig];

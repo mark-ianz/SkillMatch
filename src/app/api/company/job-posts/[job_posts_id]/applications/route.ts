@@ -6,7 +6,7 @@ import { ApplicationServices } from "@/services/application.services";
 // GET - Get all applications for a job post (Company only)
 export async function GET(
   request: NextRequest,
-  { params }: { params: { job_post_id: string } }
+  { params }: { params: { job_posts_id: string } }
 ) {
   try {
     const session = await getServerSession(authConfig);
@@ -23,10 +23,10 @@ export async function GET(
       );
     }
 
-    const { job_post_id } = params;
+    const { job_posts_id } = params;
 
     const applications = await ApplicationServices.getJobPostApplications(
-      job_post_id
+      job_posts_id
     );
 
     return NextResponse.json({ applications }, { status: 200 });
