@@ -37,7 +37,7 @@ interface JobApplicationDialogProps {
   companyName: string;
 }
 
-interface ApplicationData {
+export interface ApplicationData {
   firstName: string;
   lastName: string;
   middleName: string;
@@ -192,8 +192,10 @@ export function JobApplicationDialog({
     formData.city &&
     formData.phoneNumber &&
     formData.program &&
+    formData.resumePath &&
     formData.hoursRequired &&
-    formData.proposedSchedule &&
+    Number(formData.hoursRequired) > 0 &&
+    formData.proposedSchedule.length > 0 &&
     consent;
 
   if (isLoading) {

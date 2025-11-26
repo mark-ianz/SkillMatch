@@ -22,7 +22,7 @@ import { useState } from "react";
 import Location from "../explore/job-posts/sub-components/Location";
 import { StatusBadge } from "@/components/common/StatusBadge";
 import Link from "next/link";
-import { JobApplicationDialog } from "./JobApplicationDialog";
+import { ApplyButton } from "./ApplyButton";
 
 export function JobPostFullInfo({
   job,
@@ -36,19 +36,6 @@ export function JobPostFullInfo({
   const isSaved = useIsJobSaved(job?.job_post_id);
   const saveJobMutation = useSaveJob();
   const unsaveJobMutation = useUnsaveJob();
-
-  const [isApplicationDialogOpen, setIsApplicationDialogOpen] = useState(false);
-
-  const handleApply = () => {
-    // TODO: Implement apply functionality
-    setIsApplicationDialogOpen(true);
-    console.log("Apply clicked for job:", job?.job_post_id);
-  };
-
-  const handleApplicationSubmit = () => {
-    // TODO: Implement apply functionality
-    console.log("Application submitted:", job?.job_post_id);
-  };
 
   const handleSave = () => {
     if (!session) {
@@ -270,20 +257,14 @@ export function JobPostFullInfo({
         {/* Divider */}
         <Separator />
 
-        <Button
-          onClick={handleApply}
+        <ApplyButton
+          jobPostId={job.job_post_id}
+          jobTitle={job.job_title}
+          companyName={job.company_name}
           className="w-full h-11 text-base font-medium"
-        >
-          Apply Now
-        </Button>
+          fullWidth
+        />
       </Card>
-      <JobApplicationDialog
-        open={isApplicationDialogOpen}
-        onOpenChange={setIsApplicationDialogOpen}
-        companyName={job.company_name}
-        jobTitle={job.job_title}
-        onSubmit={handleApplicationSubmit}
-      />
     </>
   );
 }
