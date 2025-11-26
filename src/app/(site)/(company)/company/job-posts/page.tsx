@@ -218,9 +218,6 @@ export default function CompanyJobPostsPage() {
                               {post.work_arrangement}
                             </Badge>
                             <Badge variant="outline">
-                              {post.is_paid ? "Paid" : "Unpaid"}
-                            </Badge>
-                            <Badge variant="outline">
                               {post.available_positions}{" "}
                               {post.available_positions === 1
                                 ? "Position"
@@ -252,12 +249,6 @@ export default function CompanyJobPostsPage() {
                             )}
                           </span>
                         </div>
-                        {post.allowance_description && (
-                          <div className="flex items-center gap-1">
-                            <DollarSign className="h-4 w-4" />
-                            <span>{post.allowance_description}</span>
-                          </div>
-                        )}
                       </div>
 
                       {/* Application Stats */}
