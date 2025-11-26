@@ -1,0 +1,23 @@
+CREATE TABLE `account` (
+  `account_id` int(11) NOT NULL AUTO_INCREMENT,
+  `user_id` int(11) DEFAULT NULL,
+  `company_id` char(21) DEFAULT NULL,
+  `email` varchar(255) NOT NULL,
+  `profile_image` varchar(500) DEFAULT NULL,
+  `provider` enum('google-ojt','google-company') NOT NULL,
+  `provider_id` varchar(255) DEFAULT NULL,
+  `password_hash` varchar(60) DEFAULT NULL,
+  `status_id` int(11) NOT NULL,
+  `role_id` int(11) NOT NULL,
+  `created_at` datetime NOT NULL DEFAULT current_timestamp(),
+  PRIMARY KEY (`account_id`),
+  UNIQUE KEY `email` (`email`),
+  KEY `ACOUNT_USER_ID_FK` (`user_id`),
+  KEY `ACCOUNT_STATUS_ID_FK` (`status_id`),
+  KEY `ACCOUNT_ROLE_ID_FK` (`role_id`),
+  KEY `ACOUNT_COMPANY_ID_FK` (`company_id`),
+  CONSTRAINT `ACCOUNT_ROLE_ID_FK` FOREIGN KEY (`role_id`) REFERENCES `role` (`role_id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  CONSTRAINT `ACCOUNT_STATUS_ID_FK` FOREIGN KEY (`status_id`) REFERENCES `status` (`status_id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  CONSTRAINT `ACOUNT_COMPANY_ID_FK` FOREIGN KEY (`company_id`) REFERENCES `company` (`company_id`) ON DELETE CASCADE,
+  CONSTRAINT `ACOUNT_USER_ID_FK` FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`) ON DELETE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=46 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci
