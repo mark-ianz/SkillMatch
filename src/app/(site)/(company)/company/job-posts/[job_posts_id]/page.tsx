@@ -212,26 +212,25 @@ export default function JobDetailsPage() {
     organized.ALL = apps;
 
     apps.forEach((app) => {
-      const config =
-        statusConfig[app.company_status_id as keyof typeof statusConfig];
-      if (config && organized[config.key]) {
-        organized[config.key].push(app);
-      }
-      if (
-        app.application_status_id === 11 &&
-        !organized.OFFER_ACCEPTED.find(
-          (a) => a.application_id === app.application_id
-        )
-      ) {
+      // Check if offer was accepted or declined
+      const isOfferAccepted = app.application_status_id === 11;
+      const isOfferDeclined = app.application_status_id === 12;
+
+      // Handle accepted offers
+      if (isOfferAccepted) {
         organized.OFFER_ACCEPTED.push(app);
       }
-      if (
-        app.application_status_id === 12 &&
-        !organized.OFFER_DECLINED.find(
-          (a) => a.application_id === app.application_id
-        )
-      ) {
+      // Handle declined offers
+      else if (isOfferDeclined) {
         organized.OFFER_DECLINED.push(app);
+      }
+      // Handle other statuses (not accepted/declined)
+      else {
+        const config =
+          statusConfig[app.company_status_id as keyof typeof statusConfig];
+        if (config && organized[config.key]) {
+          organized[config.key].push(app);
+        }
       }
     });
 
@@ -420,6 +419,19 @@ export default function JobDetailsPage() {
                   <StatusIcon className="mr-1 h-3 w-3" />
                   {statusInfo?.label || "Unknown Status"}
                 </Badge>
+                {/* Show offer response status */}
+                {applicant.application_status_id === 11 && (
+                  <Badge className="text-xs bg-green-600 text-white">
+                    <CheckCircle2 className="mr-1 h-3 w-3" />
+                    Offer Accepted
+                  </Badge>
+                )}
+                {applicant.application_status_id === 12 && (
+                  <Badge variant="outline" className="text-xs border-gray-400 text-gray-700">
+                    <XCircle className="mr-1 h-3 w-3" />
+                    Offer Declined
+                  </Badge>
+                )}
               </div>
 
               {applicant.interview_date && (
