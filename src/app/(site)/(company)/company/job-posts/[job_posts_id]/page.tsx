@@ -49,6 +49,7 @@ import {
 } from "@/hooks/query/useApplications";
 import { useJobPost } from "@/hooks/query/useJobPosts";
 import { ApplicationWithUserDetails } from "@/types/application.types";
+import { getCourseByAbbr } from "@/lib/utils";
 
 // Status configuration matching database IDs
 const statusConfig: Record<
@@ -339,7 +340,7 @@ export default function JobDetailsPage() {
                 <div>
                   <h4 className="font-semibold">{applicant.user_name}</h4>
                   <p className="text-sm text-muted-foreground">
-                    {applicant.course || "Course not specified"}
+                    {getCourseByAbbr(applicant.course!) || "Course not specified"}
                   </p>
                 </div>
                 <DropdownMenu>
