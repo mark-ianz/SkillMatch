@@ -476,7 +476,7 @@ export default function ApplicationDetailsPage() {
 
       {/* Decline Offer Dialog */}
       <Dialog open={showDeclineDialog} onOpenChange={setShowDeclineDialog}>
-        <DialogContent>
+        <DialogContent className="max-w-md">
           <DialogHeader>
             <DialogTitle>Decline Job Offer</DialogTitle>
             <DialogDescription>

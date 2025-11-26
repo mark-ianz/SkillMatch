@@ -101,9 +101,10 @@ export function useRespondToOffer() {
       );
       return data;
     },
-    onSuccess: (data) => {
+    onSuccess: (data, variables) => {
       toast.success(data.message);
       qc.invalidateQueries({ queryKey: ["user-applications"] });
+      qc.invalidateQueries({ queryKey: ["application", variables.application_id] });
     },
     onError: (error: AxiosError<{ message?: string }>) => {
       const message = error.response?.data?.message || "Failed to respond to offer";
