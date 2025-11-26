@@ -190,6 +190,14 @@ export const ApplicationServices = {
           a.*,
           u.first_name,
           u.last_name,
+          u.phone_number,
+          u.street_name,
+          u.house_number,
+          u.subdivision,
+          u.postal_code,
+          u.barangay,
+          u.city_municipality,
+          u.region,
           acc.email as user_email,
           op.course,
           op.skills
@@ -202,10 +210,24 @@ export const ApplicationServices = {
         [job_post_id]
       );
 
-      return rows.map((row) => ({
-        ...row,
-        user_name: `${row.first_name} ${row.last_name}`,
-      }));
+      return rows.map((row) => {
+        // Construct full address from components
+        const addressParts = [
+          row.house_number,
+          row.street_name,
+          row.subdivision,
+          row.barangay,
+          row.city_municipality,
+          row.region,
+          row.postal_code,
+        ].filter(Boolean);
+        
+        return {
+          ...row,
+          user_name: `${row.first_name} ${row.last_name}`,
+          address: addressParts.length > 0 ? addressParts.join(', ') : null,
+        };
+      });
     } catch (error) {
       console.error("Error fetching job post applications:", error);
       throw error;

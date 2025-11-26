@@ -11,6 +11,7 @@ import { Alert, AlertDescription } from "@/components/ui/alert";
 import {
   ArrowLeft,
   Mail,
+  Phone,
   FileText,
   MoreVertical,
   UserCheck,
@@ -307,6 +308,18 @@ export default function JobDetailsPage() {
                   <Mail className="h-3.5 w-3.5" />
                   <span>{applicant.user_email}</span>
                 </div>
+                {applicant.phone_number && (
+                  <div className="flex items-center gap-1 text-muted-foreground">
+                    <Phone className="h-3.5 w-3.5" />
+                    <span>{applicant.phone_number}</span>
+                  </div>
+                )}
+                {applicant.address && (
+                  <div className="flex items-center gap-1 text-muted-foreground">
+                    <MapPin className="h-3.5 w-3.5" />
+                    <span>{applicant.address}</span>
+                  </div>
+                )}
               </div>
 
               <div className="flex flex-wrap items-center gap-2">

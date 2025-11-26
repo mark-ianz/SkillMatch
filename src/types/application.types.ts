@@ -71,6 +71,8 @@ export interface ApplicationWithJobDetails extends Application {
 export interface ApplicationWithUserDetails extends Application {
   user_name: string;
   user_email: string;
+  phone_number?: string | null;
+  address?: string | null;
   course?: string | null;
   skills?: string | null;
 }
