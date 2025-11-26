@@ -1,14 +1,16 @@
 "use client";
 
+import { useParams } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Skeleton } from "@/components/ui/skeleton";
+import { Alert, AlertDescription } from "@/components/ui/alert";
 import {
   ArrowLeft,
   Mail,
-  Phone,
   FileText,
   MoreVertical,
   UserCheck,
@@ -21,10 +23,10 @@ import {
   Briefcase,
   Users,
   Edit,
-  CloverIcon as CloseIcon,
   Building2,
   Globe,
   Calendar,
+  AlertCircle,
 } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
@@ -41,157 +43,194 @@ import { mockCompany } from "@/lib/mock-data/company";
 import { mockJobPost } from "@/lib/mock-data/job-post";
 import { ScheduleInterviewDialog } from "@/components/page_specific/company/view_job_post/ScheduleInterviewDialog";
 import Location from "@/components/page_specific/explore/job-posts/sub-components/Location";
+import { useJobPostApplications, useScheduleInterview, useUpdateCompanyStatus, useSendOffer, useRejectApplication } from "@/hooks/query/useApplications";
+import { ApplicationWithUserDetails } from "@/types/application.types";
 
-// Sample applicants organized by status
-const applicantsByStatus = {
-  ALL: [
-    {
-      id: "1",
-      name: "Maria Santos",
-      email: "maria.santos@qcu.edu.ph",
-      phone: "+63 912 345 6789",
-      course: "BS Information Technology",
-      year_level: "3rd Year",
-      gpa: 3.8,
-      status: "APPLIED",
-      applied_date: "2025-11-15T10:30:00.000Z",
-      skill_match: 8,
-      avatar: "",
-    },
-    {
-      id: "2",
-      name: "Juan Dela Cruz",
-      email: "juan.delacruz@qcu.edu.ph",
-      phone: "+63 923 456 7890",
-      course: "BS Computer Science",
-      year_level: "4th Year",
-      gpa: 3.6,
-      status: "SHORTLISTED",
-      applied_date: "2025-11-14T14:20:00.000Z",
-      skill_match: 9,
-      avatar: "",
-    },
-    {
-      id: "3",
-      name: "Ana Reyes",
-      email: "ana.reyes@qcu.edu.ph",
-      phone: "+63 934 567 8901",
-      course: "BS Information Systems",
-      year_level: "3rd Year",
-      gpa: 3.9,
-      status: "INTERVIEW_SCHEDULED",
-      applied_date: "2025-11-13T09:15:00.000Z",
-      skill_match: 10,
-      avatar: "",
-      interview_date: "2025-11-20T14:00:00.000Z",
-      interview_type: "virtual",
-      interview_link: "https://meet.google.com/abc-defg-hij",
-    },
-  ],
-  APPLIED: [],
-  SHORTLISTED: [],
-  ON_HOLD: [],
-  INTERVIEW_SCHEDULED: [],
-  INTERVIEW_COMPLETED: [],
-  OFFER_SENT: [],
-  OFFER_ACCEPTED: [],
-  OFFER_DECLINED: [],
-  REJECTED: [],
-};
-
-// Populate status-specific arrays
-applicantsByStatus.ALL.forEach((applicant) => {
-  if (applicantsByStatus[applicant.status as keyof typeof applicantsByStatus]) {
-    (
-      applicantsByStatus[
-        applicant.status as keyof typeof applicantsByStatus
-      ] as any[]
-    ).push(applicant);
-  }
-});
-
-const statusConfig = {
-  APPLIED: { label: "Applied", icon: FileText, color: "text-blue-600" },
-  SHORTLISTED: {
-    label: "Shortlisted",
-    icon: UserCheck,
-    color: "text-purple-600",
-  },
-  ON_HOLD: { label: "On Hold", icon: Clock, color: "text-orange-600" },
-  INTERVIEW_SCHEDULED: {
-    label: "Interview Scheduled",
-    icon: CalendarCheck,
-    color: "text-indigo-600",
-  },
-  INTERVIEW_COMPLETED: {
-    label: "Interview Completed",
-    icon: CheckCircle2,
-    color: "text-teal-600",
-  },
-  OFFER_SENT: { label: "Offer Sent", icon: Send, color: "text-cyan-600" },
-  OFFER_ACCEPTED: {
-    label: "Offer Accepted",
-    icon: CheckCircle2,
-    color: "text-green-600",
-  },
-  OFFER_DECLINED: {
-    label: "Offer Declined",
-    icon: XCircle,
-    color: "text-gray-600",
-  },
-  REJECTED: { label: "Rejected", icon: XCircle, color: "text-red-600" },
+// Status configuration matching database IDs
+const statusConfig: Record<number, { label: string; icon: React.ComponentType<{ className?: string }>; color: string; key: string }> = {
+  8: { label: "Applied", icon: FileText, color: "text-blue-600", key: "APPLIED" },
+  13: { label: "Shortlisted", icon: UserCheck, color: "text-purple-600", key: "SHORTLISTED" },
+  14: { label: "On Hold", icon: Clock, color: "text-orange-600", key: "ON_HOLD" },
+  9: { label: "Interview Scheduled", icon: CalendarCheck, color: "text-indigo-600", key: "INTERVIEW_SCHEDULED" },
+  10: { label: "Offer Sent", icon: Send, color: "text-cyan-600", key: "OFFER_SENT" },
+  11: { label: "Offer Accepted", icon: CheckCircle2, color: "text-green-600", key: "OFFER_ACCEPTED" },
+  12: { label: "Offer Declined", icon: XCircle, color: "text-gray-600", key: "OFFER_DECLINED" },
+  3: { label: "Rejected", icon: XCircle, color: "text-red-600", key: "REJECTED" },
 };
 
 export default function JobDetailsPage() {
-  const [scheduleDialogOpen, setScheduleDialogOpen] = useState(false);
-  const [selectedApplicant, setSelectedApplicant] = useState<any>(null);
+  const params = useParams();
+  const job_post_id = params.job_posts_id as string;
+  
+  // Fetch applicants data
+  const { data: applicants, isLoading, error } = useJobPostApplications(job_post_id);
+  
+  console.log(applicants, error)
+  // Mutations
+  const scheduleInterviewMutation = useScheduleInterview();
+  const updateStatusMutation = useUpdateCompanyStatus();
+  const sendOfferMutation = useSendOffer();
+  const rejectApplicationMutation = useRejectApplication();
 
-  const handleScheduleInterview = (applicant: any) => {
+  const [scheduleDialogOpen, setScheduleDialogOpen] = useState(false);
+  const [selectedApplicant, setSelectedApplicant] = useState<ApplicationWithUserDetails | null>(null);
+
+  const handleScheduleInterview = (applicant: ApplicationWithUserDetails) => {
     setSelectedApplicant(applicant);
     setScheduleDialogOpen(true);
   };
 
-  const handleScheduleSubmit = (data: any) => {
-    console.log("[v0] Schedule interview:", {
-      applicant: selectedApplicant,
-      ...data,
+  const handleScheduleSubmit = (data: {
+    type: "virtual" | "in-person";
+    date: Date;
+    time: string;
+    meetLink?: string;
+    location?: string;
+    notes?: string;
+  }) => {
+    if (!selectedApplicant) return;
+
+    const interviewDateTime = new Date(data.date);
+    const [hours, minutes] = data.time.split(":");
+    interviewDateTime.setHours(parseInt(hours), parseInt(minutes));
+
+    scheduleInterviewMutation.mutate({
+      application_id: selectedApplicant.application_id,
+      interview_date: interviewDateTime.toISOString(),
+      interview_type: data.type,
+      interview_link: data.meetLink,
+      interview_notes: data.notes,
     });
+
     setScheduleDialogOpen(false);
   };
 
-  const renderApplicantCard = (applicant: any) => {
-    const StatusIcon =
-      statusConfig[applicant.status as keyof typeof statusConfig]?.icon ||
-      FileText;
-    const statusColor =
-      statusConfig[applicant.status as keyof typeof statusConfig]?.color ||
-      "text-gray-600";
+  const handleStatusChange = (application_id: string, status_id: number) => {
+    updateStatusMutation.mutate({
+      application_id,
+      company_status_id: status_id as 8 | 13 | 14 | 9 | 10 | 3,
+    });
+  };
+
+  const handleSendOffer = (application_id: string) => {
+    const deadline = new Date();
+    deadline.setDate(deadline.getDate() + 7);
+    
+    sendOfferMutation.mutate({
+      application_id,
+      offer_deadline: deadline.toISOString(),
+    });
+  };
+
+  const handleReject = (application_id: string) => {
+    rejectApplicationMutation.mutate({
+      application_id,
+      rejection_reason: "Position filled / Not suitable at this time",
+    });
+  };
+
+  // Organize applicants by status
+  const organizeByStatus = (apps: ApplicationWithUserDetails[] | undefined) => {
+    if (!apps) return {};
+
+    const organized: Record<string, ApplicationWithUserDetails[]> = {
+      ALL: apps,
+      APPLIED: [],
+      SHORTLISTED: [],
+      ON_HOLD: [],
+      INTERVIEW_SCHEDULED: [],
+      OFFER_SENT: [],
+      OFFER_ACCEPTED: [],
+      OFFER_DECLINED: [],
+      REJECTED: [],
+    };
+
+    apps.forEach((app) => {
+      const config = statusConfig[app.company_status_id as keyof typeof statusConfig];
+      if (config && organized[config.key]) {
+        organized[config.key].push(app);
+      }
+      if (app.application_status_id === 11 && !organized.OFFER_ACCEPTED.find(a => a.application_id === app.application_id)) {
+        organized.OFFER_ACCEPTED.push(app);
+      }
+      if (app.application_status_id === 12 && !organized.OFFER_DECLINED.find(a => a.application_id === app.application_id)) {
+        organized.OFFER_DECLINED.push(app);
+      }
+    });
+
+    return organized;
+  };
+
+  const applicantsByStatus = organizeByStatus(applicants);
+
+  // Loading state
+  if (isLoading) {
+    return (
+      <div className="min-h-screen bg-gradient-to-b from-green-50 to-white">
+        <div className="border-b bg-white">
+          <div className="container mx-auto px-4 py-4">
+            <Skeleton className="h-10 w-32" />
+          </div>
+        </div>
+        <div className="container mx-auto px-4 py-8 space-y-6">
+          <Skeleton className="h-64 w-full" />
+          <Skeleton className="h-96 w-full" />
+        </div>
+      </div>
+    );
+  }
+
+  // Error state
+  if (error) {
+    return (
+      <div className="min-h-screen bg-gradient-to-b from-green-50 to-white">
+        <div className="border-b bg-white">
+          <div className="container mx-auto px-4 py-4">
+            <Link href="/company/job-posts">
+              <Button variant="ghost" size="sm">
+                <ArrowLeft className="h-4 w-4 mr-2" />
+                Back to Job Posts
+              </Button>
+            </Link>
+          </div>
+        </div>
+        <div className="container mx-auto px-4 py-8">
+          <Alert variant="destructive">
+            <AlertCircle className="h-4 w-4" />
+            <AlertDescription>
+              Failed to load job post applications. Please try again.
+            </AlertDescription>
+          </Alert>
+        </div>
+      </div>
+    );
+  }
+
+  const renderApplicantCard = (applicant: ApplicationWithUserDetails) => {
+    const statusInfo = statusConfig[applicant.company_status_id as keyof typeof statusConfig];
+    const StatusIcon = statusInfo?.icon || FileText;
+    const statusColor = statusInfo?.color || "text-gray-600";
 
     return (
-      <Card key={applicant.id} className="hover:shadow-md transition-shadow">
+      <Card key={applicant.application_id} className="hover:shadow-md transition-shadow">
         <CardContent className="p-5">
           <div className="flex items-start gap-4">
             <Avatar className="h-12 w-12">
               <AvatarImage
-                src={applicant.avatar || "/placeholder.svg"}
-                alt={applicant.name}
+                src="/placeholder.svg"
+                alt={applicant.user_name}
               />
               <AvatarFallback className="bg-gradient-to-br from-green-600 to-emerald-600 text-white">
-                {applicant.name
-                  .split(" ")
-                  .map((n: string) => n[0])
-                  .join("")
-                  .toUpperCase()
-                  .slice(0, 2)}
+                {applicant.user_name.split(" ").map(n => n[0]).join("").toUpperCase().slice(0, 2)}
               </AvatarFallback>
             </Avatar>
 
             <div className="flex-1 space-y-2">
               <div className="flex items-start justify-between">
                 <div>
-                  <h4 className="font-semibold">{applicant.name}</h4>
+                  <h4 className="font-semibold">{applicant.user_name}</h4>
                   <p className="text-sm text-muted-foreground">
-                    {applicant.course} - {applicant.year_level}
+                    {applicant.course || "Course not specified"}
                   </p>
                 </div>
                 <DropdownMenu>
@@ -209,11 +248,26 @@ export default function JobDetailsPage() {
                     >
                       Schedule Interview
                     </DropdownMenuItem>
-                    <DropdownMenuItem>Move to Shortlisted</DropdownMenuItem>
-                    <DropdownMenuItem>Put on Hold</DropdownMenuItem>
+                    <DropdownMenuItem
+                      onClick={() => handleStatusChange(applicant.application_id, 13)}
+                    >
+                      Move to Shortlisted
+                    </DropdownMenuItem>
+                    <DropdownMenuItem
+                      onClick={() => handleStatusChange(applicant.application_id, 14)}
+                    >
+                      Put on Hold
+                    </DropdownMenuItem>
                     <DropdownMenuSeparator />
-                    <DropdownMenuItem>Send Offer</DropdownMenuItem>
-                    <DropdownMenuItem className="text-red-600">
+                    <DropdownMenuItem
+                      onClick={() => handleSendOffer(applicant.application_id)}
+                    >
+                      Send Offer
+                    </DropdownMenuItem>
+                    <DropdownMenuItem 
+                      className="text-red-600"
+                      onClick={() => handleReject(applicant.application_id)}
+                    >
                       Reject
                     </DropdownMenuItem>
                   </DropdownMenuContent>
@@ -223,28 +277,22 @@ export default function JobDetailsPage() {
               <div className="flex flex-wrap items-center gap-3 text-sm">
                 <div className="flex items-center gap-1 text-muted-foreground">
                   <Mail className="h-3.5 w-3.5" />
-                  <span>{applicant.email}</span>
-                </div>
-                <div className="flex items-center gap-1 text-muted-foreground">
-                  <Phone className="h-3.5 w-3.5" />
-                  <span>{applicant.phone}</span>
+                  <span>{applicant.user_email}</span>
                 </div>
               </div>
 
               <div className="flex flex-wrap items-center gap-2">
-                <Badge variant="secondary" className="text-xs">
-                  GPA: {applicant.gpa}
-                </Badge>
-                <Badge
-                  variant="secondary"
-                  className="text-xs bg-green-50 text-green-700 border-green-200"
-                >
-                  {applicant.skill_match}/10 Skills Match
-                </Badge>
+                {applicant.skills && (
+                  <Badge
+                    variant="secondary"
+                    className="text-xs bg-green-50 text-green-700 border-green-200"
+                  >
+                    Skills: {applicant.skills.split(',').slice(0, 3).join(', ')}
+                  </Badge>
+                )}
                 <Badge variant="outline" className={`text-xs ${statusColor}`}>
                   <StatusIcon className="mr-1 h-3 w-3" />
-                  {statusConfig[applicant.status as keyof typeof statusConfig]
-                    ?.label || applicant.status}
+                  {statusInfo?.label || "Unknown Status"}
                 </Badge>
               </div>
 
@@ -365,7 +413,7 @@ export default function JobDetailsPage() {
                     Edit Job
                   </Button>
                   <Button variant="outline" size="sm">
-                    <CloseIcon className="mr-2 h-4 w-4" />
+                    <XCircle className="mr-2 h-4 w-4" />
                     Close Posting
                   </Button>
                 </div>
@@ -652,7 +700,7 @@ export default function JobDetailsPage() {
                   ) : (
                     applicantsByStatus[
                       status as keyof typeof applicantsByStatus
-                    ].map((applicant: any) => renderApplicantCard(applicant))
+                    ].map((applicant: ApplicationWithUserDetails) => renderApplicantCard(applicant))
                   )}
                 </TabsContent>
               ))}
@@ -665,7 +713,7 @@ export default function JobDetailsPage() {
         open={scheduleDialogOpen}
         onOpenChange={setScheduleDialogOpen}
         onSubmit={handleScheduleSubmit}
-        applicantName={selectedApplicant?.name || ""}
+        applicantName={selectedApplicant?.user_name || ""}
       />
     </div>
   );

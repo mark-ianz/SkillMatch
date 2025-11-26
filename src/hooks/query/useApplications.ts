@@ -134,7 +134,7 @@ export function useJobPostApplications(job_post_id: string) {
     queryKey: ["job-post-applications", job_post_id],
     queryFn: async () => {
       const { data } = await api.get<{ applications: ApplicationWithUserDetails[] }>(
-        `/company/job-post/${job_post_id}/applications`
+        `/company/job-posts/${job_post_id}/applications`
       );
       return data.applications;
     },

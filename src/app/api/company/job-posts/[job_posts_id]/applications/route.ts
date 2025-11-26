@@ -11,7 +11,7 @@ export async function GET(
   try {
     const session = await getServerSession(authConfig);
 
-    if (!session?.user?.user_id) {
+    if (!session?.user) {
       return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
     }
 
