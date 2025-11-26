@@ -40,33 +40,95 @@ import { useState } from "react";
 import { Separator } from "@/components/ui/separator";
 import { ScheduleInterviewDialog } from "@/components/page_specific/company/view_job_post/ScheduleInterviewDialog";
 import Location from "@/components/page_specific/explore/job-posts/sub-components/Location";
-import { useJobPostApplications, useScheduleInterview, useUpdateCompanyStatus, useSendOffer, useRejectApplication } from "@/hooks/query/useApplications";
+import {
+  useJobPostApplications,
+  useScheduleInterview,
+  useUpdateCompanyStatus,
+  useSendOffer,
+  useRejectApplication,
+} from "@/hooks/query/useApplications";
 import { useJobPost } from "@/hooks/query/useJobPosts";
 import { ApplicationWithUserDetails } from "@/types/application.types";
 
 // Status configuration matching database IDs
-const statusConfig: Record<number, { label: string; icon: React.ComponentType<{ className?: string }>; color: string; key: string }> = {
-  8: { label: "Applied", icon: FileText, color: "text-blue-600", key: "APPLIED" },
-  13: { label: "Shortlisted", icon: UserCheck, color: "text-purple-600", key: "SHORTLISTED" },
-  14: { label: "On Hold", icon: Clock, color: "text-orange-600", key: "ON_HOLD" },
-  9: { label: "Interview Scheduled", icon: CalendarCheck, color: "text-indigo-600", key: "INTERVIEW_SCHEDULED" },
-  10: { label: "Offer Sent", icon: Send, color: "text-cyan-600", key: "OFFER_SENT" },
-  11: { label: "Offer Accepted", icon: CheckCircle2, color: "text-green-600", key: "OFFER_ACCEPTED" },
-  12: { label: "Offer Declined", icon: XCircle, color: "text-gray-600", key: "OFFER_DECLINED" },
-  3: { label: "Rejected", icon: XCircle, color: "text-red-600", key: "REJECTED" },
+const statusConfig: Record<
+  number,
+  {
+    label: string;
+    icon: React.ComponentType<{ className?: string }>;
+    color: string;
+    key: string;
+  }
+> = {
+  8: {
+    label: "Applied",
+    icon: FileText,
+    color: "text-blue-600",
+    key: "APPLIED",
+  },
+  13: {
+    label: "Shortlisted",
+    icon: UserCheck,
+    color: "text-purple-600",
+    key: "SHORTLISTED",
+  },
+  14: {
+    label: "On Hold",
+    icon: Clock,
+    color: "text-orange-600",
+    key: "ON_HOLD",
+  },
+  9: {
+    label: "Interview Scheduled",
+    icon: CalendarCheck,
+    color: "text-indigo-600",
+    key: "INTERVIEW_SCHEDULED",
+  },
+  10: {
+    label: "Offer Sent",
+    icon: Send,
+    color: "text-cyan-600",
+    key: "OFFER_SENT",
+  },
+  11: {
+    label: "Offer Accepted",
+    icon: CheckCircle2,
+    color: "text-green-600",
+    key: "OFFER_ACCEPTED",
+  },
+  12: {
+    label: "Offer Declined",
+    icon: XCircle,
+    color: "text-gray-600",
+    key: "OFFER_DECLINED",
+  },
+  3: {
+    label: "Rejected",
+    icon: XCircle,
+    color: "text-red-600",
+    key: "REJECTED",
+  },
 };
 
 export default function JobDetailsPage() {
   const params = useParams();
   const job_post_id = params.job_posts_id as string;
-  
+
   // Fetch job post data
-  const { data: jobPost, isLoading: isLoadingJobPost, error: jobPostError } = useJobPost(job_post_id);
-  
+  const {
+    data: jobPost,
+    isLoading: isLoadingJobPost,
+    error: jobPostError,
+  } = useJobPost(job_post_id);
+
   // Fetch applicants data
-  const { data: applicants, isLoading, error } = useJobPostApplications(job_post_id);
-  
-  console.log(applicants, error, jobPost)
+  const {
+    data: applicants,
+    isLoading,
+    error,
+  } = useJobPostApplications(job_post_id);
+
+  console.log(applicants, error, jobPost);
   // Mutations
   const scheduleInterviewMutation = useScheduleInterview();
   const updateStatusMutation = useUpdateCompanyStatus();
@@ -74,7 +136,8 @@ export default function JobDetailsPage() {
   const rejectApplicationMutation = useRejectApplication();
 
   const [scheduleDialogOpen, setScheduleDialogOpen] = useState(false);
-  const [selectedApplicant, setSelectedApplicant] = useState<ApplicationWithUserDetails | null>(null);
+  const [selectedApplicant, setSelectedApplicant] =
+    useState<ApplicationWithUserDetails | null>(null);
 
   const handleScheduleInterview = (applicant: ApplicationWithUserDetails) => {
     setSelectedApplicant(applicant);
@@ -116,7 +179,7 @@ export default function JobDetailsPage() {
   const handleSendOffer = (application_id: string) => {
     const deadline = new Date();
     deadline.setDate(deadline.getDate() + 7);
-    
+
     sendOfferMutation.mutate({
       application_id,
       offer_deadline: deadline.toISOString(),
@@ -149,14 +212,25 @@ export default function JobDetailsPage() {
     organized.ALL = apps;
 
     apps.forEach((app) => {
-      const config = statusConfig[app.company_status_id as keyof typeof statusConfig];
+      const config =
+        statusConfig[app.company_status_id as keyof typeof statusConfig];
       if (config && organized[config.key]) {
         organized[config.key].push(app);
       }
-      if (app.application_status_id === 11 && !organized.OFFER_ACCEPTED.find(a => a.application_id === app.application_id)) {
+      if (
+        app.application_status_id === 11 &&
+        !organized.OFFER_ACCEPTED.find(
+          (a) => a.application_id === app.application_id
+        )
+      ) {
         organized.OFFER_ACCEPTED.push(app);
       }
-      if (app.application_status_id === 12 && !organized.OFFER_DECLINED.find(a => a.application_id === app.application_id)) {
+      if (
+        app.application_status_id === 12 &&
+        !organized.OFFER_DECLINED.find(
+          (a) => a.application_id === app.application_id
+        )
+      ) {
         organized.OFFER_DECLINED.push(app);
       }
     });
@@ -201,7 +275,10 @@ export default function JobDetailsPage() {
           <Alert variant="destructive">
             <AlertCircle className="h-4 w-4" />
             <AlertDescription>
-              {jobPostError ? 'Failed to load job post details.' : 'Failed to load job post applications.'} Please try again.
+              {jobPostError
+                ? "Failed to load job post details."
+                : "Failed to load job post applications."}{" "}
+              Please try again.
             </AlertDescription>
           </Alert>
         </div>
@@ -226,9 +303,7 @@ export default function JobDetailsPage() {
         <div className="container mx-auto px-4 py-8">
           <Alert>
             <AlertCircle className="h-4 w-4" />
-            <AlertDescription>
-              Job post not found.
-            </AlertDescription>
+            <AlertDescription>Job post not found.</AlertDescription>
           </Alert>
         </div>
       </div>
@@ -236,21 +311,27 @@ export default function JobDetailsPage() {
   }
 
   const renderApplicantCard = (applicant: ApplicationWithUserDetails) => {
-    const statusInfo = statusConfig[applicant.company_status_id as keyof typeof statusConfig];
+    const statusInfo =
+      statusConfig[applicant.company_status_id as keyof typeof statusConfig];
     const StatusIcon = statusInfo?.icon || FileText;
     const statusColor = statusInfo?.color || "text-gray-600";
 
     return (
-      <Card key={applicant.application_id} className="hover:shadow-md transition-shadow">
+      <Card
+        key={applicant.application_id}
+        className="hover:shadow-md transition-shadow"
+      >
         <CardContent className="p-5">
           <div className="flex items-start gap-4">
             <Avatar className="h-12 w-12">
-              <AvatarImage
-                src="/placeholder.svg"
-                alt={applicant.user_name}
-              />
+              <AvatarImage src="/placeholder.svg" alt={applicant.user_name} />
               <AvatarFallback className="bg-gradient-to-br from-green-600 to-emerald-600 text-white">
-                {applicant.user_name.split(" ").map(n => n[0]).join("").toUpperCase().slice(0, 2)}
+                {applicant.user_name
+                  .split(" ")
+                  .map((n) => n[0])
+                  .join("")
+                  .toUpperCase()
+                  .slice(0, 2)}
               </AvatarFallback>
             </Avatar>
 
@@ -278,12 +359,16 @@ export default function JobDetailsPage() {
                       Schedule Interview
                     </DropdownMenuItem>
                     <DropdownMenuItem
-                      onClick={() => handleStatusChange(applicant.application_id, 13)}
+                      onClick={() =>
+                        handleStatusChange(applicant.application_id, 13)
+                      }
                     >
                       Move to Shortlisted
                     </DropdownMenuItem>
                     <DropdownMenuItem
-                      onClick={() => handleStatusChange(applicant.application_id, 14)}
+                      onClick={() =>
+                        handleStatusChange(applicant.application_id, 14)
+                      }
                     >
                       Put on Hold
                     </DropdownMenuItem>
@@ -293,7 +378,7 @@ export default function JobDetailsPage() {
                     >
                       Send Offer
                     </DropdownMenuItem>
-                    <DropdownMenuItem 
+                    <DropdownMenuItem
                       className="text-red-600"
                       onClick={() => handleReject(applicant.application_id)}
                     >
@@ -328,7 +413,7 @@ export default function JobDetailsPage() {
                     variant="secondary"
                     className="text-xs bg-green-50 text-green-700 border-green-200"
                   >
-                    Skills: {applicant.skills.split(',').slice(0, 3).join(', ')}
+                    Skills: {applicant.skills.split(",").slice(0, 3).join(", ")}
                   </Badge>
                 )}
                 <Badge variant="outline" className={`text-xs ${statusColor}`}>
@@ -418,7 +503,11 @@ export default function JobDetailsPage() {
                       {jobPost.industry && jobPost.industry.length > 0 && (
                         <>
                           {jobPost.industry.map((ind, idx) => (
-                            <Badge key={idx} variant="secondary" className="text-xs">
+                            <Badge
+                              key={idx}
+                              variant="secondary"
+                              className="text-xs"
+                            >
                               <Building2 className="mr-1 h-3 w-3" />
                               {ind}
                             </Badge>
@@ -465,9 +554,7 @@ export default function JobDetailsPage() {
                 </Badge>
                 <Badge variant="outline">
                   {jobPost.available_positions}{" "}
-                  {jobPost.available_positions === 1
-                    ? "Position"
-                    : "Positions"}
+                  {jobPost.available_positions === 1 ? "Position" : "Positions"}
                 </Badge>
                 {jobPost.job_categories.map((category, idx) => (
                   <Badge key={idx} variant="secondary" className="text-xs">
@@ -628,19 +715,15 @@ export default function JobDetailsPage() {
                   Responsibilities
                 </h2>
                 <ul className="space-y-2">
-                  {jobPost.job_responsibilities.map(
-                    (responsibility, idx) => (
-                      <li
-                        key={idx}
-                        className="flex gap-3 text-sm text-muted-foreground"
-                      >
-                        <span className="flex-shrink-0 mt-1">•</span>
-                        <span className="leading-relaxed">
-                          {responsibility}
-                        </span>
-                      </li>
-                    )
-                  )}
+                  {jobPost.job_responsibilities.map((responsibility, idx) => (
+                    <li
+                      key={idx}
+                      className="flex gap-3 text-sm text-muted-foreground"
+                    >
+                      <span className="flex-shrink-0 mt-1">•</span>
+                      <span className="leading-relaxed">{responsibility}</span>
+                    </li>
+                  ))}
                 </ul>
               </div>
             </div>
@@ -654,7 +737,7 @@ export default function JobDetailsPage() {
           </CardHeader>
           <CardContent>
             <Tabs defaultValue="ALL" className="w-full">
-              <TabsList className="w-full justify-start overflow-x-auto flex-wrap h-auto">
+              <TabsList className="h-auto w-full">
                 <TabsTrigger value="ALL" className="flex items-center gap-2">
                   All
                   <Badge variant="secondary" className="ml-1">
@@ -711,7 +794,9 @@ export default function JobDetailsPage() {
                   className="flex items-center gap-2"
                 >
                   Accepted
-                  <Badge variant="secondary" className="ml-1 bg-green-100 text-green-700">
+                  <Badge
+                    variant="secondary"
+                  >
                     {applicantsByStatus.OFFER_ACCEPTED.length}
                   </Badge>
                 </TabsTrigger>
@@ -752,7 +837,9 @@ export default function JobDetailsPage() {
                   ) : (
                     applicantsByStatus[
                       status as keyof typeof applicantsByStatus
-                    ].map((applicant: ApplicationWithUserDetails) => renderApplicantCard(applicant))
+                    ].map((applicant: ApplicationWithUserDetails) =>
+                      renderApplicantCard(applicant)
+                    )
                   )}
                 </TabsContent>
               ))}
