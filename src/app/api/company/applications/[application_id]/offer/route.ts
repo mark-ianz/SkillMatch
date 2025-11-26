@@ -23,9 +23,9 @@ export async function POST(
       );
     }
 
-    const application_id = parseInt(params.application_id);
+    const application_id = params.application_id;
 
-    if (isNaN(application_id)) {
+    if (!application_id) {
       return NextResponse.json(
         { message: "Invalid application ID" },
         { status: 400 }

@@ -1,5 +1,6 @@
 import { db } from "@/lib/db";
 import { ResultSetHeader, RowDataPacket } from "mysql2";
+import { nanoid } from "nanoid";
 import {
   Application,
   ApplicationWithJobDetails,
@@ -18,8 +19,11 @@ export const ApplicationServices = {
     resume_path?: string
   ): Promise<Application> => {
     try {
-      const [result] = await db.query<ResultSetHeader>(
+      const application_id = nanoid();
+      
+      await db.query<ResultSetHeader>(
         `INSERT INTO applications (
+          application_id,
           user_id, 
           job_post_id, 
           required_hours, 
@@ -29,13 +33,13 @@ export const ApplicationServices = {
           created_at, 
           updated_at
         )
-        VALUES (?, ?, ?, ?, ?, NOW(), NOW(), NOW())`,
-        [user_id, job_post_id, required_hours, preferred_schedule, resume_path || null]
+        VALUES (?, ?, ?, ?, ?, ?, NOW(), NOW(), NOW())`,
+        [application_id, user_id, job_post_id, required_hours, preferred_schedule, resume_path || null]
       );
 
       const [rows] = await db.query<(RowDataPacket & Application)[]>(
         `SELECT * FROM applications WHERE application_id = ?`,
-        [result.insertId]
+        [application_id]
       );
 
       if (rows.length === 0) {
@@ -80,7 +84,7 @@ export const ApplicationServices = {
 
   // USER: Get single application details
   getApplicationById: async (
-    application_id: number,
+    application_id: string,
     user_id?: number
   ): Promise<ApplicationWithJobDetails | null> => {
     try {
@@ -138,7 +142,7 @@ export const ApplicationServices = {
 
   // USER: Withdraw application
   withdrawApplication: async (
-    application_id: number,
+    application_id: string,
     user_id: number
   ): Promise<void> => {
     try {
@@ -154,7 +158,7 @@ export const ApplicationServices = {
 
   // USER: Respond to offer (accept/decline)
   respondToOffer: async (
-    application_id: number,
+    application_id: string,
     user_id: number,
     response: "accept" | "decline"
   ): Promise<void> => {
@@ -208,7 +212,7 @@ export const ApplicationServices = {
 
   // COMPANY: Update company status
   updateCompanyStatus: async (
-    application_id: number,
+    application_id: string,
     company_status_id: CompanyApplicationStatusId,
     company_notes?: string
   ): Promise<void> => {
@@ -229,7 +233,7 @@ export const ApplicationServices = {
 
   // COMPANY: Schedule interview
   scheduleInterview: async (
-    application_id: number,
+    application_id: string,
     interview_date: string,
     interview_type: "virtual" | "in-person",
     interview_link?: string,
@@ -265,7 +269,7 @@ export const ApplicationServices = {
 
   // COMPANY: Send offer
   sendOffer: async (
-    application_id: number,
+    application_id: string,
     offer_deadline: string
   ): Promise<void> => {
     try {
@@ -287,7 +291,7 @@ export const ApplicationServices = {
 
   // COMPANY: Reject application
   rejectApplication: async (
-    application_id: number,
+    application_id: string,
     rejection_reason?: string
   ): Promise<void> => {
     try {

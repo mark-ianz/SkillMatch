@@ -19,7 +19,7 @@ export type CompanyApplicationStatusName =
   | "rejected";     // 3
 
 export interface Application {
-  application_id: number;
+  application_id: string;
   user_id: number;
   job_post_id: string;
   

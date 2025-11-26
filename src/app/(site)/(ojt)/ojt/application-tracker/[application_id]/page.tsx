@@ -25,7 +25,7 @@ import { statusConfig } from "@/components/page_specific/application-tracker/app
 export default function ApplicationDetailsPage() {
   const params = useParams();
   const router = useRouter();
-  const application_id = Number(params.application_id);
+  const application_id = params.application_id as string;
 
   const { data: application, isLoading } = useApplication(application_id);
 

@@ -26,7 +26,7 @@ export function useUserApplications() {
 }
 
 // Query: Get single application details
-export function useApplication(application_id: number) {
+export function useApplication(application_id: string) {
   return useQuery({
     queryKey: ["application", application_id],
     queryFn: async () => {
@@ -73,7 +73,7 @@ export function useWithdrawApplication() {
   const qc = useQueryClient();
 
   return useMutation({
-    mutationFn: async (application_id: number) => {
+    mutationFn: async (application_id: string) => {
       const { data } = await api.delete(`/applications/${application_id}`);
       return data;
     },
@@ -93,7 +93,7 @@ export function useRespondToOffer() {
   const qc = useQueryClient();
 
   return useMutation({
-    mutationFn: async (payload: { application_id: number; response: "accept" | "decline" }) => {
+    mutationFn: async (payload: { application_id: string; response: "accept" | "decline" }) => {
       const { data } = await api.post(
         `/applications/${payload.application_id}/offer`,
         { response: payload.response }
@@ -134,7 +134,7 @@ export function useUpdateCompanyStatus() {
 
   return useMutation({
     mutationFn: async (payload: {
-      application_id: number;
+      application_id: string;
       company_status_id: CompanyApplicationStatusId;
       company_notes?: string;
     }) => {
@@ -164,7 +164,7 @@ export function useScheduleInterview() {
 
   return useMutation({
     mutationFn: async (payload: {
-      application_id: number;
+      application_id: string;
       interview_date: string;
       interview_type: "virtual" | "in-person";
       interview_link?: string;
@@ -200,7 +200,7 @@ export function useSendOffer() {
 
   return useMutation({
     mutationFn: async (payload: {
-      application_id: number;
+      application_id: string;
       offer_deadline: string;
     }) => {
       const { data } = await api.post(
@@ -226,7 +226,7 @@ export function useRejectApplication() {
 
   return useMutation({
     mutationFn: async (payload: {
-      application_id: number;
+      application_id: string;
       rejection_reason?: string;
     }) => {
       const { data } = await api.post(
