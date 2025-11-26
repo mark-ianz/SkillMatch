@@ -16,6 +16,7 @@ import {
   DollarSign,
   TrendingUp,
   AlertCircle,
+  Send,
 } from "lucide-react";
 import Link from "next/link";
 import { Alert, AlertDescription } from "@/components/ui/alert";
@@ -72,13 +73,13 @@ export default function CompanyJobPostsPage() {
   }
 
   const totalApplications =
-    jobPosts?.reduce((sum, post) => sum + post.total_applications, 0) || 0;
+    jobPosts?.reduce((sum, post) => sum + (post.total_applications || 0), 0) || 0;
   const activeJobs =
     jobPosts?.filter((post) => post.job_post_status_id === 1).length || 0;
   const totalOffers =
-    jobPosts?.reduce((sum, post) => sum + post.offer_sent, 0) || 0;
+    jobPosts?.reduce((sum, post) => sum + (Number(post.offer_sent) || 0), 0) || 0;
   const totalAccepted =
-    jobPosts?.reduce((sum, post) => sum + post.offer_accepted, 0) || 0;
+    jobPosts?.reduce((sum, post) => sum + (Number(post.offer_accepted) || 0), 0) || 0;
 
   return (
     <div className="container max-w-7xl py-8 px-4">
@@ -142,7 +143,7 @@ export default function CompanyJobPostsPage() {
                 <p className="text-3xl font-bold">{totalOffers}</p>
               </div>
               <div className="h-12 w-12 rounded-lg bg-orange-100 flex items-center justify-center">
-                <DollarSign className="h-6 w-6 text-orange-600" />
+                <Send className="h-6 w-6 text-orange-600" />
               </div>
             </div>
           </CardContent>
