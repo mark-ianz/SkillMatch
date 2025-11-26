@@ -209,7 +209,7 @@ export function ApplicationCard({
 
           {/* Action Button */}
           <div className="md:ml-auto">
-            <Link href={`/applications/${application.application_id}`}>
+            <Link href={`/ojt/application-tracker/${application.application_id}`}>
               <Button variant="outline" size="sm">
                 View Details
               </Button>
