@@ -7,6 +7,7 @@ import { useApplyToJob } from "@/hooks/query/useApplications";
 import { useSession } from "next-auth/react";
 import { SignInPromptDialog } from "@/components/common/SignInPromptDialog";
 import { ApplicationData } from "./JobApplicationDialog";
+import { getRoleName } from "@/lib/utils";
 
 interface ApplyButtonProps {
   jobPostId: string;
@@ -31,6 +32,12 @@ export function ApplyButton({
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [showSignInDialog, setShowSignInDialog] = useState(false);
   const applyMutation = useApplyToJob();
+
+  // Don't render the button if user is a Company
+  const role = session?.user?.role_id ? getRoleName(session.user.role_id) : null;
+  if (role === "Company") {
+    return null;
+  }
 
   const handleApplyClick = () => {
     if (!session) {
