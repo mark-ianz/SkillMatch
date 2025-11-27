@@ -1,0 +1,15 @@
+status_id | status
+1 | active
+2 | pending
+3 | rejected
+4 | disabled
+5 | filled
+6 | closed
+7 | onboarding
+8 | applied
+9 | interview_scheduled
+10 | selected
+11 | offer_accepted
+12 | offer_declined
+13 | shortlisted
+14 | on_hold
