@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
-import { Building2, Briefcase, BarChart3, ShieldCheck } from "lucide-react";
+import { Building2, Briefcase, BarChart3, ShieldCheck, GraduationCap } from "lucide-react";
 
 const navItems = [
   {
@@ -15,6 +15,11 @@ const navItems = [
     title: "Job Posts",
     href: "/admin/job-posts",
     icon: Briefcase,
+  },
+  {
+    title: "Students",
+    href: "/admin/students",
+    icon: GraduationCap,
   },
   {
     title: "Analytics",
