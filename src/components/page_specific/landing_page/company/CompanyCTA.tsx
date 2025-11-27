@@ -1,7 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { ArrowRight } from "lucide-react";
-import Link from "next/link";
 import React from "react";
 
 export default function CompanyCTA() {
