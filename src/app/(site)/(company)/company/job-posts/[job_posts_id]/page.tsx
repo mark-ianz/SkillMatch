@@ -631,7 +631,7 @@ export default function JobDetailsPage() {
               <Separator />
 
               {/* Quick Stats */}
-              <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                 <div className="text-center p-4 bg-blue-50 rounded-lg border border-blue-100">
                   <p className="text-2xl font-bold text-blue-600">
                     {applicantsByStatus.ALL.length}
