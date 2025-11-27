@@ -1,3 +1,7 @@
+import { Suspense } from "react";
+import JobPostsTable from "@/components/admin/JobPostsTable";
+import { Skeleton } from "@/components/ui/skeleton";
+
 export default function AdminJobPostsPage() {
   return (
     <div>
@@ -8,9 +12,26 @@ export default function AdminJobPostsPage() {
         </p>
       </div>
 
-      <div className="flex items-center justify-center h-64 border-2 border-dashed rounded-lg">
-        <p className="text-muted-foreground">Coming Soon</p>
-      </div>
+      <Suspense
+        fallback={
+          <div className="space-y-4">
+            <div className="flex items-center justify-between">
+              <Skeleton className="h-10 w-[250px]" />
+              <Skeleton className="h-4 w-32" />
+            </div>
+            <div className="border rounded-lg p-4">
+              <div className="space-y-3">
+                <Skeleton className="h-12 w-full" />
+                <Skeleton className="h-16 w-full" />
+                <Skeleton className="h-16 w-full" />
+                <Skeleton className="h-16 w-full" />
+              </div>
+            </div>
+          </div>
+        }
+      >
+        <JobPostsTable />
+      </Suspense>
     </div>
   );
 }

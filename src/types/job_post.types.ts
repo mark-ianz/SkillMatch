@@ -1,42 +1,52 @@
-import { CompanyAddress, CompanyPreview } from "./company.types";
 import { JobPostStatusId, StatusName } from "./status.types";
 
 export type WorkArrangement = "Remote" | "On-site" | "Hybrid";
-/* type ShiftType = 'Day shift' | 'Night shift' | 'Flexible hours'; */
 
-export type JobPost = CompanyPreview & CompanyAddress & {
+export type JobPost = {
   job_post_id: string;
   company_id: string;
 
-  // Basic Info
+  // Basic Info (matching SQL schema exactly)
   job_title: string;
-  courses_required: string[]; // e.g., ["BS Computer Science", "BS Information Technology"]
-  job_categories: string[];
-  available_positions: number;
-  job_post_status_id: JobPostStatusId; // 1-active, 2-pending, 3-rejected, 4-disabled, 5-filled, 6-closed, 7-onboarding
-  job_post_status?: StatusName; // Computed field from job_post_status_id
-  
-  // Work Details
-  job_overview: string;
-  job_responsibilities: string[];
-  preferred_qualifications?: string;
   work_arrangement: WorkArrangement; // "Remote" | "On-site" | "Hybrid"
-  is_paid: boolean;
-  allowance_description?: string | null;
-
+  job_categories: string[]; // varchar(100) - comma separated in DB
+  job_overview: string; // text
+  available_positions: number; // smallint(6)
+  courses_required: string[]; // text - comma separated in DB
+  job_post_status_id: JobPostStatusId; // int(11) - 1-active, 2-pending, 3-rejected, 4-disabled, 5-filled, 6-closed
+  job_post_status?: StatusName; // Computed field from status join
+  
+  // Responsibilities & Requirements
+  job_responsibilities: string[]; // text - comma separated in DB
+  preferred_qualifications?: string | null; // text
+  
   // Skills
-  soft_skills: string[];
-  technical_skills: string[];
-  created_at: string; // ISO string
-  updated_at: string; // ISO string
+  technical_skills: string[]; // text - comma separated in DB
+  soft_skills: string[]; // text - comma separated in DB
+  
+  // Compensation
+  is_paid: boolean; // tinyint(1)
+  allowance_description?: string | null; // varchar(255)
 
-  // Skill matching (optional, added for OJT users)
+  // Address (matching SQL schema exactly)
+  street_name: string; // varchar(100)
+  city_municipality: string; // varchar(255)
+  barangay: string; // varchar(255)
+  postal_code: string; // char(4)
+
+  // Timestamps
+  created_at: string; // timestamp - ISO string
+  updated_at: string; // timestamp - ISO string
+
+  // Optional computed fields from JOINs with company table
+  company_name?: string;
+  company_email?: string;
+  company_image?: string;
+  industry?: string[];
+
+  // Optional computed fields (for OJT users)
   skill_match_count?: number;
   course_matched?: boolean;
-
-  /* shift_type: ShiftType; */
-  /* hours_per_week?: number; */
-  /* working_days?: string; */
 };
 
 export type JobPostQuery = JobPost & {

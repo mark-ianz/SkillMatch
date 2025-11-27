@@ -11,8 +11,8 @@ export async function PATCH(
   try {
     const session = await getServerSession(authConfig);
 
-    // Check if user is admin
-    if (!session || session.user.role_id !== 3) {
+    // Check if user is admin (role_id 2)
+    if (!session || session.user.role_id !== 2) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
@@ -57,8 +57,8 @@ export async function GET(
   try {
     const session = await getServerSession(authConfig);
 
-    // Check if user is admin
-    if (!session || session.user.role_id !== 3) {
+    // Check if user is admin (role_id 2)
+    if (!session || session.user.role_id !== 2) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
