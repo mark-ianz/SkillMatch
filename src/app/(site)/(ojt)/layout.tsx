@@ -9,7 +9,7 @@ export default function Layout({ children }: { children: ReactNode }) {
       <HeaderOJT />
       <MainLayout
         className="items-center"
-        wrapperClassName="items-center flex-col w-full"
+        wrapperClassName="items-center flex-col w-full p-0"
       >
         {children}
       </MainLayout>

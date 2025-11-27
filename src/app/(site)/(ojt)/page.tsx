@@ -6,7 +6,7 @@ import OJTStatsSection from "@/components/page_specific/landing_page/ojt/OJTStat
 
 export default function OJTLandingPage() {
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-background w-full">
       <OJTHeroSection />
       <OJTStatsSection />
       <OJTHotItWorksSection />
