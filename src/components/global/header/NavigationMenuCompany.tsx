@@ -23,10 +23,10 @@ export default async function NavigationMenuCompany() {
         {isAuth && (
           <NavigationMenuItem>
             <NavigationMenuLink
-              href="/company/applications"
+              href="/company/job-posts"
               className="bg-transparent"
             >
-              Applications
+              Job Posts
             </NavigationMenuLink>
           </NavigationMenuItem>
         )}
