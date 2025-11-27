@@ -4,11 +4,11 @@ import { JobPost } from "@/types/job_post.types";
 import React, { useEffect } from "react";
 import { JobPostPreview } from "./JobPostPreview";
 import { useJobPosts } from "@/hooks/query/useJobPosts";
-import LoadingGeneric from "@/components/global/LoadingGeneric";
 import { useExploreStore } from "@/store/ExploreStore";
 import { useSearchParams } from "next/navigation";
 import { JobExploreFilters } from "@/types/job_explore.types";
 import useSessionStore from "@/store/SessionStore";
+import { JobPostCardSkeleton } from "@/components/common/skeleton/JobPostSkeleton";
 
 export default function JobPostExplore() {
   const searchParams = useSearchParams();
@@ -56,8 +56,10 @@ export default function JobPostExplore() {
 
   if (isLoading || isSessionLoading) {
     return (
-      <div className="flex items-center justify-center">
-        <LoadingGeneric />
+      <div className="space-y-4">
+        {[...Array(5)].map((_, i) => (
+          <JobPostCardSkeleton key={i} />
+        ))}
       </div>
     );
   }

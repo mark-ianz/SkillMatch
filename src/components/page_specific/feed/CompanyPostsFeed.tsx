@@ -2,15 +2,18 @@
 
 import { useCompanyPostsFeed } from "@/hooks/query/useFeed";
 import { CompanyPost } from "@/components/page_specific/company_post/CompanyPost";
-import { Loader2, FileText } from "lucide-react";
+import { FileText } from "lucide-react";
+import { CompanyPostSkeleton } from "@/components/common/skeleton/JobPostSkeleton";
 
 export function CompanyPostsFeed() {
   const { data: posts, isLoading, error } = useCompanyPostsFeed();
 
   if (isLoading) {
     return (
-      <div className="flex justify-center items-center py-20">
-        <Loader2 className="w-8 h-8 animate-spin text-muted-foreground" />
+      <div className="space-y-6">
+        {[...Array(3)].map((_, i) => (
+          <CompanyPostSkeleton key={i} />
+        ))}
       </div>
     );
   }
