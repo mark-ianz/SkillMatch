@@ -160,7 +160,6 @@ export async function GET(request: NextRequest) {
 
       // Calculate skill match count for OJT users
       let matchCount = 0;
-      console.log({ userSkills });
       if (userSkills.length > 0) {
         const postSkillsLowerCase = technicalSkillsArray.map((s) =>
           s.toLowerCase()
@@ -207,7 +206,6 @@ export async function GET(request: NextRequest) {
           })
         : formattedRows;
 
-    console.log(sortedRows);
     return NextResponse.json(
       { job_posts: sortedRows },
       {
