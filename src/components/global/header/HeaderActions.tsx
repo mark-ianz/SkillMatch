@@ -37,12 +37,7 @@ export default async function HeaderActions({
     return (
       <div className="flex items-center gap-2">
         <NotificationPopover notifications={notifications || []} />
-        <ProfilePopover
-          email={session.user.email || ""}
-          name={session.user.name || ""}
-          userType={role}
-          avatarUrl={session.user.image}
-        />
+        <ProfilePopover userType={role} />
       </div>
     );
   }
