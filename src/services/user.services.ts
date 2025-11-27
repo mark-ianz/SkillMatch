@@ -7,7 +7,7 @@ interface OJTProfileSidebar {
   student_id: string | null;
   course: string;
   location: string;
-  profile_image: string | null;
+  ojt_image_path: string | null;
 }
 
 export const UserService = {
@@ -20,10 +20,9 @@ export const UserService = {
           op.student_id,
           op.course,
           CONCAT(u.barangay, ', ', u.city_municipality) as location,
-          acc.profile_image
+          op.ojt_image_path
         FROM user u
         INNER JOIN ojt_profile op ON u.user_id = op.user_id
-        INNER JOIN account acc ON u.user_id = acc.user_id
         WHERE u.user_id = ?`,
         [user_id]
       );

@@ -29,7 +29,6 @@ export type Account = {
   user_id: number | null;
   company_id: string | null;
   email: string;
-  profile_image?: string;
   provider: "google" | "local" | "linkedin";
   provider_id: string;
   password_hash?: string;
@@ -38,7 +37,7 @@ export type Account = {
   status_id: number;
 };
 
-export type PublicAccount = Pick<Account, "email" | "profile_image" | "role_id" | "status_id">;
+export type PublicAccount = Pick<Account, "email" | "role_id" | "status_id">;
 
 export type AcademicDetails = {
   college: string | null;

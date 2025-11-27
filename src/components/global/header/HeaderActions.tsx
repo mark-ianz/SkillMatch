@@ -41,7 +41,7 @@ export default async function HeaderActions({
           email={session.user.email || ""}
           name={session.user.name || ""}
           userType={role}
-          profile_image={session.user.image}
+          avatarUrl={session.user.image}
         />
       </div>
     );

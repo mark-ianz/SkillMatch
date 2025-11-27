@@ -108,11 +108,10 @@ export async function insertCompanyData(
   );
 
   await connection.query<ResultSetHeader>(
-    "INSERT INTO `account` (`company_id`, `email`, `profile_image`, `provider`, `provider_id`, `role_id`, `status_id`) VALUES (?, ?, ?, ?, ?, ?, ?)",
+    "INSERT INTO `account` (`company_id`, `email`, `provider`, `provider_id`, `role_id`, `status_id`) VALUES (?, ?, ?, ?, ?, ?)",
     [
       company_id,
       user.email,
-      user.image,
       "google-company",
       user.id,
       4,

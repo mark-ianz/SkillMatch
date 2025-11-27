@@ -14,7 +14,7 @@ import { OnboardingCompanyFullInfo } from "@/types/onboarding.types";
 
 async function getOnboardingCompany(company_id: string) {
   const [rows] = await db.query<(OnboardingCompanyFullInfo & RowDataPacket)[]>(
-    `SELECT o.*, c.*, a.email, a.role_id, a.status_id, a.profile_image FROM 
+    `SELECT o.*, c.*, a.email, a.role_id, a.status_id FROM 
         onboarding AS o
         JOIN company AS c
         ON o.company_id = c.company_id

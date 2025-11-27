@@ -17,14 +17,14 @@ import {
 import LogoutButton from "@/components/common/button/LogoutButton";
 
 type Props = {
-  profile_image?: string | null;
+  avatarUrl?: string | null;
   name: string;
   email: string;
   userType: "OJT" | "Company";
 };
 
 export default function ProfilePopover({
-  profile_image,
+  avatarUrl,
   name,
   email,
   userType,
@@ -34,7 +34,7 @@ export default function ProfilePopover({
       <PopoverTrigger asChild>
         <Button variant="ghost" className="relative h-10 w-10 rounded-full">
           <Avatar className="h-9 w-9">
-            <AvatarImage src={profile_image || "/placeholder.svg"} alt={name} />
+            <AvatarImage src={avatarUrl || "/placeholder.svg"} alt={name} />
             <AvatarFallback className="bg-gradient-to-br from-skillmatch-primary-green to-emerald-500 text-white">
               {name
                 .split(" ")
@@ -49,7 +49,7 @@ export default function ProfilePopover({
       <PopoverContent className="w-64 p-0" align="end">
         <div className="flex items-center gap-3 p-4">
           <Avatar className="h-12 w-12">
-            <AvatarImage src={profile_image || "/placeholder.svg"} alt={name} />
+            <AvatarImage src={avatarUrl || "/placeholder.svg"} alt={name} />
             <AvatarFallback className="bg-gradient-to-br from-skillmatch-primary-green to-emerald-500 text-white">
               {name
                 .split(" ")

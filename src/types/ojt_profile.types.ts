@@ -5,6 +5,7 @@ export type OJTProfile = AcademicDetails & {
   user_id: number;
   resume_path: string | null;
   student_id: string | null;
+  ojt_image_path: string | null;
   visibility: "public" | "private";
   skills: string[]; // processed na to, and array na
   created_at: Date;

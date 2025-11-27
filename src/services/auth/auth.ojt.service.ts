@@ -132,11 +132,10 @@ export async function insertOJTData(
 
   // 4.2. Insert user data to account table
   await connection.query<ResultSetHeader>(
-    "INSERT INTO `account` (`user_id`, `email`, `profile_image`, `provider`, `provider_id`, `role_id`, `status_id`) VALUES (?, ?, ?, ?, ?, ?, ?)",
+    "INSERT INTO `account` (`user_id`, `email`, `provider`, `provider_id`, `role_id`, `status_id`) VALUES (?, ?, ?, ?, ?, ?)",
     [
       newUser.insertId,
       user.email,
-      user.image,
       "google-ojt",
       user.id,
       3, // Set role to 'OJT' (3)
@@ -152,13 +151,14 @@ export async function insertOJTData(
 
   // 4.4 Insert user to ojt_profile
   await connection.query(
-    "INSERT INTO `ojt_profile` (`user_id`, `college`, `course`, `expected_graduation_year`, `student_id`) VALUES (?, ?, ?, ?, ?)",
+    "INSERT INTO `ojt_profile` (`user_id`, `college`, `course`, `expected_graduation_year`, `student_id`, `ojt_image_path`) VALUES (?, ?, ?, ?, ?, ?)",
     [
       newUser.insertId,
       student[0].college,
       student[0].course,
       student[0].expected_graduation_year,
       student[0].student_number,
+      user.image,
     ]
   );
 

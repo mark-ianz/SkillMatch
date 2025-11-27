@@ -73,7 +73,7 @@ export default async function SidebarProfile() {
   const displayName = isOjt 
     ? ojtProfile?.name || "OJT User"
     : companyProfile?.company_name || "Company User";
-  const profileImage = (isOjt ? ojtProfile?.profile_image : companyProfile?.profile_image) || null;
+  const profileImage = (isOjt ? ojtProfile?.ojt_image_path : companyProfile?.company_image) || null;
   const studentId = ojtProfile?.student_id || null;
   const course = getCourseByAbbr(ojtProfile?.course || "") || null;
   const location = (isOjt ? ojtProfile?.location : companyProfile?.location) || null;

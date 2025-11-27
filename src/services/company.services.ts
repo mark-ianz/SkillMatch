@@ -7,7 +7,7 @@ interface CompanyProfileSidebar {
   company_id: string;
   company_name: string;
   location: string;
-  profile_image: string | null;
+  company_image: string | null;
 }
 
 export const CompanyServices = {
@@ -96,9 +96,8 @@ export const CompanyServices = {
           c.company_id,
           c.company_name,
           CONCAT(c.barangay, ', ', c.city_municipality) as location,
-          acc.profile_image
+          c.company_image
         FROM company c
-        INNER JOIN account acc ON c.company_id = acc.company_id
         WHERE c.company_id = ?`,
         [company_id]
       );
