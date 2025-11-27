@@ -67,7 +67,7 @@ export function JobPostFullInfo({
                   width={80}
                   height={80}
                   src={job?.company_image}
-                  alt={job?.company_name}
+                  alt={job?.company_name || " Company Logo"}
                   className="w-20 h-20 rounded-xl object-cover border-2 border-border"
                 />
               )}
@@ -257,13 +257,16 @@ export function JobPostFullInfo({
         {/* Divider */}
         <Separator />
 
-        <ApplyButton
-          jobPostId={job.job_post_id}
-          jobTitle={job.job_title}
-          companyName={job.company_name}
-          className="w-full h-11 text-base font-medium"
-          fullWidth
-        />
+        {/* Apply Button - Only visible for applicants (role_id 3) */}
+        {session?.user?.role_id === 3 && (
+          <ApplyButton
+            jobPostId={job.job_post_id}
+            jobTitle={job.job_title}
+            companyName={job.company_name!}
+            className="w-full h-11 text-base font-medium"
+            fullWidth
+          />
+        )}
       </Card>
     </>
   );
