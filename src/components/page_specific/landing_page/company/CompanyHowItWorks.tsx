@@ -17,13 +17,15 @@ export default function CompanyHowItWorks() {
 
         <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 max-w-7xl mx-auto">
           <Card className="p-6 relative hover:shadow-lg transition-shadow">
-            <div className="absolute -top-4 left-6 w-8 h-8 rounded-full bg-skillmatch-primary-blue text-white flex items-center justify-center font-bold">
+            <div className="w-8 h-8 rounded-full bg-skillmatch-primary-blue text-white flex items-center justify-center font-bold">
               1
             </div>
             <div className="w-14 h-14 rounded-xl bg-skillmatch-primary-blue/10 flex items-center justify-center mx-auto mb-4 mt-4">
               <FileCheck className="h-7 w-7 text-skillmatch-primary-blue" />
             </div>
-            <h3 className="font-bold mb-2 text-center">Create Company Profile</h3>
+            <h3 className="font-bold mb-2 text-center">
+              Create Company Profile
+            </h3>
             <p className="text-sm text-muted-foreground text-center">
               Register your company and complete your profile with company
               details and requirements.
@@ -31,7 +33,7 @@ export default function CompanyHowItWorks() {
           </Card>
 
           <Card className="p-6 relative hover:shadow-lg transition-shadow">
-            <div className="absolute -top-4 left-6 w-8 h-8 rounded-full bg-skillmatch-primary-blue text-white flex items-center justify-center font-bold">
+            <div className="w-8 h-8 rounded-full bg-skillmatch-primary-blue text-white flex items-center justify-center font-bold">
               2
             </div>
             <div className="w-14 h-14 rounded-xl bg-skillmatch-primary-blue/10 flex items-center justify-center mx-auto mb-4 mt-4">
@@ -45,7 +47,7 @@ export default function CompanyHowItWorks() {
           </Card>
 
           <Card className="p-6 relative hover:shadow-lg transition-shadow">
-            <div className="absolute -top-4 left-6 w-8 h-8 rounded-full bg-skillmatch-primary-blue text-white flex items-center justify-center font-bold">
+            <div className="w-8 h-8 rounded-full bg-skillmatch-primary-blue text-white flex items-center justify-center font-bold">
               3
             </div>
             <div className="w-14 h-14 rounded-xl bg-skillmatch-primary-blue/10 flex items-center justify-center mx-auto mb-4 mt-4">
@@ -59,7 +61,7 @@ export default function CompanyHowItWorks() {
           </Card>
 
           <Card className="p-6 relative hover:shadow-lg transition-shadow">
-            <div className="absolute -top-4 left-6 w-8 h-8 rounded-full bg-skillmatch-primary-blue text-white flex items-center justify-center font-bold">
+            <div className="w-8 h-8 rounded-full bg-skillmatch-primary-blue text-white flex items-center justify-center font-bold">
               4
             </div>
             <div className="w-14 h-14 rounded-xl bg-skillmatch-primary-blue/10 flex items-center justify-center mx-auto mb-4 mt-4">
