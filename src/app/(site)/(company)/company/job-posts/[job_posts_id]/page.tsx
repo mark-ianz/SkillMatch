@@ -26,6 +26,8 @@ import {
   Edit,
   Building2,
   AlertCircle,
+  Eye,
+  Download,
 } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
@@ -321,24 +323,25 @@ export default function JobDetailsPage() {
         alert("No resume available for this applicant");
         return;
       }
-      
+
       // Extract original file extension from path
-      const originalFileName = applicant.resume_path.split('/').pop() || 'resume';
-      const fileExtension = originalFileName.includes('.') 
-        ? originalFileName.substring(originalFileName.lastIndexOf('.'))
-        : '';
-      
+      const originalFileName =
+        applicant.resume_path.split("/").pop() || "resume";
+      const fileExtension = originalFileName.includes(".")
+        ? originalFileName.substring(originalFileName.lastIndexOf("."))
+        : "";
+
       // Create formal filename: LastName_FirstName_Resume.ext
-      const nameParts = applicant.user_name.trim().split(' ');
+      const nameParts = applicant.user_name.trim().split(" ");
       const lastName = nameParts[nameParts.length - 1];
       const firstName = nameParts[0];
       const formalFileName = `${lastName}_${firstName}_Resume${fileExtension}`;
-      
+
       // Create anchor element to force download
-      const link = document.createElement('a');
+      const link = document.createElement("a");
       link.href = applicant.resume_path;
       link.download = formalFileName;
-      link.style.display = 'none';
+      link.style.display = "none";
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
@@ -368,7 +371,8 @@ export default function JobDetailsPage() {
                 <div>
                   <h4 className="font-semibold">{applicant.user_name}</h4>
                   <p className="text-sm text-muted-foreground">
-                    {getCourseByAbbr(applicant.course!) || "Course not specified"}
+                    {getCourseByAbbr(applicant.course!) ||
+                      "Course not specified"}
                   </p>
                 </div>
                 <DropdownMenu>
@@ -379,7 +383,16 @@ export default function JobDetailsPage() {
                   </DropdownMenuTrigger>
                   <DropdownMenuContent align="end">
                     <DropdownMenuItem>View Full Profile</DropdownMenuItem>
-                    <DropdownMenuItem 
+                    <DropdownMenuItem
+                      onClick={() =>
+                        applicant.resume_path &&
+                        window.open(applicant.resume_path, "_blank")
+                      }
+                      disabled={!applicant.resume_path}
+                    >
+                      View Resume
+                    </DropdownMenuItem>
+                    <DropdownMenuItem
                       onClick={handleDownloadResume}
                       disabled={!applicant.resume_path}
                     >
@@ -461,7 +474,10 @@ export default function JobDetailsPage() {
                   </Badge>
                 )}
                 {applicant.application_status_id === 12 && (
-                  <Badge variant="outline" className="text-xs border-gray-400 text-gray-700">
+                  <Badge
+                    variant="outline"
+                    className="text-xs border-gray-400 text-gray-700"
+                  >
                     <XCircle className="mr-1 h-3 w-3" />
                     Offer Declined
                   </Badge>
@@ -840,9 +856,7 @@ export default function JobDetailsPage() {
                   className="flex items-center gap-2"
                 >
                   Accepted
-                  <Badge
-                    variant="secondary"
-                  >
+                  <Badge variant="secondary">
                     {applicantsByStatus.OFFER_ACCEPTED.length}
                   </Badge>
                 </TabsTrigger>
