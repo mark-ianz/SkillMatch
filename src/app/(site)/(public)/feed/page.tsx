@@ -1,19 +1,19 @@
-"use client";
-
 import MainLayout from "@/components/layout/MainLayout";
 import SidebarProfile from "@/components/page_specific/sidebar/SidebarProfile";
 import { CompanyPostsFeed } from "@/components/page_specific/feed/CompanyPostsFeed";
 import { SuggestedCompanies } from "@/components/page_specific/feed/SuggestedCompanies";
 import { PlusCircleIcon } from "lucide-react";
 import Link from "next/link";
-import { useSession } from "next-auth/react";
 import { getRoleName } from "@/lib/utils";
+import { getServerSession } from "next-auth";
+import { authConfig } from "@/lib/auth";
+import ClientProviders from "@/components/providers/ClientProviders";
 
-export default function FeedPage() {
-  const session = useSession();
-  const isAuthenticated = session.status === "authenticated";
-  const role = session.data?.user?.role_id;
-  const role_name = session.data?.user ? getRoleName(role) : null;
+export default async function FeedPage() {
+  const session = await getServerSession(authConfig);
+  const isAuthenticated = !!session;
+  const role = session?.user?.role_id;
+  const role_name = session?.user ? getRoleName(role) : null;
 
   return (
     <MainLayout
@@ -40,12 +40,16 @@ export default function FeedPage() {
 
         {/* Middle Section - Company Posts Feed */}
         <div className="flex-2 min-w-0">
-          <CompanyPostsFeed />
+          <ClientProviders>
+            <CompanyPostsFeed />
+          </ClientProviders>
         </div>
 
         {/* Right Sidebar - Suggested Companies */}
         <div className="flex-1">
-          <SuggestedCompanies />
+          <ClientProviders>
+            <SuggestedCompanies />
+          </ClientProviders>
         </div>
       </div>
     </MainLayout>
