@@ -3,6 +3,13 @@ import { getCourseByAbbr } from "@/lib/utils";
 import { CompanyProfile } from "@/types/company.types";
 import { RowDataPacket } from "mysql2";
 
+interface CompanyProfileSidebar {
+  company_id: string;
+  company_name: string;
+  location: string;
+  profile_image: string | null;
+}
+
 export const CompanyServices = {
   getAllCompanies: async (): Promise<CompanyProfile[]> => {
     try {
@@ -79,6 +86,29 @@ export const CompanyServices = {
       throw error;
     } finally {
       connection.release();
+    }
+  },
+
+  getCompanyProfileForSidebar: async (company_id: string): Promise<CompanyProfileSidebar | null> => {
+    try {
+      const [rows] = await db.query<RowDataPacket[]>(
+        `SELECT 
+          c.company_id,
+          c.company_name,
+          CONCAT(c.barangay, ', ', c.city_municipality) as location,
+          acc.profile_image
+        FROM company c
+        INNER JOIN account acc ON c.company_id = acc.company_id
+        WHERE c.company_id = ?`,
+        [company_id]
+      );
+
+      if (rows.length === 0) return null;
+
+      return rows[0] as CompanyProfileSidebar;
+    } catch (error) {
+      console.error("Failed to fetch company profile:", error);
+      throw error;
     }
   },
 };

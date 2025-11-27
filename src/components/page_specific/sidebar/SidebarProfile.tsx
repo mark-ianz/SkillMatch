@@ -1,37 +1,14 @@
 import { Card } from "@/components/ui/card";
-import { cn, getRoleName } from "@/lib/utils";
+import { cn, getCourseByAbbr, getRoleName } from "@/lib/utils";
 import Image from "next/image";
-import ambatublow from "@/images/ambatublow.jpg";
 import OJTShortcut from "./OJTShortcut";
 import CompanyShortcut from "./CompanyShortcut";
 import { Building2 } from "lucide-react";
 import LoadingGeneric from "@/components/global/LoadingGeneric";
 import { getServerSession } from "next-auth";
 import { authConfig } from "@/lib/auth";
-
-const image_url = ambatublow.src;
-
-const OJT_DUMMY = {
-  name: "Ooh Ambatublow",
-  idNumber: "23-6967",
-  course: "Bachelor of Science in Information Technology",
-  location: "Novaliches, Quezon City",
-  avatarSrc: image_url,
-};
-
-const COMPANY_DUMMY = {
-  name: "Tech Solutions Inc.",
-  location: "Makati City, Metro Manila",
-  avatarSrc: null,
-};
-
-type ProfileData = {
-  name: string;
-  idNumber?: string;
-  course?: string;
-  location: string;
-  avatarSrc: string | null;
-};
+import { UserService } from "@/services/user.services";
+import CompanyServices from "@/services/company.services";
 
 function EmptyProfileImage({ isOjt }: { isOjt: boolean }) {
   if (isOjt) {
@@ -69,13 +46,37 @@ export default async function SidebarProfile() {
   }
 
   const role_id = session?.user.role_id;
+  const user_id = session?.user.user_id;
+  const company_id = session?.user.company_id;
 
   if (!role_id) {
     return <LoadingGeneric />;
   }
 
   const isOjt = getRoleName(role_id) === "OJT";
-  const data: ProfileData = isOjt ? OJT_DUMMY : COMPANY_DUMMY;
+  const isCompany = getRoleName(role_id) === "Company";
+  
+  // Fetch profile data from database
+  let ojtProfile;
+  let companyProfile;
+  
+  if (isOjt && user_id) {
+    ojtProfile = await UserService.getOJTProfileForSidebar(user_id);
+  } else if (isCompany && company_id) {
+    companyProfile = await CompanyServices.getCompanyProfileForSidebar(company_id);
+  }
+
+  if (!ojtProfile && !companyProfile) {
+    return <LoadingGeneric />;
+  }
+
+  const displayName = isOjt 
+    ? ojtProfile?.name || "OJT User"
+    : companyProfile?.company_name || "Company User";
+  const profileImage = (isOjt ? ojtProfile?.profile_image : companyProfile?.profile_image) || null;
+  const studentId = ojtProfile?.student_id || null;
+  const course = getCourseByAbbr(ojtProfile?.course || "") || null;
+  const location = (isOjt ? ojtProfile?.location : companyProfile?.location) || null;
 
   return (
     <Card className="pt-0 border-0">
@@ -90,10 +91,10 @@ export default async function SidebarProfile() {
       <div className="relative -mt-12 flex justify-center">
         <div className="w-20 h-20 rounded-full bg-white p-1 shadow-md">
           <div className="relative w-full h-full rounded-full overflow-hidden bg-slate-100">
-            {data.avatarSrc ? (
+            {profileImage ? (
               <Image
-                src={data.avatarSrc}
-                alt={data.name}
+                src={profileImage}
+                alt={displayName}
                 fill
                 className="object-cover"
               />
@@ -109,24 +110,24 @@ export default async function SidebarProfile() {
           <div className="flex items-center justify-between flex-wrap">
             <div>
               <div className="text-lg font-semibold text-slate-800">
-                {data.name}
+                {displayName}
               </div>
             </div>
 
-            {data.idNumber ? (
-              <p className="text-xs text-slate-600">{data.idNumber}</p>
-            ) : null}
+            {studentId && (
+              <p className="text-xs text-slate-600">{studentId}</p>
+            )}
           </div>
           <div>
-            {data.course ? (
+            {course && (
               <div className="text-xs text-slate-700">
-                {data.course.replace("Bachelor of Science in ", "BS ")}
+                {course.replace("Bachelor of Science in ", "BS ")}
               </div>
-            ) : null}
+            )}
 
-            {data.location ? (
-              <div className="text-xs text-slate-500">{data.location}</div>
-            ) : null}
+            {location && (
+              <div className="text-xs text-slate-500">{location}</div>
+            )}
           </div>
         </div>
         <hr />
