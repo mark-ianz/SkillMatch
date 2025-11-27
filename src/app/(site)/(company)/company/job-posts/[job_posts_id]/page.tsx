@@ -316,6 +316,34 @@ export default function JobDetailsPage() {
     const StatusIcon = statusInfo?.icon || FileText;
     const statusColor = statusInfo?.color || "text-gray-600";
 
+    const handleDownloadResume = () => {
+      if (!applicant.resume_path) {
+        alert("No resume available for this applicant");
+        return;
+      }
+      
+      // Extract original file extension from path
+      const originalFileName = applicant.resume_path.split('/').pop() || 'resume';
+      const fileExtension = originalFileName.includes('.') 
+        ? originalFileName.substring(originalFileName.lastIndexOf('.'))
+        : '';
+      
+      // Create formal filename: LastName_FirstName_Resume.ext
+      const nameParts = applicant.user_name.trim().split(' ');
+      const lastName = nameParts[nameParts.length - 1];
+      const firstName = nameParts[0];
+      const formalFileName = `${lastName}_${firstName}_Resume${fileExtension}`;
+      
+      // Create anchor element to force download
+      const link = document.createElement('a');
+      link.href = applicant.resume_path;
+      link.download = formalFileName;
+      link.style.display = 'none';
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    };
+
     return (
       <Card
         key={applicant.application_id}
@@ -351,7 +379,12 @@ export default function JobDetailsPage() {
                   </DropdownMenuTrigger>
                   <DropdownMenuContent align="end">
                     <DropdownMenuItem>View Full Profile</DropdownMenuItem>
-                    <DropdownMenuItem>Download Resume</DropdownMenuItem>
+                    <DropdownMenuItem 
+                      onClick={handleDownloadResume}
+                      disabled={!applicant.resume_path}
+                    >
+                      Download Resume
+                    </DropdownMenuItem>
                     <DropdownMenuSeparator />
                     <DropdownMenuItem
                       onClick={() => handleScheduleInterview(applicant)}
