@@ -2,10 +2,10 @@ import { CompanyProfile } from "@/types/company.types";
 import React, { useEffect } from "react";
 import { CompanyPreview } from "./CompanyPreview";
 import { useGetAllCompanies } from "@/hooks/query/useCompanies";
-import LoadingGeneric from "@/components/global/LoadingGeneric";
 import { useExploreStore } from "@/store/ExploreStore";
 import { useSearchParams } from "next/navigation";
 import { CompanyExploreFilters } from "@/types/job_explore.types";
+import { CompanyCardSkeleton } from "@/components/common/skeleton/JobPostSkeleton";
 
 export default function CompanyExplore() {
   const searchParams = useSearchParams();
@@ -31,8 +31,10 @@ export default function CompanyExplore() {
 
   if (isLoading) {
     return (
-      <div className="flex items-center justify-center">
-        <LoadingGeneric />
+      <div className="space-y-4">
+        {[...Array(5)].map((_, i) => (
+          <CompanyCardSkeleton key={i} />
+        ))}
       </div>
     );
   }

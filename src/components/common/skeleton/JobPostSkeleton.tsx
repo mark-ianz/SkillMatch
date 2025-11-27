@@ -144,3 +144,33 @@ export function CompanyPostSkeleton() {
     </Card>
   );
 }
+
+export function CompanyCardSkeleton() {
+  return (
+    <Card className="hover:shadow-md transition-shadow">
+      <CardContent className="p-5">
+        <div className="flex items-start gap-4">
+          {/* Company Logo Skeleton */}
+          <Skeleton className="h-16 w-16 rounded-lg flex-shrink-0" />
+
+          <div className="flex-1 space-y-3">
+            {/* Company Name Skeleton */}
+            <Skeleton className="h-5 w-2/3" />
+
+            {/* Industry Badges Skeleton */}
+            <div className="flex flex-wrap gap-2">
+              <Skeleton className="h-5 w-20" />
+              <Skeleton className="h-5 w-24" />
+            </div>
+
+            {/* Description Skeleton */}
+            <div className="space-y-2">
+              <Skeleton className="h-3 w-full" />
+              <Skeleton className="h-3 w-4/5" />
+            </div>
+          </div>
+        </div>
+      </CardContent>
+    </Card>
+  );
+}

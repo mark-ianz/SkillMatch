@@ -3,10 +3,11 @@
 import { useSuggestedCompanies } from "@/hooks/query/useFeed";
 import { CompanyPreview } from "@/components/page_specific/explore/company/CompanyPreview";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Building2, Loader2 } from "lucide-react";
+import { Building2 } from "lucide-react";
 import Link from "next/link";
 import { useSession } from "next-auth/react";
 import { getRoleName } from "@/lib/utils";
+import { CompanyCardSkeleton } from "@/components/common/skeleton/JobPostSkeleton";
 
 export function SuggestedCompanies() {
   const { data: session } = useSession();
@@ -27,8 +28,10 @@ export function SuggestedCompanies() {
       </CardHeader>
       <CardContent>
         {isLoading ? (
-          <div className="flex justify-center py-8">
-            <Loader2 className="w-6 h-6 animate-spin text-muted-foreground" />
+          <div className="flex flex-col gap-4">
+            {[...Array(3)].map((_, i) => (
+              <CompanyCardSkeleton key={i} />
+            ))}
           </div>
         ) : companies && companies.length > 0 ? (
           <div className="flex flex-col gap-4">
