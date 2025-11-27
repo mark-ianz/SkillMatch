@@ -152,13 +152,13 @@ export async function insertOJTData(
 
   // 4.4 Insert user to ojt_profile
   await connection.query(
-    "INSERT INTO `ojt_profile` (`user_id`, `college`, `course`, `expected_graduation_year`, `ojt_image_path`) VALUES (?, ?, ?, ?, ?)",
+    "INSERT INTO `ojt_profile` (`user_id`, `college`, `course`, `expected_graduation_year`, `student_id`) VALUES (?, ?, ?, ?, ?)",
     [
       newUser.insertId,
       student[0].college,
       student[0].course,
       student[0].expected_graduation_year,
-      user.image, // Google profile image
+      student[0].student_number,
     ]
   );
 
