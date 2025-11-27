@@ -21,7 +21,7 @@ export async function GET(request: NextRequest) {
         jp.*,
         c.company_name,
         c.company_image,
-        s.status_name as job_post_status
+        s.status as job_post_status
       FROM job_posts jp
       INNER JOIN company c ON jp.company_id = c.company_id
       LEFT JOIN status s ON jp.job_post_status_id = s.status_id
@@ -43,6 +43,7 @@ export async function GET(request: NextRequest) {
       ? jobPosts.map((job: any) => ({
           ...job,
           is_paid: Boolean(job.is_paid),
+          job_post_status: job.job_post_status || job.status || "Unknown",
           job_responsibilities: job.job_responsibilities
             ? job.job_responsibilities.split(",")
             : [],

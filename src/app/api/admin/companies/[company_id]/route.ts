@@ -71,7 +71,7 @@ export async function GET(
         a.email as company_email,
         a.status_id,
         a.created_at as account_created_at,
-        s.status_name
+        s.status
       FROM company c
       INNER JOIN account a ON c.company_id = a.company_id
       LEFT JOIN status s ON a.status_id = s.status_id
@@ -87,7 +87,11 @@ export async function GET(
       );
     }
 
-    return NextResponse.json(companies[0]);
+    const company = companies[0] as any;
+    return NextResponse.json({
+      ...company,
+      status_name: company.status || "Unknown",
+    });
   } catch (error) {
     console.error("Error fetching company:", error);
     return NextResponse.json(

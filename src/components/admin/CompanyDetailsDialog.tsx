@@ -288,9 +288,14 @@ export default function CompanyDetailsDialog({
                 >
                   <span className="text-sm">{doc.label}</span>
                   {doc.path ? (
-                    <Badge variant="outline" className="text-xs">
-                      Uploaded
-                    </Badge>
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      className="text-xs h-7"
+                      onClick={() => window.open(doc.path, "_blank")}
+                    >
+                      View
+                    </Button>
                   ) : (
                     <Badge variant="secondary" className="text-xs">
                       Missing

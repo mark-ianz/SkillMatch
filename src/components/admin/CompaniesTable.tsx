@@ -45,6 +45,7 @@ export default function CompaniesTable() {
   });
 
   const getStatusBadge = (statusId: number, statusName: string) => {
+    console.log(statusName)
     const status = COMPANY_ACCOUNT_STATUSES.find((s) => s.value === statusId);
     return (
       <Badge variant={status?.variant || "default"}>

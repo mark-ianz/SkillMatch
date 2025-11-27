@@ -22,7 +22,7 @@ export async function GET(request: NextRequest) {
         a.email as company_email,
         a.status_id,
         a.created_at as account_created_at,
-        s.status_name
+        s.status
       FROM company c
       INNER JOIN account a ON c.company_id = a.company_id
       LEFT JOIN status s ON a.status_id = s.status_id
@@ -39,7 +39,15 @@ export async function GET(request: NextRequest) {
 
     const [companies] = await db.query(query, params);
 
-    return NextResponse.json(companies);
+    // Map status to status_name for frontend
+    const mappedCompanies = Array.isArray(companies)
+      ? companies.map((company: any) => ({
+          ...company,
+          status_name: company.status || "Unknown",
+        }))
+      : [];
+
+    return NextResponse.json(mappedCompanies);
   } catch (error) {
     console.error("Error fetching companies:", error);
     return NextResponse.json(

@@ -68,7 +68,7 @@ export async function GET(
         c.company_name,
         c.company_image,
         c.company_email,
-        s.status_name as job_post_status
+        s.status
       FROM job_posts jp
       INNER JOIN company c ON jp.company_id = c.company_id
       LEFT JOIN status s ON jp.job_post_status_id = s.status_id
@@ -88,6 +88,7 @@ export async function GET(
     const parsedJob = {
       ...job,
       is_paid: Boolean(job.is_paid),
+      job_post_status: job.status || "Unknown",
       job_responsibilities: job.job_responsibilities
         ? job.job_responsibilities.split(",")
         : [],
