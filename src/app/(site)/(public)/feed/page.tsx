@@ -7,7 +7,6 @@ import Link from "next/link";
 import { getRoleName } from "@/lib/utils";
 import { getServerSession } from "next-auth";
 import { authConfig } from "@/lib/auth";
-import ClientProviders from "@/components/providers/ClientProviders";
 
 export default async function FeedPage() {
   const session = await getServerSession(authConfig);
@@ -40,16 +39,12 @@ export default async function FeedPage() {
 
         {/* Middle Section - Company Posts Feed */}
         <div className="flex-2 min-w-0">
-          <ClientProviders>
-            <CompanyPostsFeed />
-          </ClientProviders>
+          <CompanyPostsFeed />
         </div>
 
         {/* Right Sidebar - Suggested Companies */}
         <div className="flex-1">
-          <ClientProviders>
-            <SuggestedCompanies />
-          </ClientProviders>
+          <SuggestedCompanies />
         </div>
       </div>
     </MainLayout>

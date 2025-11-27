@@ -3,7 +3,6 @@ import MainLayout from "@/components/layout/MainLayout";
 import Explore from "@/components/page_specific/explore/shared/Explore";
 import ExploreFullInfo from "@/components/page_specific/explore/shared/ExploreFullInfo";
 import SidebarProfile from "@/components/page_specific/sidebar/SidebarProfile";
-import ClientProviders from "@/components/providers/ClientProviders";
 
 export default async function ExplorePage() {
   return (
@@ -15,10 +14,8 @@ export default async function ExplorePage() {
           <JobExploreFilter className="sticky top-28" />
         </div>
 
-        <ClientProviders>
-          <Explore />
-          <ExploreFullInfo />
-        </ClientProviders>
+        <Explore />
+        <ExploreFullInfo />
       </div>
     </MainLayout>
   );
