@@ -60,13 +60,13 @@ export default async function JobPostPage({ params }: JobPostPageProps) {
   );
 
   return (
-    <MainLayout className="items-center">
-      <div className="gap-10 flex flex-col items-center w-full">
+    <MainLayout className="items-center" wrapperClassName="w-full">
+      <div className="gap-10 flex flex-col items-center container max-w-5xl">
         {/* Job Post Full Info */}
-        <JobPostFullInfo job={jobPost} className="w-full max-w-5xl" />
+        <JobPostFullInfo job={jobPost} className="w-full" />
 
         {/* Job Suggestions Section */}
-        <div className="space-y-6 w-full max-w-5xl">
+        <div className="space-y-6 w-full">
           <div className="flex items-center justify-between">
             <h2 className="text-2xl font-bold text-foreground">
               Recommended Jobs For You
