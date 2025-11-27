@@ -7,7 +7,7 @@ import { Card } from "@/components/ui/card";
 
 export default function CompanyLandingPage() {
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-background w-full">
       <CompanyHeroSection />
       <CompanyStatsSection />
       <CompanyFeatures />
