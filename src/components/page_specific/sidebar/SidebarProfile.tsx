@@ -9,12 +9,44 @@ import { authConfig } from "@/lib/auth";
 import { UserService } from "@/services/user.services";
 import CompanyServices from "@/services/company.services";
 import { CompanyFallbackSVG, OJTFallbackSVG } from "@/components/common/fallback/ImageFallback";
+import Link from "next/link";
+import { Button } from "@/components/ui/button";
+import { LogIn, UserPlus } from "lucide-react";
 
 export default async function SidebarProfile() {
   const session = await getServerSession(authConfig);
   
+  // Show CTA for non-logged-in users
   if (!session) {
-    return <LoadingGeneric />;
+    return (
+      <Card className="p-6 border-2 border-dashed">
+        <div className="text-center space-y-4">
+          <div className="w-16 h-16 rounded-full bg-gradient-to-br from-skillmatch-primary-blue to-skillmatch-primary-green mx-auto flex items-center justify-center">
+            <UserPlus className="h-8 w-8 text-white" />
+          </div>
+          <div className="space-y-2">
+            <h3 className="font-semibold text-lg">Join SkillMatch</h3>
+            <p className="text-sm text-muted-foreground">
+              Create an account to explore opportunities, connect with companies, and manage your career journey.
+            </p>
+          </div>
+          <div className="space-y-2">
+            <Button asChild className="w-full">
+              <Link href="/signin">
+                <LogIn className="h-4 w-4 mr-2" />
+                Sign In
+              </Link>
+            </Button>
+            <Button asChild variant="outline" className="w-full">
+              <Link href="/signup">
+                <UserPlus className="h-4 w-4 mr-2" />
+                Create Account
+              </Link>
+            </Button>
+          </div>
+        </div>
+      </Card>
+    );
   }
 
   const role_id = session?.user.role_id;
