@@ -131,7 +131,6 @@ export default function JobDetailsPage() {
     error,
   } = useJobPostApplications(job_post_id);
 
-  console.log(applicants, error, jobPost);
   // Mutations
   const scheduleInterviewMutation = useScheduleInterview();
   const updateStatusMutation = useUpdateCompanyStatus();
@@ -180,8 +179,7 @@ export default function JobDetailsPage() {
   };
 
   const handleSelectApplicant = (application_id: string) => {
-    if (!confirm("Are you sure you want to select this applicant?"))
-      return;
+    if (!confirm("Are you sure you want to select this applicant?")) return;
 
     const deadline = new Date();
     deadline.setDate(deadline.getDate() + 7);
@@ -248,13 +246,13 @@ export default function JobDetailsPage() {
   // Loading state
   if (isLoading || isLoadingJobPost) {
     return (
-      <div className="min-h-screen bg-gradient-to-b from-green-50 to-white">
+      <div className="min-h-screen container max-w-5xl">
         <div className="border-b bg-white">
-          <div className="container mx-auto px-4 py-4">
+          <div className="px-4 py-4">
             <Skeleton className="h-10 w-32" />
           </div>
         </div>
-        <div className="container mx-auto px-4 py-8 space-y-6">
+        <div className="px-4 py-8 space-y-6">
           <Skeleton className="h-64 w-full" />
           <Skeleton className="h-96 w-full" />
         </div>
@@ -423,7 +421,9 @@ export default function JobDetailsPage() {
                     </DropdownMenuItem>
                     <DropdownMenuSeparator />
                     <DropdownMenuItem
-                      onClick={() => handleSelectApplicant(applicant.application_id)}
+                      onClick={() =>
+                        handleSelectApplicant(applicant.application_id)
+                      }
                     >
                       Select Applicant
                     </DropdownMenuItem>
