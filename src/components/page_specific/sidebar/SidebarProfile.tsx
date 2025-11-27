@@ -3,40 +3,12 @@ import { cn, getCourseByAbbr, getRoleName } from "@/lib/utils";
 import Image from "next/image";
 import OJTShortcut from "./OJTShortcut";
 import CompanyShortcut from "./CompanyShortcut";
-import { Building2 } from "lucide-react";
 import LoadingGeneric from "@/components/global/LoadingGeneric";
 import { getServerSession } from "next-auth";
 import { authConfig } from "@/lib/auth";
 import { UserService } from "@/services/user.services";
 import CompanyServices from "@/services/company.services";
-
-function EmptyProfileImage({ isOjt }: { isOjt: boolean }) {
-  if (isOjt) {
-    return (
-      <svg
-        viewBox="0 0 24 24"
-        fill="none"
-        xmlns="http://www.w3.org/2000/svg"
-        className="w-full h-full text-slate-700"
-      >
-        <circle cx="12" cy="8" r="3" fill="currentColor" />
-        <path
-          d="M4 20c0-3.3137 2.6863-6 6-6h4c3.3137 0 6 2.6863 6 6"
-          stroke="currentColor"
-          strokeWidth="1.2"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-        />
-      </svg>
-    );
-  }
-
-  return (
-    <div className="w-full h-full flex items-center justify-center">
-      <Building2 className="w-12 h-12 text-muted-foreground/40" />
-    </div>
-  );
-}
+import { CompanyFallbackSVG, OJTFallbackSVG } from "@/components/common/fallback/ImageFallback";
 
 export default async function SidebarProfile() {
   const session = await getServerSession(authConfig);
@@ -98,8 +70,10 @@ export default async function SidebarProfile() {
                 fill
                 className="object-cover"
               />
+            ) : isOjt ? (
+              <OJTFallbackSVG />
             ) : (
-              <EmptyProfileImage isOjt={isOjt} />
+              <CompanyFallbackSVG />
             )}
           </div>
         </div>

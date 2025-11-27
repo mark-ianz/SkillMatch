@@ -66,7 +66,7 @@ export default async function ProfilePopover({
       <PopoverTrigger asChild>
         <Button variant="ghost" className="relative h-10 w-10 rounded-full">
           <Avatar className="h-9 w-9">
-            <AvatarImage src={avatarUrl || "/placeholder.svg"} alt={name} />
+            <AvatarImage src={avatarUrl || undefined} alt={name} />
             <AvatarFallback className="bg-gradient-to-br from-skillmatch-primary-green to-emerald-500 text-white">
               {name
                 .split(" ")
@@ -81,7 +81,7 @@ export default async function ProfilePopover({
       <PopoverContent className="w-64 p-0" align="end">
         <div className="flex items-center gap-3 p-4">
           <Avatar className="h-12 w-12">
-            <AvatarImage src={avatarUrl || "/placeholder.svg"} alt={name} />
+            <AvatarImage src={avatarUrl || undefined} alt={name} />
             <AvatarFallback className="bg-gradient-to-br from-skillmatch-primary-green to-emerald-500 text-white">
               {name
                 .split(" ")

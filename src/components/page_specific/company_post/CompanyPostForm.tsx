@@ -181,7 +181,7 @@ export default function CompanyPostForm() {
                   <div className="relative w-full rounded-lg overflow-hidden border border-border bg-skillmatch-muted-light/20">
                     <div className="relative h-64 w-full">
                       <Image
-                        src={previewImage || "/placeholder.svg"}
+                        src={previewImage}
                         alt="Cover preview"
                         fill
                         className="object-contain"
@@ -268,7 +268,7 @@ export default function CompanyPostForm() {
                 <p className="text-sm font-medium mb-2">Cover Image</p>
                 <div className="relative h-60 w-full rounded-lg overflow-hidden bg-skillmatch-muted-light/20">
                   <Image
-                    src={previewImage || "/placeholder.svg"}
+                    src={previewImage}
                     alt="Cover preview"
                     fill
                     className="object-contain"

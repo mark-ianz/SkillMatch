@@ -38,7 +38,7 @@ export function ApplicationCard({
           {/* Company Logo */}
           <Avatar className="h-14 w-14 rounded-lg">
             <AvatarImage
-              src={application.company_image || "/placeholder.svg"}
+              src={application.company_image || undefined}
               alt={application.company_name}
             />
             <AvatarFallback className="rounded-lg bg-gradient-to-br from-green-600 to-emerald-600 text-white">

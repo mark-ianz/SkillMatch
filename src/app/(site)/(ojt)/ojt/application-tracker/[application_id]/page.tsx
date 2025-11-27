@@ -117,7 +117,7 @@ export default function ApplicationDetailsPage() {
           <div className="flex flex-col md:flex-row gap-6">
             <Avatar className="h-20 w-20 rounded-xl">
               <AvatarImage
-                src={application.company_image || "/placeholder.svg"}
+                src={application.company_image || undefined}
                 alt={application.company_name}
               />
               <AvatarFallback className="rounded-xl bg-gradient-to-br from-green-600 to-emerald-600 text-white text-2xl">

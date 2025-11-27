@@ -358,7 +358,7 @@ export default function JobDetailsPage() {
         <CardContent className="p-5">
           <div className="flex items-start gap-4">
             <Avatar className="h-12 w-12">
-              <AvatarImage src="/placeholder.svg" alt={applicant.user_name} />
+              <AvatarImage src={undefined} alt={applicant.user_name} />
               <AvatarFallback className="bg-gradient-to-br from-green-600 to-emerald-600 text-white">
                 {applicant.user_name
                   .split(" ")
@@ -553,7 +553,7 @@ export default function JobDetailsPage() {
                     <Image
                       width={80}
                       height={80}
-                      src={jobPost.company_image || "/placeholder.svg"}
+                      src={jobPost.company_image || ""}
                       alt={jobPost.company_name}
                       className="w-20 h-20 rounded-lg object-cover border shadow-sm"
                     />

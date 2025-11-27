@@ -66,7 +66,7 @@ export function JobPostFullInfo({
                 <Image
                   width={80}
                   height={80}
-                  src={job?.company_image || "/placeholder.svg"}
+                  src={job?.company_image}
                   alt={job?.company_name}
                   className="w-20 h-20 rounded-xl object-cover border-2 border-border"
                 />
