@@ -17,7 +17,7 @@ const shortcuts: Shortcut[] = [
     variant: "ghost",
   },
   {
-    href: "/ojt/applications",
+    href: "/ojt/application-tracker",
     icon: FileText,
     label: "My Applications",
     variant: "ghost",
