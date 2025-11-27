@@ -3,11 +3,11 @@ import { api } from "@/lib/axios";
 import { JobPostingFormData } from "@/schema/job-posting.schema";
 import { toast } from "sonner";
 import { JobPost } from "@/types/job_post.types";
-import { JobFeedFilters } from "@/types/job_explore.types";
+import { JobExploreFilters } from "@/types/job_explore.types";
 
 // Query: Get all job posts with optional filters
 export function useJobPosts(
-  filters?: JobFeedFilters, 
+  filters?: JobExploreFilters, 
   userId?: number, 
   roleName?: string | null,
   isSessionLoading?: boolean
@@ -18,11 +18,11 @@ export function useJobPosts(
       const params = new URLSearchParams();
       
       if (filters) {
-        filters.courses?.forEach((c) => params.append("course", c));
-        filters.locations?.forEach((l) => params.append("location", l));
-        filters.workArrangement?.forEach((w) => params.append("arrangement", w));
-        filters.industries?.forEach((i) => params.append("industry", i));
-        filters.jobCategories?.forEach((j) => params.append("jobCategory", j));
+        filters.courses?.forEach((c: string) => params.append("course", c));
+        filters.locations?.forEach((l: string) => params.append("location", l));
+        filters.workArrangement?.forEach((w: string) => params.append("arrangement", w));
+        filters.industries?.forEach((i: string) => params.append("industry", i));
+        filters.jobCategories?.forEach((j: string) => params.append("jobCategory", j));
         if (filters.isPaid !== undefined) {
           params.append("paid", String(filters.isPaid));
         }
