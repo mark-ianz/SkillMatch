@@ -13,7 +13,7 @@ export default function LayoutCompany({
       <HeaderCompany />
       <MainLayout
         className="items-center"
-        wrapperClassName="items-center flex-col w-full"
+        wrapperClassName="items-center flex-col w-full p-0"
       >
         {children}
       </MainLayout>
