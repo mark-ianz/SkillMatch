@@ -1,3 +1,5 @@
+"use client";
+
 import React from "react";
 import { JobExploreHeader } from "../job-posts/JobExploreHeader";
 import CompanyExplore from "../company/CompanyExplore";

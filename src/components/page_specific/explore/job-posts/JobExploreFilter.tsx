@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { use, useEffect, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -16,9 +16,9 @@ import {
 } from "@/lib/utils";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Separator } from "@/components/ui/separator";
+import { useExploreStore } from "@/store/ExploreStore";
 
 interface JobExploreFilterProps {
-  exploreType: ExploreType;
   className?: string;
 }
 
@@ -36,9 +36,21 @@ const LOCATION_OPTIONS = [
 
 const WORK_ARRANGEMENT_OPTIONS = ["Remote", "On-site", "Hybrid"];
 
-export function JobExploreFilter({ exploreType, className }: JobExploreFilterProps) {
-  const router = useRouter();
+export function JobExploreFilter({ className }: JobExploreFilterProps) {
   const searchParams = useSearchParams();
+  const exploreType = useExploreStore((state) => state.exploreType);
+  const setExploreType = useExploreStore((state) => state.setExploreType);
+
+
+  useEffect(() => {
+    // Sync URL exploreType with store
+    setExploreType(exploreType);
+    // TODO: Implement actual Explore filtering based on exploreType and filters
+    console.log("Explore type:", exploreType);
+    console.log("Search params:", Object.fromEntries(searchParams));
+  }, [exploreType, searchParams, setExploreType]);
+
+  const router = useRouter();
   const [filters, setFilters] = useState<JobExploreFilters>({
     courses: searchParams.getAll("course") || [],
     locations: searchParams.getAll("location") || [],

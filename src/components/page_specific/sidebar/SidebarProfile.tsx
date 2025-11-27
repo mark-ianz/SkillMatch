@@ -1,5 +1,3 @@
-"use client";
-
 import { Card } from "@/components/ui/card";
 import { cn, getRoleName } from "@/lib/utils";
 import Image from "next/image";
@@ -8,7 +6,8 @@ import OJTShortcut from "./OJTShortcut";
 import CompanyShortcut from "./CompanyShortcut";
 import { Building2 } from "lucide-react";
 import LoadingGeneric from "@/components/global/LoadingGeneric";
-import { useSession } from "next-auth/react";
+import { getServerSession } from "next-auth";
+import { authConfig } from "@/lib/auth";
 
 const image_url = ambatublow.src;
 
@@ -62,10 +61,10 @@ function EmptyProfileImage({ isOjt }: { isOjt: boolean }) {
   );
 }
 
-export default function SidebarProfile() {
-  const { data: session, status } = useSession();
+export default async function SidebarProfile() {
+  const session = await getServerSession(authConfig);
   
-  if (status === "loading") {
+  if (!session) {
     return <LoadingGeneric />;
   }
 
