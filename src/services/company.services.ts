@@ -10,6 +10,12 @@ interface CompanyProfileSidebar {
   company_image: string | null;
 }
 
+interface CompanyProfileHeader {
+  company_name: string;
+  email: string;
+  company_image: string | null;
+}
+
 export const CompanyServices = {
   getAllCompanies: async (): Promise<CompanyProfile[]> => {
     try {
@@ -107,6 +113,28 @@ export const CompanyServices = {
       return rows[0] as CompanyProfileSidebar;
     } catch (error) {
       console.error("Failed to fetch company profile:", error);
+      throw error;
+    }
+  },
+
+  getCompanyProfileForHeader: async (company_id: string): Promise<CompanyProfileHeader | null> => {
+    try {
+      const [rows] = await db.query<RowDataPacket[]>(
+        `SELECT 
+          c.company_name,
+          a.email,
+          c.company_image
+        FROM company c
+        INNER JOIN account a ON c.company_id = a.company_id
+        WHERE c.company_id = ?`,
+        [company_id]
+      );
+
+      if (rows.length === 0) return null;
+
+      return rows[0] as CompanyProfileHeader;
+    } catch (error) {
+      console.error("Failed to fetch company profile for header:", error);
       throw error;
     }
   },

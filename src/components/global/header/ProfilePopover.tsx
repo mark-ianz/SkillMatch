@@ -15,20 +15,52 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import LogoutButton from "@/components/common/button/LogoutButton";
+import { getServerSession } from "next-auth";
+import { authConfig } from "@/lib/auth";
+import { UserService } from "@/services/user.services";
+import CompanyServices from "@/services/company.services";
 
 type Props = {
-  avatarUrl?: string | null;
-  name: string;
-  email: string;
   userType: "OJT" | "Company";
 };
 
-export default function ProfilePopover({
-  avatarUrl,
-  name,
-  email,
+export default async function ProfilePopover({
   userType,
 }: Props) {
+  const session = await getServerSession(authConfig);
+
+  if (!session) return null;
+
+  const user_id = session.user.user_id;
+  const company_id = session.user.company_id;
+
+  console.log({company_id, me: "t"})
+  // Fetch dynamic profile data
+  let avatarUrl: string | null = null;
+  let name: string = "";
+  let email: string = "";
+
+  if (userType === "OJT" && user_id) {
+    const profile = await UserService.getOJTProfileForHeader(user_id);
+    if (profile) {
+      avatarUrl = profile.ojt_image_path;
+      name = `${profile.first_name} ${profile.last_name}`;
+      email = profile.email;
+    }
+  } else if (userType === "Company" && company_id) {
+    const profile = await CompanyServices.getCompanyProfileForHeader(company_id);
+    if (profile) {
+      avatarUrl = profile.company_image;
+      name = profile.company_name;
+      email = profile.email;
+    }
+  }
+
+  if (!name || !email) return null;
+
+  console.log(avatarUrl)
+  
+
   return (
     <Popover>
       <PopoverTrigger asChild>
