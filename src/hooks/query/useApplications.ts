@@ -210,8 +210,8 @@ export function useScheduleInterview() {
   });
 }
 
-// Mutation: Send offer
-export function useSendOffer() {
+// Mutation: Select applicant
+export function useSelectApplicant() {
   const qc = useQueryClient();
 
   return useMutation({
@@ -220,17 +220,17 @@ export function useSendOffer() {
       offer_deadline: string;
     }) => {
       const { data } = await api.post(
-        `/company/applications/${payload.application_id}/offer`,
+        `/company/applications/${payload.application_id}/select`,
         { offer_deadline: payload.offer_deadline }
       );
       return data;
     },
     onSuccess: (data) => {
-      toast.success(data.message || "Offer sent successfully");
+      toast.success(data.message || "Applicant selected successfully");
       qc.invalidateQueries({ queryKey: ["job-post-applications"] });
     },
     onError: (error: AxiosError<{ message?: string }>) => {
-      const message = error.response?.data?.message || "Failed to send offer";
+      const message = error.response?.data?.message || "Failed to select applicant";
       toast.error(message);
     },
   });

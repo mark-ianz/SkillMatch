@@ -209,7 +209,7 @@ export default function ApplicationDetailsPage() {
                   <div className="rounded-full bg-indigo-100 p-2">
                     <Calendar className="h-4 w-4 text-indigo-600" />
                   </div>
-                  {application.offer_sent_date && (
+                  {application.selected_date && (
                     <div className="h-full w-0.5 bg-border mt-2" />
                   )}
                 </div>
@@ -262,8 +262,8 @@ export default function ApplicationDetailsPage() {
               </div>
             )}
 
-            {/* Offer Sent */}
-            {application.offer_sent_date && (
+            {/* Selected */}
+            {application.selected_date && (
               <div className="flex gap-4">
                 <div className="flex flex-col items-center">
                   <div className="rounded-full bg-orange-100 p-2">
@@ -274,9 +274,9 @@ export default function ApplicationDetailsPage() {
                   )}
                 </div>
                 <div className="flex-1 pb-4">
-                  <p className="font-medium">Offer Received</p>
+                  <p className="font-medium">Selection Offer Received</p>
                   <p className="text-sm text-muted-foreground">
-                    {new Date(application.offer_sent_date).toLocaleDateString(
+                    {new Date(application.selected_date!).toLocaleDateString(
                       "en-US",
                       {
                         month: "long",
@@ -345,8 +345,8 @@ export default function ApplicationDetailsPage() {
                 <div className="flex-1">
                   <p className="font-medium">
                     {application.application_status_id === 11
-                      ? "Offer Accepted"
-                      : "Offer Declined"}
+                      ? "Selection Offer Accepted"
+                      : "Selection Offer Declined"}
                   </p>
                   <p className="text-sm text-muted-foreground">
                     {new Date(application.offer_response_date).toLocaleDateString(

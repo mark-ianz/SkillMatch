@@ -4,8 +4,8 @@ export type CompanyApplicationStatusId = 8 | 13 | 14 | 9 | 10 | 3;
 
 export type ApplicationStatusName =
   | "applied"              // 8
-  | "interview_scheduled"  // 9
-  | "offer_sent"          // 10
+  | "interview_scheduled" // 9
+  | "selected"            // 10
   | "offer_accepted"      // 11
   | "offer_declined"      // 12
   | "rejected";           // 3
@@ -14,8 +14,8 @@ export type CompanyApplicationStatusName =
   | "applied"       // 8
   | "shortlisted"   // 13
   | "on_hold"       // 14
-  | "interview_scheduled"  // 9
-  | "offer_sent"    // 10
+  | "interview_scheduled" // 9
+  | "selected"      // 10
   | "rejected";     // 3
 
 export interface Application {
@@ -43,7 +43,7 @@ export interface Application {
   interview_notes?: string | null;
   
   // Offer details
-  offer_sent_date?: string | null;
+  selected_date?: string | null;
   offer_deadline?: string | null;
   offer_response_date?: string | null;
   
@@ -95,7 +95,7 @@ export interface JobPostWithApplicationStats {
   shortlisted: number;            // status_id = 13
   on_hold: number;                // status_id = 14
   interview_scheduled: number;    // status_id = 9
-  offer_sent: number;             // status_id = 10
+  selected: number;               // status_id = 10
   offer_accepted: number;         // status_id = 11 (from application_status_id)
   offer_declined: number;         // status_id = 12 (from application_status_id)
   rejected: number;               // status_id = 3
@@ -106,7 +106,7 @@ export const getApplicationStatusName = (status_id: ApplicationStatusId): Applic
   const statusMap: Record<ApplicationStatusId, ApplicationStatusName> = {
     8: "applied",
     9: "interview_scheduled",
-    10: "offer_sent",
+    10: "selected",
     11: "offer_accepted",
     12: "offer_declined",
     3: "rejected",
@@ -118,7 +118,7 @@ export const getApplicationStatusId = (status_name: ApplicationStatusName): Appl
   const statusMap: Record<ApplicationStatusName, ApplicationStatusId> = {
     applied: 8,
     interview_scheduled: 9,
-    offer_sent: 10,
+    selected: 10,
     offer_accepted: 11,
     offer_declined: 12,
     rejected: 3,
@@ -132,7 +132,7 @@ export const getCompanyStatusName = (status_id: CompanyApplicationStatusId): Com
     13: "shortlisted",
     14: "on_hold",
     9: "interview_scheduled",
-    10: "offer_sent",
+    10: "selected",
     3: "rejected",
   };
   return statusMap[status_id];
@@ -144,7 +144,7 @@ export const getCompanyStatusId = (status_name: CompanyApplicationStatusName): C
     shortlisted: 13,
     on_hold: 14,
     interview_scheduled: 9,
-    offer_sent: 10,
+    selected: 10,
     rejected: 3,
   };
   return statusMap[status_name];

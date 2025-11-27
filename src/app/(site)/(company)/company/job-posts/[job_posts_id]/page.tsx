@@ -46,7 +46,7 @@ import {
   useJobPostApplications,
   useScheduleInterview,
   useUpdateCompanyStatus,
-  useSendOffer,
+  useSelectApplicant,
   useRejectApplication,
 } from "@/hooks/query/useApplications";
 import { useJobPost } from "@/hooks/query/useJobPosts";
@@ -88,10 +88,10 @@ const statusConfig: Record<
     key: "INTERVIEW_SCHEDULED",
   },
   10: {
-    label: "Offer Sent",
+    label: "Selected",
     icon: Send,
     color: "text-cyan-600",
-    key: "OFFER_SENT",
+    key: "SELECTED",
   },
   11: {
     label: "Offer Accepted",
@@ -100,7 +100,7 @@ const statusConfig: Record<
     key: "OFFER_ACCEPTED",
   },
   12: {
-    label: "Offer Declined",
+    label: "Selection Offer Declined",
     icon: XCircle,
     color: "text-gray-600",
     key: "OFFER_DECLINED",
@@ -135,7 +135,7 @@ export default function JobDetailsPage() {
   // Mutations
   const scheduleInterviewMutation = useScheduleInterview();
   const updateStatusMutation = useUpdateCompanyStatus();
-  const sendOfferMutation = useSendOffer();
+  const selectApplicantMutation = useSelectApplicant();
   const rejectApplicationMutation = useRejectApplication();
 
   const [scheduleDialogOpen, setScheduleDialogOpen] = useState(false);
@@ -179,11 +179,14 @@ export default function JobDetailsPage() {
     });
   };
 
-  const handleSendOffer = (application_id: string) => {
+  const handleSelectApplicant = (application_id: string) => {
+    if (!confirm("Are you sure you want to select this applicant?"))
+      return;
+
     const deadline = new Date();
     deadline.setDate(deadline.getDate() + 7);
 
-    sendOfferMutation.mutate({
+    selectApplicantMutation.mutate({
       application_id,
       offer_deadline: deadline.toISOString(),
     });
@@ -204,7 +207,7 @@ export default function JobDetailsPage() {
       SHORTLISTED: [],
       ON_HOLD: [],
       INTERVIEW_SCHEDULED: [],
-      OFFER_SENT: [],
+      SELECTED: [],
       OFFER_ACCEPTED: [],
       OFFER_DECLINED: [],
       REJECTED: [],
@@ -219,11 +222,11 @@ export default function JobDetailsPage() {
       const isOfferAccepted = app.application_status_id === 11;
       const isOfferDeclined = app.application_status_id === 12;
 
-      // Handle accepted offers
+      // Handle accepted selection offers
       if (isOfferAccepted) {
         organized.OFFER_ACCEPTED.push(app);
       }
-      // Handle declined offers
+      // Handle declined selection offers
       else if (isOfferDeclined) {
         organized.OFFER_DECLINED.push(app);
       }
@@ -420,9 +423,9 @@ export default function JobDetailsPage() {
                     </DropdownMenuItem>
                     <DropdownMenuSeparator />
                     <DropdownMenuItem
-                      onClick={() => handleSendOffer(applicant.application_id)}
+                      onClick={() => handleSelectApplicant(applicant.application_id)}
                     >
-                      Send Offer
+                      Select Applicant
                     </DropdownMenuItem>
                     <DropdownMenuItem
                       className="text-red-600"
@@ -479,7 +482,7 @@ export default function JobDetailsPage() {
                     className="text-xs border-gray-400 text-gray-700"
                   >
                     <XCircle className="mr-1 h-3 w-3" />
-                    Offer Declined
+                    Selection Offer Declined
                   </Badge>
                 )}
               </div>
@@ -843,12 +846,12 @@ export default function JobDetailsPage() {
                   </Badge>
                 </TabsTrigger>
                 <TabsTrigger
-                  value="OFFER_SENT"
+                  value="SELECTED"
                   className="flex items-center gap-2"
                 >
-                  Offer Sent
+                  Selected
                   <Badge variant="secondary" className="ml-1">
-                    {applicantsByStatus.OFFER_SENT.length}
+                    {applicantsByStatus.SELECTED.length}
                   </Badge>
                 </TabsTrigger>
                 <TabsTrigger

@@ -55,7 +55,7 @@ export function ApplicationTabs({
           </Badge>
         </TabsTrigger>
         <TabsTrigger value="10">
-          Offers
+          Selected
           <Badge variant="secondary" className="ml-2">
             {applications.filter((a) => a.application_status_id === 10).length}
           </Badge>

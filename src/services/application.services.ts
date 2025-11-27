@@ -255,8 +255,8 @@ export const ApplicationServices = {
           SUM(CASE WHEN a.company_status_id = 13 THEN 1 ELSE 0 END) as shortlisted,
           SUM(CASE WHEN a.company_status_id = 14 THEN 1 ELSE 0 END) as on_hold,
           SUM(CASE WHEN a.company_status_id = 9 THEN 1 ELSE 0 END) as interview_scheduled,
-          SUM(CASE WHEN a.company_status_id = 10 THEN 1 ELSE 0 END) as offer_sent,
-          SUM(CASE WHEN a.application_status_id = 11 THEN 1 ELSE 0 END) as offer_accepted,
+          SUM(CASE WHEN a.company_status_id = 10 THEN 1 ELSE 0 END) as selected,
+          SUM(CASE WHEN a.company_status_id = 11 THEN 1 ELSE 0 END) as offer_accepted,
           SUM(CASE WHEN a.application_status_id = 12 THEN 1 ELSE 0 END) as offer_declined,
           SUM(CASE WHEN a.company_status_id = 3 THEN 1 ELSE 0 END) as rejected
         FROM job_posts jp
@@ -331,8 +331,8 @@ export const ApplicationServices = {
     }
   },
 
-  // COMPANY: Send offer
-  sendOffer: async (
+  // COMPANY: Select applicant
+  selectApplicant: async (
     application_id: string,
     offer_deadline: string
   ): Promise<void> => {
@@ -341,7 +341,7 @@ export const ApplicationServices = {
         `UPDATE applications 
          SET application_status_id = 10,
              company_status_id = 10,
-             offer_sent_date = NOW(),
+             selected_date = NOW(),
              offer_deadline = ?,
              last_update = NOW()
          WHERE application_id = ?`,

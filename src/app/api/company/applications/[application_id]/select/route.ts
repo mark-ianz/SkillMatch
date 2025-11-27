@@ -4,7 +4,7 @@ import { authConfig } from "@/lib/auth";
 import { ApplicationServices } from "@/services/application.services";
 import { verifyCompanySession, verifyApplicationOwnership } from "@/middleware/company-auth.middleware";
 
-// POST - Send offer
+// POST - Select applicant
 export async function POST(
   request: NextRequest,
   { params }: { params: { application_id: string } }
@@ -43,16 +43,16 @@ export async function POST(
       );
     }
 
-    await ApplicationServices.sendOffer(application_id, offer_deadline);
+    await ApplicationServices.selectApplicant(application_id, offer_deadline);
 
     return NextResponse.json(
-      { message: "Offer sent successfully" },
+      { message: "Applicant selected successfully" },
       { status: 200 }
     );
   } catch (error) {
-    console.error("Error sending offer:", error);
+    console.error("Error selecting applicant:", error);
     return NextResponse.json(
-      { message: "Failed to send offer" },
+      { message: "Failed to select applicant" },
       { status: 500 }
     );
   }

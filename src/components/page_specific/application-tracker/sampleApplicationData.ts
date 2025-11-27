@@ -36,7 +36,7 @@ export const applications = [
     city_municipality: "Quezon City",
     barangay: "Batasan Hills",
     applied_date: "2025-11-08T16:45:00.000Z",
-    status: "OFFER_SENT",
+    status: "SELECTED",
     last_update: "2025-11-17T11:30:00.000Z",
     offer_deadline: "2025-11-25T23:59:59.000Z",
   },

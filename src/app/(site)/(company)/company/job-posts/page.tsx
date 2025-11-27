@@ -76,8 +76,8 @@ export default function CompanyJobPostsPage() {
     jobPosts?.reduce((sum, post) => sum + (post.total_applications || 0), 0) || 0;
   const activeJobs =
     jobPosts?.filter((post) => post.job_post_status_id === 1).length || 0;
-  const totalOffers =
-    jobPosts?.reduce((sum, post) => sum + (Number(post.offer_sent) || 0), 0) || 0;
+  const totalSelected =
+    jobPosts?.reduce((sum, post) => sum + (Number(post.selected) || 0), 0) || 0;
   const totalAccepted =
     jobPosts?.reduce((sum, post) => sum + (Number(post.offer_accepted) || 0), 0) || 0;
 
@@ -138,9 +138,9 @@ export default function CompanyJobPostsPage() {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm font-medium text-muted-foreground mb-1">
-                  Offers Sent
+                  Selected
                 </p>
-                <p className="text-3xl font-bold">{totalOffers}</p>
+                <p className="text-3xl font-bold">{totalSelected}</p>
               </div>
               <div className="h-12 w-12 rounded-lg bg-orange-100 flex items-center justify-center">
                 <Send className="h-6 w-6 text-orange-600" />
@@ -154,7 +154,7 @@ export default function CompanyJobPostsPage() {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm font-medium text-muted-foreground mb-1">
-                  Offers Accepted
+                  Accepted
                 </p>
                 <p className="text-3xl font-bold">{totalAccepted}</p>
               </div>
@@ -288,10 +288,10 @@ export default function CompanyJobPostsPage() {
                         </div>
                         <div className="bg-orange-50 border border-orange-100 rounded-lg p-3">
                           <p className="text-xs text-muted-foreground mb-1">
-                            Offers
+                            Selected
                           </p>
                           <p className="text-lg font-bold text-orange-600">
-                            {post.offer_sent}
+                            {post.selected}
                           </p>
                         </div>
                         <div className="bg-green-50 border border-green-100 rounded-lg p-3">

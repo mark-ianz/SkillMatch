@@ -6,7 +6,7 @@ import {
   XCircle,
 } from "lucide-react";
 
-// Status IDs: 8=applied, 9=interview_scheduled, 10=offer_sent, 11=offer_accepted, 12=offer_declined, 3=rejected
+// Status IDs: 8=applied, 9=interview_scheduled, 10=selected, 11=offer_accepted, 12=offer_declined, 3=rejected
 export const statusConfig = {
   "8": {
     label: "Applied",
@@ -21,10 +21,10 @@ export const statusConfig = {
     dotColor: "bg-indigo-600",
   },
   "10": {
-    label: "Offer Sent",
+    label: "Selected",
     icon: AlertCircle,
-    color: "bg-orange-100 text-orange-700 border-orange-200",
-    dotColor: "bg-orange-600",
+    color: "bg-cyan-100 text-cyan-700 border-cyan-200",
+    dotColor: "bg-cyan-600",
   },
   "11": {
     label: "Offer Accepted",
@@ -33,7 +33,7 @@ export const statusConfig = {
     dotColor: "bg-green-600",
   },
   "12": {
-    label: "Offer Declined",
+    label: "Selection Offer Declined",
     icon: XCircle,
     color: "bg-gray-100 text-gray-700 border-gray-200",
     dotColor: "bg-gray-600",

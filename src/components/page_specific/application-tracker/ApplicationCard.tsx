@@ -161,13 +161,16 @@ export function ApplicationCard({
             {/* Offer Details */}
             {application.application_status_id === 10 &&
               application.offer_deadline && (
-                <div className="mt-3 p-3 bg-orange-50 rounded-lg border border-orange-200">
+                <div className="mt-3 p-3 bg-cyan-50 rounded-lg border border-cyan-200">
                   <div className="flex items-start justify-between gap-2">
                     <div>
-                      <p className="text-sm font-semibold text-orange-900 mb-1">
-                        Offer Received
+                      <p className="text-sm font-semibold text-cyan-900 mb-1">
+                        🎉 Congratulations! You&apos;ve been selected!
                       </p>
-                      <p className="text-sm text-orange-700">
+                      <p className="text-sm text-cyan-700 mb-1">
+                        {application.company_name} would like to offer you this position.
+                      </p>
+                      <p className="text-sm text-cyan-700">
                         Respond by{" "}
                         {new Date(application.offer_deadline).toLocaleDateString(
                           "en-US",

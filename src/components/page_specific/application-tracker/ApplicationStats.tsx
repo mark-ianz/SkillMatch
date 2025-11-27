@@ -32,7 +32,7 @@ export function ApplicationStats({ applications }: ApplicationStatsProps) {
           <p className="text-2xl font-bold text-orange-600">
             {applications.filter((a) => a.application_status_id === 10).length}
           </p>
-          <p className="text-xs text-muted-foreground">Offers</p>
+          <p className="text-xs text-muted-foreground">Selected</p>
         </CardContent>
       </Card>
       <Card>

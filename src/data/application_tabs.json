@@ -41,8 +41,8 @@
       "ojt_actions": []
     },
     {
-      "code": "OFFER_SENT",
-      "label": "Offer Sent",
+      "code": "SELECTED",
+      "label": "Selected",
       "visible_to_company": true,
       "visible_to_ojt": true,
       "company_actions": ["CANCEL_OFFER"],
@@ -58,7 +58,7 @@
     },
     {
       "code": "OFFER_DECLINED",
-      "label": "Offer Declined",
+      "label": "Selection Offer Declined",
       "visible_to_company": true,
       "visible_to_ojt": true,
       "company_actions": [],
