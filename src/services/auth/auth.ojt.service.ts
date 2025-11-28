@@ -54,7 +54,7 @@ export async function handleOJTSignIn(
         return "/signup?error=DataInconsistency";
       }
       (user as ExtendedUser).user_id = user_id;
-      (user as ExtendedUser).role_id = 3;
+      (user as ExtendedUser).role_id = acc.role_id;
       (user as ExtendedUser).status_id = status_id;
       await connection.commit();
       return true;
@@ -66,7 +66,7 @@ export async function handleOJTSignIn(
     }
 
     (user as ExtendedUser).user_id = acc.user_id;
-    (user as ExtendedUser).role_id = 3;
+    (user as ExtendedUser).role_id = acc.role_id;
     (user as ExtendedUser).status_id = status_id;
 
     if (accountRows.length > 0) {
@@ -151,7 +151,7 @@ export async function insertOJTData(
 
   // 4.4 Insert user to ojt_profile
   await connection.query(
-    "INSERT INTO `ojt_profile` (`user_id`, `college`, `course`, `expected_graduation_year`, `student_id`, `ojt_image_path`) VALUES (?, ?, ?, ?, ?, ?)",
+    "INSERT INTO `ojt_profile` (`user_id`, `college`, `course`, `expected_graduation_year`, `student_number`, `ojt_image_path`) VALUES (?, ?, ?, ?, ?, ?)",
     [
       newUser.insertId,
       student[0].college,

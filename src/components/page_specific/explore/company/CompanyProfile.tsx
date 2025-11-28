@@ -55,7 +55,7 @@ export function CompanyProfile({
   };
 
   const baseUrl = process.env.NEXT_PUBLIC_FRONTEND_BASE_URL || (typeof window !== 'undefined' ? window.location.origin : '');
-  const companyUrl = `${baseUrl}/view/company?id=${company.company_id}`;
+  const companyUrl = `${baseUrl}/view/company/${company.company_id}`;
 
   return (
     <Card className={cn("p-6 shadow-sm", className)}>

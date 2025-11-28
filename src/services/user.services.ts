@@ -4,7 +4,7 @@ import { RowDataPacket } from "mysql2";
 interface OJTProfileSidebar {
   user_id: number;
   name: string;
-  student_id: string | null;
+  student_number: string | null;
   course: string;
   location: string;
   ojt_image_path: string | null;
@@ -24,7 +24,7 @@ export const UserService = {
         `SELECT 
           u.user_id,
           CONCAT(u.first_name, ' ', u.last_name) as name,
-          op.student_id,
+          op.student_number,
           op.course,
           CONCAT(u.barangay, ', ', u.city_municipality) as location,
           op.ojt_image_path

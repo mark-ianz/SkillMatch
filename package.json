@@ -2,9 +2,9 @@
   "name": "skillmatch",
   "version": "0.1.0",
   "private": true,
-  "scripts": {
-    "dev": "next dev",
-    "dev:turbo": "next dev --turbo",
+ "scripts": {
+    "dev": "SET NODE_OPTIONS=--max-old-space-size=8192 && next dev",
+    "dev:turbo": "SET NODE_OPTIONS=--max-old-space-size=8192 && next dev --turbo",
     "build": "next build",
     "start": "next start",
     "lint": "eslint"

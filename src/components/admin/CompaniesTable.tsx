@@ -13,7 +13,7 @@ import {
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { CompanyWithStatus, COMPANY_ACCOUNT_STATUSES } from "@/types/admin.types";
-import { Eye } from "lucide-react";
+import { Ellipsis, Eye } from "lucide-react";
 import { useState } from "react";
 import CompanyDetailsDialog from "./CompanyDetailsDialog";
 import {
@@ -159,8 +159,7 @@ export default function CompaniesTable() {
                       size="sm"
                       onClick={() => setSelectedCompany(company)}
                     >
-                      <Eye className="h-4 w-4 mr-2" />
-                      View
+                      <Ellipsis className="h-4 w-4" />
                     </Button>
                   </TableCell>
                 </TableRow>

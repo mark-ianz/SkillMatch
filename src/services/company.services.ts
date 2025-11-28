@@ -1,6 +1,8 @@
 import { db } from "@/lib/db";
+import { ServiceError } from "@/lib/errors";
 import { getCourseByAbbr } from "@/lib/utils";
 import { CompanyProfile } from "@/types/company.types";
+import { JobPost } from "@/types/job_post.types";
 import { RowDataPacket } from "mysql2";
 
 interface CompanyProfileSidebar {
@@ -138,6 +140,89 @@ export const CompanyServices = {
       throw error;
     }
   },
-};
+
+  getCompanyWithJobs: async (company_id: string): Promise<{ company_profile: CompanyProfile, job_posted: JobPost[] }> => {
+    try {
+      // Fetch company profile (excluding private document paths)
+      const [companyRows] = await db.query<RowDataPacket[]>(
+        `SELECT 
+        company_id,
+        company_name,
+        company_email,
+        telephone_number,
+        phone_number,
+        city_municipality,
+        barangay,
+        date_founded,
+        description,
+        industry,
+        company_image,
+        website,
+        facebook_page,
+        instagram_page,
+        twitter_page,
+        created_at
+      FROM company
+      WHERE company_id = ?`,
+        [company_id]
+      );
+
+      if (companyRows.length === 0) {
+        throw new ServiceError("Company not found", 404);
+      }
+
+      const company_profile = {
+        ...companyRows[0],
+        industry: companyRows[0].industry
+          ? companyRows[0].industry.split(",").map((ind: string) => ind.trim())
+          : null,
+      } as CompanyProfile;
+
+      // Fetch all job posts for this company
+      const [jobRows] = await db.query<RowDataPacket[]>(
+        `SELECT 
+        jp.*,
+        c.company_name,
+        c.company_image,
+        c.industry,
+        c.description,
+        c.barangay,
+        c.city_municipality
+      FROM job_posts jp
+      JOIN company c ON jp.company_id = c.company_id
+      WHERE jp.company_id = ?
+      ORDER BY jp.created_at DESC`,
+        [company_id]
+      );
+
+      const job_posted = jobRows.map((row) => ({
+        ...row,
+        courses_required: row.courses_required
+          ? row.courses_required.split(",").map((course: string) => course.trim())
+          : [],
+        job_categories: row.job_categories
+          ? row.job_categories.split(",").map((cat: string) => cat.trim())
+          : [],
+        job_responsibilities: row.job_responsibilities
+          ? row.job_responsibilities.split(",").map((resp: string) => resp.trim())
+          : [],
+        soft_skills: row.soft_skills
+          ? row.soft_skills.split(",").map((skill: string) => skill.trim())
+          : [],
+        technical_skills: row.technical_skills
+          ? row.technical_skills.split(",").map((skill: string) => skill.trim())
+          : [],
+        industry: row.industry
+          ? row.industry.split(",").map((ind: string) => ind.trim())
+          : null,
+      })) as JobPost[];
+
+      return { company_profile, job_posted }
+    } catch (error) {
+      console.error("Error fetching company profile with jobs:", error);
+      throw new ServiceError("Failed to fetch company profile with jobs", 500);
+    }
+  }
+}
 
 export default CompanyServices;

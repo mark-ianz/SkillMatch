@@ -91,7 +91,7 @@ export default function CompanyJobPostsPage() {
             Manage your job posts and track applications
           </p>
         </div>
-        <Link href="/company/create-post">
+        <Link href="/company/post-job">
           <Button size="lg">
             <Plus className="mr-2 h-5 w-5" />
             Create New Job Post
@@ -179,7 +179,7 @@ export default function CompanyJobPostsPage() {
                 <p className="text-muted-foreground mb-6">
                   Create your first job posting to start receiving applications
                 </p>
-                <Link href="/company/create-post">
+                <Link href="/company/post-job">
                   <Button>
                     <Plus className="mr-2 h-4 w-4" />
                     Create Job Post

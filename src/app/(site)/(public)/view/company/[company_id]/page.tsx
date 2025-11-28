@@ -1,30 +1,17 @@
-"use client";
-
 import { Badge } from "@/components/ui/badge";
 import { Card } from "@/components/ui/card";
-import { useSearchParams } from "next/navigation";
-import { useGetCompanyWithJobs } from "@/hooks/query/useCompanies";
-import LoadingGeneric from "@/components/global/LoadingGeneric";
 import MainLayout from "@/components/layout/MainLayout";
 import { JobPostPreview } from "@/components/page_specific/explore/job-posts/JobPostPreview";
 import Link from "next/link";
 import { CompanyProfile } from "@/components/page_specific/explore/company/CompanyProfile";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import CompanyServices from "@/services/company.services";
 
-export default function CompanyProfilePage() {
-  const company_id = useSearchParams().get("id");
+export default async function CompanyProfilePage({params} : { params: Promise<{ company_id: string }> }) {
+  const { company_id } = await params;
+  const { company_profile, job_posted } = await CompanyServices.getCompanyWithJobs(company_id);
 
-  const { data, isLoading, error } = useGetCompanyWithJobs(company_id || "");
-
-  if (isLoading) {
-    return (
-      <MainLayout>
-        <LoadingGeneric />
-      </MainLayout>
-    );
-  }
-
-  if (error || !data) {
+  if (!company_profile) {
     return (
       <MainLayout>
         <div className="flex items-center justify-center">
@@ -36,14 +23,12 @@ export default function CompanyProfilePage() {
     );
   }
 
-  const company = data.company_profile;
-  const jobPosts = data.job_posted;
 
   return (
     <MainLayout className="items-center">
       <div className="gap-10 flex flex-col items-centerw-full">
         {/* Company Profile Card */}
-        <CompanyProfile className="p-10 w-5xl" company={company} />
+        <CompanyProfile className="p-10 w-5xl" company={company_profile} />
 
         {/* Job Posts Section */}
         <div className="space-y-6 grow">
@@ -55,14 +40,14 @@ export default function CompanyProfilePage() {
               variant="secondary"
               className="text-sm font-medium px-4 py-2"
             >
-              {jobPosts.length} Opening{jobPosts.length !== 1 ? "s" : ""}
+              {job_posted.length} Opening{job_posted.length !== 1 ? "s" : ""}
             </Badge>
           </div>
 
-          {jobPosts.length > 0 ? (
+          {job_posted.length > 0 ? (
             <ScrollArea className="h-96">
               <div className="grid grid-cols-1 gap-4 pr-4">
-                {jobPosts.map((job) => (
+                {job_posted.map((job) => (
                   <Link
                     key={job.job_post_id}
                     href={"/view/job-post?id=" + job.job_post_id}

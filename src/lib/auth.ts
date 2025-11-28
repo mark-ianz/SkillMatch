@@ -16,22 +16,31 @@ export const authConfig: NextAuthOptions = {
       id: "google-ojt-signin",
       clientId: process.env.GOOGLE_CLIENT_ID!,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
+      issuer: "https://accounts.google.com",
+      wellKnown: "https://accounts.google.com/.well-known/openid-configuration",
     }),
     GoogleProvider({
       id: "google-ojt-signup",
       clientId: process.env.GOOGLE_CLIENT_ID!,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
+      issuer: "https://accounts.google.com",
+      wellKnown: "https://accounts.google.com/.well-known/openid-configuration",
     }),
     GoogleProvider({
       id: "google-company-signin",
       clientId: process.env.GOOGLE_CLIENT_ID!,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
+      issuer: "https://accounts.google.com",
+      wellKnown: "https://accounts.google.com/.well-known/openid-configuration",
     }),
     GoogleProvider({
       id: "google-company-signup",
       clientId: process.env.GOOGLE_CLIENT_ID!,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
+      issuer: "https://accounts.google.com",
+      wellKnown: "https://accounts.google.com/.well-known/openid-configuration",
     }),
+
   ],
   callbacks: {
     async signIn({ user, account }) {

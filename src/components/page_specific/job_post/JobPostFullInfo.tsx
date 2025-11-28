@@ -53,7 +53,7 @@ export function JobPostFullInfo({
   const baseUrl =
     process.env.NEXT_PUBLIC_FRONTEND_BASE_URL ||
     (typeof window !== "undefined" ? window.location.origin : "");
-  const jobPostUrl = `${baseUrl}/view/job-post?id=${job?.job_post_id}`;
+  const jobPostUrl = `${baseUrl}/view/job-post/${job?.job_post_id}`;
 
   return (
     <>

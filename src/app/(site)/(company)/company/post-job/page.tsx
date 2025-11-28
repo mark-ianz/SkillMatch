@@ -14,9 +14,7 @@ export default function PostJobPage() {
             Create a new job posting for your company
           </p>
         </div>
-        <SessionProvider>
-          <JobPostingForm />
-        </SessionProvider>
+        <JobPostingForm />
       </div>
     </MainLayout>
   );

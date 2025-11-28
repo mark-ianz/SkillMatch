@@ -13,7 +13,7 @@ import {
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { JOB_POST_STATUSES } from "@/types/admin.types";
-import { Eye } from "lucide-react";
+import { Ellipsis, Eye } from "lucide-react";
 import { useState } from "react";
 import JobPostDetailsDialog from "./JobPostDetailsDialog";
 import {
@@ -144,8 +144,7 @@ export default function JobPostsTable() {
                       size="sm"
                       onClick={() => setSelectedJobPost(job)}
                     >
-                      <Eye className="h-4 w-4 mr-2" />
-                      View
+                      <Ellipsis className="h-4 w-4" />
                     </Button>
                   </TableCell>
                 </TableRow>

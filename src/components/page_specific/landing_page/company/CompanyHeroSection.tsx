@@ -10,7 +10,7 @@ export default function CompanyHeroSection() {
     <section className="py-20 lg:py-32 relative overflow-hidden">
       <div className="absolute inset-0 bg-gradient-to-br from-skillmatch-primary-blue/15 to-background" />
       <div className="container mx-auto px-4 lg:px-8 relative">
-        <div className="grid lg:grid-cols-2 gap-12 items-center">
+        <div className="grid lg:grid-cols-2 gap-12 items-center px-20">
           <div>
             <Badge
               variant="outline"

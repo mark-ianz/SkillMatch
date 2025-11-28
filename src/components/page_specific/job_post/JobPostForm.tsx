@@ -195,7 +195,7 @@ export default function JobPostingForm() {
 
       {/* Confirmation Dialog - Shows only on successful validation */}
       <Dialog open={showConfirmDialog} onOpenChange={setShowConfirmDialog}>
-        <DialogContent>
+        <DialogContent className="max-w-3xl">
           <DialogHeader>
             <DialogTitle>Confirm Job Posting</DialogTitle>
             <DialogDescription>

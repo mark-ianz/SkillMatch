@@ -53,8 +53,8 @@ export default function OnboardingLayout({
   }
 
   return (
-    <MainLayout className="items-center">
-      <div className="flex w-full border rounded-md shadow-md min-h-[600px]">
+    <MainLayout className="items-center" wrapperClassName="w-full">
+      <div className="flex container border rounded-md shadow-md min-h-[600px] max-w-7xl">
         <div
           className={cn(
             "w-1/3 shrink-0 rounded-l-md",
