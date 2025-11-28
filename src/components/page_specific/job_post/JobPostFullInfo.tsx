@@ -91,19 +91,22 @@ export function JobPostFullInfo({
 
             {/* Action buttons */}
             <div className="flex gap-2 md:self-start">
-              <Button
-                variant="ghost"
-                size="icon"
-                onClick={handleSave}
-                disabled={
-                  saveJobMutation.isPending || unsaveJobMutation.isPending
-                }
-                className="rounded-lg h-10 w-10"
-              >
-                <Bookmark
-                  className={cn("w-5 h-5", isSaved && "fill-current")}
-                />
-              </Button>
+              {/* Bookmark button - Only visible for applicants (role_id 3) */}
+              {session?.user?.role_id === 3 && (
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  onClick={handleSave}
+                  disabled={
+                    saveJobMutation.isPending || unsaveJobMutation.isPending
+                  }
+                  className="rounded-lg h-10 w-10"
+                >
+                  <Bookmark
+                    className={cn("w-5 h-5", isSaved && "fill-current")}
+                  />
+                </Button>
+              )}
               <CopyLinkButton url={jobPostUrl} />
             </div>
           </div>

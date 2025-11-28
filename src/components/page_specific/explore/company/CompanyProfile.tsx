@@ -84,15 +84,18 @@ export function CompanyProfile({
                 </Link>
               </h1>
               <div className="flex gap-2 flex-shrink-0">
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  onClick={handleSave}
-                  disabled={saveCompanyMutation.isPending || unsaveCompanyMutation.isPending}
-                  className="h-9 w-9"
-                >
-                  <Bookmark className={cn("w-4 h-4", isSaved && "fill-current")} />
-                </Button>
+                {/* Bookmark button - Only visible for applicants (role_id 3) */}
+                {session?.user?.role_id === 3 && (
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    onClick={handleSave}
+                    disabled={saveCompanyMutation.isPending || unsaveCompanyMutation.isPending}
+                    className="h-9 w-9"
+                  >
+                    <Bookmark className={cn("w-4 h-4", isSaved && "fill-current")} />
+                  </Button>
+                )}
                 <CopyLinkButton url={companyUrl} size="icon" className="h-9 w-9" />
               </div>
             </div>

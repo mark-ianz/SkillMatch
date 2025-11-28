@@ -96,16 +96,19 @@ export function CompanyPost({ post }: CompanyPostProps) {
             />
 
             <div>
-              <Button
-                variant="ghost"
-                size="sm"
-                onClick={handleSavePost}
-                disabled={savePostMutation.isPending || unsavePostMutation.isPending}
-                className="gap-2 h-8 text-skillmatch-muted-dark hover:text-foreground"
-              >
-                <Bookmark className={cn("w-4 h-4", isSaved && "fill-current")} />
-                <span className="text-xs">{isSaved ? "Saved" : "Save"}</span>
-              </Button>
+              {/* Save button - Only visible for applicants (role_id 3) */}
+              {session?.user?.role_id === 3 && (
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={handleSavePost}
+                  disabled={savePostMutation.isPending || unsavePostMutation.isPending}
+                  className="gap-2 h-8 text-skillmatch-muted-dark hover:text-foreground"
+                >
+                  <Bookmark className={cn("w-4 h-4", isSaved && "fill-current")} />
+                  <span className="text-xs">{isSaved ? "Saved" : "Save"}</span>
+                </Button>
+              )}
 
               <CopyLinkButton
                 url={postUrl}
