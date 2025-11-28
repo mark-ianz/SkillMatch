@@ -8,10 +8,12 @@ import GoogleProvider from "next-auth/providers/google";
 import { handleCompanySignIn } from "@/services/auth/auth.company.service";
 import { handleOJTSignIn } from "@/services/auth/auth.ojt.service";
 import { handleSignup } from "@/services/auth/auth.shared.service";
+import { adminCredentialsProvider } from "@/services/auth/auth.admin.service";
 // Sign-in logic moved to service: @/services/auth/onboardingSignIn.service
 
 export const authConfig: NextAuthOptions = {
   providers: [
+    adminCredentialsProvider,
     GoogleProvider({
       id: "google-ojt-signin",
       clientId: process.env.GOOGLE_CLIENT_ID!,
@@ -45,6 +47,12 @@ export const authConfig: NextAuthOptions = {
   callbacks: {
     async signIn({ user, account }) {
       try {
+        /* Admin Credentials Authentication */
+        if (account?.provider === "admin-credentials") {
+          // Admin login via credentials - already validated in authorize
+          return true;
+        }
+
         /* Company Authentication Flows */
         if (account?.provider === "google-company-signup") {
           // Explicit signup provider — handle as signup
@@ -94,6 +102,8 @@ export const authConfig: NextAuthOptions = {
           token.company_id = (user as ExtendedUser).company_id;
           token.role_id = (user as ExtendedUser).role_id;
           token.status_id = (user as ExtendedUser).status_id;
+          token.isAdmin = (user as any).isAdmin || false;
+          token.username = (user as any).username;
         }
         return token;
       } catch (error) {
@@ -118,6 +128,8 @@ export const authConfig: NextAuthOptions = {
         (session as ExtendedSession).user.status_id = (
           token as ExtendedToken
         ).status_id;
+        (session as ExtendedSession).user.isAdmin = (token as any).isAdmin || false;
+        (session as ExtendedSession).user.username = (token as any).username;
       }
       return session;
     },

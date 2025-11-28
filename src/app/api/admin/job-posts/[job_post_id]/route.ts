@@ -1,6 +1,5 @@
-import { authConfig } from "@/lib/auth";
 import { db } from "@/lib/db";
-import { getServerSession } from "next-auth";
+import { isAdmin } from "@/lib/admin-auth";
 import { NextRequest, NextResponse } from "next/server";
 
 // Update job post status
@@ -9,10 +8,8 @@ export async function PATCH(
   { params }: { params: { job_post_id: string } }
 ) {
   try {
-    const session = await getServerSession(authConfig);
-
     // Check if user is admin
-    if (!session || session.user.role_id !== 3) {
+    if (!(await isAdmin())) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
@@ -52,10 +49,8 @@ export async function GET(
   { params }: { params: { job_post_id: string } }
 ) {
   try {
-    const session = await getServerSession(authConfig);
-
-    // Check if user is admin (role_id 2)
-    if (!session || session.user.role_id !== 2) {
+    // Check if user is admin
+    if (!(await isAdmin())) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 

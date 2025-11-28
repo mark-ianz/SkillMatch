@@ -1,15 +1,12 @@
-import { authConfig } from "@/lib/auth";
 import { db } from "@/lib/db";
-import { getServerSession } from "next-auth";
+import { isAdmin } from "@/lib/admin-auth";
 import { NextRequest, NextResponse } from "next/server";
 
-// Get all job posts with their status
+// Get all job posts with company info and status
 export async function GET(request: NextRequest) {
   try {
-    const session = await getServerSession(authConfig);
-
-    // Check if user is admin (role_id 2)
-    if (!session || session.user.role_id !== 2) {
+    // Check if user is admin
+    if (!(await isAdmin())) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 

@@ -10,10 +10,10 @@ export default async function AdminLayout({
 }) {
   const session = await getServerSession(authConfig);
 
-  // Check if user is logged in and is admin (role_id = 3)
-  /* if (!session || session.user.role_id !== 2) {
-    redirect("/");
-  } */
+  // Check if user is logged in and is admin (role_id = 2 OR isAdmin flag)
+  if (!session || (session.user.role_id !== 2 && !(session.user as any).isAdmin)) {
+    redirect("/admin-login");
+  }
 
   return (
     <div className="flex min-h-screen bg-background">
