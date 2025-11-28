@@ -5,9 +5,16 @@ export const db = mysql.createPool({
   user: process.env.DB_USER,
   password: process.env.DB_PASSWORD,
   database: process.env.DB_NAME,
-  connectionLimit: 100,
+  connectionLimit: 10, // Reduced from 100 - more efficient for most apps
   waitForConnections: true,
   queueLimit: 0,
   enableKeepAlive: true,
   keepAliveInitialDelay: 0,
+  // Performance optimizations
+  typeCast: true, // Enable type casting for better performance
+  supportBigNumbers: true,
+  bigNumberStrings: false,
+  dateStrings: false,
+  connectTimeout: 10000, // 10 second connection timeout
+  timezone: 'Z', // Use UTC to avoid timezone conversions
 });
