@@ -50,7 +50,7 @@ export default async function CompanyProfilePage({params} : { params: Promise<{ 
                 {job_posted.map((job) => (
                   <Link
                     key={job.job_post_id}
-                    href={"/view/job-post?id=" + job.job_post_id}
+                    href={"/view/job-post/" + job.job_post_id}
                   >
                     <JobPostPreview job={job} />
                   </Link>

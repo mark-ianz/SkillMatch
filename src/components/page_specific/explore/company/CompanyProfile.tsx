@@ -79,7 +79,7 @@ export function CompanyProfile({
           <div className="flex-1 min-w-0">
             <div className="flex items-start justify-between gap-4 mb-4">
               <h1 className="text-2xl font-semibold text-foreground text-balance leading-tight underline">
-                <Link href={"/view/company?id=" + company.company_id}>
+                <Link href={"/view/company/" + company.company_id}>
                   {company?.company_name}
                 </Link>
               </h1>

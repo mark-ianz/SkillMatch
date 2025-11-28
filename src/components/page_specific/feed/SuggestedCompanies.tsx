@@ -38,7 +38,7 @@ export function SuggestedCompanies() {
             {companies.map((company) => (
               <Link
                 key={company.company_id}
-                href={`/view/company?id=${company.company_id}`}
+                href={`/view/company/${company.company_id}`}
               >
                 <CompanyPreview
                   company={company}

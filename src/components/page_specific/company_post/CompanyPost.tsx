@@ -45,7 +45,7 @@ export function CompanyPost({ post }: CompanyPostProps) {
   const baseUrl =
     process.env.NEXT_PUBLIC_FRONTEND_BASE_URL ||
     (typeof window !== "undefined" ? window.location.origin : "");
-  const postUrl = `${baseUrl}/feed/view?id=${post.post_id}`;
+  const postUrl = `${baseUrl}/feed/view/${post.post_id}`;
 
   return (
     <>
@@ -54,7 +54,7 @@ export function CompanyPost({ post }: CompanyPostProps) {
           <div className="flex items-start justify-between">
             <div className="flex-1">
               <Link
-                href={`/view/company?id=${post.company_id}`}
+                href={`/view/company/${post.company_id}`}
                 className="font-semibold text-base text-card-foreground hover:text-primary transition-colors"
               >
                 {post.company_name}
