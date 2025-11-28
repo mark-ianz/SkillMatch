@@ -33,10 +33,14 @@ export default async function HeaderActions({
     );
   }
 
-  if (role === "OJT" || role === "Company") {
+  const isAdmin = (session.user as any).isAdmin || session.user.role_id === 2;
+
+  if (role === "OJT" || role === "Company" || isAdmin) {
     return (
       <div className="flex items-center gap-2">
-        <NotificationPopover notifications={notifications || []} />
+        {!isAdmin && (
+          <NotificationPopover notifications={notifications || []} />
+        )}
         <ProfilePopover userType={role} />
       </div>
     );

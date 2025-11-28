@@ -8,7 +8,14 @@ import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Separator } from "@/components/ui/separator";
 import Link from "next/link";
-import { Briefcase, FileText, Search, Settings, User } from "lucide-react";
+import {
+  Briefcase,
+  FileText,
+  Search,
+  Settings,
+  User,
+  ShieldCheck,
+} from "lucide-react";
 import {
   Tooltip,
   TooltipContent,
@@ -19,22 +26,33 @@ import { getServerSession } from "next-auth";
 import { authConfig } from "@/lib/auth";
 import { UserService } from "@/services/user.services";
 import CompanyServices from "@/services/company.services";
+import { Roles } from "@/types/role.types";
 
 type Props = {
-  userType: "OJT" | "Company";
+  userType?: Roles;
 };
 
-export default async function ProfilePopover({
-  userType,
-}: Props) {
+export default async function ProfilePopover({ userType }: Props) {
   const session = await getServerSession(authConfig);
 
   if (!session) return null;
 
+  const isAdmin = (session.user as any).isAdmin || session.user.role_id === 2;
+  // Show admin button for admin users
+  if (isAdmin) {
+    return (
+      <Link href="/admin/companies">
+        <Button variant="ghost" className="gap-2">
+          <span className="text-sm font-medium">Admin Panel</span>
+        </Button>
+      </Link>
+    );
+  }
+
   const user_id = session.user.user_id;
   const company_id = session.user.company_id;
 
-  console.log({company_id, me: "t"})
+  console.log({ company_id, me: "t" });
   // Fetch dynamic profile data
   let avatarUrl: string | null = null;
   let name: string = "";
@@ -48,7 +66,9 @@ export default async function ProfilePopover({
       email = profile.email;
     }
   } else if (userType === "Company" && company_id) {
-    const profile = await CompanyServices.getCompanyProfileForHeader(company_id);
+    const profile = await CompanyServices.getCompanyProfileForHeader(
+      company_id
+    );
     if (profile) {
       avatarUrl = profile.company_image;
       name = profile.company_name;
@@ -58,8 +78,7 @@ export default async function ProfilePopover({
 
   if (!name || !email) return null;
 
-  console.log(avatarUrl)
-  
+  console.log(avatarUrl);
 
   return (
     <Popover>
