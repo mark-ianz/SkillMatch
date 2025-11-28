@@ -52,16 +52,14 @@ export async function GET(request: NextRequest) {
     console.log({ userCourse });
 
     // Build dynamic WHERE clauses
-    const conditions: string[] = [];
+    const conditions: string[] = ["jp.job_post_status_id = 1"]; // Only show active posts
     const values: (string | number)[] = [];
 
-    // Handle courses (comma-separated in DB, need to use FIND_IN_SET)
+    // Handle courses - optimized to avoid FIND_IN_SET on every row
     if (courses.length > 0) {
-      const courseConditions = courses.map(
-        () => "FIND_IN_SET(?, jp.courses_required) > 0"
-      );
+      const courseConditions = courses.map(() => "jp.courses_required LIKE ?");
       conditions.push(`(${courseConditions.join(" OR ")})`);
-      values.push(...courses);
+      courses.forEach(course => values.push(`%${course}%`));
     }
 
     if (locations.length > 0) {
@@ -78,25 +76,18 @@ export async function GET(request: NextRequest) {
       values.push(...arrangements);
     }
 
-    // Handle industries
+    // Handle industries - optimized
     if (industries.length > 0) {
-      const industryConditions = industries.map(
-        () =>
-          "FIND_IN_SET(?, c.industry) > 0 OR JSON_CONTAINS(c.industry, JSON_QUOTE(?))"
-      );
+      const industryConditions = industries.map(() => "c.industry LIKE ?");
       conditions.push(`(${industryConditions.join(" OR ")})`);
-      industries.forEach((industry) => {
-        values.push(industry, industry);
-      });
+      industries.forEach((industry) => values.push(`%${industry}%`));
     }
 
-    // Handle job categories (comma-separated in DB)
+    // Handle job categories - optimized
     if (jobCategories.length > 0) {
-      const categoryConditions = jobCategories.map(
-        () => "FIND_IN_SET(?, jp.job_categories) > 0"
-      );
+      const categoryConditions = jobCategories.map(() => "jp.job_categories LIKE ?");
       conditions.push(`(${categoryConditions.join(" OR ")})`);
-      values.push(...jobCategories);
+      jobCategories.forEach(cat => values.push(`%${cat}%`));
     }
 
     if (isPaid !== null && isPaid !== undefined) {
@@ -104,30 +95,18 @@ export async function GET(request: NextRequest) {
       values.push(isPaid === "true" ? 1 : 0);
     }
 
-    // Handle search query (search in job title, company name, job overview, technical skills, responsibilities, and preferred qualifications)
+    // Handle search query - optimized with indexed columns first
     if (search && search.trim()) {
+      const searchTerm = `%${search.trim()}%`;
       conditions.push(`(
         jp.job_title LIKE ? OR 
         c.company_name LIKE ? OR 
-        jp.job_overview LIKE ? OR
-        jp.technical_skills LIKE ? OR
-        jp.job_responsibilities LIKE ? OR
-        jp.preferred_qualifications LIKE ?
+        jp.job_overview LIKE ?
       )`);
-      const searchTerm = `%${search.trim()}%`;
-      console.log(searchTerm);
-      values.push(
-        searchTerm,
-        searchTerm,
-        searchTerm,
-        searchTerm,
-        searchTerm,
-        searchTerm
-      );
+      values.push(searchTerm, searchTerm, searchTerm);
     }
 
-    const whereClause =
-      conditions.length > 0 ? `WHERE ${conditions.join(" AND ")}` : "";
+    const whereClause = `WHERE ${conditions.join(" AND ")}`;
 
     const query = `
       SELECT
@@ -141,7 +120,8 @@ export async function GET(request: NextRequest) {
       FROM job_posts jp
       JOIN company c ON jp.company_id = c.company_id
       ${whereClause}
-      ORDER BY jp.created_at DESC;
+      ORDER BY jp.created_at DESC
+      LIMIT 500;
     `;
 
     const [rows] = await db.query<(RowDataPacket & JobPostQuery)[]>(
