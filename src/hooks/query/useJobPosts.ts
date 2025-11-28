@@ -58,7 +58,7 @@ export function useCreateJobPost() {
     mutationFn: async (
       payload: JobPostingFormData & { company_id: string | null }
     ) => {
-      const { data } = await api.post("/company/job-post/create", payload);
+      const { data } = await api.post("/company/job-posts/create", payload);
       return data.job_post;
     },
     onSuccess: (data) => {
