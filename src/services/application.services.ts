@@ -5,10 +5,10 @@ import {
   Application,
   ApplicationWithJobDetails,
   ApplicationWithUserDetails,
-  ApplicationStatusId,
   CompanyApplicationStatusId,
   JobPostWithApplicationStats,
 } from "@/types/application.types";
+import { NotificationServices } from "./notification.services";
 
 export const ApplicationServices = {
   // USER: Apply to a job
@@ -45,6 +45,29 @@ export const ApplicationServices = {
 
       if (rows.length === 0) {
         throw new Error("Failed to retrieve created application");
+      }
+
+      // Get job post details for notification
+      const [jobRows] = await db.query<RowDataPacket[]>(
+        `SELECT jp.job_title, jp.company_id, c.company_name 
+         FROM job_posts jp 
+         JOIN company c ON jp.company_id = c.company_id 
+         WHERE jp.job_post_id = ?`,
+        [job_post_id]
+      );
+
+      if (jobRows.length > 0) {
+        const { job_title, company_id } = jobRows[0];
+        
+        // Create notification for company
+        await NotificationServices.createCompanyNotification(
+          company_id,
+          "application_received",
+          "New Application Received",
+          `A student applied for ${job_title}`,
+          application_id,
+          job_post_id
+        ).catch(err => console.error("Failed to create notification:", err));
       }
 
       return rows[0];
@@ -174,6 +197,34 @@ export const ApplicationServices = {
          WHERE application_id = ? AND user_id = ? AND application_status_id = 10`,
         [new_status, application_id, user_id]
       );
+
+      // Get application details for notification
+      const [appRows] = await db.query<RowDataPacket[]>(
+        `SELECT jp.job_title, jp.job_post_id, jp.company_id, c.company_name, u.first_name, u.last_name 
+         FROM applications a 
+         JOIN job_posts jp ON a.job_post_id = jp.job_post_id 
+         JOIN company c ON jp.company_id = c.company_id 
+         JOIN user u ON a.user_id = u.user_id 
+         WHERE a.application_id = ?`,
+        [application_id]
+      );
+
+      if (appRows.length > 0) {
+        const { job_title, job_post_id, company_id, first_name, last_name } = appRows[0];
+        const studentName = `${first_name} ${last_name}`;
+        const accepted = new_status === 11;
+        
+        await NotificationServices.createCompanyNotification(
+          company_id,
+          "offer_response",
+          accepted ? "Offer Accepted!" : "Offer Declined",
+          accepted 
+            ? `${studentName} has accepted your offer for ${job_title}` 
+            : `${studentName} has declined your offer for ${job_title}`,
+          application_id,
+          job_post_id
+        ).catch(err => console.error("Failed to create notification:", err));
+      }
     } catch (error) {
       console.error("Error responding to offer:", error);
       throw error;
@@ -289,6 +340,40 @@ export const ApplicationServices = {
          WHERE application_id = ?`,
         [company_status_id, company_notes || null, application_id]
       );
+
+      // Get application details for notification
+      const [appRows] = await db.query<RowDataPacket[]>(
+        `SELECT a.user_id, jp.job_title, jp.job_post_id 
+         FROM applications a 
+         JOIN job_posts jp ON a.job_post_id = jp.job_post_id 
+         WHERE a.application_id = ?`,
+        [application_id]
+      );
+
+      if (appRows.length > 0) {
+        const { user_id, job_title, job_post_id } = appRows[0];
+        
+        // Create notification for user based on status change
+        let title = "Application Status Updated";
+        let message = `Your application for ${job_title} has been updated`;
+        
+        if (company_status_id === 13) {
+          title = "You've Been Shortlisted!";
+          message = `Great news! You've been shortlisted for ${job_title}`;
+        } else if (company_status_id === 14) {
+          title = "Application On Hold";
+          message = `Your application for ${job_title} is currently on hold`;
+        }
+        
+        await NotificationServices.createUserNotification(
+          user_id,
+          "application_status_update",
+          title,
+          message,
+          application_id,
+          job_post_id
+        ).catch(err => console.error("Failed to create notification:", err));
+      }
     } catch (error) {
       console.error("Error updating company status:", error);
       throw error;
@@ -325,6 +410,37 @@ export const ApplicationServices = {
           application_id,
         ]
       );
+
+      // Get application details for notification
+      const [appRows] = await db.query<RowDataPacket[]>(
+        `SELECT a.user_id, jp.job_title, jp.job_post_id, c.company_name 
+         FROM applications a 
+         JOIN job_posts jp ON a.job_post_id = jp.job_post_id 
+         JOIN company c ON jp.company_id = c.company_id 
+         WHERE a.application_id = ?`,
+        [application_id]
+      );
+
+      if (appRows.length > 0) {
+        const { user_id, job_title, job_post_id, company_name } = appRows[0];
+        const interviewDateFormatted = new Date(interview_date).toLocaleString('en-US', {
+          month: 'long',
+          day: 'numeric',
+          year: 'numeric',
+          hour: 'numeric',
+          minute: '2-digit',
+          hour12: true
+        });
+        
+        await NotificationServices.createUserNotification(
+          user_id,
+          "interview_scheduled",
+          "Interview Scheduled",
+          `Your interview for ${job_title} at ${company_name} is scheduled for ${interviewDateFormatted}`,
+          application_id,
+          job_post_id
+        ).catch(err => console.error("Failed to create notification:", err));
+      }
     } catch (error) {
       console.error("Error scheduling interview:", error);
       throw error;
@@ -347,6 +463,34 @@ export const ApplicationServices = {
          WHERE application_id = ?`,
         [offer_deadline, application_id]
       );
+
+      // Get application details for notification
+      const [appRows] = await db.query<RowDataPacket[]>(
+        `SELECT a.user_id, jp.job_title, jp.job_post_id, c.company_name 
+         FROM applications a 
+         JOIN job_posts jp ON a.job_post_id = jp.job_post_id 
+         JOIN company c ON jp.company_id = c.company_id 
+         WHERE a.application_id = ?`,
+        [application_id]
+      );
+
+      if (appRows.length > 0) {
+        const { user_id, job_title, job_post_id, company_name } = appRows[0];
+        const deadlineFormatted = new Date(offer_deadline).toLocaleDateString('en-US', {
+          month: 'long',
+          day: 'numeric',
+          year: 'numeric'
+        });
+        
+        await NotificationServices.createUserNotification(
+          user_id,
+          "offer_sent",
+          "Congratulations! You've Been Selected",
+          `${company_name} has selected you for ${job_title}. Please respond by ${deadlineFormatted}`,
+          application_id,
+          job_post_id
+        ).catch(err => console.error("Failed to create notification:", err));
+      }
     } catch (error) {
       console.error("Error sending offer:", error);
       throw error;

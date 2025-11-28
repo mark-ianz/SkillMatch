@@ -1,3 +1,5 @@
+"use client";
+
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
@@ -9,13 +11,53 @@ import { Separator } from "@/components/ui/separator";
 import { Notification } from "@/types/notification.types";
 import { Bell } from "lucide-react";
 import React from "react";
+import { formatDistanceToNow } from "date-fns";
+import { useMarkNotificationAsRead, useMarkAllNotificationsAsRead } from "@/hooks/query/useNotifications";
+import { useRouter } from "next/navigation";
+import { useSession } from "next-auth/react";
 
 export default function NotificationPopover({
   notifications,
 }: {
   notifications: Notification[];
 }) {
-  const unreadCount = notifications.filter((n) => !n.read).length;
+  const router = useRouter();
+  const { data: session } = useSession();
+  const markAsReadMutation = useMarkNotificationAsRead();
+  const markAllAsReadMutation = useMarkAllNotificationsAsRead();
+  
+  const unreadCount = notifications.filter((n) => !n.is_read).length;
+  const isCompany = session?.user?.role_id === 4;
+
+  const handleNotificationClick = async (notification: Notification) => {
+    // Mark as read
+    if (!notification.is_read) {
+      await markAsReadMutation.mutateAsync(notification.notification_id);
+    }
+
+    // Navigate to relevant page
+    if (notification.application_id) {
+      if (notification.type === "application_received" || notification.type === "offer_response") {
+        // Company view - go to job post applications
+        router.push(`/company/job-posts/${notification.job_post_id}`);
+      } else {
+        // User view - go to application tracker
+        router.push(`/ojt/application-tracker/${notification.application_id}`);
+      }
+    }
+  };
+
+  const handleMarkAllAsRead = () => {
+    markAllAsReadMutation.mutate();
+  };
+
+  const formatTime = (dateString: string) => {
+    try {
+      return formatDistanceToNow(new Date(dateString), { addSuffix: true });
+    } catch {
+      return "recently";
+    }
+  };
 
   return (
     <Popover>
@@ -36,9 +78,20 @@ export default function NotificationPopover({
         <div className="flex items-center justify-between p-4 pb-3">
           <h3 className="font-semibold">Notifications</h3>
           {unreadCount > 0 && (
-            <Badge variant="secondary" className="rounded-full">
-              {unreadCount} new
-            </Badge>
+            <div className="flex items-center gap-2">
+              <Badge variant="secondary" className="rounded-full">
+                {unreadCount} new
+              </Badge>
+              <Button
+                variant="ghost"
+                size="sm"
+                className="h-auto p-1 text-xs"
+                onClick={handleMarkAllAsRead}
+                disabled={markAllAsReadMutation.isPending}
+              >
+                Mark all as read
+              </Button>
+            </div>
           )}
         </div>
         <Separator />
@@ -53,15 +106,16 @@ export default function NotificationPopover({
           ) : (
             notifications.map((notification) => (
               <div
-                key={notification.id}
+                key={notification.notification_id}
                 className={`flex gap-3 p-4 hover:bg-muted/50 cursor-pointer transition-colors ${
-                  !notification.read ? "bg-green-50/50" : ""
+                  !notification.is_read ? "bg-green-50/50" : ""
                 }`}
+                onClick={() => handleNotificationClick(notification)}
               >
                 <div className="flex-shrink-0 mt-1">
                   <div
                     className={`h-2 w-2 rounded-full ${
-                      !notification.read ? "bg-green-600" : "bg-transparent"
+                      !notification.is_read ? "bg-green-600" : "bg-transparent"
                     }`}
                   />
                 </div>
@@ -73,7 +127,7 @@ export default function NotificationPopover({
                     {notification.message}
                   </p>
                   <p className="text-xs text-muted-foreground">
-                    {notification.time}
+                    {formatTime(notification.created_at)}
                   </p>
                 </div>
               </div>
@@ -88,6 +142,7 @@ export default function NotificationPopover({
                 variant="ghost"
                 className="w-full justify-center text-sm"
                 size="sm"
+                onClick={() => router.push(isCompany ? "/company/notifications" : "/ojt/notifications")}
               >
                 View all notifications
               </Button>
