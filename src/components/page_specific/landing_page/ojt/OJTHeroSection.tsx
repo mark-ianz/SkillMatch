@@ -32,10 +32,11 @@ export default function OJTHeroSection() {
           <div className="max-w-2xl mx-auto mb-8">
             <div className="flex flex-col sm:flex-row gap-3 p-2 bg-card border rounded-lg shadow-lg">
               <div className="flex items-center flex-1 gap-2 px-3">
-                <Search className="h-5 w-5 text-muted-foreground" />
+                <Search className="h-5 w-5 text-muted-foreground flex-shrink-0" />
                 <Input
                   placeholder="Search by job title or skills..."
                   className="border-0 shadow-none focus-visible:ring-0 px-0"
+                  aria-label="Search jobs"
                 />
               </div>
               <Button className="bg-skillmatch-primary-green text-skillmatch-light hover:bg-skillmatch-primary-green/90">
@@ -45,35 +46,40 @@ export default function OJTHeroSection() {
           </div>
 
           {/* Popular Skills */}
-          <div className="flex flex-wrap justify-center gap-2">
+          <div className="flex flex-wrap justify-center gap-2" role="list" aria-label="Popular job categories">
             <span className="text-sm text-muted-foreground">Popular:</span>
             <Badge
               variant="outline"
               className="cursor-pointer hover:bg-skillmatch-primary-green hover:text-skillmatch-light transition-colors"
+              role="listitem"
             >
               Web Developer
             </Badge>
             <Badge
               variant="outline"
               className="cursor-pointer hover:bg-skillmatch-primary-green hover:text-skillmatch-light transition-colors"
+              role="listitem"
             >
               UI/UX Designer
             </Badge>
             <Badge
               variant="outline"
               className="cursor-pointer hover:bg-skillmatch-primary-green hover:text-skillmatch-light transition-colors"
+              role="listitem"
             >
               Data Analyst
             </Badge>
             <Badge
               variant="outline"
               className="cursor-pointer hover:bg-skillmatch-primary-green hover:text-skillmatch-light transition-colors"
+              role="listitem"
             >
               Marketing
             </Badge>
             <Badge
               variant="outline"
               className="cursor-pointer hover:bg-skillmatch-primary-green hover:text-skillmatch-light transition-colors"
+              role="listitem"
             >
               Software Engineer
             </Badge>
