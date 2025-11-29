@@ -10,7 +10,10 @@ export type OJTOnboardingStoreState = Partial<User> &
     skills: Skill[];
     ojt_id: number | undefined;
     resume_path: string | null;
+    student_number: string | null;
     visibility: "public" | "private";
+    preferred_schedule: string | null;
+    required_hours: number | null;
     created_at: Date | undefined;
 
     // User methods
@@ -39,12 +42,15 @@ export type OJTOnboardingStoreState = Partial<User> &
     clearOJTProfile: () => void;
     setResumePath: (resume_path: string | null) => void;
     clearResume: () => void;
+    setStudentNumber: (student_number: string | null) => void;
     setCollege: (college: string | null) => void;
     setCourse: (course: string) => void;
     setYearLevel: (year_level: "3rd year" | "4th year" | null) => void;
     setExpectedGraduationYear: (
       expected_graduation_year: string | null
     ) => void;
+    setPreferredSchedule: (preferred_schedule: string | null) => void;
+    setRequiredHours: (required_hours: number | null) => void;
   };
 
 const useOJTProfileStore = create<OJTOnboardingStoreState>((set) => ({
@@ -69,12 +75,15 @@ const useOJTProfileStore = create<OJTOnboardingStoreState>((set) => ({
 
   // Academic Details
   ojt_id: undefined,
+  student_number: null,
   college: null,
   course: "",
   year_level: "4th year",
   expected_graduation_year: null,
   resume_path: null,
   visibility: "private",
+  preferred_schedule: null,
+  required_hours: null,
 
   // Skills
   skills: [],
@@ -98,11 +107,14 @@ const useOJTProfileStore = create<OJTOnboardingStoreState>((set) => ({
   setCityMunicipality: (city_municipality) => set({ city_municipality }),
 
   // Academic Details Setters
+  setStudentNumber: (student_number) => set({ student_number }),
   setCollege: (college) => set({ college }),
   setCourse: (course) => set({ course }),
   setYearLevel: (year_level) => set({ year_level }),
   setExpectedGraduationYear: (expected_graduation_year) =>
     set({ expected_graduation_year }),
+  setPreferredSchedule: (preferred_schedule) => set({ preferred_schedule }),
+  setRequiredHours: (required_hours) => set({ required_hours }),
 
   // Skills Methods
   addSkill: (skill) => set((state) => ({ skills: [...state.skills, skill] })),
@@ -159,12 +171,15 @@ const useOJTProfileStore = create<OJTOnboardingStoreState>((set) => ({
       city_municipality: "",
       email: undefined,
       ojt_id: undefined,
+      student_number: null,
       college: null,
       course: "",
       year_level: "4th year",
       expected_graduation_year: null,
       resume_path: null,
       visibility: "private",
+      preferred_schedule: null,
+      required_hours: null,
       skills: [],
     }),
 }));
