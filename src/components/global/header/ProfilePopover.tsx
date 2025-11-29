@@ -28,15 +28,17 @@ type Props = {
 
 export default function ProfilePopover({ userType }: Props) {
   const { data: session } = useSession();
-  
+
+  console.log(session);
   // Determine profile type based on userType
-  const profileType = userType === "OJT" ? "ojt" : userType === "Company" ? "company" : null;
+  const profileType =
+    userType === "OJT" ? "ojt" : userType === "Company" ? "company" : null;
   const { data: profile, isLoading } = useHeaderProfile(profileType);
 
   if (!session) return null;
 
   const isAdmin = (session.user as any).isAdmin || session.user.role_id === 2;
-  
+
   // Show admin button for admin users
   if (isAdmin) {
     return (
