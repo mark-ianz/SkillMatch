@@ -1,11 +1,18 @@
 import Image from "next/image";
 import React from "react";
-import { cn } from "@/lib/utils";;
+import { cn } from "@/lib/utils";
+import logo from "@/images/logo/SkillMatch.png";
 
 export default function LogoOnly({ className }: { className?: string }) {
   return (
     <div className={cn("relative h-10 w-10 flex-shrink-0", className)}>
-      <Image src="/logo/SkillMatch.png" alt="SkillMatch Logo Only" fill className="object-contain" />
+      <Image
+        fill
+        src={logo}
+        sizes="100px"
+        alt="SkillMatch Logo Only"
+        className="object-contain"
+      />
     </div>
   );
 }
