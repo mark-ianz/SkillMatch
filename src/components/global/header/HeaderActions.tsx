@@ -1,19 +1,19 @@
+"use client";
+
 import React from "react";
 import { Button } from "../../ui/button";
 import Link from "next/link";
-import { getServerSession } from "next-auth";
-import { authConfig } from "@/lib/auth";
 import { getRoleName } from "@/lib/utils";
-import { Notification } from "@/types/notification.types";
 import NotificationPopover from "./NotificationPopover";
 import ProfilePopover from "./ProfilePopover";
-import { NotificationServices } from "@/services/notification.services";
+import useSessionStore from "@/store/SessionStore";
 
-export default async function HeaderActions() {
-  const session = await getServerSession(authConfig);
-  const role = getRoleName(session?.user.role_id);
+export default function HeaderActions() {
+  const role_id = useSessionStore((state) => state.role_id);
+  const isLoading = useSessionStore((state) => state.loading);
+  const role = getRoleName(role_id);
 
-  if (!session) {
+  if (isLoading && !role_id) {
     return (
       <div className="flex gap-2">
         <Button asChild variant="outline" size="sm">
@@ -30,34 +30,12 @@ export default async function HeaderActions() {
     );
   }
 
-  const isAdmin = (session.user as any).isAdmin || session.user.role_id === 2;
-
-  // Fetch notifications for user/company
-  let notifications: Notification[] = [];
-  try {
-    if (session.user.role_id === 4 && session.user.company_id) {
-      // Company
-      notifications = await NotificationServices.getCompanyNotifications(
-        session.user.company_id as string,
-        20
-      );
-    } else if (session.user.role_id === 3 && session.user.user_id) {
-      // OJT/Student
-      notifications = await NotificationServices.getUserNotifications(
-        session.user.user_id,
-        20
-      );
-    }
-  } catch (error) {
-    console.error("Failed to fetch notifications:", error);
-  }
+  const isAdmin = role_id === 2;
 
   if (role === "OJT" || role === "Company" || isAdmin) {
     return (
       <div className="flex items-center gap-2">
-        {!isAdmin && (
-          <NotificationPopover notifications={notifications} />
-        )}
+        {!isAdmin && <NotificationPopover />}
         <ProfilePopover userType={role} />
       </div>
     );
