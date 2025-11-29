@@ -2,9 +2,8 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono, Sansation } from "next/font/google";
 import "./globals.css";
 import { Toaster } from "@/components/ui/sonner";
-import { getServerSession } from "next-auth";
-import { authConfig } from "@/lib/auth";
-import AppProviders from "@/components/providers/AppProviders";
+import QueryClientProviderWrapper from "@/components/providers/QueryClientProviderWrapper";
+import SessionProviderWrapper from "@/components/providers/SessionProviderWrapper";
 
 const geistSans = Geist({
   variable: "--font-geist",
@@ -59,7 +58,8 @@ export const metadata: Metadata = {
   twitter: {
     card: "summary_large_image",
     title: "SkillMatch - QCU Student Job Platform",
-    description: "Find your perfect internship or OJT opportunity at QCU partner companies.",
+    description:
+      "Find your perfect internship or OJT opportunity at QCU partner companies.",
   },
   viewport: {
     width: "device-width",
@@ -72,22 +72,19 @@ export const metadata: Metadata = {
   },
 };
 
-export default async function RootLayout({
+export default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const currentPath
-  const shared_protected_routes = ["/notifications", "/settings"];
-  const ojt_protected_routes = ["/application-tracker"];
-  const session = await getServerSession(authConfig);
-
   return (
     <html lang="en">
       <body
         className={`${geistSans.variable} ${geistMono.variable} ${sansation.variable} antialiased overflow-y-scroll`}
       >
-        <AppProviders session={session}>{children}</AppProviders>
+        <SessionProviderWrapper>
+          <QueryClientProviderWrapper>{children}</QueryClientProviderWrapper>
+        </SessionProviderWrapper>
         <Toaster />
       </body>
     </html>
