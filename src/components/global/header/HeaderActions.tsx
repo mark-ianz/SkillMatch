@@ -6,14 +6,14 @@ import Link from "next/link";
 import { getRoleName } from "@/lib/utils";
 import NotificationPopover from "./NotificationPopover";
 import ProfilePopover from "./ProfilePopover";
-import useSessionStore from "@/store/SessionStore";
+import { useSession } from "next-auth/react";
 
 export default function HeaderActions() {
-  const role_id = useSessionStore((state) => state.role_id);
-  const isLoading = useSessionStore((state) => state.loading);
+  const { data: session } = useSession();
+  const role_id = session?.user?.role_id;
   const role = getRoleName(role_id);
 
-  if (isLoading && !role_id) {
+  if (!session) {
     return (
       <div className="flex gap-2">
         <Button asChild variant="outline" size="sm">
@@ -30,7 +30,7 @@ export default function HeaderActions() {
     );
   }
 
-  const isAdmin = role_id === 2;
+  const isAdmin = session?.user?.isAdmin;
 
   if (role === "OJT" || role === "Company" || isAdmin) {
     return (
