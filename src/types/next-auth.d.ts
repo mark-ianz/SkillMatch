@@ -10,6 +10,7 @@ declare module "next-auth" {
       role_id?: number;
       company_id?: string;
       status_id?: number;
+      isAdmin?: boolean;
     };
   }
 
@@ -21,5 +22,6 @@ declare module "next-auth" {
     role_id?: number;
     company_id?: string;
     status_id?: number;
+    isAdmin?: boolean;
   }
 }
