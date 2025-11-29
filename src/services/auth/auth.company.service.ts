@@ -75,9 +75,27 @@ export async function handleCompanySignIn(
         return "/signup?error=AccountPending";
       }
 
-      // Any other status treat as Pending (block sign-in)
+      // If status is pending (2) - account is awaiting admin approval
+      if (statusId === 2) {
+        await connection.rollback();
+        return "/signin?status=pending";
+      }
+
+      // If status is rejected (3) - account was rejected by admin
+      if (statusId === 3) {
+        await connection.rollback();
+        return "/signin?status=rejected";
+      }
+
+      // If status is disabled (4) - account was disabled
+      if (statusId === 4) {
+        await connection.rollback();
+        return "/signin?status=disabled";
+      }
+
+      // Any other status treat as invalid (block sign-in)
       await connection.rollback();
-      return "/signup?error=AccountInvalidStatus";
+      return "/signin?status=invalid";
     }
 
     // No account and no onboarding -> DoesNotExist
