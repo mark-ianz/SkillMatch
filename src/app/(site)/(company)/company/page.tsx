@@ -4,6 +4,18 @@ import CompanyFeatures from "@/components/page_specific/landing_page/company/Com
 import CompanyHowItWorks from "@/components/page_specific/landing_page/company/CompanyHowItWorks";
 import CompanyCTA from "@/components/page_specific/landing_page/company/CompanyCTA";
 import { Card } from "@/components/ui/card";
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Hire QCU Talent",
+  description:
+    "Access 3,000+ skilled students from Quezon City University. Post opportunities, find perfect matches, and hire tomorrow's top talent today.",
+  openGraph: {
+    title: "Hire Tomorrow's Top Talent - SkillMatch for Companies",
+    description:
+      "Partner with QCU to access pre-vetted student talent. Reduce time-to-hire with our streamlined recruitment platform.",
+  },
+};
 
 export default function CompanyLandingPage() {
   return (
@@ -45,7 +57,7 @@ export default function CompanyLandingPage() {
               <div className="flex items-center gap-3">
                 <div className="w-10 h-10 rounded-full bg-skillmatch-primary-blue/10 flex items-center justify-center">
                   <span className="font-bold text-skillmatch-primary-blue">
-                    AB
+                    AR
                   </span>
                 </div>
                 <div>
