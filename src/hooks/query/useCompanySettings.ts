@@ -107,6 +107,9 @@ export function useUpdateContactInfo() {
   });
 }
 
+// Alias for consistency with component naming
+export const useUpdateCompanyContact = useUpdateContactInfo;
+
 type UpdateLocationPayload = {
   city_municipality: string;
   barangay: string;

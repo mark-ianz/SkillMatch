@@ -4,6 +4,7 @@ import { useEffect } from "react";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useCompanySettings } from "@/hooks/query/useCompanySettings";
 import CompanyProfileTab from "@/components/page_specific/company-settings/CompanyProfileTab";
+import CompanyContactTab from "@/components/page_specific/company-settings/CompanyContactTab";
 import CompanySettingsSkeleton from "@/components/page_specific/company-settings/CompanySettingsSkeleton";
 import useCompanySettingsStore from "@/store/CompanySettingsStore";
 
@@ -61,6 +62,7 @@ export default function CompanySettingsPage() {
         </TabsList>
 
         <CompanyProfileTab />
+        <CompanyContactTab />
         {/* Other tabs will be added later */}
       </Tabs>
     </div>
