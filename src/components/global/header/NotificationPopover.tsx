@@ -12,17 +12,14 @@ import { Notification } from "@/types/notification.types";
 import { Bell } from "lucide-react";
 import React from "react";
 import { formatDistanceToNow } from "date-fns";
-import { useMarkNotificationAsRead, useMarkAllNotificationsAsRead } from "@/hooks/query/useNotifications";
+import { useNotifications, useMarkNotificationAsRead, useMarkAllNotificationsAsRead } from "@/hooks/query/useNotifications";
 import { useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
 
-export default function NotificationPopover({
-  notifications,
-}: {
-  notifications: Notification[];
-}) {
+export default function NotificationPopover() {
   const router = useRouter();
   const { data: session } = useSession();
+  const { data: notifications = [] } = useNotifications(20);
   const markAsReadMutation = useMarkNotificationAsRead();
   const markAllAsReadMutation = useMarkAllNotificationsAsRead();
   
