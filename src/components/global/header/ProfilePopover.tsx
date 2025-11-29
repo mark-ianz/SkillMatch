@@ -1,3 +1,5 @@
+"use client";
+
 import React from "react";
 import {
   Popover,
@@ -14,24 +16,27 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import LogoutButton from "@/components/common/button/LogoutButton";
-import { getServerSession } from "next-auth";
-import { authConfig } from "@/lib/auth";
-import { UserService } from "@/services/user.services";
-import CompanyServices from "@/services/company.services";
 import { Roles } from "@/types/role.types";
 import HeaderOJTPopoverNavigation from "./HeaderOJTPopoverNavigation";
 import HeaderCompanyPopoverNavigation from "./HeaderCompanyPopoverNavigation";
+import { useSession } from "next-auth/react";
+import { useHeaderProfile } from "@/hooks/query/useProfile";
 
 type Props = {
   userType?: Roles;
 };
 
-export default async function ProfilePopover({ userType }: Props) {
-  const session = await getServerSession(authConfig);
+export default function ProfilePopover({ userType }: Props) {
+  const { data: session } = useSession();
+  
+  // Determine profile type based on userType
+  const profileType = userType === "OJT" ? "ojt" : userType === "Company" ? "company" : null;
+  const { data: profile, isLoading } = useHeaderProfile(profileType);
 
   if (!session) return null;
 
   const isAdmin = (session.user as any).isAdmin || session.user.role_id === 2;
+  
   // Show admin button for admin users
   if (isAdmin) {
     return (
@@ -43,36 +48,22 @@ export default async function ProfilePopover({ userType }: Props) {
     );
   }
 
-  const user_id = session.user.user_id;
-  const company_id = session.user.company_id;
-
-  console.log({ company_id, me: "t" });
-  // Fetch dynamic profile data
-  let avatarUrl: string | null = null;
-  let name: string = "";
-  let email: string = "";
-
-  if (userType === "OJT" && user_id) {
-    const profile = await UserService.getOJTProfileForHeader(user_id);
-    if (profile) {
-      avatarUrl = profile.ojt_image_path;
-      name = `${profile.first_name} ${profile.last_name}`;
-      email = profile.email;
-    }
-  } else if (userType === "Company" && company_id) {
-    const profile = await CompanyServices.getCompanyProfileForHeader(
-      company_id
+  // Show loading state
+  if (isLoading) {
+    return (
+      <Button variant="ghost" className="relative h-10 w-10 rounded-full">
+        <Avatar className="h-9 w-9 border border-skillmatch-primary-green">
+          <AvatarFallback className="bg-gradient-to-br from-skillmatch-primary-green to-emerald-500 text-white">
+            ...
+          </AvatarFallback>
+        </Avatar>
+      </Button>
     );
-    if (profile) {
-      avatarUrl = profile.company_image;
-      name = profile.company_name;
-      email = profile.email;
-    }
   }
 
-  if (!name || !email) return null;
+  if (!profile) return null;
 
-  console.log(avatarUrl);
+  const { avatarUrl, name, email } = profile;
 
   return (
     <Popover>
