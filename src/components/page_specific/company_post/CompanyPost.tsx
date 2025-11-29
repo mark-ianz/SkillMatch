@@ -83,8 +83,10 @@ export function CompanyPost({ post }: CompanyPostProps) {
                 src={post.cover_image || placeholder_image}
                 alt={post.title}
                 fill
+                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 800px"
+                priority
+                fetchPriority="high"
                 className="rounded-lg object-contain"
-                priority={false}
               />
             </div>
           )}
