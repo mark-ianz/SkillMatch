@@ -64,7 +64,7 @@ export default function OJTSettingsPage() {
   }
 
   return (
-    <div className="container py-8">
+    <div className="container max-w-7xl py-8">
       <h1 className="text-3xl font-bold mb-6">Account Settings</h1>
 
       <Tabs defaultValue="personal" className="space-y-4">

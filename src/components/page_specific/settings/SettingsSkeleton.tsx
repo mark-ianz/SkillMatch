@@ -5,7 +5,7 @@ import { TabsContent } from "@/components/ui/tabs";
 
 export default function SettingsSkeleton() {
   return (
-    <div className="container py-8">
+    <div className="container max-w-7xl py-8">
       <Skeleton className="h-9 w-64 mb-6" />
 
       <Tabs defaultValue="personal" className="space-y-4">
