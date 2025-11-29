@@ -194,7 +194,12 @@ export default function PersonalInfoTab() {
               </div>
             </div>
 
-            <Button onClick={handleUpdatePersonalInfo}>Save Changes</Button>
+            <Button 
+              onClick={handleUpdatePersonalInfo}
+              disabled={updatePersonalInfoMutation.isPending}
+            >
+              {updatePersonalInfoMutation.isPending ? "Saving..." : "Save Changes"}
+            </Button>
           </CardContent>
         </Card>
 
@@ -227,9 +232,9 @@ export default function PersonalInfoTab() {
             </div>
             <Button
               onClick={handleUpdateProfilePicture}
-              disabled={!profilePicture}
+              disabled={!profilePicture || updateProfilePictureMutation.isPending}
             >
-              Upload Picture
+              {updateProfilePictureMutation.isPending ? "Uploading..." : "Upload Picture"}
             </Button>
           </CardContent>
         </Card>

@@ -158,10 +158,14 @@ export default function AccountTab() {
                 }
               />
             </div>
-            <Button onClick={handleUpdatePassword}>
-              {settings?.has_password
-                ? "Update Password"
-                : "Create Password"}
+            <Button 
+              onClick={handleUpdatePassword}
+              disabled={updatePasswordMutation.isPending}
+            >
+              {updatePasswordMutation.isPending 
+                ? "Updating..." 
+                : settings?.has_password ? "Update Password" : "Create Password"
+              }
             </Button>
           </CardContent>
         </Card>
@@ -196,8 +200,11 @@ export default function AccountTab() {
                 onChange={(e) => setResume(e.target.files?.[0] || null)}
               />
             </div>
-            <Button onClick={handleUpdateResume} disabled={!resume}>
-              Upload Resume
+            <Button 
+              onClick={handleUpdateResume} 
+              disabled={!resume || updateResumeMutation.isPending}
+            >
+              {updateResumeMutation.isPending ? "Uploading..." : "Upload Resume"}
             </Button>
           </CardContent>
         </Card>

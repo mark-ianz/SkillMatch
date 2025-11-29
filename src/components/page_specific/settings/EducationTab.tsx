@@ -137,8 +137,11 @@ export default function EducationTab() {
             />
           </div>
 
-          <Button onClick={handleUpdateEducation}>
-            Save Education Details
+          <Button 
+            onClick={handleUpdateEducation}
+            disabled={updateEducationMutation.isPending}
+          >
+            {updateEducationMutation.isPending ? "Saving..." : "Save Education Details"}
           </Button>
         </CardContent>
       </Card>

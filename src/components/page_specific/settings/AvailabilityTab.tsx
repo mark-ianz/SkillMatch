@@ -108,8 +108,11 @@ export default function AvailabilityTab() {
             </p>
           </div>
 
-          <Button onClick={handleUpdateAvailability}>
-            Save Availability
+          <Button 
+            onClick={handleUpdateAvailability}
+            disabled={updateAvailabilityMutation.isPending}
+          >
+            {updateAvailabilityMutation.isPending ? "Saving..." : "Save Availability"}
           </Button>
         </CardContent>
       </Card>
@@ -130,7 +133,12 @@ export default function AvailabilityTab() {
             Maximum of {MAXIMUM_SKILLS} skills. {skills.length}/{MAXIMUM_SKILLS}
           </p>
 
-          <Button onClick={handleUpdateSkills}>Save Skills</Button>
+          <Button 
+            onClick={handleUpdateSkills}
+            disabled={updateSkillsMutation.isPending}
+          >
+            {updateSkillsMutation.isPending ? "Saving..." : "Save Skills"}
+          </Button>
         </CardContent>
       </Card>
     </TabsContent>

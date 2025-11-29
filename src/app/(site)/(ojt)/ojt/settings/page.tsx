@@ -7,6 +7,7 @@ import PersonalInfoTab from "@/components/page_specific/settings/PersonalInfoTab
 import AccountTab from "@/components/page_specific/settings/AccountTab";
 import AvailabilityTab from "@/components/page_specific/settings/AvailabilityTab";
 import EducationTab from "@/components/page_specific/settings/EducationTab";
+import SettingsSkeleton from "@/components/page_specific/settings/SettingsSkeleton";
 import useSettingsStore from "@/store/SettingsStore";
 
 export default function OJTSettingsPage() {
@@ -59,7 +60,7 @@ export default function OJTSettingsPage() {
   }, [settings, setPersonalInfo, setAvailability, setSkills, setEducation, setProfilePicturePreview]);
 
   if (isLoading) {
-    return <div className="container py-8">Loading settings...</div>;
+    return <SettingsSkeleton />;
   }
 
   return (
