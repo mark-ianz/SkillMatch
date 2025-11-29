@@ -32,9 +32,9 @@ export type Account = {
   provider: "google" | "local" | "linkedin";
   provider_id: string;
   password_hash?: string;
-  created_at: Date;
-  role_id: number;
   status_id: number;
+  role_id: number;
+  created_at: Date;
 };
 
 export type PublicAccount = Pick<Account, "email" | "role_id" | "status_id">;

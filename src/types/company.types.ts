@@ -1,21 +1,20 @@
 import { Address } from "./user.types";
 
-export type Company =  {
+export type Company = {
   company_id: string;
   company_name: string;
   company_email: string;
-  telephone_number: string;
-  phone_number: string;
+  description: string;
+  industry: string[] | null; // varchar and concat with , on database
   city_municipality: string;
   barangay: string;
-  date_founded: string;
-  description: string;
-  industry: string[] | null;
-  company_image: string | null | undefined;
+  telephone_number: string;
+  phone_number: string;
   website: string;
   facebook_page: string;
   instagram_page: string;
   twitter_page: string;
+  date_founded: string;
   mou_path: string; // private
   loi_path: string; // private
   cp_path: string; // private
@@ -23,6 +22,7 @@ export type Company =  {
   mayor_permit_path: string; // private
   dti_permit_path: string; // private
   bir_cert_of_registration_path: string; // private
+  company_image: string | null | undefined;
   created_at: string;
 };
 
