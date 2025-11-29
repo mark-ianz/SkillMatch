@@ -38,6 +38,11 @@ export default function AccountTab() {
       return;
     }
 
+    if (settings?.has_password && !passwordData.currentPassword) {
+      toast.error("Please enter your current password");
+      return;
+    }
+
     updatePasswordMutation.mutate(
       {
         currentPassword: settings?.has_password
