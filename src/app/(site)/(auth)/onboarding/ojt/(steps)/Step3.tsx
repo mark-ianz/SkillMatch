@@ -12,6 +12,7 @@ import { ZodError } from "zod";
 import { formatZodError } from "@/lib/utils";
 import useOJTProfileStore from "@/store/onboarding/ojt.onboarding.store";
 import useOnboardingStore from "@/store/onboarding/shared.onboarding.store";
+import InputWithLabel from "@/components/common/input/InputWithLabel";
 
 export default function Step3() {
   const session = useSession();
@@ -19,6 +20,7 @@ export default function Step3() {
     session.data?.user.user_id
   );
 
+  const student_number = useOJTProfileStore((state) => state.student_number);
   const college = useOJTProfileStore((state) => state.college);
   const course = useOJTProfileStore((state) => state.course);
   const year_level = useOJTProfileStore((state) => state.year_level);
@@ -26,6 +28,7 @@ export default function Step3() {
     (state) => state.expected_graduation_year
   );
 
+  const setStudentNumber = useOJTProfileStore((state) => state.setStudentNumber);
   const setCollege = useOJTProfileStore((state) => state.setCollege);
   const setCourse = useOJTProfileStore((state) => state.setCourse);
   const setYearLevel = useOJTProfileStore((state) => state.setYearLevel);
@@ -53,6 +56,7 @@ export default function Step3() {
       setError(null);
 
       const toParse = {
+        student_number: student_number || "",
         college: college || "",
         course: course || "",
         year_level: year_level || "",
@@ -60,7 +64,6 @@ export default function Step3() {
       }
 
       const parsed = onboardingStepThreeSchema.parse(toParse);
-
 
       // update the user info on the backend
       mutate(parsed);
@@ -73,8 +76,21 @@ export default function Step3() {
       }
     }
   }
+  
   return (
     <StepContainer>
+      <RowContainer>
+        <InputWithLabel
+          value={student_number || ""}
+          required={true}
+          placeholder="e.g., 2023-10345"
+          onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+            setStudentNumber(e.target.value)
+          }
+          label="Student Number"
+          containerClassName="w-full"
+        />
+      </RowContainer>
       <RowContainer>
         <SelectWithLabel
           required={true}

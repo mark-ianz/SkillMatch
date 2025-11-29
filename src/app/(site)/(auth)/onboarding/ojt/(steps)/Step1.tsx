@@ -83,33 +83,50 @@ export default function Step1() {
           readOnly
           containerClassName="grow"
           label="First Name"
-          id="first-name"
-          type="text"
+          id="first_name"
           placeholder="Enter your first name"
           value={first_name}
-          onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFirstName(e.target.value)}
+          onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+            setFirstName(e.target.value)
+          }
         />
         <InputWithLabel
           optional={true}
           readOnly={!!middle_name}
           containerClassName="grow"
           label="Middle Name"
-          id="middle-name"
-          type="text"
+          id="middle_name"
           placeholder="Enter your middle name"
           value={middle_name || ""}
-          onChange={(e: React.ChangeEvent<HTMLInputElement>) => setMiddleName(e.target.value)}
+          onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+            setMiddleName(e.target.value)
+          }
         />
         <InputWithLabel
           required={true}
           readOnly
           containerClassName="grow"
           label="Last Name"
-          id="last-name"
-          type="text"
+          id="last_name"
           placeholder="Enter your last name"
           value={last_name}
-          onChange={(e: React.ChangeEvent<HTMLInputElement>) => setLastName(e.target.value)}
+          onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+            setLastName(e.target.value)
+          }
+        />
+      </RowContainer>
+
+      <RowContainer>
+        <InputWithLabel
+          required={true}
+          containerClassName="grow"
+          label="Phone Number"
+          id="phone_number"
+          placeholder="Enter your phone number"
+          value={phone_number}
+          onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+            setPhoneNumber(e.target.value)
+          }
         />
       </RowContainer>
 
@@ -124,16 +141,6 @@ export default function Step1() {
           placeholder="Enter your email"
           value={email}
           onChange={(e: React.ChangeEvent<HTMLInputElement>) => setEmail(e.target.value)}
-        />
-        <InputWithLabel
-          required={true}
-          containerClassName="grow"
-          label="Phone Number"
-          id="phone-number"
-          type="text"
-          placeholder="Enter your phone number"
-          value={phone_number}
-          onChange={(e: React.ChangeEvent<HTMLInputElement>) => setPhoneNumber(e.target.value)}
         />
       </RowContainer>
 
