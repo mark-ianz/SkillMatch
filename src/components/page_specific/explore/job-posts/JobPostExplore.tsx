@@ -7,22 +7,16 @@ import { useJobPosts } from "@/hooks/query/useJobPosts";
 import { useExploreStore } from "@/store/ExploreStore";
 import { useSearchParams } from "next/navigation";
 import { JobExploreFilters } from "@/types/job_explore.types";
-import useSessionStore from "@/store/SessionStore";
 import { JobPostCardSkeleton } from "@/components/common/skeleton/JobPostSkeleton";
+import { useSession } from "next-auth/react";
+import { getRoleName } from "@/lib/utils";
 
 export default function JobPostExplore() {
   const searchParams = useSearchParams();
-  const user_id = useSessionStore((state) => state.user_id);
-  const role_name = useSessionStore((state) => state.role_name);
-
-  const isSessionLoading = useSessionStore((state) => state.loading);
-
-  console.log("JobPostFeed - Session Check:", { 
-    user_id, 
-    role_name, 
-    sessionStatus: isSessionLoading,
-    isSessionLoading 
-  });
+  const { data: session, status: sessionStatus } = useSession();
+  const isSessionLoading = sessionStatus === "loading";
+  const user_id = session?.user?.user_id;
+  const role_name = getRoleName(session?.user?.role_id);
 
   // Build filters from URL params
   const filters: JobExploreFilters = {
@@ -41,7 +35,9 @@ export default function JobPostExplore() {
     error,
   } = useJobPosts(filters, user_id, role_name, isSessionLoading);
   const selected_job_post = useExploreStore((state) => state.selected_job_post);
-  const setSelectedJobPost = useExploreStore((state) => state.setSelectedJobPost);
+  const setSelectedJobPost = useExploreStore(
+    (state) => state.setSelectedJobPost
+  );
 
   console.log("JobPostFeed - User Info:", { user_id, role_name });
   console.log("JobPostFeed - Job Posts:", job_posts);
