@@ -7,13 +7,23 @@ import { getRoleName } from "@/lib/utils";
 import NotificationPopover from "./NotificationPopover";
 import ProfilePopover from "./ProfilePopover";
 import { useSession } from "next-auth/react";
+import { Skeleton } from "@/components/ui/skeleton";
 
 export default function HeaderActions() {
-  const { data: session } = useSession();
+  const { data: session, status } = useSession();
   const role_id = session?.user?.role_id;
   const role = getRoleName(role_id);
 
-  if (!session) {
+  if (status === "loading") {
+    return (
+      <>
+        <Skeleton className="h-6 w-16 rounded-md" />
+        <Skeleton className="h-6 w-16 rounded-md" />
+      </>
+    );
+  }
+
+  if (!role_id) {
     return (
       <div className="flex gap-2">
         <Button asChild variant="outline" size="sm">
