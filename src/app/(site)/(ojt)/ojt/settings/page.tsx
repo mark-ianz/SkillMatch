@@ -285,7 +285,7 @@ export default function OJTSettingsPage() {
               </CardHeader>
               <CardContent className="space-y-4">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div>
+                  <div className="space-y-2">
                     <Label htmlFor="first_name">First Name</Label>
                     <Input
                       readOnly
@@ -294,7 +294,7 @@ export default function OJTSettingsPage() {
                       className="bg-muted cursor-not-allowed"
                     />
                   </div>
-                  <div>
+                  <div className="space-y-2">
                     <Label htmlFor="middle_name">Middle Name</Label>
                     <Input
                       readOnly
@@ -303,7 +303,7 @@ export default function OJTSettingsPage() {
                       className="bg-muted cursor-not-allowed"
                     />
                   </div>
-                  <div>
+                  <div className="space-y-2">
                     <Label htmlFor="last_name">Last Name</Label>
                     <Input
                       readOnly
@@ -312,7 +312,7 @@ export default function OJTSettingsPage() {
                       className="bg-muted cursor-not-allowed"
                     />
                   </div>
-                  <div>
+                  <div className="space-y-2">
                     <Label htmlFor="phone_number">Phone Number</Label>
                     <Input
                       id="phone_number"
@@ -330,7 +330,7 @@ export default function OJTSettingsPage() {
                 <div className="space-y-2">
                   <Label className="text-base font-semibold">Address</Label>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div>
+                    <div className="space-y-2">
                       <Label htmlFor="street_name">Street Name</Label>
                       <Input
                         id="street_name"
@@ -343,7 +343,7 @@ export default function OJTSettingsPage() {
                         }
                       />
                     </div>
-                    <div>
+                    <div className="space-y-2">
                       <Label htmlFor="house_number">House Number</Label>
                       <Input
                         id="house_number"
@@ -356,7 +356,7 @@ export default function OJTSettingsPage() {
                         }
                       />
                     </div>
-                    <div>
+                    <div className="space-y-2">
                       <Label htmlFor="subdivision">
                         Subdivision{" "}
                         <span className="text-muted-foreground">
@@ -374,7 +374,7 @@ export default function OJTSettingsPage() {
                         }
                       />
                     </div>
-                    <div>
+                    <div className="space-y-2">
                       <Label htmlFor="postal_code">Postal Code</Label>
                       <Input
                         id="postal_code"
@@ -433,7 +433,7 @@ export default function OJTSettingsPage() {
                     />
                   </div>
                 )}
-                <div>
+                <div className="space-y-2">
                   <Label htmlFor="profile_picture">Choose Image</Label>
                   <Input
                     id="profile_picture"
@@ -503,7 +503,7 @@ export default function OJTSettingsPage() {
               </CardHeader>
               <CardContent className="space-y-4">
                 {settings?.has_password && (
-                  <div>
+                  <div className="space-y-2">
                     <Label htmlFor="current_password">Current Password</Label>
                     <Input
                       id="current_password"
@@ -518,7 +518,7 @@ export default function OJTSettingsPage() {
                     />
                   </div>
                 )}
-                <div>
+                <div className="space-y-2">
                   <Label htmlFor="new_password">New Password</Label>
                   <Input
                     id="new_password"
@@ -532,7 +532,7 @@ export default function OJTSettingsPage() {
                     }
                   />
                 </div>
-                <div>
+                <div className="space-y-2">
                   <Label htmlFor="confirm_password">Confirm New Password</Label>
                   <Input
                     id="confirm_password"
@@ -575,7 +575,7 @@ export default function OJTSettingsPage() {
                     </a>
                   </div>
                 )}
-                <div>
+                <div className="space-y-2">
                   <Label htmlFor="resume">Choose Resume (PDF)</Label>
                   <Input
                     id="resume"
@@ -602,7 +602,7 @@ export default function OJTSettingsPage() {
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-6">
-              <div>
+              <div className="space-y-2">
                 <Label className="mb-3 block">
                   Preferred Schedule (Days of the Week)
                 </Label>
@@ -622,7 +622,7 @@ export default function OJTSettingsPage() {
                 </div>
               </div>
 
-              <div>
+              <div className="space-y-2">
                 <Label htmlFor="required_hours">Required Hours</Label>
                 <Input
                   id="required_hours"
@@ -679,7 +679,7 @@ export default function OJTSettingsPage() {
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div>
+                <div className="space-y-2">
                   <Label htmlFor="student_number">Student Number</Label>
                   <Input
                     id="student_number"
@@ -692,7 +692,7 @@ export default function OJTSettingsPage() {
                     }
                   />
                 </div>
-                <div>
+                <div className="space-y-2">
                   <Label htmlFor="college">College</Label>
                   <Input
                     id="college"
@@ -702,7 +702,7 @@ export default function OJTSettingsPage() {
                     }
                   />
                 </div>
-                <div>
+                <div className="space-y-2">
                   <Label htmlFor="course">Course</Label>
                   <Input
                     id="course"
@@ -712,7 +712,7 @@ export default function OJTSettingsPage() {
                     }
                   />
                 </div>
-                <div>
+                <div className="space-y-2">
                   <Label htmlFor="year_level">Year Level</Label>
                   <select
                     id="year_level"
@@ -729,7 +729,7 @@ export default function OJTSettingsPage() {
                     <option value="4th year">4th Year</option>
                   </select>
                 </div>
-                <div>
+                <div className="space-y-2">
                   <Label htmlFor="graduation_year">
                     Expected Graduation Year
                   </Label>
