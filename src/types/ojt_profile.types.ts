@@ -8,6 +8,8 @@ export type OJTProfile = AcademicDetails & {
   ojt_image_path: string | null;
   visibility: "public" | "private";
   skills: string[]; // processed na to, and array na
+  preferred_schedule: string | null; // comma separated days: "Monday,Wednesday,Friday"
+  required_hours: number | null; // total hours required (e.g., 400)
   created_at: Date;
 };
 
