@@ -16,3 +16,5 @@ To-Do:
 - nag ooverlap na yung mga same name na variable sa database pati sa types tanginang yan
 
 TEMPORARY LANG YUNG CHECKING NG STATES USING USESESSION, DAPAT IISTORE YAN SA STORE AFTER FETCHING DATA.
+
+- preferred_schedule and hours per week lagay sa onboarding at tanggalin sa application, reference na lang as FK
