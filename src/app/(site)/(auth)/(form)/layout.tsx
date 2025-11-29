@@ -25,7 +25,7 @@ export default function Layout() {
 
   return (
     <MainLayout className="items-center justify-center -mt-10">
-      <div className="w-full flex">
+      <div className="container min-w-7xl max-w-7xl flex">
         <div
           className="relative flex items-end w-1/2 rounded-l-md overflow-hidden bg-cover bg-center justify-center pb-14"
           style={{ backgroundImage: `url(${imageSrc.src})` }}
