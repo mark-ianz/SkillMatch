@@ -59,8 +59,8 @@ export default function NotificationPopover() {
   return (
     <Popover>
       <PopoverTrigger asChild>
-        <Button variant="ghost" size="icon" className="relative rounded-full [&_svg:not([class*='size-'])]:size-5.5!">
-          <Bell className="" />
+        <Button name="notification_button" variant="ghost" size="icon" className="relative rounded-full [&_svg:not([class*='size-'])]:size-5.5!">
+          <Bell />
           {unreadCount > 0 && (
             <Badge
               variant="destructive"
