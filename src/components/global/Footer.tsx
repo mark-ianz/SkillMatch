@@ -33,10 +33,10 @@ export default function Footer() {
               <h4 className="font-semibold">Links</h4>
               <ul className="mt-3 space-y-2 text-sm text-skillmatch-light/80">
                 <li>
-                  <Link href="/jobs">Jobs</Link>
+                  <Link href="/">For Applicants</Link>
                 </li>
                 <li>
-                  <Link href="/companies">Companies</Link>
+                  <Link href="/company">For Companies</Link>
                 </li>
                 <li>
                   <Link href="/faqs">FAQs</Link>
@@ -61,28 +61,19 @@ export default function Footer() {
             </div>
 
             {/* Contact */}
-            <div>
+            <div className="max-w-[300px]">
               <h4 className="font-semibold">Contact</h4>
-              <div className="mt-3 text-sm text-skillmatch-light/80 space-y-3">
-                <div className="flex items-start gap-3">
-                  <MapPin className="w-5 h-5 mt-1 text-skillmatch-light/80" />
-                  <div>
-                    673 Quirino Highway, San Bartolome,
-                    <br /> Novaliches, Quezon City, Philippines
-                  </div>
-                </div>
-
-                <div className="flex items-center gap-3">
-                  <Mail className="w-5 h-5 text-skillmatch-light/80" />
-                  <a className="underline" href="mailto:qcu@qcu.edu.ph">
-                    qcu@qcu.edu.ph
-                  </a>
-                </div>
-
-                <div className="flex items-center gap-3">
-                  <Phone className="w-5 h-5 text-skillmatch-light/80" />
-                  <a href="tel:280003479">280003479</a>
-                </div>
+              <div className="mt-3 text-sm text-skillmatch-light/80">
+                For complete and updated contact information, please
+                visit:&nbsp;
+                <a
+                  className="underline"
+                  href="https://qcu.edu.ph/contact-us/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  https://qcu.edu.ph/contact-us/
+                </a>
               </div>
             </div>
           </div>
