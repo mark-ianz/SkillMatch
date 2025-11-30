@@ -1,7 +1,6 @@
 import React from "react";
 import GettingStartedCard from "./GettingStartedCard";
 import { User, FilePlus, Users, Handshake, Flag } from "lucide-react";
-import { UserType } from "@/types/user.types";
 
 const CARDS = [
   {
@@ -36,7 +35,7 @@ const CARDS = [
   },
 ];
 
-export default function GettingStartedSection({ type }: { type: UserType }) {
+export default function GettingStartedSection() {
   return (
     <section className="max-w-7xl mx-auto mt-16 text-skillmatch-dark">
       <h2 className="text-2xl font-semibold ">Getting Started</h2>

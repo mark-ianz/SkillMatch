@@ -3,23 +3,17 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import {
-  GraduationCap,
-  Building2,
   Target,
   Users,
   Heart,
   TrendingUp,
-  Award,
   Shield,
   Sparkles,
   CheckCircle2,
   Globe,
   Mail,
-  Phone,
-  MapPin,
   ArrowRight,
 } from "lucide-react";
-import Link from "next/link";
 
 // SEO Metadata
 export const metadata: Metadata = {

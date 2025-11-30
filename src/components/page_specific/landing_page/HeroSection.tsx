@@ -14,9 +14,8 @@ import Image from "next/image";
 import Link from "next/link";
 import React from "react";
 import hero_section_image from "@/images/background/hero_section_image.png";
-import { UserType } from "@/types/user.types";
 
-export default function HeroSection({ type }: { type: UserType }) {
+export default function HeroSection() {
   const qualificationCategories = [
     { name: "Technology & IT", svg: <Cpu className="w-10 h-10" /> },
     { name: "Software Development", svg: <Computer className="w-10 h-10" /> },

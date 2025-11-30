@@ -1,6 +1,9 @@
 import { db } from "@/lib/db";
 import { isAdmin } from "@/lib/admin-auth";
 import { NextRequest, NextResponse } from "next/server";
+import { RowDataPacket } from "mysql2";
+import { Status } from "@/types/status.types";
+import { Company } from "@/types/company.types";
 
 // Get all companies with their account status
 export async function GET(request: NextRequest) {
@@ -16,7 +19,7 @@ export async function GET(request: NextRequest) {
     let query = `
       SELECT 
         c.*,
-        a.email as company_email,
+        a.email,
         a.status_id,
         a.created_at as account_created_at,
         s.status
@@ -34,11 +37,11 @@ export async function GET(request: NextRequest) {
 
     query += " ORDER BY a.created_at DESC";
 
-    const [companies] = await db.query(query, params);
+    const [companies] = await db.query<(RowDataPacket & Company & Status)[]>(query, params);
 
     // Map status to status_name for frontend
     const mappedCompanies = Array.isArray(companies)
-      ? companies.map((company: any) => ({
+      ? companies.map((company) => ({
           ...company,
           status_name: company.status || "Unknown",
         }))

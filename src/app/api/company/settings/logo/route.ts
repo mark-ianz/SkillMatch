@@ -5,6 +5,7 @@ import { CompanySettingsServices } from "@/services/company-settings.services";
 import { v4 as uuidv4 } from "uuid";
 import path from "path";
 import fs from "fs";
+import { ServiceError } from "@/lib/errors";
 
 export async function PATCH(req: NextRequest) {
   try {
@@ -71,11 +72,11 @@ export async function PATCH(req: NextRequest) {
     );
 
     return NextResponse.json(result, { status: 200 });
-  } catch (error: any) {
+  } catch (error: ServiceError | unknown) {
     console.error("Error uploading company logo:", error);
     return NextResponse.json(
-      { message: error.message || "Failed to upload company logo" },
-      { status: error.statusCode || 500 }
+      { message: error instanceof ServiceError ? error.message : "Failed to upload company logo" },
+      { status: error instanceof ServiceError ? error.status : 500 }
     );
   }
 }

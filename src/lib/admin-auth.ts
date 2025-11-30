@@ -14,7 +14,7 @@ export async function isAdmin(): Promise<boolean> {
     return false;
   }
 
-  const user = session.user as any;
+  const user = session.user;
   return user.role_id === 2 || user.isAdmin === true;
 }
 

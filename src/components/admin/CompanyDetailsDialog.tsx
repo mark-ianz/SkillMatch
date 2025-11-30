@@ -8,7 +8,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { CompanyWithStatus, COMPANY_ACCOUNT_STATUSES } from "@/types/admin.types";
+import { COMPANY_ACCOUNT_STATUSES } from "@/types/admin.types";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
@@ -36,9 +36,11 @@ import {
   FileText,
 } from "lucide-react";
 import Image from "next/image";
+import { Company } from "@/types/company.types";
+import { Status } from "@/types/status.types";
 
 interface CompanyDetailsDialogProps {
-  company: CompanyWithStatus;
+  company: Company & Status;
   open: boolean;
   onOpenChange: (open: boolean) => void;
 }
@@ -127,7 +129,7 @@ export default function CompanyDetailsDialog({
               <h3 className="text-xl font-bold mb-2">{company.company_name}</h3>
               <div className="flex items-center gap-2 mb-2">
                 <span className="text-sm text-muted-foreground">Status:</span>
-                {getStatusBadge(company.status_id, company.status_name)}
+                {getStatusBadge(company.status_id, company.status)}
               </div>
               <p className="text-sm text-muted-foreground">
                 {company.description}

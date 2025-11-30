@@ -9,9 +9,8 @@ import {
   HardHat,
   PenTool,
 } from "lucide-react";
-import { UserType } from "@/types/user.types";
 
-export default function CategoriesSection({ type }: { type: UserType }) {
+export default function CategoriesSection() {
   const qualificationCategories = [
     { name: "Technology & IT", svg: <Cpu className="w-10 h-10" /> },
     { name: "Software Development", svg: <Computer className="w-10 h-10" /> },

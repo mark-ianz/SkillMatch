@@ -1,8 +1,4 @@
-import { db } from "@/lib/db";
 import { NextRequest, NextResponse } from "next/server";
-import { RowDataPacket } from "mysql2";
-import { CompanyProfile } from "@/types/company.types";
-import { JobPost } from "@/types/job_post.types";
 import CompanyServices from "@/services/company.services";
 
 export async function GET(

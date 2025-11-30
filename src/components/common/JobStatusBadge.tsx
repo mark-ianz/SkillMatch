@@ -1,14 +1,14 @@
 import { Badge } from "@/components/ui/badge";
-import { StatusName } from "@/types/status.types";
+import { JobPostStatusName, StatusName } from "@/types/status.types";
 import { cn } from "@/lib/utils";
 
-interface StatusBadgeProps {
+interface JobStatusBadgeProps {
   status: StatusName;
   className?: string;
 }
 
 const statusConfig: Record<
-  StatusName,
+  JobPostStatusName,
   { label: string; className: string }
 > = {
   active: {
@@ -41,7 +41,28 @@ const statusConfig: Record<
   },
 };
 
-export function StatusBadge({ status, className }: StatusBadgeProps) {
+export function JobStatusBadge({ status, className }: JobStatusBadgeProps) {
+  // Check if the status is a valid JobPostStatusName
+  const isJobPostStatus = (
+    statusValue: StatusName
+  ): statusValue is JobPostStatusName => {
+    const jobPostStatuses: JobPostStatusName[] = [
+      "active",
+      "pending",
+      "rejected",
+      "disabled",
+      "filled",
+      "closed",
+      "onboarding",
+    ];
+    return jobPostStatuses.includes(statusValue as JobPostStatusName);
+  };
+
+  // Only render if the status is a JobPostStatusName
+  if (!isJobPostStatus(status)) {
+    return null;
+  }
+
   const config = statusConfig[status];
 
   return (

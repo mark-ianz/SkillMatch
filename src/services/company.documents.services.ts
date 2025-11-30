@@ -1,9 +1,6 @@
 import path from "path";
 import fs from "fs";
-import { db } from "@/lib/db";
 import { ServiceError } from "@/lib/errors";
-import { ResultSetHeader } from "mysql2";
-import { deleteFile } from "@/lib/file";
 
 const ALLOWED = ["application/pdf", "image/jpeg", "image/png"];
 const MAX_BYTES = 5 * 1024 * 1024; // 5MB

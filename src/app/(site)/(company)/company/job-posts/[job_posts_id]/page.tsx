@@ -26,8 +26,6 @@ import {
   Edit,
   Building2,
   AlertCircle,
-  Eye,
-  Download,
 } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
@@ -554,7 +552,7 @@ export default function JobDetailsPage() {
                       width={80}
                       height={80}
                       src={jobPost.company_image || ""}
-                      alt={jobPost.company_name}
+                      alt={jobPost.company_name || "Company Logo"}
                       className="w-20 h-20 rounded-lg object-cover border shadow-sm"
                     />
                   </div>

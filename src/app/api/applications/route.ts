@@ -4,7 +4,7 @@ import { authConfig } from "@/lib/auth";
 import { ApplicationServices } from "@/services/application.services";
 
 // GET - Get all applications for current user
-export async function GET(request: NextRequest) {
+export async function GET() {
   try {
     const session = await getServerSession(authConfig);
 

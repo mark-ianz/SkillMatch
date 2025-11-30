@@ -4,7 +4,6 @@ import { useNotifications, useMarkNotificationAsRead, useMarkAllNotificationsAsR
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Separator } from "@/components/ui/separator";
 import { Bell, CheckCheck, Loader2 } from "lucide-react";
 import { formatDistanceToNow } from "date-fns";
 import { useRouter } from "next/navigation";
@@ -95,7 +94,7 @@ export default function NotificationsPage() {
             <Bell className="h-16 w-16 text-muted-foreground/50 mb-4" />
             <h3 className="text-lg font-semibold mb-2">No notifications yet</h3>
             <p className="text-sm text-muted-foreground text-center max-w-md">
-              When you receive updates about your applications, interviews, or offers, they'll appear here.
+              When you receive updates about your applications, interviews, or offers, they&apos;ll appear here.
             </p>
           </CardContent>
         </Card>

@@ -3,9 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
-import { Building2, Briefcase, BarChart3, ShieldCheck, GraduationCap, LogOut } from "lucide-react";
-import { signOut } from "next-auth/react";
-import { Button } from "@/components/ui/button";
+import { Building2, Briefcase, BarChart3, ShieldCheck, GraduationCap } from "lucide-react";
 import LogoutButton from "../common/button/LogoutButton";
 
 const navItems = [

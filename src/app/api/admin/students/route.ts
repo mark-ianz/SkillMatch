@@ -1,6 +1,9 @@
 import { db } from "@/lib/db";
 import { isAdmin } from "@/lib/admin-auth";
 import { NextRequest, NextResponse } from "next/server";
+import { ApplicantProfileAndUser } from "@/types/applicant_profile.types";
+import { Status } from "@/types/status.types";
+import { RowDataPacket } from "mysql2";
 
 // Get all students with their account status
 export async function GET(request: NextRequest) {
@@ -42,13 +45,13 @@ export async function GET(request: NextRequest) {
 
     query += " ORDER BY a.created_at DESC";
 
-    const [students] = await db.query(query, params);
+    const [students] = await db.query<(ApplicantProfileAndUser & Status & RowDataPacket)[]>(query, params);
 
     // Map status to status_name for frontend
     const mappedStudents = Array.isArray(students)
-      ? students.map((student: any) => ({
+      ? students.map((student) => ({
           ...student,
-          status_name: student.status_name || "Unknown",
+          status_name: student.status || "Unknown",
           full_name: student.first_name && student.last_name 
             ? `${student.first_name} ${student.last_name}`
             : "N/A",

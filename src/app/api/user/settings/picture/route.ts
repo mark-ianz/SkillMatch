@@ -1,10 +1,14 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
 import { authConfig } from "@/lib/auth";
-import { updateProfilePicture, getUserSettings } from "@/services/user-settings.services";
+import {
+  updateProfilePicture,
+  getUserSettings,
+} from "@/services/user-settings.services";
 import { writeFile } from "fs/promises";
 import path from "path";
 import { v4 as uuidv4 } from "uuid";
+import fs from "fs";
 
 export async function POST(req: NextRequest) {
   try {
@@ -17,7 +21,10 @@ export async function POST(req: NextRequest) {
     // Get user settings to find applicant_id
     const settings = await getUserSettings(session.user.user_id);
     if (!settings?.applicant_id) {
-      return NextResponse.json({ error: "Applicant profile not found" }, { status: 404 });
+      return NextResponse.json(
+        { error: "Applicant profile not found" },
+        { status: 404 }
+      );
     }
 
     const formData = await req.formData();
@@ -51,8 +58,6 @@ export async function POST(req: NextRequest) {
     const uploadDir = path.join(process.cwd(), "public", "uploads", "profile");
     const filepath = path.join(uploadDir, filename);
 
-    // Create directory if it doesn't exist
-    const fs = require("fs");
     if (!fs.existsSync(uploadDir)) {
       fs.mkdirSync(uploadDir, { recursive: true });
     }

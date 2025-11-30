@@ -5,7 +5,6 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Bookmark, Trash2, TrendingUp, Users } from "lucide-react";
-import MainLayout from "@/components/layout/MainLayout";
 import { JobPostPreview } from "@/components/page_specific/explore/job-posts/JobPostPreview";
 import { CompanyPreview } from "@/components/page_specific/explore/company/CompanyPreview";
 import { CompanyPost } from "@/components/page_specific/company_post/CompanyPost";

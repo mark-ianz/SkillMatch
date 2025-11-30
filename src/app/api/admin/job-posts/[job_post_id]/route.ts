@@ -1,6 +1,8 @@
 import { db } from "@/lib/db";
 import { isAdmin } from "@/lib/admin-auth";
 import { NextRequest, NextResponse } from "next/server";
+import { JobPostQuery } from "@/types/job_post.types";
+import { Status } from "@/types/status.types";
 
 // Update job post status
 export async function PATCH(
@@ -79,7 +81,7 @@ export async function GET(
       );
     }
 
-    const job = jobPosts[0] as any;
+    const job = jobPosts[0] as JobPostQuery & Status;
     const parsedJob = {
       ...job,
       is_paid: Boolean(job.is_paid),

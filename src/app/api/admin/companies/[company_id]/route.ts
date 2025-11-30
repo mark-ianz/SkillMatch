@@ -1,6 +1,8 @@
 import { db } from "@/lib/db";
 import { isAdmin } from "@/lib/admin-auth";
 import { NextRequest, NextResponse } from "next/server";
+import { Company } from "@/types/company.types";
+import { Status } from "@/types/status.types";
 
 // Update company status
 export async function PATCH(
@@ -14,7 +16,7 @@ export async function PATCH(
     }
 
     const { company_id } = params;
-    const { status_id, reason } = await request.json();
+    const { status_id } = await request.json();
 
     // Validate status_id - Company account statuses: 1=active, 2=pending, 3=rejected, 4=disabled, 7=onboarding
     if (!status_id || ![1, 2, 3, 4, 7].includes(status_id)) {
@@ -82,7 +84,7 @@ export async function GET(
       );
     }
 
-    const company = companies[0] as any;
+    const company = companies[0] as Company & Status;
     return NextResponse.json({
       ...company,
       status_name: company.status || "Unknown",

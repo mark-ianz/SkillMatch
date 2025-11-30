@@ -50,8 +50,8 @@ export function useUpdateCompanyProfile() {
       queryClient.invalidateQueries({ queryKey: ["company-settings"] });
       toast.success("Company profile updated successfully");
     },
-    onError: (error: any) => {
-      toast.error(error.response?.data?.message || "Failed to update company profile");
+    onError: () => {
+      toast.error("Failed to update company profile");
     },
   });
 }
@@ -74,8 +74,8 @@ export function useUpdateCompanyLogo() {
       queryClient.invalidateQueries({ queryKey: ["company-settings"] });
       toast.success("Company logo updated successfully");
     },
-    onError: (error: any) => {
-      toast.error(error.response?.data?.message || "Failed to update company logo");
+    onError: () => {
+      toast.error("Failed to update company logo");
     },
   });
 }
@@ -101,8 +101,8 @@ export function useUpdateContactInfo() {
       queryClient.invalidateQueries({ queryKey: ["company-settings"] });
       toast.success("Contact information updated successfully");
     },
-    onError: (error: any) => {
-      toast.error(error.response?.data?.message || "Failed to update contact information");
+    onError: () => {
+      toast.error("Failed to update contact information");
     },
   });
 }
@@ -127,8 +127,8 @@ export function useUpdateLocation() {
       queryClient.invalidateQueries({ queryKey: ["company-settings"] });
       toast.success("Location updated successfully");
     },
-    onError: (error: any) => {
-      toast.error(error.response?.data?.message || "Failed to update location");
+    onError: () => {
+      toast.error("Failed to update location");
     },
   });
 }
@@ -150,8 +150,8 @@ export function useUpdateCompanyPassword() {
       queryClient.invalidateQueries({ queryKey: ["company-settings"] });
       toast.success("Password updated successfully");
     },
-    onError: (error: any) => {
-      toast.error(error.response?.data?.message || "Failed to update password");
+    onError: () => {
+      toast.error("Failed to update password");
     },
   });
 }

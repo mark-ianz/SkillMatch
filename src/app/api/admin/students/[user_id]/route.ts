@@ -1,6 +1,8 @@
 import { db } from "@/lib/db";
 import { isAdmin } from "@/lib/admin-auth";
 import { NextRequest, NextResponse } from "next/server";
+import { ApplicantProfileAndUser } from "@/types/applicant_profile.types";
+import { Status } from "@/types/status.types";
 
 // Get single student details
 export async function GET(
@@ -55,7 +57,7 @@ export async function GET(
       );
     }
 
-    const student = students[0] as any;
+    const student = students[0] as ApplicantProfileAndUser & Status;
     return NextResponse.json({
       ...student,
       status_name: student.status || "Unknown",
@@ -103,7 +105,7 @@ export async function PATCH(
     // Update user table if personal info provided
     if (first_name || last_name) {
       const updates: string[] = [];
-      const values: any[] = [];
+      const values: (string | number)[] = [];
 
       if (first_name) {
         updates.push("first_name = ?");
@@ -126,7 +128,7 @@ export async function PATCH(
     // Update applicant_profile if Applicant-specific info provided
     if (course || year_level || required_hours) {
       const updates: string[] = [];
-      const values: any[] = [];
+      const values: (string | number)[] = [];
 
       if (course) {
         updates.push("course = ?");

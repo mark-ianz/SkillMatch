@@ -94,7 +94,7 @@ export default function CompanyNotificationsPage() {
             <Bell className="h-16 w-16 text-muted-foreground/50 mb-4" />
             <h3 className="text-lg font-semibold mb-2">No notifications yet</h3>
             <p className="text-sm text-muted-foreground text-center max-w-md">
-              When students apply to your job posts or respond to your offers, you'll receive notifications here.
+              When students apply to your job posts or respond to your offers, you&apos;ll receive notifications here.
             </p>
           </CardContent>
         </Card>

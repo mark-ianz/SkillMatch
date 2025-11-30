@@ -23,7 +23,6 @@ import {
 } from "@/hooks/query/useCompanySettings";
 import { getAllIndustry } from "@/lib/utils";
 import { format } from "date-fns";
-import { Calendar } from "@/components/ui/calendar";
 
 const INDUSTRIES = getAllIndustry() as string[];
 

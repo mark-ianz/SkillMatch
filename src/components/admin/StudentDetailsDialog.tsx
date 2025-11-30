@@ -35,6 +35,8 @@ import {
   Clock,
 } from "lucide-react";
 import { COMPANY_ACCOUNT_STATUSES } from "@/types/admin.types";
+import { ApplicantProfileAndUser } from "@/types/applicant_profile.types";
+import { Status, StatusId } from "@/types/status.types";
 
 interface StudentDetailsDialogProps {
   student: StudentWithStatus;
@@ -60,7 +62,7 @@ export default function StudentDetailsDialog({
   const queryClient = useQueryClient();
 
   const updateStudentMutation = useMutation({
-    mutationFn: async (data: any) => {
+    mutationFn: async (data: Partial<ApplicantProfileAndUser> & Partial<Status>) => {
       await api.patch(`/admin/students/${student.user_id}`, data);
     },
     onSuccess: () => {
@@ -75,8 +77,8 @@ export default function StudentDetailsDialog({
   });
 
   const handleSubmit = () => {
-    const updates: any = {
-      status_id: parseInt(formData.status_id),
+    const updates: Partial<ApplicantProfileAndUser> & Partial<Status> = {
+      status_id: parseInt(formData.status_id) as StatusId,
     };
 
     if (formData.first_name !== student.first_name) {

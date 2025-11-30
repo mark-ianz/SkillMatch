@@ -20,7 +20,7 @@ import { useSession } from "next-auth/react";
 import { SignInPromptDialog } from "@/components/common/SignInPromptDialog";
 import { useState } from "react";
 import Location from "../explore/job-posts/sub-components/Location";
-import { StatusBadge } from "@/components/common/StatusBadge";
+import { JobStatusBadge } from "@/components/common/JobStatusBadge";
 import Link from "next/link";
 import { ApplyButton } from "./ApplyButton";
 
@@ -77,7 +77,7 @@ export function JobPostFullInfo({
                     {job?.job_title}
                   </h1>
                   {job?.job_post_status && (
-                    <StatusBadge status={job.job_post_status} />
+                    <JobStatusBadge status={job.job_post_status} />
                   )}
                 </div>
                 <Link

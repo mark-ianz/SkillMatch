@@ -1,6 +1,8 @@
 import { db } from "@/lib/db";
 import { isAdmin } from "@/lib/admin-auth";
 import { NextRequest, NextResponse } from "next/server";
+import { JobPostQuery } from "@/types/job_post.types";
+import { ResultSetHeader } from "mysql2/promise";
 
 // Get all job posts with company info and status
 export async function GET(request: NextRequest) {
@@ -33,14 +35,14 @@ export async function GET(request: NextRequest) {
 
     query += " ORDER BY jp.created_at DESC";
 
-    const [jobPosts] = await db.query(query, params);
+    const [jobPosts] = await db.query<(JobPostQuery & ResultSetHeader)[]>(query, params);
 
     // Parse comma-separated fields into arrays
     const parsedJobPosts = Array.isArray(jobPosts)
-      ? jobPosts.map((job: any) => ({
+      ? jobPosts.map((job: JobPostQuery) => ({
           ...job,
           is_paid: Boolean(job.is_paid),
-          job_post_status: job.job_post_status || job.status || "Unknown",
+          job_post_status: job.job_post_status || "Unknown",
           job_responsibilities: job.job_responsibilities
             ? job.job_responsibilities.split(",")
             : [],

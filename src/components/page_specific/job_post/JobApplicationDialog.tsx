@@ -13,14 +13,6 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-// import { FileText, X } from "lucide-react";
 import { useSession } from "next-auth/react";
 import { useUserProfile } from "@/hooks/query/useUserProfile";
 import Link from "next/link";

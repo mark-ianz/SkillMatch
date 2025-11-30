@@ -8,9 +8,7 @@ import {
 import { QCU_User } from "@/types/qcu_user.types";
 import { MySQLError } from "@/types/mysql_error.types";
 import { Onboarding } from "@/types/onboarding.types";
-import { ExtendedUser, Account, User } from "@/types/user.types";
-import { Account as NextAccount } from "next-auth";
-import { Company } from "@/types/company.types";
+import { ExtendedUser, Account } from "@/types/user.types";
 
 /**
  * Handle OAuth sign-in logic for both Applicant and Company providers.

@@ -1,4 +1,4 @@
-import { AcademicDetails } from "./user.types";
+import { AcademicDetails, User } from "./user.types";
 
 export type ApplicantProfile = AcademicDetails & {
   applicant_id: number;
@@ -16,3 +16,5 @@ export type ApplicantProfile = AcademicDetails & {
 export type ApplicantProfileQuery = Omit<ApplicantProfile, "skills"> & {
   skills: string; // comma separated string
 };
+
+export type ApplicantProfileAndUser = ApplicantProfile & User;

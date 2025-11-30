@@ -1,6 +1,7 @@
 import { db } from "@/lib/db";
 import { ServiceError } from "@/lib/errors";
 import { ResultSetHeader, RowDataPacket } from "mysql2";
+import bcrypt from "bcrypt"
 
 export const CompanySettingsServices = {
   getCompanySettings: async (company_id: string) => {
@@ -189,7 +190,6 @@ export const CompanySettingsServices = {
           throw new ServiceError("Account not found", 404);
         }
 
-        const bcrypt = require("bcrypt");
         const isValid = await bcrypt.compare(currentPassword, rows[0].password);
 
         if (!isValid) {
@@ -198,7 +198,6 @@ export const CompanySettingsServices = {
       }
 
       // Hash new password
-      const bcrypt = require("bcrypt");
       const hashedPassword = await bcrypt.hash(newPassword, 10);
 
       // Update password

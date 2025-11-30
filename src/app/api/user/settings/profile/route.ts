@@ -1,7 +1,10 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
 import { authConfig } from "@/lib/auth";
-import { updatePersonalInfo, getUserSettings } from "@/services/user-settings.services";
+import {
+  updatePersonalInfo,
+  getUserSettings,
+} from "@/services/user-settings.services";
 
 export async function PATCH(req: NextRequest) {
   try {
@@ -12,14 +15,30 @@ export async function PATCH(req: NextRequest) {
     }
 
     const body = await req.json();
-    const { first_name, middle_name, last_name, phone_number, address } = body;
+    const {
+      first_name,
+      middle_name,
+      last_name,
+      phone_number,
+      street_name,
+      house_number,
+      subdivision,
+      postal_code,
+      barangay,
+      city_municipality,
+    } = body;
 
     await updatePersonalInfo(session.user.user_id, {
       first_name,
       middle_name,
       last_name,
       phone_number,
-      address,
+      street_name,
+      house_number,
+      subdivision,
+      postal_code,
+      barangay,
+      city_municipality,
     });
 
     const updatedSettings = await getUserSettings(session.user.user_id);

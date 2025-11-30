@@ -39,7 +39,7 @@ export default function AdminLoginPage() {
         router.push("/admin/companies");
         router.refresh();
       }
-    } catch (err) {
+    } catch {
       setError("An error occurred during login");
       setIsLoading(false);
     }

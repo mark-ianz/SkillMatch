@@ -1,8 +1,7 @@
-import { UserType } from "@/types/user.types";
 import Link from "next/link";
 import React from "react";
 
-export default function CTABannerSection({ type }: { type: UserType }) {
+export default function CTABannerSection() {
   return (
     <section className="max-w-7xl mx-auto mt-12">
       <div className="text-skillmatch-light rounded-lg bg-gradient-to-r from-slate-800 to-slate-700 text p-12 flex items-center justify-between">

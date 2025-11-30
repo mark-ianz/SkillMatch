@@ -1,17 +1,9 @@
-import { Company } from "./company.types";
-
 /**
  * Role IDs:
  * 2 = admin
  * 3 = applicant
  * 4 = employer
  */
-
-export type CompanyWithStatus = Company & {
-  status_id: number;
-  status_name: string;
-  account_created_at: string;
-};
 
 export type StatusOption = {
   value: number;

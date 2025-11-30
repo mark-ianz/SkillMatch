@@ -64,8 +64,8 @@ export function useUpdatePassword() {
     onSuccess: (data) => {
       toast.success(data.message);
     },
-    onError: (error: any) => {
-      toast.error(error.response?.data?.error || "Failed to update password");
+    onError: () => {
+      toast.error("Failed to update password");
     },
   });
 }

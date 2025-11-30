@@ -19,7 +19,7 @@ export async function updatePersonalInfo(
   }
 ) {
   const fields: string[] = [];
-  const values: any[] = [];
+  const values: (string | number)[] = [];
 
   if (data.first_name !== undefined) {
     fields.push("first_name = ?");
@@ -143,7 +143,7 @@ export async function updateAvailability(
   }
 ) {
   const fields: string[] = [];
-  const values: any[] = [];
+  const values: (string | number)[] = [];
 
   if (data.preferred_schedule !== undefined) {
     fields.push("preferred_schedule = ?");
@@ -190,7 +190,7 @@ export async function updateEducationDetails(
   }
 ) {
   const fields: string[] = [];
-  const values: any[] = [];
+  const values: (string | number)[] = [];
 
   if (data.student_number !== undefined) {
     fields.push("student_number = ?");

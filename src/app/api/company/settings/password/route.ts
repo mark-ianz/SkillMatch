@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
 import { authConfig } from "@/lib/auth";
 import { CompanySettingsServices } from "@/services/company-settings.services";
+import { ServiceError } from "@/lib/errors";
 
 export async function PATCH(req: NextRequest) {
   try {
@@ -41,11 +42,11 @@ export async function PATCH(req: NextRequest) {
       { message: "Password updated successfully" },
       { status: 200 }
     );
-  } catch (error: any) {
+  } catch (error: ServiceError | unknown) {
     console.error("Error updating password:", error);
     return NextResponse.json(
-      { message: error.message || "Failed to update password" },
-      { status: error.statusCode || 500 }
+      { message: error instanceof ServiceError ? error.message : "Failed to update password" },
+      { status: error instanceof ServiceError ? error.status : 500 }
     );
   }
 }

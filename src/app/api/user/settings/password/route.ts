@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
 import { authConfig } from "@/lib/auth";
 import { updatePassword } from "@/services/user-settings.services";
+import { ServiceError } from "@/lib/errors";
 
 export async function PATCH(req: NextRequest) {
   try {
@@ -26,10 +27,10 @@ export async function PATCH(req: NextRequest) {
     return NextResponse.json({
       message: "Password updated successfully",
     });
-  } catch (error: any) {
+  } catch (error: ServiceError | unknown) {
     console.error("Error updating password:", error);
     
-    if (error.message === "Current password is incorrect") {
+    if (error instanceof ServiceError && error?.message === "Current password is incorrect") {
       return NextResponse.json(
         { error: "Current password is incorrect" },
         { status: 400 }

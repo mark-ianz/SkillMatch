@@ -13,7 +13,7 @@ import {
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { COMPANY_ACCOUNT_STATUSES } from "@/types/admin.types";
-import { Ellipsis, Eye } from "lucide-react";
+import { Ellipsis } from "lucide-react";
 import { useState } from "react";
 import StudentDetailsDialog from "./StudentDetailsDialog";
 import {

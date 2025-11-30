@@ -12,8 +12,8 @@ import {
 } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { CompanyWithStatus, COMPANY_ACCOUNT_STATUSES } from "@/types/admin.types";
-import { Ellipsis, Eye } from "lucide-react";
+import { COMPANY_ACCOUNT_STATUSES } from "@/types/admin.types";
+import { Ellipsis } from "lucide-react";
 import { useState } from "react";
 import CompanyDetailsDialog from "./CompanyDetailsDialog";
 import {
@@ -25,10 +25,13 @@ import {
 } from "@/components/ui/select";
 import { format } from "date-fns";
 import { Skeleton } from "@/components/ui/skeleton";
+import { Company } from "@/types/company.types";
+import { Status } from "@/types/status.types";
 
 export default function CompaniesTable() {
   const [statusFilter, setStatusFilter] = useState<string>("all");
-  const [selectedCompany, setSelectedCompany] = useState<CompanyWithStatus | null>(null);
+  const [selectedCompany, setSelectedCompany] =
+    useState<Company & Status | null>(null);
 
   const { data: companies, isLoading } = useQuery({
     queryKey: ["admin-companies", statusFilter],
@@ -37,7 +40,7 @@ export default function CompaniesTable() {
       if (statusFilter !== "all") {
         params.append("status", statusFilter);
       }
-      const response = await api.get<CompanyWithStatus[]>(
+      const response = await api.get<(Company & Status)[]>(
         `/admin/companies?${params.toString()}`
       );
       return response.data;
@@ -45,7 +48,7 @@ export default function CompaniesTable() {
   });
 
   const getStatusBadge = (statusId: number, statusName: string) => {
-    console.log(statusName)
+    console.log(statusName);
     const status = COMPANY_ACCOUNT_STATUSES.find((s) => s.value === statusId);
     return (
       <Badge variant={status?.variant || "default"}>
@@ -127,7 +130,11 @@ export default function CompaniesTable() {
                     <div className="flex flex-wrap gap-1">
                       {Array.isArray(company.industry) ? (
                         company.industry.slice(0, 2).map((ind, idx) => (
-                          <Badge key={idx} variant="outline" className="text-xs">
+                          <Badge
+                            key={idx}
+                            variant="outline"
+                            className="text-xs"
+                          >
                             {ind}
                           </Badge>
                         ))
@@ -144,14 +151,15 @@ export default function CompaniesTable() {
                         )}
                     </div>
                   </TableCell>
+                  <TableCell>{company.city_municipality}</TableCell>
                   <TableCell>
-                    {company.city_municipality}
+                    {getStatusBadge(company.status_id, company.status)}
                   </TableCell>
                   <TableCell>
-                    {getStatusBadge(company.status_id, company.status_name)}
-                  </TableCell>
-                  <TableCell>
-                    {format(new Date(company.account_created_at), "MMM d, yyyy")}
+                    {format(
+                      new Date(company.created_at),
+                      "MMM d, yyyy"
+                    )}
                   </TableCell>
                   <TableCell className="text-right">
                     <Button

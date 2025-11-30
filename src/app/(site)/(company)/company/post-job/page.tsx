@@ -2,7 +2,6 @@
 
 import MainLayout from "@/components/layout/MainLayout";
 import JobPostingForm from "@/components/page_specific/job_post/JobPostForm";
-import { SessionProvider } from "next-auth/react";
 
 export default function PostJobPage() {
   return (

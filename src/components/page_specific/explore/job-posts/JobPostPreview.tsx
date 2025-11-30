@@ -5,7 +5,7 @@ import { cn } from "@/lib/utils";
 import JobPreviewHeader from "./sub-components/JobPreviewHeader";
 import Location from "./sub-components/Location";
 import DatePosted from "./sub-components/DatePosted";
-import { StatusBadge } from "@/components/common/StatusBadge";
+import { JobStatusBadge } from "@/components/common/JobStatusBadge";
 
 interface JobPostPreviewProps {
   job: JobPost;
@@ -35,7 +35,7 @@ export function JobPostPreview({
         <h3 className="text-lg font-semibold text-foreground group-hover:text-primary transition-colors">
           {job.job_title}
         </h3>
-        {job.job_post_status && <StatusBadge status={job.job_post_status} />}
+        {job.job_post_status && <JobStatusBadge status={job.job_post_status} />}
       </div>
 
       {/* Company name and Status */}

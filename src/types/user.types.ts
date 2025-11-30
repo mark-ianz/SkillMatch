@@ -42,7 +42,7 @@ export type PublicAccount = Pick<Account, "email" | "role_id" | "status_id">;
 export type AcademicDetails = {
   college: string | null;
   course: string;
-  year_level: "3rd year" | "4th year" | null;
+  year_level: string | null;
   expected_graduation_year: string | null;
 };
 

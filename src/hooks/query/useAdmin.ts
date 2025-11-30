@@ -1,6 +1,7 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { api } from "@/lib/axios";
-import { CompanyWithStatus } from "@/types/admin.types";
+import { Status } from "@/types/status.types";
+import { Company } from "@/types/company.types";
 
 export function useAdminCompanies(statusFilter?: string) {
   return useQuery({
@@ -10,7 +11,7 @@ export function useAdminCompanies(statusFilter?: string) {
       if (statusFilter && statusFilter !== "all") {
         params.append("status", statusFilter);
       }
-      const response = await api.get<CompanyWithStatus[]>(
+      const response = await api.get<(Company & Status)[]>(
         `/admin/companies?${params.toString()}`
       );
       return response.data;
@@ -44,7 +45,7 @@ export function useAdminCompanyDetails(company_id: string) {
   return useQuery({
     queryKey: ["admin-company", company_id],
     queryFn: async () => {
-      const response = await api.get<CompanyWithStatus>(
+      const response = await api.get<(Company & Status)>(
         `/admin/companies/${company_id}`
       );
       return response.data;

@@ -1,5 +1,4 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import Link from "next/link";
 import { api } from "@/lib/axios";
 import { CompanyPostFormData } from "@/schema/company-post.schema";
 import { toast } from "sonner";

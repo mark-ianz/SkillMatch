@@ -11,7 +11,7 @@ import {
   ExternalLink,
 } from "lucide-react";
 import Link from "next/link";
-import { ApplicationWithJobDetails, getApplicationStatusName } from "@/types/application.types";
+import { ApplicationWithJobDetails } from "@/types/application.types";
 
 interface StatusConfig {
   label: string;

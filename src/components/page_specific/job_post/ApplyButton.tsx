@@ -26,7 +26,6 @@ export function ApplyButton({
   className,
   variant = "default",
   size = "default",
-  fullWidth = false,
 }: ApplyButtonProps) {
   const { data: session } = useSession();
   const [isDialogOpen, setIsDialogOpen] = useState(false);
