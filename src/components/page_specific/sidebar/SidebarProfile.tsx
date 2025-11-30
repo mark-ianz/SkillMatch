@@ -157,12 +157,13 @@ export default async function SidebarProfile() {
       {/* <ProfileBanner data={dummy_profile} /> */}
       <div className="relative -mt-12 flex justify-center">
         <div className="w-20 h-20 rounded-full bg-white p-1 shadow-md">
-          <div className="relative w-full h-full rounded-full overflow-hidden bg-slate-100">
+          <div className="relative w-[72px] h-[72px] rounded-full overflow-hidden bg-slate-100">
             {profileImage ? (
               <Image
                 src={profileImage}
                 alt={displayName}
                 fill
+                quality={50}
                 className="object-cover"
               />
             ) : isOjt ? (
