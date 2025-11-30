@@ -38,6 +38,7 @@ export function CopyLinkButton({
 
   return (
     <Button
+      aria-label="Copy Link"
       name="copy_link_button"
       variant={variant}
       size={size}

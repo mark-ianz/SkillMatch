@@ -94,6 +94,7 @@ export function JobPostFullInfo({
               {/* Bookmark button - Only visible for applicants (role_id 3) */}
               {session?.user?.role_id === 3 && (
                 <Button
+                  aria-label={isSaved ? "Unsave Job" : "Save Job"}
                   variant="ghost"
                   size="icon"
                   onClick={handleSave}
