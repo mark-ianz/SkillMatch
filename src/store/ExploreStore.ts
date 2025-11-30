@@ -13,7 +13,7 @@ interface ExploreStoreState {
 }
 
 export const useExploreStore = create<ExploreStoreState>((set) => ({
-  exploreType: "job-posts",
+  exploreType: "job-postings",
   selected_company: null,
   selected_job_post: null,
   setExploreType: (exploreType) =>

@@ -36,7 +36,7 @@ export default function NotificationPopover() {
     if (notification.application_id) {
       if (notification.type === "application_received" || notification.type === "offer_response") {
         // Company view - go to job post applications
-        router.push(`/company/job-posts/${notification.job_post_id}`);
+        router.push(`/company/job-postings/${notification.job_post_id}`);
       } else {
         // User view - go to application tracker
         router.push(`/applicant/application-tracker/${notification.application_id}`);

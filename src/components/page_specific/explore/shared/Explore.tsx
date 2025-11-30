@@ -2,10 +2,10 @@
 
 import React, { useEffect } from "react";
 import { useParams } from "next/navigation";
-import { JobExploreHeader } from "../job-posts/JobExploreHeader";
+import { JobExploreHeader } from "../job-postings/JobExploreHeader";
 import CompanyExplore from "../company/CompanyExplore";
 import { useExploreStore } from "@/store/ExploreStore";
-import JobPostExplore from "../job-posts/JobPostExplore";
+import JobPostExplore from "../job-postings/JobPostExplore";
 import { ExploreType } from "@/types/job_explore.types";
 
 export default function Explore({}) {
@@ -27,7 +27,7 @@ export default function Explore({}) {
 
       {/* Job List - Scrollable */}
       <div className="overflow-y-hidden space-y-3">
-        {exploreType === "job-posts" ? <JobPostExplore /> : <CompanyExplore />}
+        {exploreType === "job-postings" ? <JobPostExplore /> : <CompanyExplore />}
       </div>
     </div>
   );

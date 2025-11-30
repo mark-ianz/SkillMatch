@@ -1,7 +1,7 @@
 "use client";
 
 import MainLayout from "@/components/layout/MainLayout";
-import JobPostingForm from "@/components/page_specific/job_post/JobPostForm";
+import JobPostingForm from "@/components/page_specific/job_postings/JobPostForm";
 
 export default function PostJobPage() {
   return (

@@ -13,7 +13,7 @@ export function useJobPosts(
   isSessionLoading?: boolean
 ) {
   return useQuery({
-    queryKey: ["job-posts", filters, userId, roleName],
+    queryKey: ["job-postings", filters, userId, roleName],
     queryFn: async () => {
       const params = new URLSearchParams();
       
@@ -58,14 +58,14 @@ export function useCreateJobPost() {
     mutationFn: async (
       payload: JobPostingFormData & { company_id: string | null }
     ) => {
-      const { data } = await api.post("/company/job-posts/create", payload);
+      const { data } = await api.post("/company/job-postings/create", payload);
       return data.job_post;
     },
     onSuccess: (data) => {
       console.log(data);
       toast.success("Job posted successfully");
-      // Invalidate job-posts so new job post appears
-      qc.invalidateQueries({ queryKey: ["job-posts"] });
+      // Invalidate job-postings so new job post appears
+      qc.invalidateQueries({ queryKey: ["job-postings"] });
     },
     onError: (error) => {
       console.log(error);

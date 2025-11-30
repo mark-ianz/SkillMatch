@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { JobPostFullInfo } from "../../job_post/JobPostFullInfo";
+import { JobPostFullInfo } from "../../job_postings/JobPostFullInfo";
 import { useExploreStore } from "@/store/ExploreStore";
 import { CompanyProfile } from "../company/CompanyProfile";
 import { JobPostFullInfoSkeleton } from "@/components/common/skeleton/JobPostSkeleton";
@@ -17,7 +17,7 @@ export default function ExploreFullInfo() {
   // Show skeleton while loading
   if (
     status === "loading" ||
-    (!selected_job_post && exploreType === "job-posts") ||
+    (!selected_job_post && exploreType === "job-postings") ||
     (!selected_company && exploreType === "companies")
   ) {
     return (
@@ -29,7 +29,7 @@ export default function ExploreFullInfo() {
     );
   }
 
-  if (!selected_job_post && exploreType === "job-posts") {
+  if (!selected_job_post && exploreType === "job-postings") {
     return (
       <div className="flex items-center justify-center">
         <p className="text-muted">No job post selected</p>
@@ -48,7 +48,7 @@ export default function ExploreFullInfo() {
   return (
     <div className="flex-4 sticky top-28 bottom-4 pb-20 h-fit">
       <div className="max-h-[calc(100vh-9rem)] overflow-y-auto border pb-4 rounded-lg">
-        {exploreType === "job-posts" && (
+        {exploreType === "job-postings" && (
           <JobPostFullInfo
             job={selected_job_post!}
             className="border-0 shadow-none"

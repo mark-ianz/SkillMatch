@@ -22,7 +22,7 @@ export default async function NavigationMenuApplicant() {
             Explore
           </NavigationMenuTrigger>
           <NavigationMenuContent>
-            <NavigationMenuLink className="w-[200px]" href="/explore/job-posts">
+            <NavigationMenuLink className="w-[200px]" href="/explore/job-postings">
               <div className="font-medium">Jobs</div>
               <div className="text-muted-foreground">
                 Browse all job listings.

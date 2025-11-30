@@ -22,7 +22,7 @@ export default async function NavigationMenuCompany() {
             Manage
           </NavigationMenuTrigger>
           <NavigationMenuContent>
-            <NavigationMenuLink className="w-[230px]" href="/company/job-posts">
+            <NavigationMenuLink className="w-[230px]" href="/company/job-postings">
               <div className="font-medium">Job Postings</div>
               <div className="text-muted-foreground">
                 Create and manage your job postings.

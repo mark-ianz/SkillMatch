@@ -92,7 +92,7 @@ export default async function SidebarProfile() {
                 Companies
               </Button>
             </Link>
-            <Link href="/admin/job-posts" className="block">
+            <Link href="/admin/job-postings" className="block">
               <Button variant="ghost" size="sm" className="w-full justify-start">
                 <Briefcase className="h-4 w-4 mr-2" />
                 Job Posts

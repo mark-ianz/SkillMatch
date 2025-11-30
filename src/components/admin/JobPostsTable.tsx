@@ -37,14 +37,14 @@ export default function JobPostsTable() {
   const [selectedJobPost, setSelectedJobPost] = useState<JobPostWithCompany | null>(null);
 
   const { data: jobPosts, isLoading } = useQuery({
-    queryKey: ["admin-job-posts", statusFilter],
+    queryKey: ["admin-job-postings", statusFilter],
     queryFn: async () => {
       const params = new URLSearchParams();
       if (statusFilter !== "all") {
         params.append("status", statusFilter);
       }
       const response = await api.get<JobPostWithCompany[]>(
-        `/admin/job-posts?${params.toString()}`
+        `/admin/job-postings?${params.toString()}`
       );
       return response.data;
     },

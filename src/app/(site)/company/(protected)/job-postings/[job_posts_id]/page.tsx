@@ -39,7 +39,7 @@ import {
 import { useState } from "react";
 import { Separator } from "@/components/ui/separator";
 import { ScheduleInterviewDialog } from "@/components/page_specific/company/view_job_post/ScheduleInterviewDialog";
-import Location from "@/components/page_specific/explore/job-posts/sub-components/Location";
+import Location from "@/components/page_specific/explore/job-postings/sub-components/Location";
 import {
   useJobPostApplications,
   useScheduleInterview,
@@ -264,7 +264,7 @@ export default function JobDetailsPage() {
       <div className="min-h-screen bg-gradient-to-b from-green-50 to-white">
         <div className="border-b bg-white">
           <div className="container mx-auto px-4 py-4">
-            <Link href="/company/job-posts">
+            <Link href="/company/job-postings">
               <Button variant="ghost" size="sm">
                 <ArrowLeft className="h-4 w-4 mr-2" />
                 Back to Job Posts
@@ -293,7 +293,7 @@ export default function JobDetailsPage() {
       <div className="min-h-screen bg-gradient-to-b from-green-50 to-white">
         <div className="border-b bg-white">
           <div className="container mx-auto px-4 py-4">
-            <Link href="/company/job-posts">
+            <Link href="/company/job-postings">
               <Button variant="ghost" size="sm">
                 <ArrowLeft className="h-4 w-4 mr-2" />
                 Back to Job Posts

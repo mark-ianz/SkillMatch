@@ -11,7 +11,7 @@ interface Shortcut {
 
 const shortcuts: Shortcut[] = [
   {
-    href: "/explore/job-posts",
+    href: "/explore/job-postings",
     icon: Search,
     label: "Browse Jobs",
     variant: "ghost",

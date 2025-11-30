@@ -118,10 +118,10 @@ export function useRespondToOffer() {
 // Query: Get all job posts for company with application statistics
 export function useCompanyJobPostsWithStats() {
   return useQuery({
-    queryKey: ["company-job-posts-stats"],
+    queryKey: ["company-job-postings-stats"],
     queryFn: async () => {
       const { data } = await api.get<{ jobPosts: JobPostWithApplicationStats[] }>(
-        "/company/job-posts"
+        "/company/job-postings"
       );
       return data.jobPosts;
     },
@@ -135,7 +135,7 @@ export function useJobPostApplications(job_post_id: string) {
     queryKey: ["job-post-applications", job_post_id],
     queryFn: async () => {
       const { data } = await api.get<{ applications: ApplicationWithUserDetails[] }>(
-        `/company/job-posts/${job_post_id}/applications`
+        `/company/job-postings/${job_post_id}/applications`
       );
       return data.applications;
     },

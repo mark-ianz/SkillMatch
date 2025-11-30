@@ -20,7 +20,7 @@ import { JobPost } from "@/types/job_post.types";
 import { useState } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { api } from "@/lib/axios";
-import { JobPostFullInfo } from "@/components/page_specific/job_post/JobPostFullInfo";
+import { JobPostFullInfo } from "@/components/page_specific/job_postings/JobPostFullInfo";
 
 type JobPostWithCompany = JobPost & {
   company_name: string;
@@ -45,12 +45,12 @@ export default function JobPostDetailsDialog({
 
   const updateStatusMutation = useMutation({
     mutationFn: async (status_id: number) => {
-      await api.patch(`/admin/job-posts/${jobPost.job_post_id}`, {
+      await api.patch(`/admin/job-postings/${jobPost.job_post_id}`, {
         job_post_status_id: status_id,
       });
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["admin-job-posts"] });
+      queryClient.invalidateQueries({ queryKey: ["admin-job-postings"] });
       onOpenChange(false);
     },
   });

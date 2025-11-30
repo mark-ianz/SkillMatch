@@ -18,12 +18,12 @@ import {
 } from "@/schema/job-posting.schema";
 import ErrorArray from "@/components/common/ErrorArray";
 
-import BasicInformation from "@/components/page_specific/job_post/BasicInformation";
-import JobDescriptionSection from "@/components/page_specific/job_post/JobDescriptionSection";
-import RequirementsSection from "@/components/page_specific/job_post/RequirementsSection";
-import CompensationSection from "@/components/page_specific/job_post/CompensationSection";
-import LocationSection from "@/components/page_specific/job_post/LocationSection";
-import FormActions from "@/components/page_specific/job_post/FormActions";
+import BasicInformation from "@/components/page_specific/job_postings/BasicInformation";
+import JobDescriptionSection from "@/components/page_specific/job_postings/JobDescriptionSection";
+import RequirementsSection from "@/components/page_specific/job_postings/RequirementsSection";
+import CompensationSection from "@/components/page_specific/job_postings/CompensationSection";
+import LocationSection from "@/components/page_specific/job_postings/LocationSection";
+import FormActions from "@/components/page_specific/job_postings/FormActions";
 import { formatZodError } from "@/lib/utils";
 import { useCreateJobPost } from "@/hooks/query/useJobPosts";
 import useRequireCompany from "@/hooks/useRequireCompany";

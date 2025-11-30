@@ -224,7 +224,7 @@ export default function CompanyJobPostsPage() {
                             </Badge>
                           </div>
                         </div>
-                        <Link href={`/company/job-posts/${post.job_post_id}`}>
+                        <Link href={`/company/job-postings/${post.job_post_id}`}>
                           <Button variant="outline">
                             <Eye className="mr-2 h-4 w-4" />
                             View Details

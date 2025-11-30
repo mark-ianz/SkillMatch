@@ -13,4 +13,4 @@ export type CompanyExploreFilters = {
   search?: string;
 };
 
-export type ExploreType = "job-posts" | "companies";
+export type ExploreType = "job-postings" | "companies";

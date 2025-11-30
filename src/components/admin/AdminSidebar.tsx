@@ -14,7 +14,7 @@ const navItems = [
   },
   {
     title: "Job Posts",
-    href: "/admin/job-posts",
+    href: "/admin/job-postings",
     icon: Briefcase,
   },
   {

@@ -1,7 +1,7 @@
 import { Badge } from "@/components/ui/badge";
 import { Card } from "@/components/ui/card";
 import MainLayout from "@/components/layout/MainLayout";
-import { JobPostPreview } from "@/components/page_specific/explore/job-posts/JobPostPreview";
+import { JobPostPreview } from "@/components/page_specific/explore/job-postings/JobPostPreview";
 import Link from "next/link";
 import { CompanyProfile } from "@/components/page_specific/explore/company/CompanyProfile";
 import { ScrollArea } from "@/components/ui/scroll-area";

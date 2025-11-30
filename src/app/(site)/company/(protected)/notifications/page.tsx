@@ -25,7 +25,7 @@ export default function CompanyNotificationsPage() {
 
     // Navigate to relevant page - company goes to job post applicants
     if (notification.job_post_id) {
-      router.push(`/company/job-posts/${notification.job_post_id}`);
+      router.push(`/company/job-postings/${notification.job_post_id}`);
     }
   };
 

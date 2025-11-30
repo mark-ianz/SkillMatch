@@ -65,7 +65,7 @@ export function JobExploreHeader() {
         <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-muted-foreground" />
         <Input
           placeholder={
-            exploreType === "job-posts"
+            exploreType === "job-postings"
               ? "Search job titles or companies..."
               : "Search companies..."
           }
@@ -82,7 +82,7 @@ export function JobExploreHeader() {
         className="w-full"
       >
         <TabsList className="w-full grid grid-cols-2">
-          <TabsTrigger aria-label="Job Posts" value="job-posts">Job Posts</TabsTrigger>
+          <TabsTrigger aria-label="Job Posts" value="job-postings">Job Posts</TabsTrigger>
           <TabsTrigger aria-label="Companies" value="companies">Companies</TabsTrigger>
         </TabsList>
       </Tabs>

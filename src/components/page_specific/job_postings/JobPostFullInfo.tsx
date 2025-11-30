@@ -9,8 +9,8 @@ import { Bookmark, Briefcase } from "lucide-react";
 import Image from "next/image";
 import { CopyLinkButton } from "@/components/common/button/CopyLinkButton";
 import { Separator } from "@/components/ui/separator";
-import MatchedBadges from "../explore/job-posts/sub-components/MatchedBadges";
-import JobCategories from "../explore/job-posts/sub-components/JobCategories";
+import MatchedBadges from "../explore/job-postings/sub-components/MatchedBadges";
+import JobCategories from "../explore/job-postings/sub-components/JobCategories";
 import {
   useIsJobSaved,
   useSaveJob,
@@ -19,7 +19,7 @@ import {
 import { useSession } from "next-auth/react";
 import { SignInPromptDialog } from "@/components/common/SignInPromptDialog";
 import { useState } from "react";
-import Location from "../explore/job-posts/sub-components/Location";
+import Location from "../explore/job-postings/sub-components/Location";
 import { JobStatusBadge } from "@/components/common/JobStatusBadge";
 import Link from "next/link";
 import { ApplyButton } from "./ApplyButton";
