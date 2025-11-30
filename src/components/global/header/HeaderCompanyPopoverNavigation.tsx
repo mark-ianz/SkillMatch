@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button";
-import { Building2, Briefcase, FileText, Users } from "lucide-react";
+import { Building2, Briefcase, FileText } from "lucide-react";
 import Link from "next/link";
 import React from "react";
 
@@ -22,12 +22,6 @@ export default function HeaderCompanyPopoverNavigation() {
         <Button variant="ghost" className="w-full justify-start" size="sm">
           <FileText className="mr-2 h-4 w-4" />
           Feed Posts
-        </Button>
-      </Link>
-      <Link href="/company/applications">
-        <Button variant="ghost" className="w-full justify-start" size="sm">
-          <Users className="mr-2 h-4 w-4" />
-          Applicants
         </Button>
       </Link>
     </>
