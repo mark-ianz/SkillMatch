@@ -41,7 +41,6 @@ export function JobExploreFilter({ className }: JobExploreFilterProps) {
   const exploreType = useExploreStore((state) => state.exploreType);
   const setExploreType = useExploreStore((state) => state.setExploreType);
 
-
   useEffect(() => {
     // Sync URL exploreType with store
     setExploreType(exploreType);
@@ -155,11 +154,12 @@ export function JobExploreFilter({ className }: JobExploreFilterProps) {
         <>
           <div className="space-y-1">
             <h4 className="text-sm font-semibold">Industry</h4>
-            <div className="space-y-0.5">
+            <div>
               {INDUSTRIES.map((industry) => (
-                <div
+                <Label
+                  htmlFor={`industry-${industry}`}
                   key={industry}
-                  className="flex align-top gap-2 justify-start"
+                  className="flex align-top gap-2 justify-start font-normal cursor-pointer leading-tight py-1"
                 >
                   <Checkbox
                     id={`industry-${industry}`}
@@ -168,13 +168,9 @@ export function JobExploreFilter({ className }: JobExploreFilterProps) {
                       handleFilterChange("industries", industry)
                     }
                   />
-                  <Label
-                    htmlFor={`industry-${industry}`}
-                    className="text-sm font-normal cursor-pointer leading-tight"
-                  >
-                    {industry}
-                  </Label>
-                </div>
+
+                  {industry}
+                </Label>
               ))}
             </div>
           </div>
@@ -185,11 +181,12 @@ export function JobExploreFilter({ className }: JobExploreFilterProps) {
           {/* Courses Filter */}
           <div className="space-y-1">
             <h4 className="text-sm font-bold">Courses</h4>
-            <div className="space-y-0.5">
+            <div>
               {COURSES.map((course, index) => (
-                <div
+                <Label
                   key={course + index}
-                  className="flex align-top gap-2 justify-start"
+                  className="flex align-top gap-2 justify-start font-normal cursor-pointer leading-tight py-1"
+                  htmlFor={`course-${course}`}
                 >
                   <Checkbox
                     id={`course-${course}`}
@@ -198,13 +195,9 @@ export function JobExploreFilter({ className }: JobExploreFilterProps) {
                       handleFilterChange("courses", course)
                     }
                   />
-                  <Label
-                    htmlFor={`course-${course}`}
-                    className="font-normal cursor-pointer leading-tight"
-                  >
-                    {course.replace("Bachelor of Science in ", "BS ")}
-                  </Label>
-                </div>
+
+                  {course.replace("Bachelor of Science in ", "BS ")}
+                </Label>
               ))}
             </div>
           </div>
@@ -214,9 +207,13 @@ export function JobExploreFilter({ className }: JobExploreFilterProps) {
           {/* Location Filter */}
           <div className="space-y-1">
             <h4 className="text-sm font-semibold">Location</h4>
-            <div className="space-y-0.5">
+            <div>
               {LOCATION_OPTIONS.map((location) => (
-                <div key={location} className="flex items-center gap-2">
+                <Label
+                  key={location}
+                  htmlFor={`location-${location}`}
+                  className="flex align-top gap-2 justify-start font-normal cursor-pointer leading-tight py-1"
+                >
                   <Checkbox
                     id={`location-${location}`}
                     checked={filters.locations.includes(location)}
@@ -224,13 +221,9 @@ export function JobExploreFilter({ className }: JobExploreFilterProps) {
                       handleFilterChange("locations", location)
                     }
                   />
-                  <Label
-                    htmlFor={`location-${location}`}
-                    className="font-normal cursor-pointer"
-                  >
-                    {location}
-                  </Label>
-                </div>
+
+                  {location}
+                </Label>
               ))}
             </div>
           </div>
@@ -240,11 +233,12 @@ export function JobExploreFilter({ className }: JobExploreFilterProps) {
           {/* Work Arrangement Filter */}
           <div className="space-y-1">
             <h4 className="text-sm font-semibold">Work Arrangement</h4>
-            <div className="space-y-0.5">
+            <div>
               {WORK_ARRANGEMENT_OPTIONS.map((arrangement) => (
-                <div
+                <Label
+                  htmlFor={`arrangement-${arrangement}`}
+                  className="flex align-top gap-2 justify-start font-normal cursor-pointer leading-tight py-1"
                   key={arrangement}
-                  className="flex items-center justify-start gap-2"
                 >
                   <Checkbox
                     id={`arrangement-${arrangement}`}
@@ -253,13 +247,9 @@ export function JobExploreFilter({ className }: JobExploreFilterProps) {
                       handleFilterChange("workArrangement", arrangement)
                     }
                   />
-                  <Label
-                    htmlFor={`arrangement-${arrangement}`}
-                    className="font-normal cursor-pointer"
-                  >
-                    {arrangement}
-                  </Label>
-                </div>
+
+                  {arrangement}
+                </Label>
               ))}
             </div>
           </div>
@@ -269,11 +259,12 @@ export function JobExploreFilter({ className }: JobExploreFilterProps) {
           {/* Industry Filter */}
           <div className="space-y-1">
             <h4 className="text-sm font-semibold">Industry</h4>
-            <div className="space-y-0.5">
+            <div>
               {INDUSTRIES.map((industry) => (
-                <div
+                <Label
+                  htmlFor={`industry-${industry}`}
                   key={industry}
-                  className="flex align-top gap-2 justify-start"
+                  className="flex align-top gap-2 justify-start font-normal cursor-pointer leading-tight py-1"
                 >
                   <Checkbox
                     id={`industry-${industry}`}
@@ -282,13 +273,9 @@ export function JobExploreFilter({ className }: JobExploreFilterProps) {
                       handleFilterChange("industries", industry)
                     }
                   />
-                  <Label
-                    htmlFor={`industry-${industry}`}
-                    className="text-sm font-normal cursor-pointer leading-tight"
-                  >
-                    {industry}
-                  </Label>
-                </div>
+
+                  {industry}
+                </Label>
               ))}
             </div>
           </div>
@@ -299,11 +286,12 @@ export function JobExploreFilter({ className }: JobExploreFilterProps) {
           <div className="space-y-1 ">
             <h4 className="text-sm font-semibold">Job Categories</h4>
             <ScrollArea className="h-48">
-              <div className="space-y-0.5">
+              <div>
                 {JOB_CATEGORIES.map((category) => (
-                  <div
+                  <Label
+                    htmlFor={`jobCategory-${category}`}
+                    className="flex align-top gap-2 justify-start font-normal cursor-pointer leading-tight py-1"
                     key={category}
-                    className="flex align-top items-center justify-start gap-2"
                   >
                     <Checkbox
                       id={`jobCategory-${category}`}
@@ -312,13 +300,9 @@ export function JobExploreFilter({ className }: JobExploreFilterProps) {
                         handleFilterChange("jobCategories", category)
                       }
                     />
-                    <Label
-                      htmlFor={`jobCategory-${category}`}
-                      className="font-normal cursor-pointer"
-                    >
-                      {category}
-                    </Label>
-                  </div>
+
+                    {category}
+                  </Label>
                 ))}
               </div>
             </ScrollArea>
