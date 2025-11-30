@@ -297,18 +297,32 @@ export default function AboutPage() {
               <div className="prose prose-lg max-w-none">
                 <Card className="p-8 lg:p-12">
                   <p className="text-lg text-muted-foreground leading-relaxed mb-6">
-                    SkillMatch was founded in 2025 with a simple but powerful vision: to redefine how Quezon City University students connect with their first professional opportunities. Recognizing that traditional OJT placement processes were often fragmented and inefficient, we set out to create a platform that bridges the gap between academic learning and industry readiness.
+                    SkillMatch was founded in 2025 with a simple but powerful
+                    vision: to redefine how Quezon City University students
+                    connect with their first professional opportunities.
+                    Recognizing that traditional OJT placement processes were
+                    often fragmented and inefficient, we set out to create a
+                    platform that bridges the gap between academic learning and
+                    industry readiness.
                   </p>
                   <p className="text-lg text-muted-foreground leading-relaxed mb-6">
-                    In collaboration with Quezon City University Scholarship, Placement, and Alumni Relations Division, we designed a comprehensive platform that guides students through the entire OJT journey—from discovering opportunities to securing placements. Our carefully curated partnership model ensures that only verified, quality companies can post positions, giving students confidence as they explore their career paths.
+                    In collaboration with Quezon City University Scholarship,
+                    Placement, and Alumni Relations Division, we designed a
+                    comprehensive platform that guides students through the
+                    entire OJT journey—from discovering opportunities to
+                    securing placements. Our carefully curated partnership model
+                    ensures that only verified, quality companies can post
+                    positions, giving students confidence as they explore their
+                    career paths.
                   </p>
                   <p className="text-lg text-muted-foreground leading-relaxed">
-                    SkillMatch serves as the primary OJT placement
-                    platform for Quezon City University, connecting thousands of students with
-                    industry-leading companies across Metro Manila and beyond.
-                    We&apos;re proud to have facilitated meaningful career
-                    starts for our students while providing companies access to
-                    Quezon City University&apos;s exceptional talent pool.
+                    SkillMatch serves as the primary OJT placement platform for
+                    Quezon City University, connecting thousands of students
+                    with industry-leading companies across Metro Manila and
+                    beyond. We&apos;re proud to have facilitated meaningful
+                    career starts for our students while providing companies
+                    access to Quezon City University&apos;s exceptional talent
+                    pool.
                   </p>
                 </Card>
               </div>
@@ -342,11 +356,11 @@ export default function AboutPage() {
                 </div>
                 <h3 className="font-bold mb-2">Email Us</h3>
                 <a
-                  href="mailto:support@skillmatch.com"
+                  href="mailto:skillmatch.qcu@gmail.com"
                   className="text-skillmatch-primary-green hover:underline"
                   aria-label="Email SkillMatch support"
                 >
-                  support@skillmatch.com
+                  skillmatch.qcu@gmail.com
                 </a>
               </Card>
 
