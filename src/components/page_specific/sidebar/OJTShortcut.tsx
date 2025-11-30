@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button";
-import { Search, FileText, Bookmark, Settings, LucideIcon } from "lucide-react";
+import { Search, FileText, Bookmark, User, LucideIcon } from "lucide-react";
 import Link from "next/link";
 
 interface Shortcut {
@@ -23,15 +23,15 @@ const shortcuts: Shortcut[] = [
     variant: "ghost",
   },
   {
-    href: "/ojt/saved-jobs",
+    href: "/ojt/saved",
     icon: Bookmark,
-    label: "Saved Jobs",
+    label: "Saved Items",
     variant: "ghost",
   },
   {
     href: "/ojt/settings",
-    icon: Settings,
-    label: "Settings",
+    icon: User,
+    label: "Profile Settings",
     variant: "ghost",
   },
 ];
