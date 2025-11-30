@@ -30,7 +30,7 @@ export default function Footer() {
           <div className="flex gap-10">
             {/* Links */}
             <div>
-              <h4 className="font-semibold">Links</h4>
+              <p className="font-semibold">Links</p>
               <ul className="mt-3 space-y-2 text-sm text-skillmatch-light/80">
                 <li>
                   <Link href="/">For Applicants</Link>
@@ -49,7 +49,7 @@ export default function Footer() {
 
             {/* Legal */}
             <div>
-              <h4 className="font-semibold">Legal</h4>
+              <p className="font-semibold">Legal</p>
               <ul className="mt-3 space-y-2 text-sm text-skillmatch-light/80">
                 <li>
                   <Link href="/privacy">Privacy Policy</Link>
@@ -62,7 +62,7 @@ export default function Footer() {
 
             {/* Contact */}
             <div className="max-w-[300px] text-sm flex flex-col gap-2">
-              <h4 className="font-semibold">Contact</h4>
+              <p className="font-semibold">Contact</p>
               <div className="flex items-start gap-3">
                 <MapPin className="w-4 h-4 mt-1 text-skillmatch-light/80" />
                 <div>
