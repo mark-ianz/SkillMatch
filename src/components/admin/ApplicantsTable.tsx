@@ -12,62 +12,29 @@ import {
 } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { COMPANY_ACCOUNT_STATUSES } from "@/types/admin.types";
 import { Ellipsis } from "lucide-react";
 import { useState } from "react";
 import ApplicantDetailsDialog from "./ApplicantsDetailsDialog";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 import { format } from "date-fns";
 import { Skeleton } from "@/components/ui/skeleton";
+import { ApplicantProfileAndUser } from "@/types/applicant_profile.types";
+import { Account } from "@/types/user.types";
+import { getCourseByAbbr } from "@/lib/utils";
 
-export interface ApplicantWithStatus {
-  user_id: number;
-  email: string;
-  status_id: number;
-  status_name: string;
-  account_created_at: string;
-  first_name?: string;
-  last_name?: string;
-  full_name: string;
-  course?: string;
-  year_level?: string;
-  required_hours?: number;
-  city_municipality?: string;
-  phone_number?: string;
-}
 
 export default function ApplicantsTable() {
-  const [statusFilter, setStatusFilter] = useState<string>("all");
-  const [selectedApplicant, setSelectedApplicant] = useState<ApplicantWithStatus | null>(null);
+  const [selectedApplicant, setSelectedApplicant] =
+    useState<ApplicantProfileAndUser & Account | null>(null);
 
   const { data: applicants, isLoading } = useQuery({
-    queryKey: ["admin-applicants", statusFilter],
+    queryKey: ["admin-applicants"],
     queryFn: async () => {
-      const params = new URLSearchParams();
-      if (statusFilter !== "all") {
-        params.append("status", statusFilter);
-      }
-      const response = await api.get<ApplicantWithStatus[]>(
-        `/admin/applicants?${params.toString()}`
+      const response = await api.get<(ApplicantProfileAndUser & Account)[]>(
+        `/admin/applicants`
       );
       return response.data;
     },
   });
-
-  const getStatusBadge = (statusId: number, statusName: string) => {
-    const status = COMPANY_ACCOUNT_STATUSES.find((s) => s.value === statusId);
-    return (
-      <Badge variant={status?.variant || "default"}>
-        {statusName || "Unknown"}
-      </Badge>
-    );
-  };
 
   if (isLoading) {
     return (
@@ -95,38 +62,20 @@ export default function ApplicantsTable() {
 
   return (
     <div className="space-y-4">
-      <div className="flex items-center justify-between">
-        <div className="flex items-center gap-2">
-          <span className="text-sm font-medium">Filter by Status:</span>
-          <Select value={statusFilter} onValueChange={setStatusFilter}>
-            <SelectTrigger className="w-[180px]">
-              <SelectValue placeholder="All Statuses" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="all">All Statuses</SelectItem>
-              {COMPANY_ACCOUNT_STATUSES.map((status) => (
-                <SelectItem key={status.value} value={status.value.toString()}>
-                  {status.label}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-        </div>
-        <div className="text-sm text-muted-foreground">
-          {applicants?.length || 0} applicants found
-        </div>
-      </div>
+      <p className="text-sm text-muted-foreground">
+        {applicants?.length || 0} applicants found
+      </p>
 
       <div className="border rounded-lg">
         <Table>
           <TableHeader>
             <TableRow>
+              <TableHead>Student Number</TableHead>
               <TableHead>Name</TableHead>
               <TableHead>Email</TableHead>
               <TableHead>Course</TableHead>
               <TableHead>Year Level</TableHead>
               <TableHead>Location</TableHead>
-              <TableHead>Status</TableHead>
               <TableHead>Joined</TableHead>
               <TableHead className="text-right">Actions</TableHead>
             </TableRow>
@@ -136,12 +85,15 @@ export default function ApplicantsTable() {
               applicants.map((student) => (
                 <TableRow key={student.user_id}>
                   <TableCell className="font-medium">
-                    {student.full_name}
+                    {student.student_number}
+                  </TableCell>
+                  <TableCell className="font-medium">
+                    {`${student.first_name} ${student.last_name}`}
                   </TableCell>
                   <TableCell>{student.email}</TableCell>
                   <TableCell>
                     {student.course ? (
-                      <Badge variant="outline">{student.course}</Badge>
+                      <Badge variant="outline">{`${getCourseByAbbr(student.course)} (${student.course})`}</Badge>
                     ) : (
                       <span className="text-muted-foreground text-sm">N/A</span>
                     )}
@@ -152,15 +104,17 @@ export default function ApplicantsTable() {
                     )}
                   </TableCell>
                   <TableCell>
-                    {student.city_municipality || (
+                    {student.city_municipality && student.barangay ? (
+                      <span>{`${student.city_municipality}, ${student.barangay}`}</span>
+                    ) : (
                       <span className="text-muted-foreground text-sm">N/A</span>
                     )}
                   </TableCell>
                   <TableCell>
-                    {getStatusBadge(student.status_id, student.status_name)}
-                  </TableCell>
-                  <TableCell>
-                    {format(new Date(student.account_created_at), "MMM d, yyyy")}
+                    {format(
+                      new Date(student.created_at),
+                      "MMM d, yyyy"
+                    )}
                   </TableCell>
                   <TableCell className="text-right">
                     <Button

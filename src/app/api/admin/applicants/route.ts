@@ -1,64 +1,48 @@
 import { db } from "@/lib/db";
 import { isAdmin } from "@/lib/admin-auth";
-import { NextRequest, NextResponse } from "next/server";
+import { NextResponse } from "next/server";
 import { ApplicantProfileAndUser } from "@/types/applicant_profile.types";
-import { Status } from "@/types/status.types";
 import { RowDataPacket } from "mysql2";
 
 // Get all applicants with their account status
-export async function GET(request: NextRequest) {
+export async function GET() {
   try {
     // Check if user is admin
     if (!(await isAdmin())) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    const { searchParams } = new URL(request.url);
-    const statusFilter = searchParams.get("status");
-
     let query = `
       SELECT 
         a.user_id,
         a.email,
-        a.status_id,
-        a.created_at as account_created_at,
-        s.status as status_name,
+        a.created_at,
         u.first_name,
         u.last_name,
         u.phone_number,
+        u.barangay,
         u.city_municipality,
         op.course,
-        op.year_level
+        op.student_number,
+        op.year_level,
+        op.required_hours,
+        op.preferred_schedule,
+        op.applicant_image_path
       FROM account a
       LEFT JOIN user u ON a.user_id = u.user_id
       LEFT JOIN applicant_profile op ON a.user_id = op.user_id
-      LEFT JOIN status s ON a.status_id = s.status_id
       WHERE a.role_id = 3
     `;
 
     const params: number[] = [];
 
-    if (statusFilter && statusFilter !== "all") {
-      query += " AND a.status_id = ?";
-      params.push(parseInt(statusFilter));
-    }
-
     query += " ORDER BY a.created_at DESC";
 
-    const [applicants] = await db.query<(ApplicantProfileAndUser & Status & RowDataPacket)[]>(query, params);
+    const [applicants] = await db.query<
+      (ApplicantProfileAndUser & RowDataPacket)[]
+    >(query, params);
 
-    // Map status to status_name for frontend
-    const mappedapplicants = Array.isArray(applicants)
-      ? applicants.map((student) => ({
-          ...student,
-          status_name: student.status || "Unknown",
-          full_name: student.first_name && student.last_name 
-            ? `${student.first_name} ${student.last_name}`
-            : "N/A",
-        }))
-      : [];
-
-    return NextResponse.json(mappedapplicants);
+    return NextResponse.json(applicants);
   } catch (error) {
     console.error("Error fetching applicants:", error);
     return NextResponse.json(

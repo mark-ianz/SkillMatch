@@ -8,16 +8,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { ApplicantWithStatus } from "./ApplicantsTable";
-import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useState } from "react";
@@ -33,13 +24,14 @@ import {
   GraduationCap,
   Phone,
   Clock,
+  CalendarCheck,
 } from "lucide-react";
-import { COMPANY_ACCOUNT_STATUSES } from "@/types/admin.types";
 import { ApplicantProfileAndUser } from "@/types/applicant_profile.types";
-import { Status, StatusId } from "@/types/status.types";
+import { Account } from "@/types/user.types";
+import { getCourseByAbbr } from "@/lib/utils";
 
 interface ApplicantDetailsDialogProps {
-  student: ApplicantWithStatus;
+  student: ApplicantProfileAndUser & Account;
   open: boolean;
   onOpenChange: (open: boolean) => void;
 }
@@ -56,13 +48,12 @@ export default function ApplicantDetailsDialog({
     course: student.course || "",
     year_level: student.year_level || "",
     required_hours: student.required_hours?.toString() || "",
-    status_id: student.status_id.toString(),
   });
 
   const queryClient = useQueryClient();
 
   const updateApplicantMutation = useMutation({
-    mutationFn: async (data: Partial<ApplicantProfileAndUser> & Partial<Status>) => {
+    mutationFn: async (data: Partial<ApplicantProfileAndUser & Account>) => {
       await api.patch(`/admin/applicants/${student.user_id}`, data);
     },
     onSuccess: () => {
@@ -77,9 +68,7 @@ export default function ApplicantDetailsDialog({
   });
 
   const handleSubmit = () => {
-    const updates: Partial<ApplicantProfileAndUser> & Partial<Status> = {
-      status_id: parseInt(formData.status_id) as StatusId,
-    };
+    const updates: Partial<ApplicantProfileAndUser & Account> = {};
 
     if (formData.first_name !== student.first_name) {
       updates.first_name = formData.first_name;
@@ -100,22 +89,15 @@ export default function ApplicantDetailsDialog({
     updateApplicantMutation.mutate(updates);
   };
 
-  const getStatusBadge = (statusId: number, statusName: string) => {
-    const status = COMPANY_ACCOUNT_STATUSES.find((s) => s.value === statusId);
-    return (
-      <Badge variant={status?.variant || "default"} className="text-sm">
-        {statusName || "Unknown"}
-      </Badge>
-    );
-  };
-
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle className="text-2xl">Applicant Details</DialogTitle>
           <DialogDescription>
-            {editMode ? "Edit student information" : "View and manage student account"}
+            {editMode
+              ? "Edit student information"
+              : "View and manage student account"}
           </DialogDescription>
         </DialogHeader>
 
@@ -199,15 +181,18 @@ export default function ApplicantDetailsDialog({
             ) : (
               <div className="grid grid-cols-2 gap-4">
                 <div>
+                  <p className="text-sm text-muted-foreground">Student Number</p>
+                  <p className="font-medium">{student.student_number}</p>
+                </div>
+                <div>
                   <p className="text-sm text-muted-foreground">Full Name</p>
-                  <p className="font-medium">{student.full_name}</p>
+                  <p className="font-medium">{`${student.first_name} ${student.last_name}`}</p>
                 </div>
                 <div>
                   <p className="text-sm text-muted-foreground flex items-center gap-2">
-                    <GraduationCap className="h-4 w-4" />
                     Course
                   </p>
-                  <p className="font-medium">{student.course || "N/A"}</p>
+                  <p className="font-medium">{`${getCourseByAbbr(student.course)} (${student.course})`}</p>
                 </div>
                 <div>
                   <p className="text-sm text-muted-foreground">Year Level</p>
@@ -215,11 +200,20 @@ export default function ApplicantDetailsDialog({
                 </div>
                 <div>
                   <p className="text-sm text-muted-foreground flex items-center gap-2">
-                    <Clock className="h-4 w-4" />
                     Required Hours
                   </p>
                   <p className="font-medium">
-                    {student.required_hours ? `${student.required_hours} hrs` : "N/A"}
+                    {student.required_hours
+                      ? `${student.required_hours} hrs`
+                      : "N/A"}
+                  </p>
+                </div>
+                <div>
+                  <p className="text-sm text-muted-foreground flex items-center gap-2">
+                    Preferred Schedule
+                  </p>
+                  <p className="font-medium">
+                    {student.preferred_schedule?.split(",").join(", ") || "N/A"}
                   </p>
                 </div>
               </div>
@@ -265,44 +259,13 @@ export default function ApplicantDetailsDialog({
           {/* Account Status */}
           <div>
             <h3 className="text-lg font-semibold mb-4">Account Status</h3>
-            <div className="space-y-4">
-              <div className="flex items-center gap-2">
-                <Calendar className="h-4 w-4 text-muted-foreground" />
-                <div>
-                  <p className="text-sm text-muted-foreground">Joined</p>
-                  <p className="font-medium">
-                    {format(new Date(student.account_created_at), "MMMM d, yyyy")}
-                  </p>
-                </div>
-              </div>
+            <div className="flex items-center gap-2">
+              <Calendar className="h-4 w-4 text-muted-foreground" />
               <div>
-                <Label>Status</Label>
-                {editMode ? (
-                  <Select
-                    value={formData.status_id}
-                    onValueChange={(value) =>
-                      setFormData({ ...formData, status_id: value })
-                    }
-                  >
-                    <SelectTrigger className="mt-2">
-                      <SelectValue />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {COMPANY_ACCOUNT_STATUSES.map((status) => (
-                        <SelectItem
-                          key={status.value}
-                          value={status.value.toString()}
-                        >
-                          {status.label}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                ) : (
-                  <div className="mt-2">
-                    {getStatusBadge(student.status_id, student.status_name)}
-                  </div>
-                )}
+                <p className="text-sm text-muted-foreground">Joined</p>
+                <p className="font-medium">
+                  {format(new Date(student.created_at), "MMMM d, yyyy")}
+                </p>
               </div>
             </div>
           </div>
@@ -321,7 +284,6 @@ export default function ApplicantDetailsDialog({
                     course: student.course || "",
                     year_level: student.year_level || "",
                     required_hours: student.required_hours?.toString() || "",
-                    status_id: student.status_id.toString(),
                   });
                 }}
               >
@@ -331,7 +293,9 @@ export default function ApplicantDetailsDialog({
                 onClick={handleSubmit}
                 disabled={updateApplicantMutation.isPending}
               >
-                {updateApplicantMutation.isPending ? "Saving..." : "Save Changes"}
+                {updateApplicantMutation.isPending
+                  ? "Saving..."
+                  : "Save Changes"}
               </Button>
             </>
           ) : (
