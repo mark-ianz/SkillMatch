@@ -17,9 +17,9 @@ export default async function FeedPage() {
   return (
     <MainLayout
       className="items-center pb-20"
-      wrapperClassName="py-4 w-full container"
+      wrapperClassName="p-4"
     >
-      <div className="flex gap-6 w-full mt-4">
+      <div className="flex gap-6 container max-w-7xl mt-4">
         {/* Left Sidebar - Profile */}
         <div className="flex-1">
           {isAuthenticated && role_name === "Company" && (
