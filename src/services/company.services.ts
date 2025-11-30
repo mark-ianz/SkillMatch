@@ -124,10 +124,9 @@ export const CompanyServices = {
       const [rows] = await db.query<RowDataPacket[]>(
         `SELECT 
           c.company_name,
-          a.email,
+          c.company_email as email,
           c.company_image
         FROM company c
-        INNER JOIN account a ON c.company_id = a.company_id
         WHERE c.company_id = ?`,
         [company_id]
       );
