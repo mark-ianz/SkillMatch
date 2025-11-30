@@ -4,19 +4,14 @@ Done:
 - feed ng posts
 - feed ng job posts
 - ojt skill, gawin na lang ding string sa db with "," instead of separate table pa. same rin sa job_post_skills. pwede ma search ng user base sa skills
-
+- dynamic header
+- make the view path a server component
 
 To-Do:
 - bug when you got no result on search and you searched again with result, it will not preview the first result on the company profile.
 - on company onboarding, auto fill the input when user first onboard
 - company posts feed
-- dynamic header
 - make the job categories required on job posts
-- make the view path a server component
 - nag ooverlap na yung mga same name na variable sa database pati sa types tanginang yan
-
-TEMPORARY LANG YUNG CHECKING NG STATES USING USESESSION, DAPAT IISTORE YAN SA STORE AFTER FETCHING DATA.
-
 - preferred_schedule and hours per week lagay sa onboarding at tanggalin sa application, reference na lang as FK
-
 - company email sa settings ng company is editable dapat, ang hindi editable is yung personal email na pinang login, ilagay rin to sa security.
