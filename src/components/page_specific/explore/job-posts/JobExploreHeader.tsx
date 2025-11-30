@@ -82,7 +82,7 @@ export function JobExploreHeader() {
         className="w-full"
       >
         <TabsList className="w-full grid grid-cols-2">
-          <TabsTrigger value="job-posts">Applicant Posts</TabsTrigger>
+          <TabsTrigger value="job-posts">Job Posts</TabsTrigger>
           <TabsTrigger value="companies">Companies</TabsTrigger>
         </TabsList>
       </Tabs>
