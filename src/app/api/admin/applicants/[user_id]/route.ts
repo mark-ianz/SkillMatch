@@ -17,7 +17,7 @@ export async function GET(
 
     const { user_id } = params;
 
-    const [students] = await db.query(
+    const [applicants] = await db.query(
       `
       SELECT 
         a.user_id,
@@ -50,14 +50,14 @@ export async function GET(
       [user_id]
     );
 
-    if (!Array.isArray(students) || students.length === 0) {
+    if (!Array.isArray(applicants) || applicants.length === 0) {
       return NextResponse.json(
-        { error: "Student not found" },
+        { error: "Applicant not found" },
         { status: 404 }
       );
     }
 
-    const student = students[0] as ApplicantProfileAndUser & Status;
+    const student = applicants[0] as ApplicantProfileAndUser & Status;
     return NextResponse.json({
       ...student,
       status_name: student.status || "Unknown",
@@ -154,7 +154,7 @@ export async function PATCH(
 
     return NextResponse.json({
       success: true,
-      message: "Student updated successfully",
+      message: "Applicant updated successfully",
     });
   } catch (error) {
     console.error("Error updating student:", error);

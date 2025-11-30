@@ -150,7 +150,7 @@ export default function AnalyticsDashboard() {
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
               <GraduationCap className="h-5 w-5" />
-              Student Courses Distribution
+              Applicant Courses Distribution
             </CardTitle>
             <CardDescription>
               {getTimeFrameLabel()}

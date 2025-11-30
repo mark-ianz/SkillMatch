@@ -18,8 +18,8 @@ const navItems = [
     icon: Briefcase,
   },
   {
-    title: "Students",
-    href: "/admin/students",
+    title: "Applicants",
+    href: "/admin/applicants",
     icon: GraduationCap,
   },
   {

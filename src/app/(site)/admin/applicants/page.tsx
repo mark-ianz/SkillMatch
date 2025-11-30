@@ -1,12 +1,12 @@
 import { Suspense } from "react";
-import StudentsTable from "@/components/admin/StudentsTable";
+import ApplicantsTable from "@/components/admin/ApplicantsTable";
 import { Skeleton } from "@/components/ui/skeleton";
 
-export default function AdminStudentsPage() {
+export default function AdminApplicantsPage() {
   return (
     <div>
       <div className="mb-8">
-        <h1 className="text-3xl font-bold mb-2">Students Management</h1>
+        <h1 className="text-3xl font-bold mb-2">Applicants Management</h1>
         <p className="text-muted-foreground">
           Manage and monitor all student accounts
         </p>
@@ -30,7 +30,7 @@ export default function AdminStudentsPage() {
           </div>
         }
       >
-        <StudentsTable />
+        <ApplicantsTable />
       </Suspense>
     </div>
   );

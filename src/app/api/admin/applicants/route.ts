@@ -5,7 +5,7 @@ import { ApplicantProfileAndUser } from "@/types/applicant_profile.types";
 import { Status } from "@/types/status.types";
 import { RowDataPacket } from "mysql2";
 
-// Get all students with their account status
+// Get all applicants with their account status
 export async function GET(request: NextRequest) {
   try {
     // Check if user is admin
@@ -45,11 +45,11 @@ export async function GET(request: NextRequest) {
 
     query += " ORDER BY a.created_at DESC";
 
-    const [students] = await db.query<(ApplicantProfileAndUser & Status & RowDataPacket)[]>(query, params);
+    const [applicants] = await db.query<(ApplicantProfileAndUser & Status & RowDataPacket)[]>(query, params);
 
     // Map status to status_name for frontend
-    const mappedStudents = Array.isArray(students)
-      ? students.map((student) => ({
+    const mappedapplicants = Array.isArray(applicants)
+      ? applicants.map((student) => ({
           ...student,
           status_name: student.status || "Unknown",
           full_name: student.first_name && student.last_name 
@@ -58,11 +58,11 @@ export async function GET(request: NextRequest) {
         }))
       : [];
 
-    return NextResponse.json(mappedStudents);
+    return NextResponse.json(mappedapplicants);
   } catch (error) {
-    console.error("Error fetching students:", error);
+    console.error("Error fetching applicants:", error);
     return NextResponse.json(
-      { error: "Failed to fetch students" },
+      { error: "Failed to fetch applicants" },
       { status: 500 }
     );
   }

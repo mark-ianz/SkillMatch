@@ -31,7 +31,7 @@ export function CoursesChart({ data, timeFrame }: CoursesChartProps) {
   // Generate chart config dynamically based on data
   const chartConfig: ChartConfig = {
     count: {
-      label: "Students",
+      label: "Applicants",
     },
     ...data.reduce((acc, item, index) => {
       acc[item.course] = {
@@ -42,14 +42,14 @@ export function CoursesChart({ data, timeFrame }: CoursesChartProps) {
     }, {} as Record<string, { label: string; color: string }>),
   };
 
-  const totalStudents = data.reduce((sum, item) => sum + item.count, 0);
+  const totalApplicants = data.reduce((sum, item) => sum + item.count, 0);
 
   return (
     <Card className="flex flex-col">
       <CardHeader className="items-center pb-0">
         <CardTitle className="flex items-center gap-2">
           <GraduationCap className="h-5 w-5" />
-          Student Courses Distribution
+          Applicant Courses Distribution
         </CardTitle>
         <CardDescription>{timeFrame}</CardDescription>
       </CardHeader>
@@ -71,7 +71,7 @@ export function CoursesChart({ data, timeFrame }: CoursesChartProps) {
       </CardContent>
       <div className="flex-col gap-2 text-sm px-6 pb-6">
         <div className="flex items-center justify-center gap-2 font-medium leading-none">
-          Total: {totalStudents} student{totalStudents !== 1 ? "s" : ""}
+          Total: {totalApplicants} student{totalApplicants !== 1 ? "s" : ""}
         </div>
         <div className="text-center text-muted-foreground leading-none mt-2">
           Showing course distribution for {timeFrame.toLowerCase()}

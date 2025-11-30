@@ -15,7 +15,7 @@ import { Button } from "@/components/ui/button";
 import { COMPANY_ACCOUNT_STATUSES } from "@/types/admin.types";
 import { Ellipsis } from "lucide-react";
 import { useState } from "react";
-import StudentDetailsDialog from "./StudentDetailsDialog";
+import ApplicantDetailsDialog from "./ApplicantsDetailsDialog";
 import {
   Select,
   SelectContent,
@@ -26,7 +26,7 @@ import {
 import { format } from "date-fns";
 import { Skeleton } from "@/components/ui/skeleton";
 
-export interface StudentWithStatus {
+export interface ApplicantWithStatus {
   user_id: number;
   email: string;
   status_id: number;
@@ -42,19 +42,19 @@ export interface StudentWithStatus {
   phone_number?: string;
 }
 
-export default function StudentsTable() {
+export default function ApplicantsTable() {
   const [statusFilter, setStatusFilter] = useState<string>("all");
-  const [selectedStudent, setSelectedStudent] = useState<StudentWithStatus | null>(null);
+  const [selectedApplicant, setSelectedApplicant] = useState<ApplicantWithStatus | null>(null);
 
-  const { data: students, isLoading } = useQuery({
-    queryKey: ["admin-students", statusFilter],
+  const { data: applicants, isLoading } = useQuery({
+    queryKey: ["admin-applicants", statusFilter],
     queryFn: async () => {
       const params = new URLSearchParams();
       if (statusFilter !== "all") {
         params.append("status", statusFilter);
       }
-      const response = await api.get<StudentWithStatus[]>(
-        `/admin/students?${params.toString()}`
+      const response = await api.get<ApplicantWithStatus[]>(
+        `/admin/applicants?${params.toString()}`
       );
       return response.data;
     },
@@ -113,7 +113,7 @@ export default function StudentsTable() {
           </Select>
         </div>
         <div className="text-sm text-muted-foreground">
-          {students?.length || 0} students found
+          {applicants?.length || 0} applicants found
         </div>
       </div>
 
@@ -132,8 +132,8 @@ export default function StudentsTable() {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {students && students.length > 0 ? (
-              students.map((student) => (
+            {applicants && applicants.length > 0 ? (
+              applicants.map((student) => (
                 <TableRow key={student.user_id}>
                   <TableCell className="font-medium">
                     {student.full_name}
@@ -166,7 +166,7 @@ export default function StudentsTable() {
                     <Button
                       variant="ghost"
                       size="sm"
-                      onClick={() => setSelectedStudent(student)}
+                      onClick={() => setSelectedApplicant(student)}
                     >
                       <Ellipsis className="h-4 w-4" />
                     </Button>
@@ -176,7 +176,7 @@ export default function StudentsTable() {
             ) : (
               <TableRow>
                 <TableCell colSpan={8} className="text-center py-8">
-                  No students found
+                  No applicants found
                 </TableCell>
               </TableRow>
             )}
@@ -184,11 +184,11 @@ export default function StudentsTable() {
         </Table>
       </div>
 
-      {selectedStudent && (
-        <StudentDetailsDialog
-          student={selectedStudent}
-          open={!!selectedStudent}
-          onOpenChange={(open: boolean) => !open && setSelectedStudent(null)}
+      {selectedApplicant && (
+        <ApplicantDetailsDialog
+          student={selectedApplicant}
+          open={!!selectedApplicant}
+          onOpenChange={(open: boolean) => !open && setSelectedApplicant(null)}
         />
       )}
     </div>

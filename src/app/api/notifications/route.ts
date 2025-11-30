@@ -32,7 +32,7 @@ export async function GET(request: NextRequest) {
         limit
       );
     } else if (session.user.role_id === 3) {
-      // Applicant/Student
+      // Applicant/Applicant
       const userId = session.user.user_id;
       if (!userId) {
         return NextResponse.json(

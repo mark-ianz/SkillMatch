@@ -8,7 +8,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { StudentWithStatus } from "./StudentsTable";
+import { ApplicantWithStatus } from "./ApplicantsTable";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
@@ -38,17 +38,17 @@ import { COMPANY_ACCOUNT_STATUSES } from "@/types/admin.types";
 import { ApplicantProfileAndUser } from "@/types/applicant_profile.types";
 import { Status, StatusId } from "@/types/status.types";
 
-interface StudentDetailsDialogProps {
-  student: StudentWithStatus;
+interface ApplicantDetailsDialogProps {
+  student: ApplicantWithStatus;
   open: boolean;
   onOpenChange: (open: boolean) => void;
 }
 
-export default function StudentDetailsDialog({
+export default function ApplicantDetailsDialog({
   student,
   open,
   onOpenChange,
-}: StudentDetailsDialogProps) {
+}: ApplicantDetailsDialogProps) {
   const [editMode, setEditMode] = useState(false);
   const [formData, setFormData] = useState({
     first_name: student.first_name || "",
@@ -61,13 +61,13 @@ export default function StudentDetailsDialog({
 
   const queryClient = useQueryClient();
 
-  const updateStudentMutation = useMutation({
+  const updateApplicantMutation = useMutation({
     mutationFn: async (data: Partial<ApplicantProfileAndUser> & Partial<Status>) => {
-      await api.patch(`/admin/students/${student.user_id}`, data);
+      await api.patch(`/admin/applicants/${student.user_id}`, data);
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["admin-students"] });
-      toast.success("Student updated successfully");
+      queryClient.invalidateQueries({ queryKey: ["admin-applicants"] });
+      toast.success("Applicant updated successfully");
       setEditMode(false);
       onOpenChange(false);
     },
@@ -97,7 +97,7 @@ export default function StudentDetailsDialog({
       updates.required_hours = parseInt(formData.required_hours) || 0;
     }
 
-    updateStudentMutation.mutate(updates);
+    updateApplicantMutation.mutate(updates);
   };
 
   const getStatusBadge = (statusId: number, statusName: string) => {
@@ -113,7 +113,7 @@ export default function StudentDetailsDialog({
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
         <DialogHeader>
-          <DialogTitle className="text-2xl">Student Details</DialogTitle>
+          <DialogTitle className="text-2xl">Applicant Details</DialogTitle>
           <DialogDescription>
             {editMode ? "Edit student information" : "View and manage student account"}
           </DialogDescription>
@@ -329,9 +329,9 @@ export default function StudentDetailsDialog({
               </Button>
               <Button
                 onClick={handleSubmit}
-                disabled={updateStudentMutation.isPending}
+                disabled={updateApplicantMutation.isPending}
               >
-                {updateStudentMutation.isPending ? "Saving..." : "Save Changes"}
+                {updateApplicantMutation.isPending ? "Saving..." : "Save Changes"}
               </Button>
             </>
           ) : (
