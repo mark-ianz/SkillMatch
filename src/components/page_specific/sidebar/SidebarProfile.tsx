@@ -52,7 +52,7 @@ export default async function SidebarProfile() {
   const role_id = session?.user.role_id;
   const user_id = session?.user.user_id;
   const company_id = session?.user.company_id;
-  const isAdmin = (session.user as any).isAdmin || role_id === 2;
+  const isAdmin = session.user.isAdmin || role_id === 2;
 
   // Show admin card for admin users
   if (isAdmin) {

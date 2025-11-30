@@ -102,8 +102,8 @@ export const authConfig: NextAuthOptions = {
           token.company_id = (user as ExtendedUser).company_id;
           token.role_id = (user as ExtendedUser).role_id;
           token.status_id = (user as ExtendedUser).status_id;
-          token.isAdmin = (user as any).isAdmin || false;
-          token.username = (user as any).username;
+          token.isAdmin = (user as ExtendedUser).isAdmin || false;
+          token.username = (user as ExtendedUser).username;
         }
         return token;
       } catch (error) {
@@ -128,8 +128,8 @@ export const authConfig: NextAuthOptions = {
         (session as ExtendedSession).user.status_id = (
           token as ExtendedToken
         ).status_id;
-        (session as ExtendedSession).user.isAdmin = (token as any).isAdmin || false;
-        (session as ExtendedSession).user.username = (token as any).username;
+        (session as ExtendedSession).user.isAdmin = (token as ExtendedToken).isAdmin || false;
+        (session as ExtendedSession).user.username = (token as ExtendedToken).username;
       }
       return session;
     },

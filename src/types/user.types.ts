@@ -52,6 +52,8 @@ export type ExtendedInfo = {
   role_id: number;
   company_id?: string;
   status_id?: number;
+  username?: string;
+  isAdmin?: boolean;
 };
 
 export type ExtendedUser = NextAuthUser & ExtendedInfo;
