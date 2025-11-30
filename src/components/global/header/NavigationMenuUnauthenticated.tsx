@@ -78,37 +78,8 @@ export default function NavigationMenuUnauthenticated() {
           </NavigationMenuLink>
         </NavigationMenuItem>
         <NavigationMenuItem>
-          <NavigationMenuLink href="/" className="bg-transparent">
-            For Applicants
-          </NavigationMenuLink>
-        </NavigationMenuItem>
-      </NavigationMenuList>
-    </NavigationMenu>
-  );
-
-  // Default: OJT/Public navigation
-  return (
-    <NavigationMenu viewport={false}>
-      <NavigationMenuList>
-        <NavigationMenuItem>
-          <NavigationMenuLink href="/" className="bg-transparent">
-            Home
-          </NavigationMenuLink>
-        </NavigationMenuItem>
-
-        <NavigationMenuItem>
-          <NavigationMenuLink href="/about" className="bg-transparent">
-            About
-          </NavigationMenuLink>
-        </NavigationMenuItem>
-        <NavigationMenuItem>
-          <NavigationMenuLink href="/#how-it-works" className="bg-transparent">
-            How It Works
-          </NavigationMenuLink>
-        </NavigationMenuItem>
-        <NavigationMenuItem>
-          <NavigationMenuLink href="/company" className="bg-transparent">
-            For Companies
+          <NavigationMenuLink href={isCompanyRoute ? "/" : "/company"} className="bg-transparent">
+            For {isCompanyRoute ? "Applicants" : "Companies"}
           </NavigationMenuLink>
         </NavigationMenuItem>
       </NavigationMenuList>
