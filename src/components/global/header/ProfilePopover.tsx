@@ -21,6 +21,7 @@ import HeaderOJTPopoverNavigation from "./HeaderOJTPopoverNavigation";
 import HeaderCompanyPopoverNavigation from "./HeaderCompanyPopoverNavigation";
 import { useSession } from "next-auth/react";
 import { useHeaderProfile } from "@/hooks/query/useProfile";
+import { cn } from "@/lib/utils";
 
 type Props = {
   userType?: Roles;
@@ -70,13 +71,24 @@ export default function ProfilePopover({ userType }: Props) {
     <Popover>
       <PopoverTrigger asChild>
         <Button variant="ghost" className="relative h-10 w-10 rounded-full">
-          <Avatar className="h-9 w-9 border border-skillmatch-primary-green">
+          <Avatar
+            className={cn(
+              "h-9 w-9 border-2 border-skillmatch-primary-green",
+              profileType === "company" && "border-skillmatch-primary-blue"
+            )}
+          >
             <AvatarImage
               className="object-cover"
               src={avatarUrl || undefined}
               alt={name}
             />
-            <AvatarFallback className="bg-gradient-to-br from-skillmatch-primary-green to-emerald-500 text-white">
+            <AvatarFallback
+              className={cn(
+                "bg-gradient-to-br from-skillmatch-primary-green to-emerald-500 text-white",
+                profileType === "company" &&
+                  "bg-gradient-to-br from-skillmatch-primary-blue to-blue-300"
+              )}
+            >
               {name
                 .split(" ")
                 .map((n) => n[0])
@@ -89,13 +101,24 @@ export default function ProfilePopover({ userType }: Props) {
       </PopoverTrigger>
       <PopoverContent className="w-64 p-0" align="end">
         <div className="flex items-center gap-3 p-4">
-          <Avatar className="h-12 w-12 border border-skillmatch-primary-green">
+          <Avatar
+            className={cn(
+              "h-12 w-12 border-2 border-skillmatch-primary-green",
+              profileType === "company" && "border-skillmatch-primary-blue"
+            )}
+          >
             <AvatarImage
               className="object-cover"
               src={avatarUrl || undefined}
               alt={name}
             />
-            <AvatarFallback className="bg-gradient-to-br from-skillmatch-primary-green to-emerald-500 text-white">
+            <AvatarFallback
+              className={cn(
+                "bg-gradient-to-br from-skillmatch-primary-green to-emerald-500 text-white",
+                profileType === "company" &&
+                  "bg-gradient-to-br from-skillmatch-primary-blue to-blue-300"
+              )}
+            >
               {name
                 .split(" ")
                 .map((n) => n[0])
