@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button";
-import { FileText, Search, UserCog } from "lucide-react";
+import { User, FileText, Bookmark } from "lucide-react";
 import Link from "next/link";
 import React from "react";
 
@@ -8,20 +8,20 @@ export default function HeaderOJTPopoverNavigation() {
     <>
       <Link href="/ojt/settings">
         <Button variant="ghost" className="w-full justify-start" size="sm">
-          <UserCog className="mr-2 h-4 w-4" />
-          Account Settings
+          <User className="mr-2 h-4 w-4" />
+          Profile Settings
         </Button>
       </Link>
-      <Link href="/applications">
+      <Link href="/ojt/application-tracker">
         <Button variant="ghost" className="w-full justify-start" size="sm">
           <FileText className="mr-2 h-4 w-4" />
           My Applications
         </Button>
       </Link>
-      <Link href="/explore/job-posts">
+      <Link href="/ojt/saved">
         <Button variant="ghost" className="w-full justify-start" size="sm">
-          <Search className="mr-2 h-4 w-4" />
-          Browse Jobs
+          <Bookmark className="mr-2 h-4 w-4" />
+          Saved Items
         </Button>
       </Link>
     </>

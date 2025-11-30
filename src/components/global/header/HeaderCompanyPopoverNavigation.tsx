@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button";
-import { Briefcase, Columns3Cog, Search } from "lucide-react";
+import { Building2, Briefcase, FileText, Users } from "lucide-react";
 import Link from "next/link";
 import React from "react";
 
@@ -8,20 +8,26 @@ export default function HeaderCompanyPopoverNavigation() {
     <>
       <Link href="/company/settings">
         <Button variant="ghost" className="w-full justify-start" size="sm">
-          <Columns3Cog className="mr-2 h-4 w-4" />
-          Company Settings
+          <Building2 className="mr-2 h-4 w-4" />
+          Company Profile Settings
         </Button>
       </Link>
-      <Link href="/company/post-job">
+      <Link href="/company/job-postings">
         <Button variant="ghost" className="w-full justify-start" size="sm">
           <Briefcase className="mr-2 h-4 w-4" />
-          Post a Job
+          My Job Postings
         </Button>
       </Link>
-      <Link href="/company/create-post">
+      <Link href="/company/feed-posts">
         <Button variant="ghost" className="w-full justify-start" size="sm">
-          <Search className="mr-2 h-4 w-4" />
-          Create a Post
+          <FileText className="mr-2 h-4 w-4" />
+          Feed Posts
+        </Button>
+      </Link>
+      <Link href="/company/applications">
+        <Button variant="ghost" className="w-full justify-start" size="sm">
+          <Users className="mr-2 h-4 w-4" />
+          Applicants
         </Button>
       </Link>
     </>

@@ -1,61 +1,41 @@
 import React from "react";
 import {
   NavigationMenu,
+  NavigationMenuContent,
   NavigationMenuItem,
   NavigationMenuLink,
   NavigationMenuList,
+  NavigationMenuTrigger,
 } from "../../ui/navigation-menu";
-import { getServerSession } from "next-auth";
-import { authConfig } from "@/lib/auth";
 
 export default async function NavigationMenuCompany() {
-  const session = await getServerSession(authConfig);
-  const isAuth = !!session;
-
   return (
-    <NavigationMenu viewport={false}>
+    <NavigationMenu>
       <NavigationMenuList>
         <NavigationMenuItem>
-          <NavigationMenuLink href="/company" className="bg-transparent">
-            Home
+          <NavigationMenuLink href="/feed" className="bg-transparent">
+            Feed
           </NavigationMenuLink>
         </NavigationMenuItem>
-        {isAuth && (
-          <NavigationMenuItem>
-            <NavigationMenuLink
-              href="/company/job-posts"
-              className="bg-transparent"
-            >
-              Job Posts
+        <NavigationMenuItem>
+          <NavigationMenuTrigger className="bg-transparent px-2! cursor-pointer">
+            Manage
+          </NavigationMenuTrigger>
+          <NavigationMenuContent>
+            <NavigationMenuLink className="w-[230px]" href="/company/job-posts">
+              <div className="font-medium">Job Postings</div>
+              <div className="text-muted-foreground">
+                Create and manage your job postings.
+              </div>
             </NavigationMenuLink>
-          </NavigationMenuItem>
-        )}
-
-        {!isAuth && (
-          <>
-            <NavigationMenuItem>
-              <NavigationMenuLink
-                href="/company#benefits"
-                className="bg-transparent"
-              >
-                Benefits
-              </NavigationMenuLink>
-            </NavigationMenuItem>
-            <NavigationMenuItem>
-              <NavigationMenuLink
-                href="/company#how-it-works"
-                className="bg-transparent"
-              >
-                How It Works
-              </NavigationMenuLink>
-            </NavigationMenuItem>
-            <NavigationMenuItem>
-              <NavigationMenuLink href="/" className="bg-transparent">
-                For OJT
-              </NavigationMenuLink>
-            </NavigationMenuItem>
-          </>
-        )}
+            <NavigationMenuLink className="w-[230px]" href="/company/posts">
+              <div className="font-medium">Feed Posts</div>
+              <div className="text-muted-foreground">
+                Create and update your feed posts.
+              </div>
+            </NavigationMenuLink>
+          </NavigationMenuContent>
+        </NavigationMenuItem>
       </NavigationMenuList>
     </NavigationMenu>
   );
