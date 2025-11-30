@@ -7,7 +7,8 @@
     "dev:turbo": "next dev --turbo",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "check": "tsc --noEmit && eslint ."
   },
   "dependencies": {
     "@google-apps/meet": "^0.7.1",
@@ -59,6 +60,7 @@
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
+    "@types/uuid": "^10.0.0",
     "eslint": "^9",
     "eslint-config-next": "15.5.3",
     "tailwindcss": "^4.1.13",
