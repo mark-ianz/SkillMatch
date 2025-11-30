@@ -17,9 +17,9 @@ export default function OnboardingLayout({
 }: {
   children: React.ReactNode;
 }) {
-  // checks if the path is for ojt or employer
+  // checks if the path is for applicant or employer
   const path = usePathname();
-  const type = path.includes("/onboarding/ojt") ? "ojt" : "employer";
+  const type = path.includes("/onboarding/applicant") ? "applicant" : "employer";
 
   const session = useSession();
   const currentStep = useOnboardingStore((state) => state.currentStep);
@@ -58,7 +58,7 @@ export default function OnboardingLayout({
         <div
           className={cn(
             "w-1/3 shrink-0 rounded-l-md",
-            type === "ojt"
+            type === "applicant"
               ? " bg-skillmatch-primary-green "
               : " bg-skillmatch-primary-blue"
           )}

@@ -13,7 +13,7 @@ export default function AuthTabs() {
   const pathname = usePathname();
   const searchParams = useSearchParams();
 
-  const type = searchParams.get("type") || "ojt";
+  const type = searchParams.get("type") || "applicant";
   const errorParam = searchParams.get("error");
   const statusParam = searchParams.get("status");
 
@@ -49,11 +49,11 @@ export default function AuthTabs() {
       defaultValue={type}
       className="w-full"
     >
-      <TabsContent value="ojt" className="border-r border-y rounded-r-md p-4 space-y-4">
+      <TabsContent value="applicant" className="border-r border-y rounded-r-md p-4 space-y-4">
         <TabList />
         {authError && <ErrorAlert error={authError} />}
-        {isSignupRoute && <SignupForm mode="ojt" />}
-        {isSigninRoute && <SigninForm mode="ojt" />}
+        {isSignupRoute && <SignupForm mode="applicant" />}
+        {isSigninRoute && <SigninForm mode="applicant" />}
       </TabsContent>
 
       <TabsContent
@@ -72,8 +72,8 @@ export default function AuthTabs() {
 function TabList() {
   return (
     <TabsList className="grid w-full grid-cols-2">
-      <TabsTrigger className="cursor-pointer" value="ojt">
-        OJT
+      <TabsTrigger className="cursor-pointer" value="applicant">
+        Applicant
       </TabsTrigger>
       <TabsTrigger className="cursor-pointer" value="company">
         Company

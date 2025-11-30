@@ -47,7 +47,7 @@ export const CompanyServices = {
     }
   },
 
-  getSuggestedCompaniesForOJT: async (userCourse: string): Promise<CompanyProfile[]> => {
+  getSuggestedCompaniesForApplicant: async (userCourse: string): Promise<CompanyProfile[]> => {
     const full_course = getCourseByAbbr(userCourse);
 
     const connection = await db.getConnection();

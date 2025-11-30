@@ -3,7 +3,7 @@ import { getServerSession } from "next-auth";
 import { authConfig } from "@/lib/auth";
 import { UserService } from "@/services/user.services";
 
-// GET - Fetch OJT profile for sidebar
+// GET - Fetch Applicant profile for sidebar
 export async function GET(request: NextRequest) {
   try {
     const session = await getServerSession(authConfig);
@@ -20,7 +20,7 @@ export async function GET(request: NextRequest) {
       );
     }
 
-    const profile = await UserService.getOJTProfileForSidebar(userId);
+    const profile = await UserService.getApplicantProfileForSidebar(userId);
     
     if (!profile) {
       return NextResponse.json(
@@ -31,7 +31,7 @@ export async function GET(request: NextRequest) {
 
     return NextResponse.json(profile, { status: 200 });
   } catch (error) {
-    console.error("Error fetching OJT profile:", error);
+    console.error("Error fetching Applicant profile:", error);
     return NextResponse.json(
       { message: "Failed to fetch profile" },
       { status: 500 }

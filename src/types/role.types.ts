@@ -1,4 +1,4 @@
-export type Roles = "OJT" | "Company" | "Admin" | "Spards";
+export type Roles = "Applicant" | "Company" | "Admin" | "Spards";
 
 export type Role = {
   role_id: number;

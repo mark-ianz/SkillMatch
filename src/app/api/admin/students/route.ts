@@ -28,7 +28,7 @@ export async function GET(request: NextRequest) {
         op.year_level
       FROM account a
       LEFT JOIN user u ON a.user_id = u.user_id
-      LEFT JOIN ojt_profile op ON a.user_id = op.user_id
+      LEFT JOIN applicant_profile op ON a.user_id = op.user_id
       LEFT JOIN status s ON a.status_id = s.status_id
       WHERE a.role_id = 3
     `;

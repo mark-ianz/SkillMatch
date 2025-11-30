@@ -4,90 +4,90 @@
       "code": "APPLIED",
       "label": "Applied",
       "visible_to_company": true,
-      "visible_to_ojt": true,
+      "visible_to_applicant": true,
       "company_actions": ["SELECT", "SCHEDULE_INTERVIEW", "PUT_ON_HOLD", "DECLINE"],
-      "ojt_actions": ["CANCEL_APPLICATION", "VIEW_APPLICATION"]
+      "applicant_actions": ["CANCEL_APPLICATION", "VIEW_APPLICATION"]
     },
     {
       "code": "SHORTLISTED",
       "label": "Shortlisted",
       "visible_to_company": true,
-      "visible_to_ojt": false,
+      "visible_to_applicant": false,
       "company_actions": ["SELECT", "SCHEDULE_INTERVIEW", "PUT_ON_HOLD", "DECLINE"],
-      "ojt_actions": []
+      "applicant_actions": []
     },
     {
       "code": "ON_HOLD",
       "label": "On Hold",
       "visible_to_company": true,
-      "visible_to_ojt": false,
+      "visible_to_applicant": false,
       "company_actions": ["SELECT", "SCHEDULE_INTERVIEW", "SHORTLIST", "DECLINE"],
-      "ojt_actions": []
+      "applicant_actions": []
     },
     {
       "code": "INTERVIEW_SCHEDULED",
       "label": "Interview Scheduled",
       "visible_to_company": true,
-      "visible_to_ojt": true,
+      "visible_to_applicant": true,
       "company_actions": ["MARK_INTERVIEW_DONE", "RESCHEDULE", "DECLINE"],
-      "ojt_actions": ["VIEW_SCHEDULE_INFORMATION", "VIEW_APPLICATION", "CANCEL_APPLICATION"]
+      "applicant_actions": ["VIEW_SCHEDULE_INFORMATION", "VIEW_APPLICATION", "CANCEL_APPLICATION"]
     },
     {
       "code": "INTERVIEW_COMPLETED",
       "label": "Interview Completed",
       "visible_to_company": true,
-      "visible_to_ojt": false,
+      "visible_to_applicant": false,
       "company_actions": ["SELECT", "SHORTLIST", "PUT_ON_HOLD", "DECLINE"],
-      "ojt_actions": []
+      "applicant_actions": []
     },
     {
       "code": "SELECTED",
       "label": "Selected",
       "visible_to_company": true,
-      "visible_to_ojt": true,
+      "visible_to_applicant": true,
       "company_actions": ["CANCEL_OFFER"],
-      "ojt_actions": ["ACCEPT", "DECLINE", "VIEW_APPLICATION"]
+      "applicant_actions": ["ACCEPT", "DECLINE", "VIEW_APPLICATION"]
     },
     {
       "code": "OFFER_ACCEPTED",
       "label": "Offer Accepted",
       "visible_to_company": true,
-      "visible_to_ojt": true,
+      "visible_to_applicant": true,
       "company_actions": ["MARK_HIRED", "DECLINE"],
-      "ojt_actions": ["VIEW_APPLICATION"]
+      "applicant_actions": ["VIEW_APPLICATION"]
     },
     {
       "code": "OFFER_DECLINED",
       "label": "Selection Offer Declined",
       "visible_to_company": true,
-      "visible_to_ojt": true,
+      "visible_to_applicant": true,
       "company_actions": [],
-      "ojt_actions": ["VIEW_APPLICATION"]
+      "applicant_actions": ["VIEW_APPLICATION"]
     },
     {
       "code": "REJECTED",
       "label": "Rejected",
       "visible_to_company": true,
-      "visible_to_ojt": true,
+      "visible_to_applicant": true,
       "company_actions": [],
-      "ojt_actions": ["VIEW_APPLICATION"]
+      "applicant_actions": ["VIEW_APPLICATION"]
     },
     {
       "code": "HIRED",
       "label": "Hired",
       "visible_to_company": true,
-      "visible_to_ojt": true,
+      "visible_to_applicant": true,
       "company_actions": [],
-      "ojt_actions": ["VIEW_APPLICATION"]
+      "applicant_actions": ["VIEW_APPLICATION"]
     }
     ,
     {
       "code": "ALL",
       "label": "All",
       "visible_to_company": true,
-      "visible_to_ojt": true,
+      "visible_to_applicant": true,
       "company_actions": [""],
-      "ojt_actions": [""]
+      "applicant_actions": [""]
     }
   ]
 }

@@ -1,6 +1,6 @@
 import { formatZodError } from "@/lib/utils";
 import { onboardingPasswordSchema } from "@/schema/onboarding";
-import OnboardingOJTServices from "@/services/onboarding/onboarding.ojt.services";
+import OnboardingApplicantServices from "@/services/onboarding/onboarding.applicant.services";
 import { NextResponse } from "next/server";
 
 export async function POST(
@@ -35,7 +35,7 @@ export async function POST(
   }
 
   try {
-    await OnboardingOJTServices.submitStepSix(
+    await OnboardingApplicantServices.submitStepSix(
       Number(params.id),
       params.farthestStep,
       data

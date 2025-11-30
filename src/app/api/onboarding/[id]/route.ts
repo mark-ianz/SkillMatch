@@ -1,4 +1,4 @@
-import OnboardingOJTServices from "@/services/onboarding/onboarding.ojt.services";
+import OnboardingApplicantServices from "@/services/onboarding/onboarding.applicant.services";
 import { SkillServices } from "@/services/skill.services";
 import { NextResponse } from "next/server";
 
@@ -15,7 +15,7 @@ export async function GET(
     );
   }
 
-  const onboardingData = await OnboardingOJTServices.getOnboarding(
+  const onboardingData = await OnboardingApplicantServices.getOnboarding(
     Number(params.id)
   );
 

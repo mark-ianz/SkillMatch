@@ -39,7 +39,7 @@ export default function NotificationPopover() {
         router.push(`/company/job-posts/${notification.job_post_id}`);
       } else {
         // User view - go to application tracker
-        router.push(`/ojt/application-tracker/${notification.application_id}`);
+        router.push(`/applicant/application-tracker/${notification.application_id}`);
       }
     }
   };
@@ -139,7 +139,7 @@ export default function NotificationPopover() {
                 variant="ghost"
                 className="w-full justify-center text-sm"
                 size="sm"
-                onClick={() => router.push(isCompany ? "/company/notifications" : "/ojt/notifications")}
+                onClick={() => router.push(isCompany ? "/company/notifications" : "/applicant/notifications")}
               >
                 View all notifications
               </Button>

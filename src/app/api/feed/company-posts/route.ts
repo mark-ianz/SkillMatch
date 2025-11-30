@@ -14,15 +14,15 @@ export async function GET() {
 
     // Only apply custom algorithm if user is authenticated
     if (session?.user) {
-      // If OJT user, get their course from ojt_profile
+      // If Applicant user, get their course from applicant_profile
       if (session.user.role_id === 3) {
-        const [ojtRows] = await db.query<RowDataPacket[]>(
-          `SELECT course FROM ojt_profile WHERE user_id = ?`,
+        const [applicantRows] = await db.query<RowDataPacket[]>(
+          `SELECT course FROM applicant_profile WHERE user_id = ?`,
           [session.user.user_id]
         );
 
-        if (ojtRows && ojtRows.length > 0) {
-          userCourse = ojtRows[0].course;
+        if (applicantRows && applicantRows.length > 0) {
+          userCourse = applicantRows[0].course;
         }
       }
 

@@ -6,13 +6,13 @@ import OauthButton from "@/components/common/button/OauthButton";
 import { cn } from "@/lib/utils";
 
 interface SignupFormProps {
-  mode: "ojt" | "company";
+  mode: "applicant" | "company";
 }
 
 export function SignupForm({ mode }: SignupFormProps) {
-  const isOJT = mode === "ojt";
+  const isApplicant = mode === "applicant";
 
-  const subtitle = isOJT ? (
+  const subtitle = isApplicant ? (
     <>
       Your career journey starts here.
       <br /> Join a community of learners and professionals.
@@ -25,11 +25,11 @@ export function SignupForm({ mode }: SignupFormProps) {
     </>
   );
 
-  const buttonText = isOJT
-    ? "Sign up with Google as OJT"
+  const buttonText = isApplicant
+    ? "Sign up with Google as Applicant"
     : "Sign up with Google as Company";
 
-  const emailHint = isOJT
+  const emailHint = isApplicant
     ? "Continue with your Quezon City University email address."
     : "Continue with your company email address.";
 
@@ -55,10 +55,10 @@ export function SignupForm({ mode }: SignupFormProps) {
 
         <div className="flex flex-col items-center justify-center gap-3 w-full">
           <OauthButton
-            variant={isOJT ? "default" : "default_employer"}
+            variant={isApplicant ? "default" : "default_employer"}
             text={buttonText}
-            provider={isOJT ? "google-ojt-signup" : "google-company-signup"}
-            callbackUrl={isOJT ? "/onboarding/ojt" : "/onboarding/company"}
+            provider={isApplicant ? "google-applicant-signup" : "google-company-signup"}
+            callbackUrl={isApplicant ? "/onboarding/applicant" : "/onboarding/company"}
             className="w-[400px]"
           />
           <p className="text-xs text-muted-foreground text-center">
@@ -69,10 +69,10 @@ export function SignupForm({ mode }: SignupFormProps) {
         <div className="text-sm text-muted-foreground text-center">
           Already have an account?{" "}
           <Link
-            href={`/signin?type=${isOJT ? "ojt" : "company"}`}
+            href={`/signin?type=${isApplicant ? "applicant" : "company"}`}
             className={cn(
               "hover:underline font-medium text-skillmatch-primary-green",
-              !isOJT && "text-skillmatch-primary-blue"
+              !isApplicant && "text-skillmatch-primary-blue"
             )}
           >
             Sign in

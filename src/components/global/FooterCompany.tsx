@@ -13,7 +13,7 @@ export default function FooterCompany() {
               <span className="text-xl font-bold">SkillMatch</span>
             </div>
             <p className="text-sm text-muted-foreground">
-              The trusted platform for companies to hire exceptional OJT talent
+              The trusted platform for companies to hire exceptional Applicant talent
               from Quezon City University.
             </p>
           </div>

@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { db } from "@/lib/db";
 import { RowDataPacket } from "mysql2";
 
-// GET - Get user profile with OJT profile data
+// GET - Get user profile with Applicant profile data
 export async function GET(
   request: NextRequest,
   { params }: { params: { user_id: string } }
@@ -17,11 +17,11 @@ export async function GET(
       );
     }
 
-    // Fetch user data with OJT profile
+    // Fetch user data with Applicant profile
     const [rows] = await db.query<RowDataPacket[]>(
       `SELECT 
         u.*,
-        op.ojt_id,
+        op.applicant_id,
         op.resume_path,
         op.visibility,
         op.skills,
@@ -29,9 +29,9 @@ export async function GET(
         op.course,
         op.year_level,
         op.expected_graduation_year,
-        op.created_at as ojt_created_at
+        op.created_at as applicant_created_at
       FROM user u
-      LEFT JOIN ojt_profile op ON u.user_id = op.user_id
+      LEFT JOIN applicant_profile op ON u.user_id = op.user_id
       WHERE u.user_id = ?`,
       [user_id]
     );

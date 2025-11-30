@@ -17,10 +17,10 @@ export default function OauthButton({
   callbackUrl?: string;
   className?: string;
   provider:
-    | "google-ojt-signin"
+    | "google-applicant-signin"
     | "google-company-signin"
     | "google-company-signup"
-    | "google-ojt-signup"
+    | "google-applicant-signup"
     | "linkedIn";
   text: string;
 }) {

@@ -2,15 +2,15 @@ import path from "path";
 import fs from "fs";
 import { db } from "@/lib/db";
 import { ServiceError } from "@/lib/errors";
-import { OJTProfile } from "@/types/ojt_profile.types";
+import { ApplicantProfile } from "@/types/applicant_profile.types";
 import { RowDataPacket } from "mysql2";
 import { deleteFile } from "@/lib/file";
 
 export const ResumeService = {
   upload_local: async (request: Request, user_id: number) => {
     // get the current resume_path from the database
-    const [row] = await db.query<(OJTProfile & RowDataPacket)[]>(
-      "SELECT resume_path FROM ojt_profile WHERE user_id = ?",
+    const [row] = await db.query<(ApplicantProfile & RowDataPacket)[]>(
+      "SELECT resume_path FROM applicant_profile WHERE user_id = ?",
       [user_id]
     );
 
@@ -69,7 +69,7 @@ export const ResumeService = {
   upload_path_to_db: async (user_id: number, path: string) => {
     try {
       await db.query(
-        "UPDATE ojt_profile SET resume_path = ? WHERE user_id = ?",
+        "UPDATE applicant_profile SET resume_path = ? WHERE user_id = ?",
         [path, user_id]
       );
       return true;
@@ -80,8 +80,8 @@ export const ResumeService = {
   },
   delete_resume: async (user_id: number) => {
     // get current resume path from DB
-    const [rows] = await db.query<(OJTProfile & RowDataPacket)[]>(
-      "SELECT resume_path FROM ojt_profile WHERE user_id = ?",
+    const [rows] = await db.query<(ApplicantProfile & RowDataPacket)[]>(
+      "SELECT resume_path FROM applicant_profile WHERE user_id = ?",
       [user_id]
     );
 
@@ -93,7 +93,7 @@ export const ResumeService = {
 
     // remove DB reference regardless of file delete success
     try {
-      await db.query("UPDATE ojt_profile SET resume_path = NULL WHERE user_id = ?", [user_id]);
+      await db.query("UPDATE applicant_profile SET resume_path = NULL WHERE user_id = ?", [user_id]);
       return deleted;
     } catch (err) {
       console.error(err);

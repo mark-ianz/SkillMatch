@@ -8,7 +8,7 @@ export function CompanyFallbackSVG() {
   );
 }
 
-export function OJTFallbackSVG() {
+export function ApplicantFallbackSVG() {
   return (
     <div className="w-full h-full flex items-center justify-center">
       <svg

@@ -44,7 +44,7 @@ export type JobPost = {
   company_image?: string;
   industry?: string[];
 
-  // Optional computed fields (for OJT users)
+  // Optional computed fields (for Applicant users)
   skill_match_count?: number;
   course_matched?: boolean;
 };

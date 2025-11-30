@@ -41,7 +41,7 @@ export async function GET(
         op.required_hours
       FROM account a
       LEFT JOIN user u ON a.user_id = u.user_id
-      LEFT JOIN ojt_profile op ON a.user_id = op.user_id
+      LEFT JOIN applicant_profile op ON a.user_id = op.user_id
       LEFT JOIN status s ON a.status_id = s.status_id
       WHERE a.user_id = ? AND a.role_id = 3
       `,
@@ -123,7 +123,7 @@ export async function PATCH(
       }
     }
 
-    // Update ojt_profile if OJT-specific info provided
+    // Update applicant_profile if Applicant-specific info provided
     if (course || year_level || required_hours) {
       const updates: string[] = [];
       const values: any[] = [];
@@ -144,7 +144,7 @@ export async function PATCH(
       if (updates.length > 0) {
         values.push(user_id);
         await db.query(
-          `UPDATE ojt_profile SET ${updates.join(", ")} WHERE user_id = ?`,
+          `UPDATE applicant_profile SET ${updates.join(", ")} WHERE user_id = ?`,
           values
         );
       }

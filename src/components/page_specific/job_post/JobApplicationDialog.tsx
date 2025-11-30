@@ -165,7 +165,7 @@ export function JobApplicationDialog({
       setFormData((prev) => ({ ...prev, resumePath: null }));
 
       // Delete from server
-      await api.post("/ojt/resume/delete", {
+      await api.post("/applicant/resume/delete", {
         user_id: session?.user?.user_id,
       });
 

@@ -23,7 +23,7 @@ export function capitalizeFirstLetter(string: string) {
   return string.charAt(0).toUpperCase() + string.slice(1);
 }
 
-export function getStepDetails(step: number, type: "ojt" | "employer" = "ojt") {
+export function getStepDetails(step: number, type: "applicant" | "employer" = "applicant") {
   if (type === "employer") {
     return employer_steps.find((s) => s.step === step);
   } else {
@@ -136,7 +136,7 @@ export function getBarangaysByCity(
 export function getRoleName(role_id: number | undefined): Roles | undefined {
   switch (role_id) {
     case 3:
-      return "OJT";
+      return "Applicant";
     case 4:
       return "Company";
     case 2:

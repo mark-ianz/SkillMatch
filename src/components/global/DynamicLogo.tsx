@@ -8,7 +8,7 @@ import { cn } from "@/lib/utils";
 
 export default function DynamicLogo({ role }: { role?: Roles }) {
   const text = {
-    ojt: "For Applicants",
+    applicant: "For Applicants",
     company: "For Companies",
     admin: "For Admin",
   };
@@ -18,7 +18,7 @@ export default function DynamicLogo({ role }: { role?: Roles }) {
   return (
     <div className="flex items-center gap-4">
       <Link
-        href={role === "OJT" ? "/" : role === "Company" ? "/company" : "/"}
+        href={role === "Applicant" ? "/" : role === "Company" ? "/company" : "/"}
         className="font-sans font-semibold text-2xl flex items-center gap-2"
       >
         <LogoOnly />

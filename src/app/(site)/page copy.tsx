@@ -7,11 +7,11 @@ import CTABannerSection from "@/components/page_specific/landing_page/CTABannerS
 export default function LandingPage() {
   return (
     <main className="pb-20">
-      <HeroSection type="ojt" />
+      <HeroSection type="applicant" />
       {/* <CategoriesSection /> */}
-      <GettingStartedSection type="ojt" />
-      <WhyChooseUsSection type="ojt" />
-      <CTABannerSection type="ojt" />
+      <GettingStartedSection type="applicant" />
+      <WhyChooseUsSection type="applicant" />
+      <CTABannerSection type="applicant" />
     </main>
   );
 }

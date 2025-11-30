@@ -7,7 +7,7 @@ export function useSearchSkills(q: string, type: "soft" | "technical" = "technic
   return useQuery({
     queryKey: ["search-skills", q, type],
     queryFn: async () => {
-      const { data } = await api.get<SkillQuery>("/ojt/skills/search", {
+      const { data } = await api.get<SkillQuery>("/applicant/skills/search", {
         params: { q, type },
       });
       return data;
@@ -22,7 +22,7 @@ export function useUpdateUserSkills(user_id: number | undefined) {
   return useMutation({
     mutationKey: ["update-user-skills", user_id],
     mutationFn: async (skills: Skill[]) => {
-      await api.post(`/ojt/skills/${user_id}`, { skills });
+      await api.post(`/applicant/skills/${user_id}`, { skills });
     },
     onSuccess: () => {
       // increment the step on the store

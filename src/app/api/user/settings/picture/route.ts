@@ -14,10 +14,10 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    // Get user settings to find ojt_id
+    // Get user settings to find applicant_id
     const settings = await getUserSettings(session.user.user_id);
-    if (!settings?.ojt_id) {
-      return NextResponse.json({ error: "OJT profile not found" }, { status: 404 });
+    if (!settings?.applicant_id) {
+      return NextResponse.json({ error: "Applicant profile not found" }, { status: 404 });
     }
 
     const formData = await req.formData();
@@ -64,7 +64,7 @@ export async function POST(req: NextRequest) {
 
     // Update database with relative path
     const imagePath = `/uploads/profile/${filename}`;
-    await updateProfilePicture(settings.ojt_id, imagePath);
+    await updateProfilePicture(settings.applicant_id, imagePath);
 
     const updatedSettings = await getUserSettings(session.user.user_id);
 

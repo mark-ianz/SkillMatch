@@ -17,7 +17,7 @@ import {
 } from "@/components/ui/tooltip";
 import LogoutButton from "@/components/common/button/LogoutButton";
 import { Roles } from "@/types/role.types";
-import HeaderOJTPopoverNavigation from "./HeaderOJTPopoverNavigation";
+import HeaderApplicantPopoverNavigation from "./HeaderApplicantPopoverNavigation";
 import HeaderCompanyPopoverNavigation from "./HeaderCompanyPopoverNavigation";
 import { useSession } from "next-auth/react";
 import { useHeaderProfile } from "@/hooks/query/useProfile";
@@ -32,7 +32,7 @@ export default function ProfilePopover({ userType }: Props) {
 
   // Determine profile type based on userType
   const profileType =
-    userType === "OJT" ? "ojt" : userType === "Company" ? "company" : null;
+    userType === "Applicant" ? "applicant" : userType === "Company" ? "company" : null;
   const { data: profile, isLoading } = useHeaderProfile(profileType);
 
   if (!session) return null;
@@ -141,8 +141,8 @@ export default function ProfilePopover({ userType }: Props) {
         </div>
         <Separator />
         <div className="p-2">
-          {userType === "OJT" ? (
-            <HeaderOJTPopoverNavigation />
+          {userType === "Applicant" ? (
+            <HeaderApplicantPopoverNavigation />
           ) : (
             <HeaderCompanyPopoverNavigation />
           )}

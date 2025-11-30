@@ -14,7 +14,7 @@ export function SuggestedCompanies() {
   const { data: companies, isLoading } = useSuggestedCompanies();
 
   // Don't show for company users
-  if (session?.user?.role_id && getRoleName(session.user.role_id) !== "OJT") {
+  if (session?.user?.role_id && getRoleName(session.user.role_id) !== "Applicant") {
     return null;
   }
 

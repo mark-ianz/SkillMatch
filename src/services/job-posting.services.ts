@@ -146,14 +146,14 @@ export const JobPostingServices = {
     roleName?: string
   ): Promise<JobPost | null> => {
     try {
-      // Fetch user skills and course if OJT user
+      // Fetch user skills and course if Applicant user
       let userSkills: string[] = [];
       let userCourse: string | null = null;
-      if (userId && roleName === "OJT") {
+      if (userId && roleName === "Applicant") {
         try {
           const [profileRows] = await db.query<
             (RowDataPacket & { skills: string | null; course: string | null })[]
-          >(`SELECT skills, course FROM ojt_profile WHERE user_id = ?`, [
+          >(`SELECT skills, course FROM applicant_profile WHERE user_id = ?`, [
             userId,
           ]);
 
@@ -222,7 +222,7 @@ export const JobPostingServices = {
         ? row.courses_required.split(",").map((c: string) => c.trim())
         : [];
 
-      // Calculate skill match count for OJT users
+      // Calculate skill match count for Applicant users
       let matchCount = 0;
       if (userSkills.length > 0) {
         const postSkillsLowerCase = technicalSkillsArray.map((s: string) =>
@@ -278,14 +278,14 @@ export const JobPostingServices = {
     roleName?: string
   ): Promise<JobPost[]> => {
     try {
-      // Fetch user skills and course if OJT user
+      // Fetch user skills and course if Applicant user
       let userSkills: string[] = [];
       let userCourse: string | null = null;
-      if (userId && roleName === "OJT") {
+      if (userId && roleName === "Applicant") {
         try {
           const [profileRows] = await db.query<
             (RowDataPacket & { skills: string | null; course: string | null })[]
-          >(`SELECT skills, course FROM ojt_profile WHERE user_id = ?`, [
+          >(`SELECT skills, course FROM applicant_profile WHERE user_id = ?`, [
             userId,
           ]);
 
@@ -398,7 +398,7 @@ export const JobPostingServices = {
               .map((course: string) => course.trim())
           : [];
 
-        // Calculate skill match count for OJT users
+        // Calculate skill match count for Applicant users
         let matchCount = 0;
         if (userSkills.length > 0) {
           const postSkillsLowerCase = technicalSkillsArray.map((s: string) =>
@@ -444,7 +444,7 @@ export const JobPostingServices = {
         };
       }) as JobPost[];
 
-      // Sort by course match and skill match count if OJT user
+      // Sort by course match and skill match count if Applicant user
       const sortedSuggestions =
         userCourse || userSkills.length > 0
           ? suggestions.sort((a, b) => {

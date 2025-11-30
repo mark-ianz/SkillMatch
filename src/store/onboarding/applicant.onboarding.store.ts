@@ -1,0 +1,187 @@
+import { create } from "zustand";
+import { AcademicDetails, Account, User } from "@/types/user.types";
+import { Skill } from "@/types/skill.types";
+
+export type ApplicantOnboardingStoreState = Partial<User> &
+  Partial<Account> &
+  Partial<AcademicDetails> & {
+    user_id: number | undefined;
+    email: string | undefined;
+    skills: Skill[];
+    applicant_id: number | undefined;
+    resume_path: string | null;
+    student_number: string | null;
+    visibility: "public" | "private";
+    preferred_schedule: string | null;
+    required_hours: number | null;
+    created_at: Date | undefined;
+
+    // User methods
+    setUser: (user: Partial<User> & Partial<Account>) => void;
+    clearUser: () => void;
+    setFirstName: (first_name: string) => void;
+    setLastName: (last_name: string) => void;
+    setMiddleName: (middle_name: string | null) => void;
+    setPhoneNumber: (phone_number: string) => void;
+    setGender: (gender: "male" | "female" | "prefer not to say") => void;
+    setBirthdate: (birthdate: Date | null | string) => void;
+    setEmail: (email: string) => void;
+    setStreetName: (street_name: string) => void;
+    setHouseNumber: (house_number: string) => void;
+    setSubdivision: (subdivision: string | null) => void;
+    setBarangay: (barangay: string) => void;
+    setPostalCode: (postal_code: string) => void;
+    setCityMunicipality: (city_municipality: string) => void;
+
+    // Applicant Profile methods
+    setApplicantProfile: (profile: Partial<ApplicantOnboardingStoreState>) => void;
+    setAcademicDetails: (details: Partial<AcademicDetails>) => void;
+    setSkills: (skills: Skill[]) => void;
+    addSkill: (skill: Skill) => void;
+    removeSkill: (skill_id: number) => void;
+    clearApplicantProfile: () => void;
+    setResumePath: (resume_path: string | null) => void;
+    clearResume: () => void;
+    setStudentNumber: (student_number: string | null) => void;
+    setCollege: (college: string | null) => void;
+    setCourse: (course: string) => void;
+    setYearLevel: (year_level: "3rd year" | "4th year" | null) => void;
+    setExpectedGraduationYear: (
+      expected_graduation_year: string | null
+    ) => void;
+    setPreferredSchedule: (preferred_schedule: string | null) => void;
+    setRequiredHours: (required_hours: number | null) => void;
+  };
+
+const useApplicantProfileStore = create<ApplicantOnboardingStoreState>((set) => ({
+  // User Information
+  user_id: undefined,
+  first_name: "",
+  middle_name: null,
+  last_name: "",
+  gender: "prefer not to say",
+  birthdate: null,
+  phone_number: "",
+  role_id: undefined,
+  status_id: undefined,
+  created_at: undefined,
+  house_number: "",
+  street_name: "",
+  subdivision: null,
+  postal_code: "",
+  barangay: "",
+  city_municipality: "",
+  email: undefined,
+
+  // Academic Details
+  applicant_id: undefined,
+  student_number: null,
+  college: null,
+  course: "",
+  year_level: "4th year",
+  expected_graduation_year: null,
+  resume_path: null,
+  visibility: "private",
+  preferred_schedule: null,
+  required_hours: null,
+
+  // Skills
+  skills: [],
+
+  // User Information Setters
+  setFirstName: (first_name: string) => set({ first_name }),
+  setLastName: (last_name: string) => set({ last_name }),
+  setMiddleName: (middle_name: string | null) => set({ middle_name }),
+  setPhoneNumber: (phone_number: string) => set({ phone_number }),
+  setGender: (gender: "male" | "female" | "prefer not to say") =>
+    set({ gender }),
+  setBirthdate: (birthdate: Date | null | string) => set({ birthdate }),
+  setEmail: (email: string) => set({ email }),
+
+  // Address Setters
+  setPostalCode: (postal_code) => set({ postal_code }),
+  setStreetName: (street_name) => set({ street_name }),
+  setHouseNumber: (house_number) => set({ house_number }),
+  setSubdivision: (subdivision) => set({ subdivision }),
+  setBarangay: (barangay) => set({ barangay }),
+  setCityMunicipality: (city_municipality) => set({ city_municipality }),
+
+  // Academic Details Setters
+  setStudentNumber: (student_number) => set({ student_number }),
+  setCollege: (college) => set({ college }),
+  setCourse: (course) => set({ course }),
+  setYearLevel: (year_level) => set({ year_level }),
+  setExpectedGraduationYear: (expected_graduation_year) =>
+    set({ expected_graduation_year }),
+  setPreferredSchedule: (preferred_schedule) => set({ preferred_schedule }),
+  setRequiredHours: (required_hours) => set({ required_hours }),
+
+  // Skills Methods
+  addSkill: (skill) => set((state) => ({ skills: [...state.skills, skill] })),
+  setSkills: (skills) => set({ skills }),
+  removeSkill: (skill_id) =>
+    set((state) => ({
+      skills: state.skills.filter((s) => s.skill_id !== skill_id),
+    })),
+
+  // Resume Methods
+  setResumePath: (resume_path) => set({ resume_path }),
+  clearResume: () => set({ resume_path: null }),
+
+  // General Methods
+  setUser: (user) => set(user),
+  clearUser: () =>
+    set({
+      user_id: undefined,
+      first_name: "",
+      middle_name: null,
+      last_name: "",
+      gender: "prefer not to say",
+      birthdate: null,
+      phone_number: "",
+      role_id: undefined,
+      status_id: undefined,
+      created_at: undefined,
+      house_number: "",
+      street_name: "",
+      subdivision: null,
+      postal_code: "",
+      barangay: "",
+      city_municipality: "",
+    }),
+  setApplicantProfile: (profile) => set(profile),
+  setAcademicDetails: (details) => set(details),
+  clearApplicantProfile: () =>
+    set({
+      user_id: undefined,
+      first_name: "",
+      middle_name: null,
+      last_name: "",
+      gender: "prefer not to say",
+      birthdate: null,
+      phone_number: "",
+      role_id: undefined,
+      status_id: undefined,
+      created_at: undefined,
+      house_number: "",
+      street_name: "",
+      subdivision: null,
+      postal_code: "",
+      barangay: "",
+      city_municipality: "",
+      email: undefined,
+      applicant_id: undefined,
+      student_number: null,
+      college: null,
+      course: "",
+      year_level: "4th year",
+      expected_graduation_year: null,
+      resume_path: null,
+      visibility: "private",
+      preferred_schedule: null,
+      required_hours: null,
+      skills: [],
+    }),
+}));
+
+export default useApplicantProfileStore;

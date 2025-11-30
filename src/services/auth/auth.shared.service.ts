@@ -2,12 +2,12 @@ import { db } from "@/lib/db";
 import { MySQLError } from "@/types/mysql_error.types";
 import { Account, ExtendedUser } from "@/types/user.types";
 import { RowDataPacket } from "mysql2/promise";
-import { insertOJTData } from "./auth.ojt.service";
+import { insertApplicantData } from "./auth.applicant.service";
 import { insertCompanyData } from "./auth.company.service";
 
 export async function handleSignup(
   user: ExtendedUser,
-  type: "ojt" | "company"
+  type: "applicant" | "company"
 ): Promise<true | false | string> {
   const connection = await db.getConnection();
 
@@ -27,11 +27,11 @@ export async function handleSignup(
     }
 
     // Insert data based on type of signup
-    if (type === "ojt") {
-      const newOJTId = await insertOJTData(connection, user);
+    if (type === "applicant") {
+      const newApplicantId = await insertApplicantData(connection, user);
 
-      (user as ExtendedUser).user_id = newOJTId;
-      (user as ExtendedUser).role_id = 3; // OJT role
+      (user as ExtendedUser).user_id = newApplicantId;
+      (user as ExtendedUser).role_id = 3; // Applicant role
       (user as ExtendedUser).status_id = 7;
     } else if (type === "company") {
       const newCompanyId = await insertCompanyData(connection, user);

@@ -6,7 +6,7 @@ import {
 } from "@/types/user.types";
 import GoogleProvider from "next-auth/providers/google";
 import { handleCompanySignIn } from "@/services/auth/auth.company.service";
-import { handleOJTSignIn } from "@/services/auth/auth.ojt.service";
+import { handleApplicantSignIn } from "@/services/auth/auth.applicant.service";
 import { handleSignup } from "@/services/auth/auth.shared.service";
 import { adminCredentialsProvider } from "@/services/auth/auth.admin.service";
 // Sign-in logic moved to service: @/services/auth/onboardingSignIn.service
@@ -15,14 +15,14 @@ export const authConfig: NextAuthOptions = {
   providers: [
     adminCredentialsProvider,
     GoogleProvider({
-      id: "google-ojt-signin",
+      id: "google-applicant-signin",
       clientId: process.env.GOOGLE_CLIENT_ID!,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
       issuer: "https://accounts.google.com",
       wellKnown: "https://accounts.google.com/.well-known/openid-configuration",
     }),
     GoogleProvider({
-      id: "google-ojt-signup",
+      id: "google-applicant-signup",
       clientId: process.env.GOOGLE_CLIENT_ID!,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
       issuer: "https://accounts.google.com",
@@ -66,16 +66,16 @@ export const authConfig: NextAuthOptions = {
           return res;
         }
 
-        /* OJT Authentication Flows */
-        if (account?.provider === "google-ojt-signup") {
-          // OJT sign-up flow
-          const res = await handleSignup(user as ExtendedUser, "ojt");
+        /* Applicant Authentication Flows */
+        if (account?.provider === "google-applicant-signup") {
+          // Applicant sign-up flow
+          const res = await handleSignup(user as ExtendedUser, "applicant");
           return res;
         }
 
-        if (account?.provider === "google-ojt-signin") {
-          // OJT sign-in flow
-          const res = await handleOJTSignIn(user as ExtendedUser);
+        if (account?.provider === "google-applicant-signin") {
+          // Applicant sign-in flow
+          const res = await handleApplicantSignIn(user as ExtendedUser);
           console.log("res", res);
           return res;
         }
@@ -83,7 +83,7 @@ export const authConfig: NextAuthOptions = {
         console.log("ME??");
         return false;
 
-        /* // Fallback / OJT provider
+        /* // Fallback / Applicant provider
         const result = await handleOAuthSignIn(user as ExtendedUser, account); */
         /* return result; */
       } catch (err) {

@@ -4,7 +4,7 @@ import { cn } from "@/lib/utils";
 import { employer_steps, steps } from "@/const/steps";
 import useOnboardingStore from "@/store/onboarding/shared.onboarding.store";
 
-export default function RenderSteps({ type }: { type: "ojt" | "employer" }) {
+export default function RenderSteps({ type }: { type: "applicant" | "employer" }) {
   const farthestStep = useOnboardingStore((state) => state.farthestStep);
   const currentStep = useOnboardingStore((state) => state.currentStep);
 

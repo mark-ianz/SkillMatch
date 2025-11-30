@@ -1,11 +1,11 @@
 import { useQuery } from "@tanstack/react-query";
 import { api } from "@/lib/axios";
 import { User } from "@/types/user.types";
-import { OJTProfile } from "@/types/ojt_profile.types";
+import { ApplicantProfile } from "@/types/applicant_profile.types";
 
-export type UserProfileData = User & OJTProfile;
+export type UserProfileData = User & ApplicantProfile;
 
-// Query: Get user profile data (combined user + OJT profile)
+// Query: Get user profile data (combined user + Applicant profile)
 export function useUserProfile(user_id?: number) {
   return useQuery({
     queryKey: ["user-profile", user_id],

@@ -6,21 +6,21 @@ import { cn } from "@/lib/utils";
 import OauthButton from "@/components/common/button/OauthButton";
 
 interface SigninFormProps {
-  mode: "ojt" | "company";
+  mode: "applicant" | "company";
 }
 
 export function SigninForm({ mode }: SigninFormProps) {
-  const isOJT = mode === "ojt";
+  const isApplicant = mode === "applicant";
 
-  const tagline = isOJT
+  const tagline = isApplicant
     ? "Your next opportunity awaits. Sign in to explore internships and grow your skills."
     : "Connect with top talent, manage your team, and scale your business.";
 
-  const buttonText = isOJT
-    ? "Sign in with Google as OJT"
+  const buttonText = isApplicant
+    ? "Sign in with Google as Applicant"
     : "Sign in with Google as Company";
 
-  const emailHint = isOJT
+  const emailHint = isApplicant
     ? "Sign in with your Quezon City University email address."
     : "Sign in with your company email address.";
 
@@ -48,10 +48,10 @@ export function SigninForm({ mode }: SigninFormProps) {
         {/* CTA Button */}
         <div className="flex flex-col items-center justify-center gap-3 w-full">
           <OauthButton
-            variant={isOJT ? "default" : "default_employer"}
+            variant={isApplicant ? "default" : "default_employer"}
             text={buttonText}
-            provider={isOJT ? "google-ojt-signin" : "google-company-signin"}
-            callbackUrl={isOJT ? "/onboarding/ojt" : "/onboarding/company"}
+            provider={isApplicant ? "google-applicant-signin" : "google-company-signin"}
+            callbackUrl={isApplicant ? "/onboarding/applicant" : "/onboarding/company"}
             className="w-[400px]"
           />
           <p className="text-xs text-muted-foreground text-center">
@@ -63,10 +63,10 @@ export function SigninForm({ mode }: SigninFormProps) {
         <div className="text-sm text-muted-foreground text-center">
           New here?{" "}
           <Link
-            href={`/signup?type=${isOJT ? "ojt" : "company"}`}
+            href={`/signup?type=${isApplicant ? "applicant" : "company"}`}
             className={cn(
               "hover:underline font-medium text-skillmatch-primary-green",
-              !isOJT && "text-skillmatch-primary-blue"
+              !isApplicant && "text-skillmatch-primary-blue"
             )}
           >
             Create an account

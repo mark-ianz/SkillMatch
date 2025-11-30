@@ -11,15 +11,15 @@ export default function Layout() {
   const pathName = usePathname();
   const searchQuery = useSearchParams();
 
-  const isOJT = searchQuery.get("type") === "ojt";
+  const isApplicant = searchQuery.get("type") === "applicant";
   const isSignup = pathName.includes("signup");
 
   const imageSrc = isSignup ? signup_general : signin_general;
 
-  const tagline = isOJT
+  const tagline = isApplicant
     ? "Step Into the Workplace with Confidence and Purpose"
     : "Connecting You to the Next Generation of Professionals";
-  const description = isOJT
+  const description = isApplicant
     ? "Seize opportunities, gain hands-on experience, and sharpen your skills to grow both personally and professionally."
     : "Discover talented individuals willing to contribute, collaborate, and grow their skills while contributing to success.";
 

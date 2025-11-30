@@ -19,7 +19,7 @@ export default function ShortcutsCard({
   const defaults: Shortcut[] = [
     {
       id: 1,
-      label: "Saved OJTs",
+      label: "Saved Applicants",
       icon: (
         <Bookmark className="w-5 h-5 text-[var(--color-skillmatch-dark)]" />
       ),

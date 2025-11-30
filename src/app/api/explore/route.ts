@@ -19,14 +19,14 @@ export async function GET(request: NextRequest) {
     const userId = searchParams.get("userId");
     const roleName = searchParams.get("roleName");
 
-    // Fetch user skills and course if OJT user
+    // Fetch user skills and course if Applicant user
     let userSkills: string[] = [];
     let userCourse: string | null = null;
-    if (userId && roleName === "OJT") {
+    if (userId && roleName === "Applicant") {
       try {
         const [profileRows] = await db.query<
           (RowDataPacket & { skills: string | null; course: string | null })[]
-        >(`SELECT skills, course FROM ojt_profile WHERE user_id = ?`, [userId]);
+        >(`SELECT skills, course FROM applicant_profile WHERE user_id = ?`, [userId]);
 
         if (profileRows.length > 0) {
           // Get skills
@@ -138,7 +138,7 @@ export async function GET(request: NextRequest) {
         ? post.courses_required.split(",").map((c) => c.trim())
         : [];
 
-      // Calculate skill match count for OJT users
+      // Calculate skill match count for Applicant users
       let matchCount = 0;
       if (userSkills.length > 0) {
         const postSkillsLowerCase = technicalSkillsArray.map((s) =>
@@ -172,7 +172,7 @@ export async function GET(request: NextRequest) {
       };
     });
 
-    // Sort by course match and skill match count if OJT user
+    // Sort by course match and skill match count if Applicant user
     // Priority: 1. Course matched, 2. Higher skill matches
     const sortedRows =
       userCourse || userSkills.length > 0

@@ -16,14 +16,14 @@ export async function GET() {
       );
     }
 
-    // Only OJT users get suggested companies
+    // Only Applicant users get suggested companies
     if (session.user.role_id !== 3) {
       return NextResponse.json([], { status: 200 });
     }
 
     // Get user's course
     const [userRows] = await db.query<RowDataPacket[]>(
-      `SELECT course FROM ojt_profile WHERE user_id = ?`,
+      `SELECT course FROM applicant_profile WHERE user_id = ?`,
       [session.user.user_id]
     );
 
@@ -35,7 +35,7 @@ export async function GET() {
     }
 
     const userCourse = userRows[0].course;
-    const companies = await CompanyServices.getSuggestedCompaniesForOJT(userCourse);
+    const companies = await CompanyServices.getSuggestedCompaniesForApplicant(userCourse);
 
     return NextResponse.json(companies, { status: 200 });
   } catch (error) {

@@ -1,5 +1,5 @@
 import { Company } from "./company.types";
-import { OJTProfile } from "./ojt_profile.types";
+import { ApplicantProfile } from "./applicant_profile.types";
 import { SkillQuery } from "./skill.types";
 import { AcademicDetails, PublicAccount, User } from "./user.types";
 
@@ -15,6 +15,6 @@ export type Onboarding = {
 export type OnboardingStudentFullInfo = Onboarding &
   User &
   AcademicDetails &
-  OJTProfile & SkillQuery & PublicAccount;
+  ApplicantProfile & SkillQuery & PublicAccount;
 
 export type OnboardingCompanyFullInfo = Onboarding & Company & PublicAccount;

@@ -123,7 +123,7 @@ export const CompanyPostServices = {
 
       const params: string[] = [];
 
-      // If user has a course (OJT), prioritize posts from companies with matching job posts
+      // If user has a course (Applicant), prioritize posts from companies with matching job posts
       if (userCourse) {
         query = `
           SELECT 

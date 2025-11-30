@@ -17,7 +17,7 @@ export async function GET(request: NextRequest) {
 
     let notifications;
 
-    // Check if user is a company (role_id 4) or OJT/student (role_id 3)
+    // Check if user is a company (role_id 4) or Applicant/student (role_id 3)
     if (session.user.role_id === 4) {
       // Company
       const companyId = session.user.company_id as string;
@@ -32,7 +32,7 @@ export async function GET(request: NextRequest) {
         limit
       );
     } else if (session.user.role_id === 3) {
-      // OJT/Student
+      // Applicant/Student
       const userId = session.user.user_id;
       if (!userId) {
         return NextResponse.json(

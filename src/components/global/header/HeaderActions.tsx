@@ -42,7 +42,7 @@ export default function HeaderActions() {
 
   const isAdmin = session?.user?.isAdmin;
 
-  if (role === "OJT" || role === "Company" || isAdmin) {
+  if (role === "Applicant" || role === "Company" || isAdmin) {
     return (
       <div className="flex items-center gap-2">
         {!isAdmin && <NotificationPopover />}

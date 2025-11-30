@@ -41,7 +41,7 @@ export default function PersonalInfoTab() {
 
     updateProfilePictureMutation.mutate(profilePicture, {
       onSuccess: (data) => {
-        setProfilePicturePreview(data.data.ojt_image_path);
+        setProfilePicturePreview(data.data.applicant_image_path);
         setProfilePicture(null);
       },
     });

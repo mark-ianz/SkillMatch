@@ -74,10 +74,10 @@ export async function updatePersonalInfo(
   return result.affectedRows > 0;
 }
 
-// Update profile picture (ojt_profile.ojt_image_path)
-export async function updateProfilePicture(ojtId: number, imagePath: string) {
-  const query = `UPDATE ojt_profile SET ojt_image_path = ? WHERE ojt_id = ?`;
-  const [result] = await db.execute<ResultSetHeader>(query, [imagePath, ojtId]);
+// Update profile picture (applicant_profile.applicant_image_path)
+export async function updateProfilePicture(applicantId: number, imagePath: string) {
+  const query = `UPDATE applicant_profile SET applicant_image_path = ? WHERE applicant_id = ?`;
+  const [result] = await db.execute<ResultSetHeader>(query, [imagePath, applicantId]);
 
   return result.affectedRows > 0;
 }
@@ -123,12 +123,12 @@ export async function updatePassword(
   return result.affectedRows > 0;
 }
 
-// Update resume (ojt_profile.resume_path)
-export async function updateResume(ojtId: number, resumePath: string) {
-  const query = `UPDATE ojt_profile SET resume_path = ? WHERE ojt_id = ?`;
+// Update resume (applicant_profile.resume_path)
+export async function updateResume(applicantId: number, resumePath: string) {
+  const query = `UPDATE applicant_profile SET resume_path = ? WHERE applicant_id = ?`;
   const [result] = await db.execute<ResultSetHeader>(query, [
     resumePath,
-    ojtId,
+    applicantId,
   ]);
 
   return result.affectedRows > 0;
@@ -136,7 +136,7 @@ export async function updateResume(ojtId: number, resumePath: string) {
 
 // Update availability (preferred_schedule and required_hours)
 export async function updateAvailability(
-  ojtId: number,
+  applicantId: number,
   data: {
     preferred_schedule?: string; // e.g., "Monday,Wednesday,Friday"
     required_hours?: number; // e.g., 400
@@ -158,29 +158,29 @@ export async function updateAvailability(
     throw new Error("No fields to update");
   }
 
-  values.push(ojtId);
+  values.push(applicantId);
 
-  const query = `UPDATE ojt_profile SET ${fields.join(", ")} WHERE ojt_id = ?`;
+  const query = `UPDATE applicant_profile SET ${fields.join(", ")} WHERE applicant_id = ?`;
   const [result] = await db.execute<ResultSetHeader>(query, values);
 
   return result.affectedRows > 0;
 }
 
-// Update skills (ojt_profile.skills)
-export async function updateSkills(ojtId: number, skills: string[]) {
+// Update skills (applicant_profile.skills)
+export async function updateSkills(applicantId: number, skills: string[]) {
   const skillsString = skills.join(",");
-  const query = `UPDATE ojt_profile SET skills = ? WHERE ojt_id = ?`;
+  const query = `UPDATE applicant_profile SET skills = ? WHERE applicant_id = ?`;
   const [result] = await db.execute<ResultSetHeader>(query, [
     skillsString,
-    ojtId,
+    applicantId,
   ]);
 
   return result.affectedRows > 0;
 }
 
-// Update education details (ojt_profile)
+// Update education details (applicant_profile)
 export async function updateEducationDetails(
-  ojtId: number,
+  applicantId: number,
   data: {
     student_number?: string;
     college?: string;
@@ -217,15 +217,15 @@ export async function updateEducationDetails(
     throw new Error("No fields to update");
   }
 
-  values.push(ojtId);
+  values.push(applicantId);
 
-  const query = `UPDATE ojt_profile SET ${fields.join(", ")} WHERE ojt_id = ?`;
+  const query = `UPDATE applicant_profile SET ${fields.join(", ")} WHERE applicant_id = ?`;
   const [result] = await db.execute<ResultSetHeader>(query, values);
 
   return result.affectedRows > 0;
 }
 
-// Get user settings data (combined from user, account, and ojt_profile)
+// Get user settings data (combined from user, account, and applicant_profile)
 export async function getUserSettings(userId: number) {
   const query = `
     SELECT 
@@ -243,8 +243,8 @@ export async function getUserSettings(userId: number) {
       u.city_municipality,
       a.email,
       a.password_hash,
-      o.ojt_id,
-      o.ojt_image_path,
+      o.applicant_id,
+      o.applicant_image_path,
       o.resume_path,
       o.student_number,
       o.college,
@@ -256,7 +256,7 @@ export async function getUserSettings(userId: number) {
       o.required_hours
     FROM user u
     LEFT JOIN account a ON u.user_id = a.user_id
-    LEFT JOIN ojt_profile o ON u.user_id = o.user_id
+    LEFT JOIN applicant_profile o ON u.user_id = o.user_id
     WHERE u.user_id = ?
   `;
 
@@ -282,8 +282,8 @@ export async function getUserSettings(userId: number) {
     city_municipality: row.city_municipality,
     email: row.email,
     has_password: !!row.password_hash,
-    ojt_id: row.ojt_id,
-    ojt_image_path: row.ojt_image_path,
+    applicant_id: row.applicant_id,
+    applicant_image_path: row.applicant_image_path,
     resume_path: row.resume_path,
     student_number: row.student_number,
     college: row.college,

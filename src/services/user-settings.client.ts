@@ -14,8 +14,8 @@ export type UserSettings = {
   city_municipality: string | null;
   email: string;
   has_password: boolean;
-  ojt_id: number;
-  ojt_image_path: string | null;
+  applicant_id: number;
+  applicant_image_path: string | null;
   resume_path: string | null;
   student_number: string | null;
   college: string | null;

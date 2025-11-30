@@ -2,7 +2,7 @@ import { DefaultSession, User as NextAuthUser } from "next-auth";
 import { AdapterUser } from "next-auth/adapters";
 import { JWT } from "next-auth/jwt";
 
-export type UserType = "ojt" | "company";
+export type UserType = "applicant" | "company";
 
 export type User = Address & {
   user_id: number;

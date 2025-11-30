@@ -9,7 +9,7 @@ export function useUploadResume(user_id: number) {
     mutationFn: async (file: File) => {
       const fd = new FormData();
       fd.append("resume", file, file.name);
-      const { data } = await api.post(`/ojt/resume/${user_id}`, fd, {
+      const { data } = await api.post(`/applicant/resume/${user_id}`, fd, {
         headers: { "Content-Type": "multipart/form-data" },
       });
       return data as UploadResult;

@@ -42,9 +42,9 @@ export const SkillServices = {
       // Convert skills array to comma-separated string
       const skillsString = skills.map((skill) => skill.skill_name).join(", ");
 
-      // Update the skills column in ojt_profile
+      // Update the skills column in applicant_profile
       await connection.query(
-        `UPDATE ojt_profile SET skills = ? WHERE user_id = ?`,
+        `UPDATE applicant_profile SET skills = ? WHERE user_id = ?`,
         [skillsString, user_id]
       );
 
@@ -58,7 +58,7 @@ export const SkillServices = {
   },
   getUserSkills: async (user_id: string | number) => {
     const [rows] = await db.query<(RowDataPacket & { skills: string | null })[]>(
-      `SELECT skills FROM ojt_profile WHERE user_id = ?`,
+      `SELECT skills FROM applicant_profile WHERE user_id = ?`,
       [user_id]
     );
 

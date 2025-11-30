@@ -14,15 +14,15 @@ import { useSearchSkills } from "@/hooks/query/useSkills";
 import useDebounce from "@/hooks/useDebounce";
 import LoadingGeneric from "@/components/global/LoadingGeneric";
 import { toast } from "sonner";
-import useOJTProfileStore from "@/store/onboarding/ojt.onboarding.store";
+import useApplicantProfileStore from "@/store/onboarding/applicant.onboarding.store";
 
 const MAXIMUM_SKILLS = parseInt(
   process.env.NEXT_PUBLIC_MAXIMUM_SKILLS as string
 );
 
 export default function SearchSkill() {
-  const skills = useOJTProfileStore((state) => state.skills);
-  const addSkill = useOJTProfileStore((state) => state.addSkill);
+  const skills = useApplicantProfileStore((state) => state.skills);
+  const addSkill = useApplicantProfileStore((state) => state.addSkill);
 
   const [searchQuery, setSearchQuery] = useState("");
   const debouncedSearchQuery = useDebounce(searchQuery, 300);

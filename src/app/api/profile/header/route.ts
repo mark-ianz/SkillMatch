@@ -14,9 +14,9 @@ export async function GET(request: NextRequest) {
     }
 
     const { searchParams } = new URL(request.url);
-    const type = searchParams.get("type"); // "ojt" or "company"
+    const type = searchParams.get("type"); // "applicant" or "company"
 
-    if (type === "ojt") {
+    if (type === "applicant") {
       const userId = session.user.user_id;
       if (!userId) {
         return NextResponse.json(
@@ -25,7 +25,7 @@ export async function GET(request: NextRequest) {
         );
       }
 
-      const profile = await UserService.getOJTProfileForHeader(userId);
+      const profile = await UserService.getApplicantProfileForHeader(userId);
       
       if (!profile) {
         return NextResponse.json(
@@ -35,7 +35,7 @@ export async function GET(request: NextRequest) {
       }
 
       return NextResponse.json({
-        avatarUrl: profile.ojt_image_path,
+        avatarUrl: profile.applicant_image_path,
         name: `${profile.first_name} ${profile.last_name}`,
         email: profile.email,
       }, { status: 200 });
@@ -66,7 +66,7 @@ export async function GET(request: NextRequest) {
       
     } else {
       return NextResponse.json(
-        { message: "Invalid type parameter. Use 'ojt' or 'company'" },
+        { message: "Invalid type parameter. Use 'applicant' or 'company'" },
         { status: 400 }
       );
     }

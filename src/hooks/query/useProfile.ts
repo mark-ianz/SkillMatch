@@ -7,8 +7,8 @@ interface HeaderProfile {
   email: string;
 }
 
-// Fetch header profile (OJT or Company)
-export function useHeaderProfile(type: "ojt" | "company" | null) {
+// Fetch header profile (Applicant or Company)
+export function useHeaderProfile(type: "applicant" | "company" | null) {
   return useQuery({
     queryKey: ["header-profile", type],
     queryFn: async () => {

@@ -11,10 +11,10 @@ export async function PATCH(req: NextRequest) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    // Get user settings to find ojt_id
+    // Get user settings to find applicant_id
     const settings = await getUserSettings(session.user.user_id);
-    if (!settings?.ojt_id) {
-      return NextResponse.json({ error: "OJT profile not found" }, { status: 404 });
+    if (!settings?.applicant_id) {
+      return NextResponse.json({ error: "Applicant profile not found" }, { status: 404 });
     }
 
     const body = await req.json();
@@ -45,7 +45,7 @@ export async function PATCH(req: NextRequest) {
       }
     }
 
-    await updateAvailability(settings.ojt_id, {
+    await updateAvailability(settings.applicant_id, {
       preferred_schedule,
       required_hours,
     });

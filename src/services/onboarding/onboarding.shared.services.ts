@@ -58,7 +58,7 @@ async function updateStep({
   user_id?: number;
   company_id?: string;
 }) {
-  // Since onboarding can be for both OJT and Company, we need to handle both cases
+  // Since onboarding can be for both Applicant and Company, we need to handle both cases
 
   // Check if both user_id and company_id are provided
   if (!user_id && !company_id) {

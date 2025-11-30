@@ -1,14 +1,14 @@
 import { Card } from "@/components/ui/card";
 import { cn, getCourseByAbbr, getRoleName } from "@/lib/utils";
 import Image from "next/image";
-import OJTShortcut from "./OJTShortcut";
+import ApplicantShortcut from "./ApplicantShortcut";
 import CompanyShortcut from "./CompanyShortcut";
 import LoadingGeneric from "@/components/global/LoadingGeneric";
 import { getServerSession } from "next-auth";
 import { authConfig } from "@/lib/auth";
 import { UserService } from "@/services/user.services";
 import CompanyServices from "@/services/company.services";
-import { CompanyFallbackSVG, OJTFallbackSVG } from "@/components/common/fallback/ImageFallback";
+import { CompanyFallbackSVG, ApplicantFallbackSVG } from "@/components/common/fallback/ImageFallback";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { LogIn, UserPlus, ShieldCheck, Users, Briefcase, BarChart3 } from "lucide-react";
@@ -120,30 +120,30 @@ export default async function SidebarProfile() {
     return <LoadingGeneric />;
   }
 
-  const isOjt = getRoleName(role_id) === "OJT";
+  const isOjt = getRoleName(role_id) === "Applicant";
   const isCompany = getRoleName(role_id) === "Company";
   
   // Fetch profile data from database
-  let ojtProfile;
+  let applicantProfile;
   let companyProfile;
   
   if (isOjt && user_id) {
-    ojtProfile = await UserService.getOJTProfileForSidebar(user_id);
+    applicantProfile = await UserService.getApplicantProfileForSidebar(user_id);
   } else if (isCompany && company_id) {
     companyProfile = await CompanyServices.getCompanyProfileForSidebar(company_id);
   }
 
-  if (!ojtProfile && !companyProfile) {
+  if (!applicantProfile && !companyProfile) {
     return <LoadingGeneric />;
   }
 
   const displayName = isOjt 
-    ? ojtProfile?.name || "OJT User"
+    ? applicantProfile?.name || "Applicant User"
     : companyProfile?.company_name || "Company User";
-  const profileImage = (isOjt ? ojtProfile?.ojt_image_path : companyProfile?.company_image) || null;
-  const studentId = ojtProfile?.student_number || null;
-  const course = getCourseByAbbr(ojtProfile?.course || "") || null;
-  const location = (isOjt ? ojtProfile?.location : companyProfile?.location) || null;
+  const profileImage = (isOjt ? applicantProfile?.applicant_image_path : companyProfile?.company_image) || null;
+  const studentId = applicantProfile?.student_number || null;
+  const course = getCourseByAbbr(applicantProfile?.course || "") || null;
+  const location = (isOjt ? applicantProfile?.location : companyProfile?.location) || null;
 
   return (
     <Card className="pt-0 border-0">
@@ -166,7 +166,7 @@ export default async function SidebarProfile() {
                 className="object-cover"
               />
             ) : isOjt ? (
-              <OJTFallbackSVG />
+              <ApplicantFallbackSVG />
             ) : (
               <CompanyFallbackSVG />
             )}
@@ -201,7 +201,7 @@ export default async function SidebarProfile() {
         </div>
         <hr />
 
-        {isOjt ? <OJTShortcut /> : <CompanyShortcut />}
+        {isOjt ? <ApplicantShortcut /> : <CompanyShortcut />}
       </div>
     </Card>
   );

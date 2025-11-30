@@ -8,9 +8,9 @@ export default function QuickSignInButtons() {
     <div className="flex flex-col gap-2">
       <button
         className="px-4 py-2 rounded bg-gray-200"
-        onClick={() => signIn("google-ojt-signin", { callbackUrl: "/onboarding/ojt" })}
+        onClick={() => signIn("google-applicant-signin", { callbackUrl: "/onboarding/applicant" })}
       >
-        Sign in as OJT
+        Sign in as Applicant
       </button>
       <button
         className="px-4 py-2 rounded bg-gray-200"

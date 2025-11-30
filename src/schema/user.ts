@@ -24,7 +24,7 @@ export const createUserInputSchema = onboardingStepOneSchema
       .min(8, { error: "Confirm Password must be at least 8 characters long" }),
     auth_provider: z.enum(["local", "google", "facebook"]).default("local"),
     oauth_id: z.string().optional(),
-    role_id: z.number().default(3), // Default role_id to 3 (OJT Student)
+    role_id: z.number().default(3), // Default role_id to 3 (Applicant Student)
     status_id: z.number().default(1), // Default status_id to 1 (active)
   })
   .refine((data) => data.password === data.confirm_password, {
