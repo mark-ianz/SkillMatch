@@ -100,7 +100,7 @@ export default function ApplicationDetailsPage() {
   const StatusIcon = config?.icon || FileText;
 
   return (
-    <div className="container max-w-4xl py-8">
+    <>
       {/* Back Button */}
       <Button
         variant="ghost"
@@ -519,6 +519,6 @@ export default function ApplicationDetailsPage() {
           </DialogFooter>
         </DialogContent>
       </Dialog>
-    </div>
+    </>
   );
 }

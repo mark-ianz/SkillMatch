@@ -21,7 +21,7 @@ export default function ApplicationTrackerPage() {
   }
 
   return (
-    <div className="container max-w-5xl bg-background">
+    <>
       {/* Page Header */}
       <div className="mb-8">
         <h1 className="text-3xl font-bold mb-2">Application Tracker</h1>
@@ -40,6 +40,6 @@ export default function ApplicationTrackerPage() {
         activeTab={activeTab}
         onTabChange={setActiveTab}
       />
-    </div>
+    </>
   );
 }

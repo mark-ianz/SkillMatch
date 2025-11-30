@@ -52,7 +52,7 @@ export default function SavedPage() {
   };
 
   return (
-    <div className="max-w-5xl container">
+    <>
       <div className="mb-8">
         <h1 className="text-3xl font-bold mb-2">Saved Items</h1>
         <p className="text-muted-foreground">
@@ -180,6 +180,6 @@ export default function SavedPage() {
           )}
         </TabsContent>
       </Tabs>
-    </div>
+    </>
   );
 }

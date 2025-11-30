@@ -1,17 +1,19 @@
 import { ReactNode } from "react";
-import Footer from "../../../components/global/Footer";
 import UniversalHeader from "@/components/global/header/UniversalHeader";
 import MainLayout from "@/components/layout/MainLayout";
+import Footer from "@/components/global/Footer";
 
 export default function Layout({ children }: { children: ReactNode }) {
   return (
     <>
-      <UniversalHeader role="Applicant"/>
+      <UniversalHeader role="Company"/>
       <MainLayout
         className="items-center"
-        wrapperClassName="items-center flex-col w-full p-0"
+        wrapperClassName="items-center flex-col w-full py-0"
       >
-        {children}
+        <div className="container max-w-5xl py-10">
+          {children}
+        </div>
       </MainLayout>
       <Footer />
     </>

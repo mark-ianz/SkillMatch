@@ -64,7 +64,7 @@ export default function ApplicantSettingsPage() {
   }
 
   return (
-    <div className="container max-w-7xl py-8">
+    <>
       <h1 className="text-3xl font-bold mb-6">Account Settings</h1>
 
       <Tabs defaultValue="personal" className="space-y-4">
@@ -80,6 +80,6 @@ export default function ApplicantSettingsPage() {
         <AvailabilityTab />
         <EducationTab />
       </Tabs>
-    </div>
+    </>
   );
 }
