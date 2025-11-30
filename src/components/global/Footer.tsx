@@ -61,9 +61,34 @@ export default function Footer() {
             </div>
 
             {/* Contact */}
-            <div className="max-w-[300px]">
+            <div className="max-w-[300px] text-sm flex flex-col gap-2">
               <h4 className="font-semibold">Contact</h4>
-              <div className="mt-3 text-sm text-skillmatch-light/80">
+              <div className="flex items-start gap-3">
+                <MapPin className="w-4 h-4 mt-1 text-skillmatch-light/80" />
+                <div>
+                  673 Quirino Highway, San Bartolome,
+                  <br /> Novaliches, Quezon City, Philippines
+                </div>
+              </div>
+
+              <div className="flex items-center gap-3">
+                <Mail className="w-4 h-4 text-skillmatch-light/80" />
+                <a href="mailto:QCUniversity@quezoncity.gov.ph">
+                  QCUniversity@quezoncity.gov.ph
+                </a>
+              </div>
+              <div className="flex items-center gap-3">
+                <Mail className="w-4 h-4 text-skillmatch-light/80" />
+                <a href="mailto:skillmatch.qcu@gmail.com">
+                  skillmatch.qcu@gmail.com
+                </a>
+              </div>
+
+              <div className="flex items-center gap-3">
+                <Phone className="w-4 h-4 text-skillmatch-light/80" />
+                <a href="tel:280003479">8806-3324, 8681-9135, 8806-3470</a>
+              </div>
+              <div className="mt-3 text-skillmatch-light/80">
                 For complete and updated contact information, please
                 visit:&nbsp;
                 <a
