@@ -5,6 +5,8 @@ import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useCompanySettings } from "@/hooks/query/useCompanySettings";
 import CompanyProfileTab from "@/components/page_specific/company-settings/CompanyProfileTab";
 import CompanyContactTab from "@/components/page_specific/company-settings/CompanyContactTab";
+import CompanyLocationTab from "@/components/page_specific/company-settings/CompanyLocationTab";
+import CompanySecurityTab from "@/components/page_specific/company-settings/CompanySecurityTab";
 import CompanySettingsSkeleton from "@/components/page_specific/company-settings/CompanySettingsSkeleton";
 import useCompanySettingsStore from "@/store/CompanySettingsStore";
 
@@ -63,7 +65,8 @@ export default function CompanySettingsPage() {
 
         <CompanyProfileTab />
         <CompanyContactTab />
-        {/* Other tabs will be added later */}
+        <CompanyLocationTab />
+        <CompanySecurityTab />
       </Tabs>
     </div>
   );
