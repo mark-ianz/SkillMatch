@@ -133,7 +133,7 @@ export function getBarangaysByCity(
   return barangays;
 }
 
-export function getRoleName(role_id: number | undefined): Roles | undefined {
+export function getRoleName(role_id: number | undefined): Roles {
   switch (role_id) {
     case 3:
       return "OJT";
@@ -144,6 +144,6 @@ export function getRoleName(role_id: number | undefined): Roles | undefined {
     case 1:
       return "Admin";
     default:
-      return undefined;
+      return "OJT";
   }
 }
