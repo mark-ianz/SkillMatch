@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button";
-import { Briefcase, Users, Settings, PlusCircle, LucideIcon, FileText } from "lucide-react";
+import { Briefcase, Building2, PlusCircle, LucideIcon, FileText } from "lucide-react";
 import Link from "next/link";
 
 interface Shortcut {
@@ -23,21 +23,15 @@ const shortcuts: Shortcut[] = [
     variant: "ghost",
   },
   {
-    href: "/company/posts",
+    href: "/company/feed-posts",
     icon: FileText,
-    label: "My Posts",
-    variant: "ghost",
-  },
-  {
-    href: "/company/applications",
-    icon: Users,
-    label: "Applications",
+    label: "Feed Posts",
     variant: "ghost",
   },
   {
     href: "/company/settings",
-    icon: Settings,
-    label: "Settings",
+    icon: Building2,
+    label: "Company Profile Settings",
     variant: "ghost",
   },
 ];
