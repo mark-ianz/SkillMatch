@@ -1,9 +1,8 @@
 import React from "react";
 import { Badge } from "@/components/ui/badge";
-import { Sparkles, Search } from "lucide-react";
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
-import Link from "next/link";
+import { Sparkles } from "lucide-react";
+import SearchBar from "./SearchBar";
+import PopularCategories from "./PopularCategories";
 
 export default function ApplicantHeroSection() {
   return (
@@ -29,64 +28,8 @@ export default function ApplicantHeroSection() {
             professional journey.
           </p>
 
-          {/* Search Bar */}
-          <div className="max-w-2xl mx-auto mb-8">
-            <div className="flex flex-col sm:flex-row gap-3 p-2 bg-card border rounded-lg shadow-lg">
-              <div className="flex items-center flex-1 gap-2 px-3">
-                <Search className="h-5 w-5 text-muted-foreground flex-shrink-0" />
-                <Input
-                  placeholder="Search by job title or skills..."
-                  className="border-0 shadow-none focus-visible:ring-0 px-0"
-                  aria-label="Search jobs"
-                />
-              </div>
-              <Link href="/about">
-                <Button className="bg-skillmatch-primary-green text-skillmatch-light hover:bg-skillmatch-primary-green/90">
-                  Search Jobs
-                </Button>
-              </Link>
-            </div>
-          </div>
-
-          {/* Popular Skills */}
-          <div className="flex flex-wrap justify-center gap-2" role="list" aria-label="Popular job categories">
-            <span className="text-sm text-muted-foreground">Popular:</span>
-            <Badge
-              variant="outline"
-              className="cursor-pointer hover:bg-skillmatch-primary-green hover:text-skillmatch-light transition-colors"
-              role="listitem"
-            >
-              Web Developer
-            </Badge>
-            <Badge
-              variant="outline"
-              className="cursor-pointer hover:bg-skillmatch-primary-green hover:text-skillmatch-light transition-colors"
-              role="listitem"
-            >
-              UI/UX Designer
-            </Badge>
-            <Badge
-              variant="outline"
-              className="cursor-pointer hover:bg-skillmatch-primary-green hover:text-skillmatch-light transition-colors"
-              role="listitem"
-            >
-              Data Analyst
-            </Badge>
-            <Badge
-              variant="outline"
-              className="cursor-pointer hover:bg-skillmatch-primary-green hover:text-skillmatch-light transition-colors"
-              role="listitem"
-            >
-              Marketing
-            </Badge>
-            <Badge
-              variant="outline"
-              className="cursor-pointer hover:bg-skillmatch-primary-green hover:text-skillmatch-light transition-colors"
-              role="listitem"
-            >
-              Software Engineer
-            </Badge>
-          </div>
+          <SearchBar />
+          <PopularCategories />
         </div>
       </div>
     </section>
