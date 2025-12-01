@@ -16,9 +16,8 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
-import { Edit, Heart, Trash2 } from "lucide-react";
+import { Edit, Trash2 } from "lucide-react";
 import { EditCompanyPostDialog } from "./EditCompanyPostDialog";
-import { ViewReactionsDialog } from "./ViewReactionsDialog";
 import { CompanyPostSkeleton } from "@/components/common/skeleton/JobPostSkeleton";
 
 export function CompanyFeedPostsList() {
@@ -27,7 +26,6 @@ export function CompanyFeedPostsList() {
   const deletePostMutation = useDeleteCompanyPost();
 
   const [editPost, setEditPost] = useState<CompanyPostType | null>(null);
-  const [viewReactionsPost, setViewReactionsPost] = useState<CompanyPostType | null>(null);
   const [deletePostId, setDeletePostId] = useState<string | null>(null);
 
   const handleDelete = () => {
@@ -82,15 +80,6 @@ export function CompanyFeedPostsList() {
               <Button
                 variant="outline"
                 size="sm"
-                onClick={() => setViewReactionsPost(post)}
-                className="gap-2"
-              >
-                <Heart className="w-4 h-4" />
-                View Reactions
-              </Button>
-              <Button
-                variant="outline"
-                size="sm"
                 onClick={() => setDeletePostId(post.post_id)}
                 className="gap-2 text-destructive hover:text-destructive ml-auto"
               >
@@ -107,13 +96,6 @@ export function CompanyFeedPostsList() {
         post={editPost}
         open={!!editPost}
         onOpenChange={(open) => !open && setEditPost(null)}
-      />
-
-      {/* View Reactions Dialog */}
-      <ViewReactionsDialog
-        post={viewReactionsPost}
-        open={!!viewReactionsPost}
-        onOpenChange={(open) => !open && setViewReactionsPost(null)}
       />
 
       {/* Delete Confirmation Dialog */}
