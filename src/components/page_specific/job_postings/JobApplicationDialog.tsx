@@ -226,7 +226,7 @@ export function JobApplicationDialog({
             <span className="text-sm text-blue-700 dark:text-blue-400">
               If your information is incorrect,{" "}
               <Link
-                href="/profile"
+                href="/applicant/settings"
                 className="font-medium underline hover:text-blue-800 dark:hover:text-blue-300"
               >
                 edit it on your profile
