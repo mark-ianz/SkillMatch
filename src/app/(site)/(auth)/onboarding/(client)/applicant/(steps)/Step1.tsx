@@ -139,8 +139,7 @@ export default function Step1() {
           id="email"
           type="email"
           placeholder="Enter your email"
-          value={email}
-          onChange={(e: React.ChangeEvent<HTMLInputElement>) => setEmail(e.target.value)}
+          defaultValue={email}
         />
       </RowContainer>
 
