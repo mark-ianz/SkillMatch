@@ -2,6 +2,7 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { ArrowRight } from "lucide-react";
 import React from "react";
+import Link from "next/link";
 
 export default function CompanyCTA() {
   return (
@@ -16,20 +17,24 @@ export default function CompanyCTA() {
             students for their OJT programs.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Button
-              size="lg"
-              className="text-sm bg-skillmatch-light text-skillmatch-dark hover:bg-skillmatch-light/90"
-            >
-              Get Started
-              <ArrowRight className="ml-2 h-5 w-5" />
-            </Button>
-            <Button
-              size="lg"
-              variant="outline"
-              className="text-sm bg-transparent hover:bg-skillmatch-light/10 hover:text-skillmatch-light"
-            >
-              Learn More
-            </Button>
+            <Link href="/signup">
+              <Button
+                size="lg"
+                className="text-sm bg-skillmatch-light text-skillmatch-dark hover:bg-skillmatch-light/90"
+              >
+                Get Started
+                <ArrowRight className="ml-2 h-5 w-5" />
+              </Button>
+            </Link>
+            <Link href="/about">
+              <Button
+                size="lg"
+                variant="outline"
+                className="text-sm bg-transparent hover:bg-skillmatch-light/10 hover:text-skillmatch-light"
+              >
+                Learn More
+              </Button>
+            </Link>
           </div>
         </Card>
       </div>

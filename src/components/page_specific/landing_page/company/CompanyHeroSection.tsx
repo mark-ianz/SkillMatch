@@ -4,6 +4,7 @@ import { Sparkles, ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Target, Shield, Zap } from "lucide-react";
+import Link from "next/link";
 
 export default function CompanyHeroSection() {
   return (
@@ -31,13 +32,15 @@ export default function CompanyHeroSection() {
               your team with pre-vetted talent.
             </p>
             <div className="flex flex-col sm:flex-row gap-4">
-              <Button
-                size="lg"
-                className="text-lg bg-skillmatch-primary-blue text-white hover:bg-skillmatch-primary-blue/90"
-              >
-                Get Started
-                <ArrowRight className="ml-2 h-5 w-5" />
-              </Button>
+              <Link href="/signup">
+                <Button
+                  size="lg"
+                  className="text-lg bg-skillmatch-primary-blue text-white hover:bg-skillmatch-primary-blue/90"
+                >
+                  Get Started
+                  <ArrowRight className="ml-2 h-5 w-5" />
+                </Button>
+              </Link>
             </div>
           </div>
           <div className="relative">

@@ -3,6 +3,7 @@ import { Badge } from "@/components/ui/badge";
 import { Sparkles, Search } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import Link from "next/link";
 
 export default function ApplicantHeroSection() {
   return (
@@ -39,9 +40,11 @@ export default function ApplicantHeroSection() {
                   aria-label="Search jobs"
                 />
               </div>
-              <Button className="bg-skillmatch-primary-green text-skillmatch-light hover:bg-skillmatch-primary-green/90">
-                Search Jobs
-              </Button>
+              <Link href="/about">
+                <Button className="bg-skillmatch-primary-green text-skillmatch-light hover:bg-skillmatch-primary-green/90">
+                  Search Jobs
+                </Button>
+              </Link>
             </div>
           </div>
 
