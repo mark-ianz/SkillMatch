@@ -189,6 +189,81 @@ export const CompanyPostServices = {
     }
   },
 
+  getCompanyPostById: async (post_id: string) => {
+    const connection = await db.getConnection();
+    try {
+      const [rows] = await connection.query<(RowDataPacket & CompanyPost)[]>(
+        `SELECT 
+          cp.post_id,
+          cp.company_id,
+          cp.title,
+          cp.content,
+          cp.cover_image,
+          cp.created_at,
+          c.company_name,
+          c.company_image
+        FROM company_posts cp
+        INNER JOIN company c ON cp.company_id = c.company_id
+        WHERE cp.post_id = ?`,
+        [post_id]
+      );
+
+      return rows.length > 0 ? (rows[0] as CompanyPost) : null;
+    } catch (error) {
+      console.error("Error fetching company post by ID:", error);
+      throw error;
+    } finally {
+      connection.release();
+    }
+  },
+
+  getCompanyPostSuggestions: async (post_id: string, user_id?: number) => {
+    const connection = await db.getConnection();
+    try {
+      // Get the current post's company_id
+      const [currentPost] = await connection.query<RowDataPacket[]>(
+        `SELECT company_id FROM company_posts WHERE post_id = ?`,
+        [post_id]
+      );
+
+      if (currentPost.length === 0) {
+        return [];
+      }
+
+      const company_id = currentPost[0].company_id;
+
+      // Get suggestions: posts from the same company first, then others
+      const [rows] = await connection.query<(RowDataPacket & CompanyPost)[]>(
+        `SELECT 
+          cp.post_id,
+          cp.company_id,
+          cp.title,
+          cp.content,
+          cp.cover_image,
+          cp.created_at,
+          c.company_name,
+          c.company_image,
+          CASE 
+            WHEN cp.company_id = ? THEN 1
+            ELSE 0
+          END as same_company
+        FROM company_posts cp
+        INNER JOIN company c ON cp.company_id = c.company_id
+        WHERE cp.post_id != ?
+        ORDER BY same_company DESC, cp.created_at DESC
+        LIMIT 10`,
+        [company_id, post_id]
+      );
+
+      return rows as CompanyPost[];
+    } catch (error) {
+      console.error("Error fetching company post suggestions:", error);
+      throw error;
+    } finally {
+      connection.release();
+    }
+  },
+
   // Add or update a reaction to a post
   addOrUpdateReaction: async (
     post_id: string,
