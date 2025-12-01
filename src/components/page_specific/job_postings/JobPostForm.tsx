@@ -238,7 +238,7 @@ export default function JobPostingForm() {
         open={showResetConfirmDialog}
         onOpenChange={setShowResetConfirmDialog}
       >
-        <DialogContent>
+        <DialogContent className="max-w-md">
           <DialogHeader>
             <DialogTitle>Clear Form?</DialogTitle>
             <DialogDescription>
