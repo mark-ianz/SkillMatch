@@ -14,15 +14,11 @@ export default function ExploreFullInfo() {
   const selected_job_post = useExploreStore((state) => state.selected_job_post);
   const selected_company = useExploreStore((state) => state.selected_company);
 
-  // Show skeleton while loading
-  if (
-    status === "loading" ||
-    (!selected_job_post && exploreType === "job-postings") ||
-    (!selected_company && exploreType === "companies")
-  ) {
+  // Show skeleton only while session is loading
+  if (status === "loading") {
     return (
-      <div className="flex-4 sticky top-28 bottom-4 pb-20 h-fit">
-        <div className="max-h-[calc(100vh-9rem)] overflow-y-auto border pb-4 rounded-lg">
+      <div className="flex-4 sticky top-24 bottom-4 pb-20 h-fit">
+        <div className="max-h-[calc(100vh-9rem)] pb-4">
           <JobPostFullInfoSkeleton />
         </div>
       </div>
@@ -31,22 +27,66 @@ export default function ExploreFullInfo() {
 
   if (!selected_job_post && exploreType === "job-postings") {
     return (
-      <div className="flex items-center justify-center">
-        <p className="text-muted">No job post selected</p>
+      <div className="flex-4 sticky top-24 bottom-4 pb-20 h-fit">
+        <div className="border rounded-lg p-12 flex flex-col items-center justify-center text-center min-h-[400px]">
+          <div className="w-16 h-16 rounded-full bg-gray-100 flex items-center justify-center mb-4">
+            <svg
+              className="w-8 h-8 text-gray-400"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"
+              />
+            </svg>
+          </div>
+          <h3 className="text-lg font-semibold text-gray-900 mb-2">
+            Select a Job Posting
+          </h3>
+          <p className="text-sm text-muted-foreground max-w-sm">
+            Click on any job posting from the list to view its full details here.
+          </p>
+        </div>
       </div>
     );
   }
 
   if (!selected_company && exploreType === "companies") {
     return (
-      <div className="flex items-center justify-center">
-        <p className="text-muted">No company selected</p>
+      <div className="flex-4 sticky top-24 bottom-4 pb-20 h-fit">
+        <div className="border rounded-lg p-12 flex flex-col items-center justify-center text-center min-h-[400px]">
+          <div className="w-16 h-16 rounded-full bg-gray-100 flex items-center justify-center mb-4">
+            <svg
+              className="w-8 h-8 text-gray-400"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"
+              />
+            </svg>
+          </div>
+          <h3 className="text-lg font-semibold text-gray-900 mb-2">
+            Select a Company
+          </h3>
+          <p className="text-sm text-muted-foreground max-w-sm">
+            Click on any company from the list to view its full profile here.
+          </p>
+        </div>
       </div>
     );
   }
 
   return (
-    <div className="flex-4 sticky top-28 bottom-4 pb-20 h-fit">
+    <div className="flex-4 sticky top-24 bottom-4 pb-20 h-fit">
       <div className="max-h-[calc(100vh-9rem)] overflow-y-auto border pb-4 rounded-lg">
         {exploreType === "job-postings" && (
           <JobPostFullInfo

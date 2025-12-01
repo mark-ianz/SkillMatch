@@ -47,6 +47,9 @@ export default function JobPostExplore() {
     if (job_posts && job_posts.length > 0 && selected_job_post === null) {
       console.log("Setting initial job post:", job_posts[0].job_title);
       setSelectedJobPost(job_posts[0]);
+    } else if (job_posts && job_posts.length === 0) {
+      // Clear selection when no results
+      setSelectedJobPost(null);
     }
   }, [job_posts, selected_job_post, setSelectedJobPost]);
 
@@ -70,17 +73,37 @@ export default function JobPostExplore() {
     );
   }
 
-  if (!job_posts && !isLoading) {
+  if (!job_posts || job_posts.length === 0) {
     return (
-      <div className="flex items-center justify-center">
-        <p className="text-muted">No job posts available</p>
+      <div className="flex flex-col items-center justify-center py-16 px-4 text-center">
+        <div className="w-16 h-16 rounded-full bg-gray-100 flex items-center justify-center mb-4">
+          <svg
+            className="w-8 h-8 text-gray-400"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+            />
+          </svg>
+        </div>
+        <h3 className="text-lg font-semibold text-gray-900 mb-2">
+          No Job Postings Found
+        </h3>
+        <p className="text-sm text-muted-foreground max-w-sm">
+          Try adjusting your filters or search query to find more results.
+        </p>
       </div>
     );
   }
 
   return (
     <>
-      {job_posts!.map((job: JobPost) => (
+      {job_posts.map((job: JobPost) => (
         <div key={job.job_post_id} onClick={() => setSelectedJobPost(job)}>
           <JobPostPreview
             job={job}
