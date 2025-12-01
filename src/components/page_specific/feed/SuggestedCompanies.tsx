@@ -19,14 +19,14 @@ export function SuggestedCompanies() {
   }
 
   return (
-    <Card className="h-fit sticky top-4">
-      <CardHeader>
+    <Card className="h-fit p-0 border-0 shadow-none gap-2">
+      <CardHeader className="p-0">
         <CardTitle className="text-lg flex items-center gap-2">
           <Building2 className="w-5 h-5" />
           Suggested Companies
         </CardTitle>
       </CardHeader>
-      <CardContent>
+      <CardContent className="p-0">
         {isLoading ? (
           <div className="flex flex-col gap-4">
             {[...Array(3)].map((_, i) => (
