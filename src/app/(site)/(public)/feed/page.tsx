@@ -7,6 +7,7 @@ import Link from "next/link";
 import { getRoleName } from "@/lib/utils";
 import { getServerSession } from "next-auth";
 import { authConfig } from "@/lib/auth";
+import { Separator } from "@/components/ui/separator";
 
 export default async function FeedPage() {
   const session = await getServerSession(authConfig);
@@ -31,6 +32,7 @@ export default async function FeedPage() {
 
           <div className="min-w-80 flex-shrink-0 h-fit flex flex-col gap-10">
             <SidebarProfile />
+            <Separator/>
             <SuggestedCompanies />
           </div>
         </div>

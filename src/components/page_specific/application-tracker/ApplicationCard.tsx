@@ -54,7 +54,7 @@ export function ApplicationCard({
           {/* Application Details */}
           <div className="flex-1 space-y-3">
             <div>
-              <Link target="_blank" href={`/view/job-post/${application.job_post_id}`}>
+              <Link target="_blank" href={`/view/job-postings/${application.job_post_id}`}>
                 <h3 className="text-lg font-semibold hover:text-green-600 transition-colors">
                   {application.job_title}
                 </h3>

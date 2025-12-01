@@ -99,7 +99,7 @@ export default function SavedPage() {
           ) : (
             savedJobs.map((job) => (
               <div key={job.job_post_id} className="relative group">
-                <Link href={`/view/job-post/${job.job_post_id}`}>
+                <Link href={`/view/job-postings/${job.job_post_id}`}>
                   <JobPostPreview job={job} />
                 </Link>
                 <Button

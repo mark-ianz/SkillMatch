@@ -87,7 +87,7 @@ export default async function JobPostPage({ params }: JobPostPageProps) {
                 {suggestions.map((job) => (
                   <Link
                     key={job.job_post_id}
-                    href={"/view/job-post/" + job.job_post_id}
+                    href={"/view/job-postings/" + job.job_post_id}
                   >
                     <JobPostPreview job={job} />
                   </Link>

@@ -132,7 +132,7 @@ export default function ApplicationDetailsPage() {
 
             <div className="flex-1">
               <Link
-                href={`/view/job-post/${application.job_post_id}`}
+                href={`/view/job-postings/${application.job_post_id}`}
                 target="_blank"
                 className="text-2xl font-bold hover:text-green-600 transition-colors inline-flex items-center gap-2"
               >
