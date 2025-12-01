@@ -96,8 +96,8 @@ export function useJobPostSuggestions(
 
       const queryString = params.toString();
       const url = queryString
-        ? `/job-post/${job_post_id}/suggestions?${queryString}`
-        : `/job-post/${job_post_id}/suggestions`;
+        ? `/job-postings/${job_post_id}/suggestions?${queryString}`
+        : `/job-postings/${job_post_id}/suggestions`;
 
       const { data } = await api.get<{ suggestions: JobPost[] }>(url);
       return data.suggestions;
@@ -129,8 +129,8 @@ export function useJobPost(
 
       const queryString = params.toString();
       const url = queryString
-        ? `/job-post/${job_post_id}?${queryString}`
-        : `/job-post/${job_post_id}`;
+        ? `/job-postings/${job_post_id}?${queryString}`
+        : `/job-postings/${job_post_id}`;
 
       const { data } = await api.get<{ job_post: JobPost }>(url);
       return data.job_post;
