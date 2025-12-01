@@ -684,14 +684,6 @@ export default function JobDetailsPage() {
                     </span>
                   </div>
                 </div>
-                <div className="space-y-3">
-                  <h3 className="text-sm font-semibold uppercase tracking-wide">
-                    Allowance
-                  </h3>
-                  <p className="text-sm text-muted-foreground">
-                    {jobPost.allowance_description || "Not specified"}
-                  </p>
-                </div>
               </div>
 
               <Separator />
