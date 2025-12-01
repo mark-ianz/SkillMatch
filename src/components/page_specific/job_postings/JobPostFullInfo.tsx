@@ -59,6 +59,12 @@ export function JobPostFullInfo({
     <>
       <Card className={cn("border-1 shadow-sm p-6 w-full", className)}>
         <div className="space-y-3">
+          <MatchedBadges
+            badgeClassName="text-sm"
+            course_matched={job.course_matched}
+            skill_match_count={job.skill_match_count}
+          />
+          
           <div className="flex flex-col md:flex-row md:items-start gap-6">
             {/* Company logo and info */}
             <div className="flex gap-4 flex-1">
@@ -154,11 +160,16 @@ export function JobPostFullInfo({
               )}
             </div>
 
-            <MatchedBadges
-              badgeClassName="text-sm"
-              course_matched={job.course_matched}
-              skill_match_count={job.skill_match_count}
-            />
+            {/* Apply Button - Only visible for applicants (role_id 3) */}
+            {session?.user?.role_id === 3 && (
+              <ApplyButton
+                jobPostId={job.job_post_id}
+                jobTitle={job.job_title}
+                companyName={job.company_name!}
+                className="w-full h-11 text-base font-medium"
+                fullWidth
+              />
+            )}
           </div>
         </div>
 
@@ -260,17 +271,6 @@ export function JobPostFullInfo({
 
         {/* Divider */}
         <Separator />
-
-        {/* Apply Button - Only visible for applicants (role_id 3) */}
-        {session?.user?.role_id === 3 && (
-          <ApplyButton
-            jobPostId={job.job_post_id}
-            jobTitle={job.job_title}
-            companyName={job.company_name!}
-            className="w-full h-11 text-base font-medium"
-            fullWidth
-          />
-        )}
       </Card>
     </>
   );
