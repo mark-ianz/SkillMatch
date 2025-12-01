@@ -8,7 +8,7 @@ import { CompanyFeedPostsList } from "@/components/page_specific/company/Company
 
 export default function CompanyFeedPostsPage() {
   return (
-    <MainLayout className="items-center pb-20" wrapperClassName="p-4">
+    <MainLayout className="items-center pb-20" wrapperClassName="p-4 w-full">
       <div className="container max-w-7xl mt-4">
         {/* Header */}
         <div className="flex items-center justify-between mb-8">
@@ -19,7 +19,7 @@ export default function CompanyFeedPostsPage() {
             </p>
           </div>
           <Link href="/company/create-post">
-            <Button size="lg">
+            <Button size="lg" variant={"default_employer"}>
               <Plus className="mr-2 h-5 w-5" />
               Create New Post
             </Button>
