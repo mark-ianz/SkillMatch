@@ -50,6 +50,7 @@ import {
 import { useState } from "react";
 import { Separator } from "@/components/ui/separator";
 import { ScheduleInterviewDialog } from "@/components/page_specific/company/view_job_post/ScheduleInterviewDialog";
+import { useInterviewStore } from "@/store/InterviewStore";
 import Location from "@/components/page_specific/explore/job-postings/sub-components/Location";
 import {
   useJobPostApplications,
@@ -154,6 +155,7 @@ export default function JobDetailsPage() {
     useState<ApplicationWithUserDetails | null>(null);
   const [closeDialogOpen, setCloseDialogOpen] = useState(false);
   const [fillDialogOpen, setFillDialogOpen] = useState(false);
+  const { resetForm } = useInterviewStore();
 
   const handleScheduleInterview = (applicant: ApplicationWithUserDetails) => {
     setSelectedApplicant(applicant);
@@ -165,6 +167,7 @@ export default function JobDetailsPage() {
     date: Date;
     time: string;
     meetLink?: string;
+    meetingCode?: string;
     location?: string;
     notes?: string;
   }) => {
@@ -174,15 +177,22 @@ export default function JobDetailsPage() {
     const [hours, minutes] = data.time.split(":");
     interviewDateTime.setHours(parseInt(hours), parseInt(minutes));
 
-    scheduleInterviewMutation.mutate({
-      application_id: selectedApplicant.application_id,
-      interview_date: interviewDateTime.toISOString(),
-      interview_type: data.type,
-      interview_link: data.meetLink,
-      interview_notes: data.notes,
-    });
-
-    setScheduleDialogOpen(false);
+    scheduleInterviewMutation.mutate(
+      {
+        application_id: selectedApplicant.application_id,
+        interview_date: interviewDateTime.toISOString(),
+        interview_type: data.type,
+        interview_link: data.meetLink,
+        interview_code: data.meetingCode,
+        interview_notes: data.notes,
+      },
+      {
+        onSuccess: () => {
+          setScheduleDialogOpen(false);
+          resetForm();
+        },
+      }
+    );
   };
 
   const handleStatusChange = (application_id: string, status_id: number) => {
@@ -532,14 +542,21 @@ export default function JobDetailsPage() {
                   </p>
                   {applicant.interview_type === "virtual" &&
                     applicant.interview_link && (
-                      <a
-                        href={applicant.interview_link}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="text-xs text-indigo-600 hover:underline"
-                      >
-                        Join Google Meet
-                      </a>
+                      <div className="space-y-1">
+                        <a
+                          href={applicant.interview_link}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="text-xs text-indigo-600 hover:underline block"
+                        >
+                          Join Google Meet
+                        </a>
+                        {applicant.interview_code && (
+                          <p className="text-xs text-muted-foreground">
+                            Code: <span className="font-mono font-semibold">{applicant.interview_code}</span>
+                          </p>
+                        )}
+                      </div>
                     )}
                 </div>
               )}
@@ -957,6 +974,7 @@ export default function JobDetailsPage() {
         onOpenChange={setScheduleDialogOpen}
         onSubmit={handleScheduleSubmit}
         applicantName={selectedApplicant?.user_name || ""}
+        isSubmitting={scheduleInterviewMutation.isPending}
       />
 
       {/* Close Posting Confirmation Dialog */}

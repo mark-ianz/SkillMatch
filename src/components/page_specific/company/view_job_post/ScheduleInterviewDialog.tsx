@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -22,12 +22,16 @@ import {
 } from "@/components/ui/popover";
 import { CalendarIcon, Video, MapPin } from "lucide-react";
 import { format } from "date-fns";
+import { useInterviewStore } from "@/store/InterviewStore";
+import { api } from "@/lib/axios";
+import { AxiosError } from "axios";
 
 interface ScheduleInterviewDialogProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
   onSubmit: (data: InterviewData) => void;
   applicantName: string;
+  isSubmitting?: boolean;
 }
 
 interface InterviewData {
@@ -35,6 +39,7 @@ interface InterviewData {
   date: Date;
   time: string;
   meetLink?: string;
+  meetingCode?: string;
   location?: string;
   notes?: string;
 }
@@ -44,15 +49,46 @@ export function ScheduleInterviewDialog({
   onOpenChange,
   onSubmit,
   applicantName,
+  isSubmitting = false,
 }: ScheduleInterviewDialogProps) {
-  const [interviewType, setInterviewType] = useState<"virtual" | "in-person">(
-    "virtual"
-  );
-  const [selectedDate, setSelectedDate] = useState<Date>();
-  const [time, setTime] = useState("");
-  const [meetLink, setMeetLink] = useState("");
-  const [location, setLocation] = useState("");
-  const [notes, setNotes] = useState("");
+  const {
+    type: interviewType,
+    date: selectedDate,
+    time,
+    meetLink,
+    meetingCode,
+    location,
+    notes,
+    isCreatingMeeting,
+    setType: setInterviewType,
+    setDate: setSelectedDate,
+    setTime,
+    setMeetLink,
+    setLocation,
+    setNotes,
+    setIsCreatingMeeting,
+    setMeetingDetails,
+  } = useInterviewStore();
+
+  // Listen for messages from Google Meet OAuth popup
+  useEffect(() => {
+    const handleMessage = (event: MessageEvent) => {
+      if (event.origin !== window.location.origin) return;
+
+      if (event.data.type === "GOOGLE_MEET_SUCCESS") {
+        setMeetingDetails(event.data.meetingUri, event.data.meetingCode);
+        setIsCreatingMeeting(false);
+      }
+
+      if (event.data.type === "GOOGLE_MEET_ERROR") {
+        setIsCreatingMeeting(false);
+        alert("Failed to create meeting. Please try again.");
+      }
+    };
+
+    window.addEventListener("message", handleMessage);
+    return () => window.removeEventListener("message", handleMessage);
+  }, [setMeetingDetails, setIsCreatingMeeting]);
 
   const handleSubmit = () => {
     if (!selectedDate || !time) {
@@ -67,31 +103,85 @@ export function ScheduleInterviewDialog({
     };
 
     if (interviewType === "virtual") {
-      data.meetLink = meetLink || "https://meet.google.com/new";
+      data.meetLink = meetLink;
+      data.meetingCode = meetingCode;
     } else {
       data.location = location;
     }
 
     onSubmit(data);
-
-    // Reset form
-    setInterviewType("virtual");
-    setSelectedDate(undefined);
-    setTime("");
-    setMeetLink("");
-    setLocation("");
-    setNotes("");
   };
 
-  const generateMeetLink = () => {
-    // In a real application, this would call Google Meet API
-    const randomId = Math.random().toString(36).substring(2, 15);
-    setMeetLink(
-      `https://meet.google.com/${randomId.slice(0, 3)}-${randomId.slice(
-        3,
-        7
-      )}-${randomId.slice(7, 10)}`
-    );
+  const generateGoogleMeetLink = async () => {
+    setIsCreatingMeeting(true);
+
+    try {
+      const response = await api.get("/virtual-meeting");
+
+      if (
+        response.data.error === "NOT_AUTHENTICATED" ||
+        response.status === 401 ||
+        response.data.authUrl
+      ) {
+        const authResponse = await api.get("/auth/google-meet");
+
+        const popup = window.open(
+          authResponse.data.authUrl,
+          "Google Meet Authorization",
+          "width=500,height=600,scrollbars=yes"
+        );
+
+        if (!popup) {
+          alert(
+            "Please allow popups for this site to authenticate with Google."
+          );
+          setIsCreatingMeeting(false);
+          return;
+        }
+
+        // Monitor popup closure
+        const checkPopupClosed = setInterval(() => {
+          if (popup.closed) {
+            clearInterval(checkPopupClosed);
+            setIsCreatingMeeting(false);
+          }
+        }, 500);
+
+        return;
+      }
+
+      if (response.data.meetingUri) {
+        setMeetingDetails(response.data.meetingUri, response.data.meetingCode);
+        setIsCreatingMeeting(false);
+      }
+    } catch (error: AxiosError | unknown) {
+      console.error("Error:", error);
+      setIsCreatingMeeting(false);
+
+      if (error instanceof AxiosError && error.response?.status === 401) {
+        const authResponse = await api.get("/auth/google-meet");
+
+        const popup = window.open(
+          authResponse.data.authUrl,
+          "Google Meet Authorization",
+          "width=500,height=600,scrollbars=yes"
+        );
+
+        if (popup) {
+          // Monitor popup closure
+          const checkPopupClosed = setInterval(() => {
+            if (popup.closed) {
+              clearInterval(checkPopupClosed);
+              setIsCreatingMeeting(false);
+            }
+          }, 500);
+        }
+
+        return;
+      }
+
+      alert("Failed to create meeting. Please try again.");
+    }
   };
 
   return (
@@ -198,18 +288,27 @@ export function ScheduleInterviewDialog({
                   placeholder="https://meet.google.com/..."
                   value={meetLink}
                   onChange={(e) => setMeetLink(e.target.value)}
+                  readOnly={!!meetingCode}
                 />
                 <Button
                   type="button"
                   variant="outline"
-                  onClick={generateMeetLink}
+                  onClick={generateGoogleMeetLink}
+                  disabled={isCreatingMeeting}
                 >
-                  Generate
+                  {isCreatingMeeting ? "Creating..." : "Generate"}
                 </Button>
               </div>
-              <p className="text-xs text-muted-foreground">
-                A meeting link will be sent to the applicant
-              </p>
+              {meetingCode && (
+                <p className="text-sm text-muted-foreground">
+                  Meeting Code: <span className="font-mono font-semibold">{meetingCode}</span>
+                </p>
+              )}
+              {!meetingCode && (
+                <p className="text-xs text-muted-foreground">
+                  Generate a Google Meet link or paste your own
+                </p>
+              )}
             </div>
           )}
 
@@ -246,14 +345,15 @@ export function ScheduleInterviewDialog({
           <Button
             onClick={handleSubmit}
             disabled={
+              isSubmitting ||
               !selectedDate ||
               !time ||
               (interviewType === "virtual" && !meetLink) ||
               (interviewType === "in-person" && !location)
             }
-            className="bg-green-600 hover:bg-green-700"
+            variant="default_employer"
           >
-            Schedule Interview
+            {isSubmitting ? "Scheduling..." : "Schedule Interview"}
           </Button>
         </DialogFooter>
       </DialogContent>
