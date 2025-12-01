@@ -3,18 +3,24 @@
 import React from "react";
 import { Button } from "../../ui/button";
 import Link from "next/link";
-import { getRoleName } from "@/lib/utils";
+import { cn, getRoleName } from "@/lib/utils";
 import NotificationPopover from "./NotificationPopover";
 import ProfilePopover from "./ProfilePopover";
 import { useSession } from "next-auth/react";
 import { Skeleton } from "@/components/ui/skeleton";
+import { usePathname } from "next/navigation";
 
 export default function HeaderActions() {
   const { data: session, status } = useSession();
+  const pathname = usePathname();
   const role_id = session?.user?.role_id;
   const status_id = session?.user?.status_id;
   const role = getRoleName(role_id);
   const isActive = status_id === 1;
+
+  // Determine user type based on current path
+  const isCompanyPath = pathname?.startsWith("/company");
+  const userType = isCompanyPath ? "company" : "applicant";
 
   if (status === "loading") {
     return (
@@ -34,14 +40,14 @@ export default function HeaderActions() {
     return (
       <div className="flex gap-2">
         <Button asChild variant="outline" size="sm">
-          <Link href="/signin">Sign In</Link>
+          <Link href={`/signin?type=${userType}`}>Sign In</Link>
         </Button>
         <Button
           asChild
           size="sm"
-          className="bg-skillmatch-primary-green text-skillmatch-light hover:bg-skillmatch-primary-green/90"
+          className={cn("bg-skillmatch-primary-green text-skillmatch-light hover:bg-skillmatch-primary-green/90", userType === "company" && "bg-skillmatch-primary-blue hover:bg-skillmatch-primary-blue/90")}
         >
-          <Link href="/signup">Get Started</Link>
+          <Link href={`/signup?type=${userType}`}>Get Started</Link>
         </Button>
       </div>
     );
