@@ -1,6 +1,7 @@
 "use client";
 
 import { useParams, useRouter } from "next/navigation";
+import { notFound } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -332,26 +333,12 @@ export default function JobDetailsPage() {
 
   // No job post found
   if (!jobPost) {
-    return (
-      <div className="min-h-screen bg-gradient-to-b from-green-50 to-white">
-        <div className="border-b bg-white">
-          <div className="container mx-auto px-4 py-4">
-            <Link href="/company/job-postings">
-              <Button variant="ghost" size="sm">
-                <ArrowLeft className="h-4 w-4 mr-2" />
-                Back to Job Posts
-              </Button>
-            </Link>
-          </div>
-        </div>
-        <div className="container mx-auto px-4 py-8">
-          <Alert>
-            <AlertCircle className="h-4 w-4" />
-            <AlertDescription>Job post not found.</AlertDescription>
-          </Alert>
-        </div>
-      </div>
-    );
+    notFound();
+  }
+
+  // Pending job posts are not accessible
+  if (jobPost.job_post_status_id === 2) {
+    notFound();
   }
 
   const renderApplicantCard = (applicant: ApplicationWithUserDetails) => {
