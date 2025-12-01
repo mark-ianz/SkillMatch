@@ -361,6 +361,153 @@ export const CompanyPostServices = {
       connection.release();
     }
   },
+
+  // Get all posts for a specific company
+  getCompanyOwnPosts: async (company_id: string) => {
+    const connection = await db.getConnection();
+    try {
+      const [rows] = await connection.query<(RowDataPacket & CompanyPost)[]>(
+        `SELECT 
+          cp.post_id,
+          cp.company_id,
+          cp.title,
+          cp.content,
+          cp.cover_image,
+          cp.created_at,
+          c.company_name,
+          c.company_image,
+          (SELECT COUNT(*) FROM company_post_reactions WHERE post_id = cp.post_id) as reaction_count
+        FROM company_posts cp
+        INNER JOIN company c ON cp.company_id = c.company_id
+        WHERE cp.company_id = ?
+        ORDER BY cp.created_at DESC`,
+        [company_id]
+      );
+
+      return rows as CompanyPost[];
+    } catch (error) {
+      console.error("Error fetching company own posts:", error);
+      throw error;
+    } finally {
+      connection.release();
+    }
+  },
+
+  // Update a company post
+  updateCompanyPost: async (
+    post_id: string,
+    company_id: string,
+    data: CompanyPostFormData,
+    coverImageFile?: File | null
+  ) => {
+    const connection = await db.getConnection();
+    try {
+      await connection.beginTransaction();
+
+      // Verify the post belongs to the company
+      const [existing] = await connection.query<RowDataPacket[]>(
+        `SELECT post_id, cover_image FROM company_posts WHERE post_id = ? AND company_id = ?`,
+        [post_id, company_id]
+      );
+
+      if (existing.length === 0) {
+        throw new ServiceError("Post not found or unauthorized", 404);
+      }
+
+      const { title, content, cover_image } = data;
+      const oldCoverImage = existing[0].cover_image;
+
+      // Handle file upload if new file is provided
+      let finalCoverImagePath = cover_image || oldCoverImage;
+      if (coverImageFile) {
+        finalCoverImagePath = await uploadCoverImage(coverImageFile);
+
+        // Delete old image if it exists and we're replacing it
+        if (oldCoverImage && oldCoverImage !== finalCoverImagePath) {
+          const oldImagePath = path.join(process.cwd(), "public", oldCoverImage);
+          if (fs.existsSync(oldImagePath)) {
+            fs.unlinkSync(oldImagePath);
+          }
+        }
+      }
+
+      await connection.query<ResultSetHeader>(
+        `UPDATE company_posts 
+         SET title = ?, content = ?, cover_image = ?
+         WHERE post_id = ? AND company_id = ?`,
+        [title, content, finalCoverImagePath, post_id, company_id]
+      );
+
+      const [rows] = await connection.query<(RowDataPacket & CompanyPost)[]>(
+        `SELECT * FROM company_posts WHERE post_id = ?`,
+        [post_id]
+      );
+
+      await connection.commit();
+
+      if (!rows || rows.length === 0) {
+        throw new Error("Failed to retrieve updated company post");
+      }
+
+      return rows[0] as CompanyPost;
+    } catch (error) {
+      await connection.rollback();
+      console.error("Error updating company post:", error);
+      throw error;
+    } finally {
+      connection.release();
+    }
+  },
+
+  // Delete a company post
+  deleteCompanyPost: async (post_id: string, company_id: string) => {
+    const connection = await db.getConnection();
+    try {
+      await connection.beginTransaction();
+
+      // Verify the post belongs to the company and get cover image path
+      const [existing] = await connection.query<RowDataPacket[]>(
+        `SELECT cover_image FROM company_posts WHERE post_id = ? AND company_id = ?`,
+        [post_id, company_id]
+      );
+
+      if (existing.length === 0) {
+        throw new ServiceError("Post not found or unauthorized", 404);
+      }
+
+      const coverImage = existing[0].cover_image;
+
+      // Delete reactions first
+      await connection.query<ResultSetHeader>(
+        `DELETE FROM company_post_reactions WHERE post_id = ?`,
+        [post_id]
+      );
+
+      // Delete the post
+      await connection.query<ResultSetHeader>(
+        `DELETE FROM company_posts WHERE post_id = ? AND company_id = ?`,
+        [post_id, company_id]
+      );
+
+      await connection.commit();
+
+      // Delete cover image file if it exists
+      if (coverImage) {
+        const imagePath = path.join(process.cwd(), "public", coverImage);
+        if (fs.existsSync(imagePath)) {
+          fs.unlinkSync(imagePath);
+        }
+      }
+
+      return { success: true };
+    } catch (error) {
+      await connection.rollback();
+      console.error("Error deleting company post:", error);
+      throw error;
+    } finally {
+      connection.release();
+    }
+  },
 };
 
 export default CompanyPostServices;
