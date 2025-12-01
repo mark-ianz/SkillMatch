@@ -9,12 +9,145 @@ Done:
 - company posts feed
 - on company onboarding, auto fill the input when user first onboard
 - preferred_schedule and hours per week lagay sa onboarding at tanggalin sa application, reference na lang as FK
+- make the job categories required on job posts
 
 To-Do:
 - bug when you got no result on search and you searched again with result, it will not preview the first result on the company profile.
-- make the job categories required on job posts
 - nag ooverlap na yung mga same name na variable sa database pati sa types tanginang yan
 - company email sa settings ng company is editable dapat, ang hindi editable is yung personal email na pinang login, ilagay rin to sa security.
 - optimize bg image on signup/signin
-- error and not found page
-- add password on login only
+
+
+**************************************************
+**************** // PRIORITIZE // ****************
+**************************************************
+
+**************** // Landing Page // ****************
+  Landing Page (Both):
+    - Buttons on the CTA sections are not functional.
+
+  Landing Page / Applicant:
+  - Make the search jobs functional on the hero section.
+  - On the quick link below the search job on the hero section (popular). Get the 5 most used job_categories on the job_posts table then display it. If for some reason, no result was found. Then replace this with some text saying no popular category something...
+************************************************
+
+**************** // Auth Pages // ****************
+  Onboarding
+    - Remove the links on the header when they are on the onboarding, to not distract them. They won't be able to access protected routes anyway if they are still onboarding.
+
+  Onboarding/Company
+    - Select city_municipality
+
+  Signup
+  - Add password option login on the signin. This should trigger the same function the same as loggin in as google but just with password.
+************************************************
+
+**************** // New Pages // ****************
+  New Pages
+    - error and not found page
+************************************************
+
+**************** // Company // ****************
+  Posting Job
+    - Remove the compentsation section
+    - After the job posting is successfully posted. The toast should have a link like `View Jost Post` under the Success message. The link should be smaller, primary-blue and underlined.
+    - Job Post Confirmation button should be primary-blue
+
+  Feed Posts
+    - The text and button is touching each other.
+
+  Create Post
+    - bug: Content is shrinking when typing on post content
+    - Reset Confirmation is too big.
+    - Post Confirmation is too big.
+    - Post Confirmation button should be primary-blue
+
+  Viewing Job Post by the company
+  - bug: showing as Active even if it's pending.
+  - Make the Edit Job functional
+  - Make the close posting functional
+************************************************
+
+**************** // Authorization // ****************
+  Brute Force Viewing:
+  - No one should be able to visit/view pending company or pending job-postings.
+  - /view/job-postings/nVCDwwuAb02I8K3efVm-I (still pending). Then it should be 404 not found, same goes to visiting pending company.
+
+  Route
+  - If their status is onboarding and tried to access:
+    - Protected Route for their role, then unauthorized them with a message saying they must finish their onboarding first to access this page something then add a link for /onboaring/role
+    - Unauthorized route (example company is still onboarding and they accessed /applicant/settings) then instead of prompting them that they are still onboarding and can't access this, they should receive a different unauthorized message saying they are not allowed to this page.
+  - Even admins shouldn't be able to access protected routes of company and applicants.
+  - Redirect these unauthorized users to error page with custom messages.
+************************************************
+
+**************** // Applicants // ****************
+  Job Posts
+    - Apply now button ilagay sa header na.
+    - If walang result sa search, add a display saying no result found on both the feed and the full info
+    - The gap on the search and label is too big.
+    - Reset popover is too wide.
+    - Reposition the strucute on the Location:
+      - 1 row & 2 column is Street Address and Postal Code
+      - 1 row & 2 column is City/Municipality and Barangay
+
+  Applicant Settings
+    - Student Number is for VIEW only
+
+  Applicant Saved
+    - Add course/skill matching badges on the saved jobs.
+
+  Application:
+    - Instead of random character on the google meet link, use the ACTUAL GOOGLE MEET BUTTON! for company when generating google links. and when storing the link, store the code too and display it along side the link when rendering.
+************************************************
+
+**************** // Admin // ****************
+  Sidebar Panel
+    - Line the Logout button with the navigations, so it's under them and not at the very end of the page. Because if the page is long then the logout button will be at the very end of the screen.
+
+  Companies
+    - Industry is getting displayed like Information Technology / Computer Studies,Electronics and Electrical Engineering. industry is string on the database but separated with ,. But they should be split with (","). Then render it with map. Same problem occurs when viewing company details popover.
+  Job Posts
+    - (bug): nothing is showing up
+
+  Status
+    - On status, add a color theme. Check JobStatusBadge. I know it's for JobStatus, but make it work.
+
+  Applicant Popover
+    - Applicant info font size is too big.
+
+  General
+    - Add a search for Companies, Job Posts, and Applicants and use the debouce hook.
+************************************************
+
+**************** // General // ****************
+  Filter
+    - Make the filter selection automatic. So if they select a filter, it will automatically query and the same if they unchecked too.
+    - Make the section have a max height. And if checkbox exceed like 6+ filters, there will be a text saying view more, if they clicked it then it will show all the filter checkboxes.
+    - On the Location filter, render all the city_municipality from the json.
+
+  Explore tab
+    - Inconsistent yung PopoverContent.
+
+  Reactions
+    - Move the reaction count from beside of reaction to above it.
+    - Display the 2 most reactions beside the count.
+
+      2 (._.)(;_;)  
+    |  (<3) React    |
+
+  Legal
+    - On the privacy-policy page and terms-of-service, there's a footer for Related Documents and some links. I want to have those quick links on Abous Us and FAQs
+
+  Animation:
+    - Add minimal but attention catching animations. Especially for STATIC/SSR pages
+    - PRIORITIZE THE LANDING PAGE FOR BOTH APPLICANT AND COMPANY
+
+  Inputs:
+    - The link input requires to have http:// or https://. This shouldn't be the case.
+    - Add more industry maybe.
+    - Documents should now be only PDF format, add a note when there's a file upload for these saying that they should prepare a pdf file format of the files.
+      - Partnership Documents (onboarding/company)
+      - Legal Documents (onboarding/company)
+      - Resume
+************************************************
