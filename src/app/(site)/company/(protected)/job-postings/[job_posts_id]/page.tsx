@@ -50,6 +50,7 @@ import {
 import { useJobPost } from "@/hooks/query/useJobPosts";
 import { ApplicationWithUserDetails } from "@/types/application.types";
 import { getCourseByAbbr } from "@/lib/utils";
+import { getJobStatusConfig } from "@/const/jobStatusConfig";
 
 // Status configuration matching database IDs
 const statusConfig: Record<
@@ -607,7 +608,9 @@ export default function JobDetailsPage() {
 
               {/* Job Status & Details */}
               <div className="flex flex-wrap items-center gap-2">
-                <Badge className="bg-green-600">Active</Badge>
+                <Badge className={getJobStatusConfig(jobPost.job_post_status_id).bgColor}>
+                  {getJobStatusConfig(jobPost.job_post_status_id).label}
+                </Badge>
                 <Badge variant="outline">
                   <Briefcase className="mr-1 h-3 w-3" />
                   {jobPost.work_arrangement}
