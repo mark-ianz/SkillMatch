@@ -42,6 +42,7 @@ export default function CompanyPostForm() {
   const [errors, setErrors] = useState<string[] | null>(null);
   const [showConfirmDialog, setShowConfirmDialog] = useState(false);
   const [showResetConfirmDialog, setShowResetConfirmDialog] = useState(false);
+  const [isContentExpanded, setIsContentExpanded] = useState(false);
   const [previewImage, setPreviewImage] = useState<string | null>(
     formData.cover_image || null
   );
@@ -77,6 +78,7 @@ export default function CompanyPostForm() {
     e.preventDefault();
     const result = companyPostSchema.safeParse(formData as CompanyPostFormData);
 
+    console.log(result);
     if (!result.success) {
       const errorMessages = formatZodError(result.error);
       setErrors(errorMessages);
@@ -155,7 +157,7 @@ export default function CompanyPostForm() {
                 <div className="flex items-center justify-between">
                   <Label htmlFor="title">Post Title</Label>
                   <span className="text-xs text-muted-foreground">
-                    {(formData.title || "").length}/100
+                    {(formData.title || "").length}/150
                   </span>
                 </div>
                 <Input
@@ -258,7 +260,7 @@ export default function CompanyPostForm() {
 
       {/* Confirmation Dialog */}
       <Dialog open={showConfirmDialog} onOpenChange={setShowConfirmDialog}>
-        <DialogContent>
+        <DialogContent className="max-w-xl">
           <DialogHeader>
             <DialogTitle>Confirm Post</DialogTitle>
             <DialogDescription>
@@ -273,9 +275,22 @@ export default function CompanyPostForm() {
             </div>
             <div>
               <p className="text-sm font-medium">Content</p>
-              <p className="text-sm text-muted-foreground whitespace-pre-wrap line-clamp-4">
+              <p
+                className={`text-sm text-muted-foreground whitespace-pre-wrap ${
+                  !isContentExpanded ? "line-clamp-4" : ""
+                }`}
+              >
                 {formData.content}
               </p>
+              {formData.content && formData.content.length > 200 && (
+                <button
+                  type="button"
+                  onClick={() => setIsContentExpanded(!isContentExpanded)}
+                  className="text-xs text-skillmatch-primary-blue cursor-pointer hover:underline mt-1"
+                >
+                  {isContentExpanded ? "See less" : "See more..."}
+                </button>
+              )}
             </div>
             {previewImage && (
               <div>
@@ -301,6 +316,7 @@ export default function CompanyPostForm() {
               Cancel
             </Button>
             <Button
+              variant="default_employer"
               type="button"
               onClick={handleConfirmSubmit}
               disabled={isPending}
@@ -316,7 +332,7 @@ export default function CompanyPostForm() {
         open={showResetConfirmDialog}
         onOpenChange={setShowResetConfirmDialog}
       >
-        <DialogContent>
+        <DialogContent className="max-w-md">
           <DialogHeader>
             <DialogTitle>Clear Form?</DialogTitle>
             <DialogDescription>
