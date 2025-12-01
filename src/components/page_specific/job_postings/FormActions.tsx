@@ -5,11 +5,13 @@ import { Button } from "@/components/ui/button";
 type Props = {
   setShowResetConfirmDialog: (v: boolean) => void;
   isSubmitting?: boolean;
+  isEditing?: boolean;
 };
 
 export default function FormActions({
   setShowResetConfirmDialog,
   isSubmitting = false,
+  isEditing = false,
 }: Props) {
   return (
     <div className="flex gap-3">
@@ -23,10 +25,10 @@ export default function FormActions({
         {isSubmitting ? (
           <div className="flex items-center gap-2">
             <div className="w-4 h-4 animate-spin rounded-full border-2 border-muted-foreground/40 border-t-muted-foreground" />
-            Posting...
+            {isEditing ? "Updating..." : "Posting..."}
           </div>
         ) : (
-          "Post Job"
+          isEditing ? "Update Job" : "Post Job"
         )}
       </Button>
       <Button
