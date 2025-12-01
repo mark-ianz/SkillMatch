@@ -43,9 +43,9 @@ const nextConfig: NextConfig = {
   poweredByHeader: false,
   reactStrictMode: true,
   experimental: {
+    authInterrupts: true,
     optimizePackageImports: ["lucide-react", "@radix-ui/react-icons", "date-fns"],
   },
-  swcMinify: true,
 };
 
 export default nextConfig;
