@@ -26,7 +26,13 @@ export async function GET(request: NextRequest) {
       try {
         const [profileRows] = await db.query<
           (RowDataPacket & { skills: string | null; course: string | null })[]
-        >(`SELECT skills, course FROM applicant_profile WHERE user_id = ?`, [userId]);
+        >(
+          `SELECT ap.skills, ap.course 
+           FROM applicant_profile ap
+           JOIN user u ON ap.applicant_id = u.applicant_id
+           WHERE u.user_id = ?`,
+          [userId]
+        );
 
         if (profileRows.length > 0) {
           // Get skills
