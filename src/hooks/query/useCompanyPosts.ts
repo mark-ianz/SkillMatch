@@ -23,6 +23,7 @@ type UpdateCompanyPostPayload = CompanyPostFormData & {
   post_id: string;
   company_id: string;
   cover_image_file?: File | null;
+  remove_image?: boolean;
 };
 
 // Update company post
@@ -31,7 +32,7 @@ export function useUpdateCompanyPost() {
 
   return useMutation({
     mutationFn: async (payload: UpdateCompanyPostPayload) => {
-      const { post_id, company_id, cover_image_file, ...restPayload } = payload;
+      const { post_id, company_id, cover_image_file, remove_image, ...restPayload } = payload;
 
       if (cover_image_file) {
         const formData = new FormData();
@@ -39,6 +40,9 @@ export function useUpdateCompanyPost() {
         formData.append("content", restPayload.content);
         formData.append("company_id", company_id);
         formData.append("cover_image", cover_image_file);
+        if (remove_image) {
+          formData.append("remove_image", "true");
+        }
 
         const { data } = await api.put<{ company_post: CompanyPost }>(
           `/company/post/${post_id}`,
@@ -54,7 +58,7 @@ export function useUpdateCompanyPost() {
 
       const { data } = await api.put<{ company_post: CompanyPost }>(
         `/company/post/${post_id}`,
-        { ...restPayload, company_id }
+        { ...restPayload, company_id, remove_image }
       );
       return data.company_post;
     },

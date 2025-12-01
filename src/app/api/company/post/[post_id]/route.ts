@@ -17,6 +17,7 @@ export async function PUT(
       title?: unknown;
       content?: unknown;
       company_id?: string | null;
+      remove_image?: boolean;
     };
     let coverImageFile: File | null = null;
 
@@ -27,6 +28,7 @@ export async function PUT(
         title: formData.get("title"),
         content: formData.get("content"),
         company_id: formData.get("company_id") as string | null,
+        remove_image: formData.get("remove_image") === "true",
       };
 
       const file = formData.get("cover_image");
@@ -54,12 +56,15 @@ export async function PUT(
       );
     }
 
+    const removeImage = body.remove_image === true;
+
     try {
       const updated = await CompanyPostServices.updateCompanyPost(
         post_id,
         company_id,
         data,
-        coverImageFile
+        coverImageFile,
+        removeImage
       );
       return NextResponse.json({ company_post: updated }, { status: 200 });
     } catch (err) {

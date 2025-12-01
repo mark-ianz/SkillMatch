@@ -398,7 +398,8 @@ export const CompanyPostServices = {
     post_id: string,
     company_id: string,
     data: CompanyPostFormData,
-    coverImageFile?: File | null
+    coverImageFile?: File | null,
+    removeImage?: boolean
   ) => {
     const connection = await db.getConnection();
     try {
@@ -417,9 +418,18 @@ export const CompanyPostServices = {
       const { title, content, cover_image } = data;
       const oldCoverImage = existing[0].cover_image;
 
+      let finalCoverImagePath: string | null = oldCoverImage;
+
+      // Handle explicit image removal
+      if (removeImage && oldCoverImage) {
+        const oldImagePath = path.join(process.cwd(), "public", oldCoverImage);
+        if (fs.existsSync(oldImagePath)) {
+          fs.unlinkSync(oldImagePath);
+        }
+        finalCoverImagePath = null;
+      }
       // Handle file upload if new file is provided
-      let finalCoverImagePath = cover_image || oldCoverImage;
-      if (coverImageFile) {
+      else if (coverImageFile) {
         finalCoverImagePath = await uploadCoverImage(coverImageFile);
 
         // Delete old image if it exists and we're replacing it
@@ -429,6 +439,10 @@ export const CompanyPostServices = {
             fs.unlinkSync(oldImagePath);
           }
         }
+      }
+      // Keep the cover_image value from data if explicitly set
+      else if (cover_image !== undefined) {
+        finalCoverImagePath = cover_image;
       }
 
       await connection.query<ResultSetHeader>(
