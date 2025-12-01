@@ -64,7 +64,7 @@ export function JobPostFullInfo({
             course_matched={job.course_matched}
             skill_match_count={job.skill_match_count}
           />
-          
+
           <div className="flex flex-col md:flex-row md:items-start gap-6">
             {/* Company logo and info */}
             <div className="flex gap-4 flex-1">
@@ -160,8 +160,8 @@ export function JobPostFullInfo({
               )}
             </div>
 
-            {/* Apply Button - Only visible for applicants (role_id 3) */}
-            {session?.user?.role_id === 3 && (
+            {/* Apply Button - Will not be shown if the role is admin and company */}
+            {!(session?.user?.role_id === 2 || session?.user?.role_id === 4) && (
               <ApplyButton
                 jobPostId={job.job_post_id}
                 jobTitle={job.job_title}
@@ -268,9 +268,6 @@ export function JobPostFullInfo({
             ))}
           </ul>
         </div>
-
-        {/* Divider */}
-        <Separator />
       </Card>
     </>
   );
