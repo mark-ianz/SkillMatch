@@ -17,8 +17,6 @@ const initialState: Partial<JobPost> = {
   job_responsibilities: [],
   preferred_qualifications: "",
   work_arrangement: "On-site",
-  is_paid: false,
-  allowance_description: null,
   soft_skills: [],
   technical_skills: [],
   street_name: "",

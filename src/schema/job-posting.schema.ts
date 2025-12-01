@@ -13,8 +13,6 @@ export const jobPostingSchema = z.object({
     .min(1, "At least one responsibility is required"),
   preferred_qualifications: z.string().optional(),
   work_arrangement: z.enum(["Remote", "On-site", "Hybrid"] as const),
-  is_paid: z.boolean(),
-  allowance_description: z.string().nullable().optional(),
   soft_skills: z.array(z.string()),
   technical_skills: z.array(z.string()),
   street_name: z.string().min(1, "Street address is required"),
