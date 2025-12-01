@@ -15,7 +15,7 @@ export default async function FeedPage() {
   const role_name = session?.user ? getRoleName(role) : null;
 
   return (
-    <MainLayout className="items-center pb-20" wrapperClassName="p-4">
+    <MainLayout className="items-center pb-20" wrapperClassName="p-4 w-full">
       <div className="flex gap-6 container max-w-7xl mt-4">
         {/* Left Sidebar - Profile */}
         <div className="flex-1">
@@ -36,7 +36,7 @@ export default async function FeedPage() {
         </div>
 
         {/* Middle Section - Company Posts Feed */}
-        <div className="flex-3 min-w-0">
+        <div className="flex-2">
           <CompanyPostsFeed />
         </div>
       </div>
