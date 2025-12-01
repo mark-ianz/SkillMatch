@@ -21,7 +21,6 @@ import ErrorArray from "@/components/common/ErrorArray";
 import BasicInformation from "@/components/page_specific/job_postings/BasicInformation";
 import JobDescriptionSection from "@/components/page_specific/job_postings/JobDescriptionSection";
 import RequirementsSection from "@/components/page_specific/job_postings/RequirementsSection";
-import CompensationSection from "@/components/page_specific/job_postings/CompensationSection";
 import LocationSection from "@/components/page_specific/job_postings/LocationSection";
 import FormActions from "@/components/page_specific/job_postings/FormActions";
 import { formatZodError } from "@/lib/utils";
@@ -33,13 +32,12 @@ const WORK_ARRANGEMENTS: WorkArrangement[] = ["Remote", "On-site", "Hybrid"];
 export default function JobPostingForm() {
   const company_id = useRequireCompany();
 
-  const { mutate } = useCreateJobPost();
+  const { mutate, isPending } = useCreateJobPost();
 
   const { formData, updateField, reset } = useJobPostingStore();
   const [currentResponsibility, setCurrentResponsibility] = useState("");
   const [courseInput, setCoursesInput] = useState("");
   const [errors, setErrors] = useState<string[] | null>(null);
-  const [isSubmitting, setIsSubmitting] = useState(false);
   const [showConfirmDialog, setShowConfirmDialog] = useState(false);
   const [showResetConfirmDialog, setShowResetConfirmDialog] = useState(false);
 
@@ -112,23 +110,15 @@ export default function JobPostingForm() {
   };
 
   const handleConfirmSubmit = async () => {
-    setIsSubmitting(true);
-    try {
-      // TODO: Send to server
-      mutate(
-        { ...(formData as JobPostingFormData), company_id },
-        {
-          onSuccess: () => {
-            setShowConfirmDialog(false);
-            reset();
-          },
-        }
-      );
-    } catch (error) {
-      console.error("[v0] Error submitting form:", error);
-    } finally {
-      setIsSubmitting(false);
-    }
+    mutate(
+      { ...(formData as JobPostingFormData), company_id },
+      {
+        onSuccess: () => {
+          setShowConfirmDialog(false);
+          reset();
+        },
+      }
+    );
   };
 
   const handleReset = () => {
@@ -172,13 +162,6 @@ export default function JobPostingForm() {
             updateField={updateField}
           />
 
-          {/* Compensation */}
-          <CompensationSection
-            formData={formData}
-            handleSelectChange={handleSelectChange}
-            handleInputChange={handleInputChange}
-          />
-
           {/* Location */}
           <LocationSection
             formData={formData}
@@ -188,7 +171,7 @@ export default function JobPostingForm() {
           {/* Submit & Reset Buttons */}
           <FormActions
             setShowResetConfirmDialog={setShowResetConfirmDialog}
-            isSubmitting={isSubmitting}
+            isSubmitting={isPending}
           />
         </div>
       </form>
@@ -241,9 +224,10 @@ export default function JobPostingForm() {
             <Button
               type="button"
               onClick={handleConfirmSubmit}
-              disabled={isSubmitting}
+              disabled={isPending}
+              className="bg-skillmatch-primary-blue hover:bg-skillmatch-primary-blue/90"
             >
-              {isSubmitting ? "Submitting..." : "Confirm & Post"}
+              {isPending ? "Submitting..." : "Confirm & Post"}
             </Button>
           </DialogFooter>
         </DialogContent>

@@ -63,7 +63,22 @@ export function useCreateJobPost() {
     },
     onSuccess: (data) => {
       console.log(data);
-      toast.success("Job posted successfully");
+      toast.success("Job posted successfully", {
+        action: {
+          label: "View Job Post",
+          onClick: () => {
+            window.location.href = `/view/job-postings/${data.job_post_id}`;
+          },
+        },
+        actionButtonStyle: {
+          fontSize: "0.875rem",
+          color: "#4f6899",
+          textDecoration: "underline",
+          backgroundColor: "transparent",
+          border: "none",
+          padding: "0",
+        },
+      });
       // Invalidate job-postings so new job post appears
       qc.invalidateQueries({ queryKey: ["job-postings"] });
     },
