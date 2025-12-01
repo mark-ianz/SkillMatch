@@ -238,7 +238,7 @@ export default function ApplicationDetailsPage() {
                   </Badge>
                   {application.interview_type === "virtual" &&
                     application.interview_link && (
-                      <div className="mt-2">
+                      <div className="mt-2 space-y-1">
                         <a
                           href={application.interview_link}
                           target="_blank"
@@ -248,6 +248,11 @@ export default function ApplicationDetailsPage() {
                           Join Google Meet
                           <ExternalLink className="h-3 w-3" />
                         </a>
+                        {application.interview_code && (
+                          <p className="text-sm text-muted-foreground">
+                            Meeting Code: <span className="font-mono font-semibold">{application.interview_code}</span>
+                          </p>
+                        )}
                       </div>
                     )}
                   {application.interview_notes && (
