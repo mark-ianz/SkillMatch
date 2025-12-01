@@ -55,37 +55,37 @@ export function CompanyPost({ post }: CompanyPostProps) {
 
   return (
     <>
-      <Card className="w-full h-fit">
-        <CardHeader className="flex">
-          {post.company_image && (
-            <Avatar className="w-10 h-10">
+      <Card className="w-full h-fit shadow-sm hover:shadow-md transition-shadow">
+        <CardHeader className="flex pb-3">
+          <div className="flex items-center gap-3">
+            <Avatar className="w-12 h-12 ring-2 ring-border/50">
               <AvatarImage src={post.company_image} alt={post.company_name} />
-              <AvatarFallback>
+              <AvatarFallback className="bg-primary/10 text-primary font-semibold">
                 {post.company_name.charAt(0).toUpperCase()}
               </AvatarFallback>
             </Avatar>
-          )}
-          <div className="flex-1">
-            <Link
-              href={`/view/company/${post.company_id}`}
-              className="font-semibold text-base text-card-foreground hover:text-primary transition-colors"
-            >
-              {post.company_name}
-            </Link>
-            <DateDifference
-              className="text-xs text-muted-foreground"
-              date={post.created_at}
-            />
+            <div className="flex-1">
+              <Link
+                href={`/view/company/${post.company_id}`}
+                className="font-semibold text-base text-card-foreground hover:text-primary transition-colors inline-block"
+              >
+                {post.company_name}
+              </Link>
+              <DateDifference
+                className="text-xs text-muted-foreground block"
+                date={post.created_at}
+              />
+            </div>
           </div>
         </CardHeader>
 
-        <CardContent className="space-y-3">
-          <div>
-            <h2 className="text-lg font-bold text-card-foreground mb-2">
+        <CardContent className="space-y-4 pt-0">
+          <div className="space-y-2">
+            <h2 className="text-xl font-bold text-card-foreground leading-tight">
               {post.title}
             </h2>
             <p
-              className={`text-sm text-card-foreground/80 whitespace-pre-wrap ${
+              className={`text-sm text-card-foreground/80 whitespace-pre-wrap leading-relaxed ${
                 !isContentExpanded ? "line-clamp-4" : ""
               }`}
             >
@@ -95,7 +95,7 @@ export function CompanyPost({ post }: CompanyPostProps) {
               <button
                 type="button"
                 onClick={() => setIsContentExpanded(!isContentExpanded)}
-                className="text-xs text-skillmatch-primary-blue cursor-pointer hover:underline mt-1"
+                className="text-sm font-medium text-skillmatch-primary-blue cursor-pointer hover:underline transition-colors"
               >
                 {isContentExpanded ? "See less" : "See more..."}
               </button>
@@ -103,7 +103,7 @@ export function CompanyPost({ post }: CompanyPostProps) {
           </div>
 
           {post.cover_image && (
-            <div className="relative w-full h-96 border rounded-md">
+            <div className="relative w-full h-96 border rounded-lg overflow-hidden bg-muted/20">
               <Image
                 src={post.cover_image || placeholder_image}
                 alt={post.title}
@@ -111,18 +111,18 @@ export function CompanyPost({ post }: CompanyPostProps) {
                 sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 800px"
                 priority
                 fetchPriority="high"
-                className="rounded-lg object-contain"
+                className="object-contain hover:scale-[1.02] transition-transform duration-300"
               />
             </div>
           )}
 
-          <div className="flex items-center gap-2 pt-3 border-t justify-between">
+          <div className="flex items-center gap-2 pt-2 border-t">
             <ReactionButton
               post_id={post.post_id}
               onShowReactionsModal={() => setShowReactionsModal(true)}
             />
 
-            <div>
+            <div className="ml-auto flex items-center gap-1">
               {/* Save button - Only visible for applicants (role_id 3) */}
               {session?.user?.role_id === 3 && (
                 <Button
@@ -132,12 +132,17 @@ export function CompanyPost({ post }: CompanyPostProps) {
                   disabled={
                     savePostMutation.isPending || unsavePostMutation.isPending
                   }
-                  className="gap-2 h-8 text-skillmatch-muted-dark hover:text-foreground"
+                  className="gap-2 h-9 text-skillmatch-muted-dark hover:text-foreground hover:bg-muted/50 transition-colors"
                 >
                   <Bookmark
-                    className={cn("w-4 h-4", isSaved && "fill-current")}
+                    className={cn(
+                      "w-4 h-4 transition-all",
+                      isSaved && "fill-current text-primary"
+                    )}
                   />
-                  <span className="text-xs">{isSaved ? "Saved" : "Save"}</span>
+                  <span className="text-xs font-medium">
+                    {isSaved ? "Saved" : "Save"}
+                  </span>
                 </Button>
               )}
 
@@ -147,7 +152,7 @@ export function CompanyPost({ post }: CompanyPostProps) {
                 showIcon={true}
                 showText={true}
                 text="Copy Link"
-                className="gap-2 h-8 text-xs"
+                className="gap-2 h-9 text-xs font-medium hover:bg-muted/50"
               />
             </div>
           </div>
