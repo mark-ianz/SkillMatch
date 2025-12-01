@@ -463,6 +463,48 @@ export const JobPostingServices = {
       throw error;
     }
   },
+
+  getPopularJobCategories: async (limit: number = 5) => {
+    try {
+      const [rows] = await db.query<RowDataPacket[]>(
+        `SELECT 
+          job_categories,
+          COUNT(*) as category_count
+        FROM job_posts
+        WHERE job_post_status_id = 1
+        GROUP BY job_categories
+        ORDER BY category_count DESC
+        LIMIT ?`,
+        [limit]
+      );
+
+      // Extract individual categories and count their occurrences
+      const categoryMap = new Map<string, number>();
+      
+      rows.forEach((row) => {
+        if (row.job_categories) {
+          const categories = row.job_categories.split(" / ");
+          categories.forEach((cat: string) => {
+            const trimmed = cat.trim();
+            if (trimmed) {
+              categoryMap.set(trimmed, (categoryMap.get(trimmed) || 0) + row.category_count);
+            }
+          });
+        }
+      });
+
+      // Sort by count and return top categories
+      const sortedCategories = Array.from(categoryMap.entries())
+        .sort((a, b) => b[1] - a[1])
+        .slice(0, limit)
+        .map(([category]) => category);
+
+      return sortedCategories;
+    } catch (error) {
+      console.error("Error fetching popular job categories:", error);
+      throw error;
+    }
+  },
 };
 
 export default JobPostingServices;
