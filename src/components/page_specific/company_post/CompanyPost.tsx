@@ -29,6 +29,7 @@ interface CompanyPostProps {
 export function CompanyPost({ post }: CompanyPostProps) {
   const [showReactionsModal, setShowReactionsModal] = useState(false);
   const [showSignInDialog, setShowSignInDialog] = useState(false);
+  const [isContentExpanded, setIsContentExpanded] = useState(false);
   const { data: session } = useSession();
   const isSaved = useIsPostSaved(post.post_id);
   const savePostMutation = useSavePost();
@@ -83,9 +84,22 @@ export function CompanyPost({ post }: CompanyPostProps) {
             <h2 className="text-lg font-bold text-card-foreground mb-2">
               {post.title}
             </h2>
-            <p className="text-sm text-card-foreground/80 whitespace-pre-wrap">
+            <p
+              className={`text-sm text-card-foreground/80 whitespace-pre-wrap ${
+                !isContentExpanded ? "line-clamp-4" : ""
+              }`}
+            >
               {post.content}
             </p>
+            {post.content && post.content.length > 200 && (
+              <button
+                type="button"
+                onClick={() => setIsContentExpanded(!isContentExpanded)}
+                className="text-xs text-skillmatch-primary-blue cursor-pointer hover:underline mt-1"
+              >
+                {isContentExpanded ? "See less" : "See more..."}
+              </button>
+            )}
           </div>
 
           {post.cover_image && (
