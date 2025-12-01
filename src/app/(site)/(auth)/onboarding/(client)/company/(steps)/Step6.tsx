@@ -36,7 +36,7 @@ export default function Step6() {
         `/onboarding/${company_id}/submit/${farthestStep}/step-six-skip/company`
       );
       nextStep();
-      router.push("/profile");
+      router.push("/feed");
     } catch (err) {
       console.error("Failed to finalize onboarding on skip:", err);
       const msg = err instanceof Error ? err.message : String(err);
@@ -56,7 +56,7 @@ export default function Step6() {
         onSuccess: () => {
           // increment locally then navigate to profile after successful finalization
           nextStep();
-          router.push("/profile");
+          router.push("/feed");
         },
         onError: (err) => {
           const msg = err instanceof Error ? err.message : String(err);
