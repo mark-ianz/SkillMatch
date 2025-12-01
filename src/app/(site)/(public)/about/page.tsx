@@ -14,6 +14,7 @@ import {
   Mail,
   ArrowRight,
 } from "lucide-react";
+import Link from "next/link";
 
 // SEO Metadata
 export const metadata: Metadata = {
@@ -408,6 +409,30 @@ export default function AboutPage() {
                 </Button>
               </div>
             </Card>
+            {/* Footer Links */}
+            <div className="text-center pb-12 space-y-4 mt-14">
+              <p className="text-sm text-muted-foreground">Related Documents</p>
+              <div className="flex justify-center gap-4 flex-wrap">
+                <Link
+                  href="/privacy-policy"
+                  className="text-sm text-skillmatch-primary-green hover:underline"
+                >
+                  Privacy Policy
+                </Link>
+                <Link
+                  href="/terms-of-service"
+                  className="text-sm text-skillmatch-primary-green hover:underline"
+                >
+                  Terms of Service
+                </Link>
+                <Link
+                  href="/faqs"
+                  className="text-sm text-skillmatch-primary-green hover:underline"
+                >
+                  FAQs
+                </Link>
+              </div>
+            </div>
           </div>
         </section>
       </div>

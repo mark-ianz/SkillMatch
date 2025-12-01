@@ -356,6 +356,30 @@ export default function FAQsPage() {
                 </div>
               </Card>
             </div>
+            {/* Footer Links */}
+            <div className="text-center pb-12 space-y-4 mt-14">
+              <p className="text-sm text-muted-foreground">Related Documents</p>
+              <div className="flex justify-center gap-4 flex-wrap">
+                <Link
+                  href="/privacy-policy"
+                  className="text-sm text-skillmatch-primary-green hover:underline"
+                >
+                  Privacy Policy
+                </Link>
+                <Link
+                  href="/terms-of-service"
+                  className="text-sm text-skillmatch-primary-green hover:underline"
+                >
+                  Terms of Service
+                </Link>
+                <Link
+                  href="/about"
+                  className="text-sm text-skillmatch-primary-green hover:underline"
+                >
+                  About Us
+                </Link>
+              </div>
+            </div>
           </div>
         </section>
       </div>
