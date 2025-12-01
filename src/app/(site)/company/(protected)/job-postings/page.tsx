@@ -1,15 +1,13 @@
 "use client";
 
+import { useState } from "react";
 import { useCompanyJobPostsWithStats } from "@/hooks/query/useApplications";
 import { Card, CardContent} from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import {
   Briefcase,
   Users,
-  Calendar,
-  Eye,
   Plus,
   Building2,
   TrendingUp,
@@ -18,6 +16,8 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 import { Alert, AlertDescription } from "@/components/ui/alert";
+import JobPostsFilter from "@/components/page_specific/job_postings/JobPostsFilter";
+import JobPostCard from "@/components/page_specific/job_postings/JobPostCard";
 
 const statusColors: Record<
   number,
@@ -34,6 +34,12 @@ const statusColors: Record<
 
 export default function CompanyJobPostsPage() {
   const { data: jobPosts, isLoading, error } = useCompanyJobPostsWithStats();
+  const [selectedStatuses, setSelectedStatuses] = useState<number[]>([1, 2, 3, 4, 5, 6]);
+
+  // Filter job posts based on selected statuses
+  const filteredJobPosts = jobPosts?.filter((post) =>
+    selectedStatuses.length === 0 || selectedStatuses.includes(post.job_post_status_id)
+  );
 
   if (isLoading) {
     return (
@@ -42,7 +48,7 @@ export default function CompanyJobPostsPage() {
           <Skeleton className="h-10 w-64 mb-2" />
           <Skeleton className="h-5 w-96" />
         </div>
-        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3 mb-8">
+        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4 mb-8">
           {[1, 2, 3, 4].map((i) => (
             <Skeleton key={i} className="h-32" />
           ))}
@@ -89,12 +95,18 @@ export default function CompanyJobPostsPage() {
             Manage your job posts and track applications
           </p>
         </div>
-        <Link href="/company/post-job">
-          <Button size="lg" variant="default_employer">
-            <Plus className="mr-2 h-5 w-5" />
-            Create New Job Post
-          </Button>
-        </Link>
+        <div className="flex gap-3">
+          <JobPostsFilter
+            selectedStatuses={selectedStatuses}
+            onStatusChange={setSelectedStatuses}
+          />
+          <Link href="/company/post-job">
+            <Button size="lg" variant="default_employer">
+              <Plus className="mr-2 h-5 w-5" />
+              Create New Job Post
+            </Button>
+          </Link>
+        </div>
       </div>
 
       {/* Stats Overview */}
@@ -166,147 +178,49 @@ export default function CompanyJobPostsPage() {
 
       {/* Job Posts List */}
       <div className="space-y-4">
-        <h2 className="text-xl font-semibold mb-4">All Job Posts</h2>
+        <div className="flex items-center justify-between mb-4">
+          <h2 className="text-xl font-semibold">All Job Posts</h2>
+          {filteredJobPosts && filteredJobPosts.length > 0 && (
+            <p className="text-sm text-muted-foreground">
+              Showing {filteredJobPosts.length} of {jobPosts?.length || 0} posts
+            </p>
+          )}
+        </div>
 
-        {!jobPosts || jobPosts.length === 0 ? (
+        {!filteredJobPosts || filteredJobPosts.length === 0 ? (
           <Card>
             <CardContent className="p-12">
               <div className="text-center">
                 <Building2 className="h-12 w-12 text-muted-foreground/50 mx-auto mb-4" />
-                <h3 className="text-lg font-semibold mb-2">No job posts yet</h3>
+                <h3 className="text-lg font-semibold mb-2">
+                  {!jobPosts || jobPosts.length === 0
+                    ? "No job posts yet"
+                    : "No posts match your filters"}
+                </h3>
                 <p className="text-muted-foreground mb-6">
-                  Create your first job posting to start receiving applications
+                  {!jobPosts || jobPosts.length === 0
+                    ? "Create your first job posting to start receiving applications"
+                    : "Try adjusting your filter settings"}
                 </p>
-                <Link href="/company/post-job">
-                  <Button>
-                    <Plus className="mr-2 h-4 w-4" />
-                    Create Job Post
-                  </Button>
-                </Link>
+                {(!jobPosts || jobPosts.length === 0) && (
+                  <Link href="/company/post-job">
+                    <Button>
+                      <Plus className="mr-2 h-4 w-4" />
+                      Create Job Post
+                    </Button>
+                  </Link>
+                )}
               </div>
             </CardContent>
           </Card>
         ) : (
-          jobPosts.map((post) => {
-            const statusInfo =
-              statusColors[post.job_post_status_id] || statusColors[1];
-
-            return (
-              <Card
-                key={post.job_post_id}
-                className="hover:shadow-md transition-shadow"
-              >
-                <CardContent className="p-6">
-                  <div className="flex items-start justify-between gap-4">
-                    <div className="flex-1 space-y-3">
-                      {/* Title and Status */}
-                      <div className="flex items-start justify-between gap-4">
-                        <div>
-                          <h3 className="text-xl font-semibold mb-2">
-                            {post.job_title}
-                          </h3>
-                          <div className="flex flex-wrap items-center gap-2">
-                            <Badge
-                              variant="secondary"
-                              className={`${statusInfo.bg} ${statusInfo.text} border-0`}
-                            >
-                              {statusInfo.label}
-                            </Badge>
-                            <Badge variant="outline">
-                              <Briefcase className="mr-1 h-3 w-3" />
-                              {post.work_arrangement}
-                            </Badge>
-                            <Badge variant="outline">
-                              {post.available_positions}{" "}
-                              {post.available_positions === 1
-                                ? "Position"
-                                : "Positions"}
-                            </Badge>
-                          </div>
-                        </div>
-                        <Link href={`/company/job-postings/${post.job_post_id}`}>
-                          <Button variant="outline">
-                            <Eye className="mr-2 h-4 w-4" />
-                            View Details
-                          </Button>
-                        </Link>
-                      </div>
-
-                      {/* Metadata */}
-                      <div className="flex items-center gap-4 text-sm text-muted-foreground">
-                        <div className="flex items-center gap-1">
-                          <Calendar className="h-4 w-4" />
-                          <span>
-                            Posted{" "}
-                            {new Date(post.created_at).toLocaleDateString(
-                              "en-US",
-                              {
-                                month: "short",
-                                day: "numeric",
-                                year: "numeric",
-                              }
-                            )}
-                          </span>
-                        </div>
-                      </div>
-
-                      {/* Application Stats */}
-                      <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-6 gap-3 pt-3">
-                        <div className="bg-blue-50 border border-blue-100 rounded-lg p-3">
-                          <p className="text-xs text-muted-foreground mb-1">
-                            Total
-                          </p>
-                          <p className="text-lg font-bold text-blue-600">
-                            {post.total_applications}
-                          </p>
-                        </div>
-                        <div className="bg-purple-50 border border-purple-100 rounded-lg p-3">
-                          <p className="text-xs text-muted-foreground mb-1">
-                            New
-                          </p>
-                          <p className="text-lg font-bold text-purple-600">
-                            {post.new_applications}
-                          </p>
-                        </div>
-                        <div className="bg-indigo-50 border border-indigo-100 rounded-lg p-3">
-                          <p className="text-xs text-muted-foreground mb-1">
-                            Shortlisted
-                          </p>
-                          <p className="text-lg font-bold text-indigo-600">
-                            {post.shortlisted}
-                          </p>
-                        </div>
-                        <div className="bg-cyan-50 border border-cyan-100 rounded-lg p-3">
-                          <p className="text-xs text-muted-foreground mb-1">
-                            Interviews
-                          </p>
-                          <p className="text-lg font-bold text-cyan-600">
-                            {post.interview_scheduled}
-                          </p>
-                        </div>
-                        <div className="bg-orange-50 border border-orange-100 rounded-lg p-3">
-                          <p className="text-xs text-muted-foreground mb-1">
-                            Selected
-                          </p>
-                          <p className="text-lg font-bold text-orange-600">
-                            {post.selected}
-                          </p>
-                        </div>
-                        <div className="bg-green-50 border border-green-100 rounded-lg p-3">
-                          <p className="text-xs text-muted-foreground mb-1">
-                            Accepted
-                          </p>
-                          <p className="text-lg font-bold text-green-600">
-                            {post.offer_accepted}
-                          </p>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-            );
-          })
+          filteredJobPosts.map((post) => (
+            <JobPostCard
+              key={post.job_post_id}
+              post={post}
+              statusColors={statusColors}
+            />
+          ))
         )}
       </div>
     </div>
