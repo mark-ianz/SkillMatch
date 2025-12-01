@@ -73,13 +73,13 @@ export default function EducationTab() {
               <Input
                 id="student_number"
                 value={education.student_number}
-                onChange={(e) =>
-                  setEducation({
-                    ...education,
-                    student_number: e.target.value,
-                  })
-                }
+                readOnly
+                disabled
+                className="bg-muted cursor-not-allowed"
               />
+              <p className="text-xs text-muted-foreground">
+                Student number cannot be changed
+              </p>
             </div>
             <SelectWithLabel
               required={true}
