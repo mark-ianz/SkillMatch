@@ -9,8 +9,15 @@ export default async function NavigationMenuUniversal() {
   const session = await getServerSession(authConfig);
   const isAuth = session?.user;
   const userRole = session?.user?.role_id;
+  const statusId = session?.user?.status_id;
   const isApplicant = userRole === 3;
   const isCompany = userRole === 4;
+  const isActive = statusId === 1;
+
+  // Hide navigation if user is in onboarding (not active)
+  if (isAuth && !isActive) {
+    return null;
+  }
 
   // For authenticated users, show their respective navigation
   if (isAuth && isApplicant) {

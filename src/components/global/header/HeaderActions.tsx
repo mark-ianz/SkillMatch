@@ -12,7 +12,9 @@ import { Skeleton } from "@/components/ui/skeleton";
 export default function HeaderActions() {
   const { data: session, status } = useSession();
   const role_id = session?.user?.role_id;
+  const status_id = session?.user?.status_id;
   const role = getRoleName(role_id);
+  const isActive = status_id === 1;
 
   if (status === "loading") {
     return (
@@ -21,6 +23,11 @@ export default function HeaderActions() {
         <Skeleton className="h-6 w-16 rounded-md" />
       </>
     );
+  }
+
+  // Hide actions if user is in onboarding (not active)
+  if (role_id && !isActive) {
+    return null;
   }
 
   if (!role_id) {
