@@ -32,6 +32,7 @@ export function EditCompanyPostDialog({ post, open, onOpenChange }: EditCompanyP
   });
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [previewImage, setPreviewImage] = useState<string | null>(null);
+  const [shouldRemoveImage, setShouldRemoveImage] = useState(false);
   const [errors, setErrors] = useState<string[] | null>(null);
 
   useEffect(() => {
@@ -43,6 +44,7 @@ export function EditCompanyPostDialog({ post, open, onOpenChange }: EditCompanyP
       });
       setPreviewImage(post.cover_image || null);
       setImageFile(null);
+      setShouldRemoveImage(false);
     }
   }, [post]);
 
@@ -69,6 +71,7 @@ export function EditCompanyPostDialog({ post, open, onOpenChange }: EditCompanyP
     setImageFile(null);
     setFormData((prev) => ({ ...prev, cover_image: null }));
     setPreviewImage(null);
+    setShouldRemoveImage(true);
   };
 
   const handleSubmit = () => {
@@ -92,6 +95,7 @@ export function EditCompanyPostDialog({ post, open, onOpenChange }: EditCompanyP
         content: formData.content,
         cover_image: formData.cover_image,
         cover_image_file: imageFile,
+        remove_image: shouldRemoveImage,
       },
       {
         onSuccess: () => {
@@ -146,7 +150,7 @@ export function EditCompanyPostDialog({ post, open, onOpenChange }: EditCompanyP
                   src={previewImage}
                   alt="Cover preview"
                   fill
-                  className="object-cover"
+                  className="object-contain"
                 />
                 <Button
                   type="button"
