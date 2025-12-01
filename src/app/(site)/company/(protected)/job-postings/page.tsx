@@ -90,7 +90,7 @@ export default function CompanyJobPostsPage() {
           </p>
         </div>
         <Link href="/company/post-job">
-          <Button size="lg">
+          <Button size="lg" variant="default_employer">
             <Plus className="mr-2 h-5 w-5" />
             Create New Job Post
           </Button>
