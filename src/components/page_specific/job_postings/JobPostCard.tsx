@@ -53,12 +53,14 @@ export default function JobPostCard({ post, statusColors }: JobPostCardProps) {
                   </Badge>
                 </div>
               </div>
-              <Link href={`/company/job-postings/${post.job_post_id}`}>
-                <Button variant="outline">
-                  <Eye className="mr-2 h-4 w-4" />
-                  View Details
-                </Button>
-              </Link>
+              {post.job_post_status_id !== 2 && (
+                <Link href={`/company/job-postings/${post.job_post_id}`}>
+                  <Button variant="outline">
+                    <Eye className="mr-2 h-4 w-4" />
+                    View Details
+                  </Button>
+                </Link>
+              )}
             </div>
 
             {/* Metadata */}
