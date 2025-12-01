@@ -131,7 +131,7 @@ export default function Step1() {
           containerClassName="grow"
           id="city_municipality"
           label="City/Municipality"
-          searchFor="city_municipality"
+          searchFor="City/Municipality"
           value={city_municipality}
           items={cities}
           onValueChange={setCityMunicipality}
