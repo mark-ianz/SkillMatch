@@ -50,7 +50,7 @@ export function CompanyPost({ post }: CompanyPostProps) {
   const baseUrl =
     process.env.NEXT_PUBLIC_FRONTEND_BASE_URL ||
     (typeof window !== "undefined" ? window.location.origin : "");
-  const postUrl = `${baseUrl}/feed/view/${post.post_id}`;
+  const postUrl = `${baseUrl}/view/feed/${post.post_id}`;
 
   return (
     <>

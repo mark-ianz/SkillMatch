@@ -110,7 +110,7 @@ export default function CompanyPostForm() {
             <span className="flex flex-col">
               Company post published successfully!
               <Link
-                href={`/feed/view/${data.post_id}`}
+                href={`/view/feed/${data.post_id}`}
                 className="text-blue-500 hover:underline"
               >
                 View Post
