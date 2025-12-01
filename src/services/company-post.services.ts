@@ -217,7 +217,7 @@ export const CompanyPostServices = {
     }
   },
 
-  getCompanyPostSuggestions: async (post_id: string, user_id?: number) => {
+  getCompanyPostSuggestions: async (post_id: string) => {
     const connection = await db.getConnection();
     try {
       // Get the current post's company_id
