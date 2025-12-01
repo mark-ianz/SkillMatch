@@ -576,7 +576,7 @@ export default function JobDetailsPage() {
     <div className="min-h-screen bg-background">
       <main className="container py-8 px-4 max-w-7xl">
         {/* Back Button */}
-        <Link href="/company/jobs">
+        <Link href="/company/job-postings">
           <Button variant="ghost" className="mb-4">
             <ArrowLeft className="mr-2 h-4 w-4" />
             Back to Job Posts
