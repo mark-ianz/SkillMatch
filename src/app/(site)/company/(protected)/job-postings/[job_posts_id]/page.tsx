@@ -1,6 +1,6 @@
 "use client";
 
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -8,6 +8,16 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Alert, AlertDescription } from "@/components/ui/alert";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
 import {
   ArrowLeft,
   Mail,
@@ -47,7 +57,7 @@ import {
   useSelectApplicant,
   useRejectApplication,
 } from "@/hooks/query/useApplications";
-import { useJobPost } from "@/hooks/query/useJobPosts";
+import { useJobPost, useUpdateJobPostStatus } from "@/hooks/query/useJobPosts";
 import { ApplicationWithUserDetails } from "@/types/application.types";
 import { getCourseByAbbr } from "@/lib/utils";
 import { getJobStatusConfig } from "@/const/jobStatusConfig";
@@ -114,6 +124,7 @@ const statusConfig: Record<
 
 export default function JobDetailsPage() {
   const params = useParams();
+  const router = useRouter();
   const job_post_id = params.job_posts_id as string;
 
   // Fetch job post data
@@ -135,10 +146,13 @@ export default function JobDetailsPage() {
   const updateStatusMutation = useUpdateCompanyStatus();
   const selectApplicantMutation = useSelectApplicant();
   const rejectApplicationMutation = useRejectApplication();
+  const updateJobPostStatusMutation = useUpdateJobPostStatus();
 
   const [scheduleDialogOpen, setScheduleDialogOpen] = useState(false);
   const [selectedApplicant, setSelectedApplicant] =
     useState<ApplicationWithUserDetails | null>(null);
+  const [closeDialogOpen, setCloseDialogOpen] = useState(false);
+  const [fillDialogOpen, setFillDialogOpen] = useState(false);
 
   const handleScheduleInterview = (applicant: ApplicationWithUserDetails) => {
     setSelectedApplicant(applicant);
@@ -194,6 +208,34 @@ export default function JobDetailsPage() {
       application_id,
       rejection_reason: "Position filled / Not suitable at this time",
     });
+  };
+
+  const handleEditJob = () => {
+    router.push(`/company/job-postings/${job_post_id}/edit`);
+  };
+
+  const handleClosePosting = () => {
+    setCloseDialogOpen(true);
+  };
+
+  const confirmClosePosting = () => {
+    updateJobPostStatusMutation.mutate({
+      job_post_id,
+      status_id: 6, // 6 = closed
+    });
+    setCloseDialogOpen(false);
+  };
+
+  const handleMarkAsFilled = () => {
+    setFillDialogOpen(true);
+  };
+
+  const confirmMarkAsFilled = () => {
+    updateJobPostStatusMutation.mutate({
+      job_post_id,
+      status_id: 5, // 5 = filled
+    });
+    setFillDialogOpen(false);
   };
 
   // Organize applicants by status
@@ -595,13 +637,32 @@ export default function JobDetailsPage() {
 
                 {/* Action buttons */}
                 <div className="flex gap-2">
-                  <Button variant="outline" size="sm">
+                  <Button 
+                    variant="outline" 
+                    size="sm"
+                    onClick={handleEditJob}
+                    disabled={jobPost.job_post_status_id === 6 || jobPost.job_post_status_id === 5}
+                  >
                     <Edit className="mr-2 h-4 w-4" />
                     Edit Job
                   </Button>
-                  <Button variant="outline" size="sm">
+                  <Button 
+                    variant="outline" 
+                    size="sm"
+                    onClick={handleMarkAsFilled}
+                    disabled={jobPost.job_post_status_id === 5 || jobPost.job_post_status_id === 6 || updateJobPostStatusMutation.isPending}
+                  >
+                    <CheckCircle2 className="mr-2 h-4 w-4" />
+                    {jobPost.job_post_status_id === 5 ? "Filled" : "Mark as Filled"}
+                  </Button>
+                  <Button 
+                    variant="outline" 
+                    size="sm"
+                    onClick={handleClosePosting}
+                    disabled={jobPost.job_post_status_id === 6 || updateJobPostStatusMutation.isPending}
+                  >
                     <XCircle className="mr-2 h-4 w-4" />
-                    Close Posting
+                    {jobPost.job_post_status_id === 6 ? "Closed" : "Close Posting"}
                   </Button>
                 </div>
               </div>
@@ -910,6 +971,42 @@ export default function JobDetailsPage() {
         onSubmit={handleScheduleSubmit}
         applicantName={selectedApplicant?.user_name || ""}
       />
+
+      {/* Close Posting Confirmation Dialog */}
+      <AlertDialog open={closeDialogOpen} onOpenChange={setCloseDialogOpen}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Close Job Posting?</AlertDialogTitle>
+            <AlertDialogDescription>
+              Are you sure you want to close this job posting? This will prevent new applications from being submitted.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogAction onClick={confirmClosePosting}>
+              Close Posting
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
+
+      {/* Mark as Filled Confirmation Dialog */}
+      <AlertDialog open={fillDialogOpen} onOpenChange={setFillDialogOpen}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Mark Position as Filled?</AlertDialogTitle>
+            <AlertDialogDescription>
+              Are you sure you want to mark this position as filled? This will indicate that all available positions have been filled.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogAction onClick={confirmMarkAsFilled}>
+              Mark as Filled
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   );
 }

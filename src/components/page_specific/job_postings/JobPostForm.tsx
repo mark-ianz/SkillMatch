@@ -1,6 +1,7 @@
 "use client";
 import type React from "react";
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -24,15 +25,22 @@ import RequirementsSection from "@/components/page_specific/job_postings/Require
 import LocationSection from "@/components/page_specific/job_postings/LocationSection";
 import FormActions from "@/components/page_specific/job_postings/FormActions";
 import { formatZodError } from "@/lib/utils";
-import { useCreateJobPost } from "@/hooks/query/useJobPosts";
+import { useCreateJobPost, useUpdateJobPost } from "@/hooks/query/useJobPosts";
 import useRequireCompany from "@/hooks/useRequireCompany";
 
 const WORK_ARRANGEMENTS: WorkArrangement[] = ["Remote", "On-site", "Hybrid"];
 
-export default function JobPostingForm() {
-  const company_id = useRequireCompany();
+interface JobPostingFormProps {
+  isEditMode?: boolean;
+  jobPostId?: string;
+}
 
-  const { mutate, isPending } = useCreateJobPost();
+export default function JobPostingForm({ isEditMode = false, jobPostId }: JobPostingFormProps) {
+  const company_id = useRequireCompany();
+  const router = useRouter();
+
+  const { mutate: createMutate, isPending: isCreating } = useCreateJobPost();
+  const { mutate: updateMutate, isPending: isUpdating } = useUpdateJobPost();
 
   const { formData, updateField, reset } = useJobPostingStore();
   const [currentResponsibility, setCurrentResponsibility] = useState("");
@@ -110,16 +118,35 @@ export default function JobPostingForm() {
   };
 
   const handleConfirmSubmit = async () => {
-    mutate(
-      { ...(formData as JobPostingFormData), company_id },
-      {
-        onSuccess: () => {
-          setShowConfirmDialog(false);
-          reset();
+    if (isEditMode && jobPostId) {
+      // Update existing job post
+      updateMutate(
+        {
+          job_post_id: jobPostId,
+          data: formData as JobPostingFormData,
         },
-      }
-    );
+        {
+          onSuccess: () => {
+            setShowConfirmDialog(false);
+            router.push(`/company/job-postings/${jobPostId}`);
+          },
+        }
+      );
+    } else {
+      // Create new job post
+      createMutate(
+        { ...(formData as JobPostingFormData), company_id },
+        {
+          onSuccess: () => {
+            setShowConfirmDialog(false);
+            reset();
+          },
+        }
+      );
+    }
   };
+
+  const isPending = isEditMode ? isUpdating : isCreating;
 
   const handleReset = () => {
     reset();
@@ -170,6 +197,7 @@ export default function JobPostingForm() {
 
           {/* Submit & Reset Buttons */}
           <FormActions
+            isEditing={isEditMode}
             setShowResetConfirmDialog={setShowResetConfirmDialog}
             isSubmitting={isPending}
           />
@@ -180,10 +208,12 @@ export default function JobPostingForm() {
       <Dialog open={showConfirmDialog} onOpenChange={setShowConfirmDialog}>
         <DialogContent className="max-w-3xl">
           <DialogHeader>
-            <DialogTitle>Confirm Job Posting</DialogTitle>
+            <DialogTitle>{isEditMode ? "Confirm Job Post Update" : "Confirm Job Posting"}</DialogTitle>
             <DialogDescription>
-              Are you sure you want to post this job? Please review the details
-              before confirming.
+              {isEditMode 
+                ? "Are you sure you want to update this job post? Please review the changes before confirming."
+                : "Are you sure you want to post this job? Please review the details before confirming."
+              }
             </DialogDescription>
           </DialogHeader>
           <div className="max-h-[400px] overflow-y-auto space-y-3">
@@ -227,7 +257,10 @@ export default function JobPostingForm() {
               disabled={isPending}
               className="bg-skillmatch-primary-blue hover:bg-skillmatch-primary-blue/90"
             >
-              {isPending ? "Submitting..." : "Confirm & Post"}
+              {isPending 
+                ? (isEditMode ? "Updating..." : "Submitting...") 
+                : (isEditMode ? "Confirm & Update" : "Confirm & Post")
+              }
             </Button>
           </DialogFooter>
         </DialogContent>

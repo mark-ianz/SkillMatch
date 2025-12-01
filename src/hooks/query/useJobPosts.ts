@@ -154,3 +154,90 @@ export function useJobPost(
     staleTime: 1000 * 60 * 5, // 5 minutes
   });
 }
+
+// Mutation: Update job post status (close, disable, reactivate)
+export function useUpdateJobPostStatus() {
+  const qc = useQueryClient();
+
+  return useMutation({
+    mutationFn: async ({
+      job_post_id,
+      status_id,
+    }: {
+      job_post_id: string;
+      status_id: 1 | 4 | 5 | 6; // 1 = active, 4 = disabled, 5 = filled, 6 = closed
+    }) => {
+      const { data } = await api.patch(
+        `/company/job-postings/${job_post_id}/status`,
+        { status_id }
+      );
+      return data;
+    },
+    onSuccess: (data, variables) => {
+      const statusLabel =
+        variables.status_id === 6
+          ? "closed"
+          : variables.status_id === 5
+          ? "marked as filled"
+          : variables.status_id === 4
+          ? "disabled"
+          : "activated";
+      toast.success(`Job post ${statusLabel} successfully`);
+      // Invalidate relevant queries
+      qc.invalidateQueries({ queryKey: ["job-post", variables.job_post_id] });
+      qc.invalidateQueries({ queryKey: ["job-postings"] });
+      qc.invalidateQueries({ queryKey: ["company-job-posts-with-stats"] });
+    },
+    onError: (error) => {
+      console.error("Error updating job post status:", error);
+      toast.error("Failed to update job post status");
+    },
+  });
+}
+
+// Mutation: Update job post details
+export function useUpdateJobPost() {
+  const qc = useQueryClient();
+
+  return useMutation({
+    mutationFn: async ({
+      job_post_id,
+      data,
+    }: {
+      job_post_id: string;
+      data: JobPostingFormData;
+    }) => {
+      const response = await api.put(
+        `/company/job-postings/${job_post_id}`,
+        data
+      );
+      return response.data;
+    },
+    onSuccess: (data, variables) => {
+      toast.success("Job post updated successfully", {
+        action: {
+          label: "View Job Post",
+          onClick: () => {
+            window.location.href = `/company/job-postings/${variables.job_post_id}`;
+          },
+        },
+        actionButtonStyle: {
+          fontSize: "0.875rem",
+          color: "#4f6899",
+          textDecoration: "underline",
+          backgroundColor: "transparent",
+          border: "none",
+          padding: "0",
+        },
+      });
+      // Invalidate relevant queries
+      qc.invalidateQueries({ queryKey: ["job-post", variables.job_post_id] });
+      qc.invalidateQueries({ queryKey: ["job-postings"] });
+      qc.invalidateQueries({ queryKey: ["company-job-posts-with-stats"] });
+    },
+    onError: (error) => {
+      console.error("Error updating job post:", error);
+      toast.error("Failed to update job post");
+    },
+  });
+}
