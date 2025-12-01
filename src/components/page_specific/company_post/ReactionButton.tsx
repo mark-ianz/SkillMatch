@@ -50,6 +50,13 @@ export function ReactionButton({
 
   const userReaction = reactionData?.userReaction || null;
   const totalReactions = reactionData?.totalReactions || 0;
+  const reactionCounts = reactionData?.counts || {};
+
+  // Get top 2 most popular reactions
+  const topReactions = Object.entries(reactionCounts)
+    .sort(([, a], [, b]) => (b as number) - (a as number))
+    .slice(0, 2)
+    .map(([type]) => type as ReactionType);
 
   const handleReactionClick = (reaction: ReactionType) => {
     if (!session?.user) {
@@ -70,8 +77,9 @@ export function ReactionButton({
 
   if (isLoading) {
     return (
-      <Button variant="ghost" size="sm" className="h-8" disabled>
-        👍
+      <Button variant="ghost" size="sm" className="h-9" disabled>
+        <span className="text-lg">👍</span>
+        <span className="text-xs ml-1">Like</span>
       </Button>
     );
   }
@@ -79,36 +87,51 @@ export function ReactionButton({
   return (
     <>
       <TooltipProvider>
-        <div className="relative flex items-center gap-2">
+        <div className="flex items-center gap-1">
+          {/* Reaction count with top 2 emojis */}
           {totalReactions > 0 && (
             <button
               onClick={onShowReactionsModal}
-              className="text-sm text-muted-foreground hover:text-foreground transition-colors cursor-pointer mb-1"
+              className="flex items-center gap-1 px-2 py-1 rounded-full hover:bg-muted/50 transition-colors cursor-pointer"
             >
-              {totalReactions}
+              <div className="flex items-center -space-x-1">
+                {topReactions.map((reaction) => (
+                  <span
+                    key={reaction}
+                    className="text-sm bg-background rounded-full border border-border"
+                  >
+                    {REACTIONS[reaction].emoji}
+                  </span>
+                ))}
+              </div>
+              <span className="text-sm font-medium text-muted-foreground">
+                {totalReactions}
+              </span>
             </button>
           )}
 
+          {/* React button with popover */}
           <Popover open={open} onOpenChange={setOpen}>
             <PopoverTrigger asChild>
               {userReaction ? (
                 <Button
                   variant="ghost"
                   size="sm"
-                  className="gap-1 h-8 bg-skillmatch-muted-light/30"
+                  className="gap-1 h-9 hover:bg-muted/50"
                   disabled={addReaction.isPending || removeReaction.isPending}
                 >
                   <span className="text-lg">{REACTIONS[userReaction].emoji}</span>
-                  <span className="text-xs">{REACTIONS[userReaction].label}</span>
+                  <span className="text-xs font-medium">{REACTIONS[userReaction].label}</span>
                 </Button>
               ) : (
                 <Button 
                   variant="ghost" 
                   size="sm" 
-                  className="h-8"
+                  className="gap-1 h-9 hover:bg-muted/50"
                   disabled={addReaction.isPending || removeReaction.isPending}
                 >
-                  👍
+                  <span className="text-lg">👍</span>
+                  <span className="text-xs font-medium">Like</span>
                 </Button>
               )}
             </PopoverTrigger>
