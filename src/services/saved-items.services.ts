@@ -312,6 +312,27 @@ export const SavedItemsServices = {
       connection.release();
     }
   },
+
+  // Get user profile for skill and course matching
+  getUserProfile: async (user_id: string) => {
+    const connection = await db.getConnection();
+    try {
+      const [rows] = await connection.query<RowDataPacket[]>(
+        `SELECT ap.skills, ap.course
+         FROM applicant_profile ap
+         JOIN user u ON ap.user_id = u.user_id
+         WHERE u.user_id = ?`,
+        [user_id]
+      );
+
+      return rows[0] || null;
+    } catch (error) {
+      console.error("Error fetching user profile:", error);
+      throw error;
+    } finally {
+      connection.release();
+    }
+  },
 };
 
 export default SavedItemsServices;
