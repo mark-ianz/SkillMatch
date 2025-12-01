@@ -28,7 +28,7 @@ export default async function NavigationMenuCompany() {
                 Create and manage your job postings.
               </div>
             </NavigationMenuLink>
-            <NavigationMenuLink className="w-[230px]" href="/company/posts">
+            <NavigationMenuLink className="w-[230px]" href="/company/feed-posts">
               <div className="font-medium">Feed Posts</div>
               <div className="text-muted-foreground">
                 Create and update your feed posts.
