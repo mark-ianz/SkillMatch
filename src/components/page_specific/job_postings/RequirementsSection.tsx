@@ -89,25 +89,27 @@ export default function RequirementsSection({
             </Button>
           </div>
 
-          <ul className="space-y-2 mt-3">
-            {formData.courses_required?.map((prog, idx) => (
-              <li
-                key={idx}
-                className="flex items-center justify-between p-2 bg-muted rounded"
-              >
-                <span className="text-sm">{prog}</span>
-                <button
-                  type="button"
-                  onClick={() => removeCourses(idx)}
-                  className="text-destructive hover:text-destructive/80"
-                >
-                  ×
-                </button>
-              </li>
-            ))}
-          </ul>
+          {formData.courses_required &&
+            formData.courses_required.length > 0 && (
+              <ul className="space-y-2 mt-3">
+                {formData.courses_required?.map((prog, idx) => (
+                  <li
+                    key={idx}
+                    className="flex items-center justify-between p-2 bg-muted rounded"
+                  >
+                    <span className="text-sm">{prog}</span>
+                    <button
+                      type="button"
+                      onClick={() => removeCourses(idx)}
+                      className="text-destructive hover:text-destructive/80"
+                    >
+                      ×
+                    </button>
+                  </li>
+                ))}
+              </ul>
+            )}
         </div>
-
         <div className="grid gap-2">
           <Label>Job Categories</Label>
           <SearchJobCategory

@@ -35,7 +35,10 @@ export default function SearchSkill({
   const [isCreating, setIsCreating] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
 
-  const { data, isLoading } = useSearchSkills(debouncedSearchQuery, skillType === "soft" ? "soft" : "technical");
+  const { data, isLoading } = useSearchSkills(
+    debouncedSearchQuery,
+    skillType === "soft" ? "soft" : "technical"
+  );
   const createSkill = useCreateSkill();
 
   useEffect(() => {
@@ -145,20 +148,22 @@ export default function SearchSkill({
 
   return (
     <div ref={containerRef} className="w-full">
-      <div className="flex flex-wrap gap-2 mb-3">
-        {selectedSkills.map((name, idx) => (
-          <Badge key={idx} variant="secondary" className="gap-1">
-            {name}
-            <button
-              type="button"
-              onClick={() => handleRemoveSkill(name)}
-              className="ml-1 hover:bg-muted-foreground/20 rounded"
-            >
-              <X className="h-3 w-3" />
-            </button>
-          </Badge>
-        ))}
-      </div>
+      {selectedSkills.length > 0 && (
+        <div className="flex flex-wrap gap-2 mb-3">
+          {selectedSkills.map((name, idx) => (
+            <Badge key={idx} variant="secondary" className="gap-1">
+              {name}
+              <button
+                type="button"
+                onClick={() => handleRemoveSkill(name)}
+                className="ml-1 hover:bg-muted-foreground/20 rounded"
+              >
+                <X className="h-3 w-3" />
+              </button>
+            </Badge>
+          ))}
+        </div>
+      )}
 
       <Popover open={isOpen} onOpenChange={setIsOpen}>
         <PopoverTrigger asChild>
@@ -194,20 +199,20 @@ export default function SearchSkill({
 
             {results.length > 0 && (
               <div className="py-2">
-                      {results.map((skill) => (
-                        <button
-                          type="button"
-                          key={skill.skill_id}
-                          onClick={() => handleSelectSkill(skill)}
-                          className={`w-full px-4 py-2 text-left text-sm transition-colors ${
-                            selectedSkills.includes(skill.skill_name)
-                              ? "bg-accent text-accent-foreground"
-                              : "hover:bg-accent hover:text-accent-foreground"
-                          }`}
-                        >
-                          {skill.skill_name}
-                        </button>
-                      ))}
+                {results.map((skill) => (
+                  <button
+                    type="button"
+                    key={skill.skill_id}
+                    onClick={() => handleSelectSkill(skill)}
+                    className={`w-full px-4 py-2 text-left text-sm transition-colors ${
+                      selectedSkills.includes(skill.skill_name)
+                        ? "bg-accent text-accent-foreground"
+                        : "hover:bg-accent hover:text-accent-foreground"
+                    }`}
+                  >
+                    {skill.skill_name}
+                  </button>
+                ))}
               </div>
             )}
 
@@ -226,9 +231,16 @@ export default function SearchSkill({
                       onClick={() => handleCreateSkill(searchQuery.trim())}
                       disabled={isCreating || !searchQuery.trim()}
                     >
-                      {isCreating
-                        ? "Creating..."
-                        : <>Add skill <span className="text-skillmatch-muted-dark">`{searchQuery.trim()}`</span></>}
+                      {isCreating ? (
+                        "Creating..."
+                      ) : (
+                        <>
+                          Add skill{" "}
+                          <span className="text-skillmatch-muted-dark">
+                            `{searchQuery.trim()}`
+                          </span>
+                        </>
+                      )}
                     </Button>
                   </div>
                 )}

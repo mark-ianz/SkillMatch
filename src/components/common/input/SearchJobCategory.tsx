@@ -75,7 +75,9 @@ export default function SearchJobCategory({
 
   function handleSelectCategory(categoryName: string) {
     if (selectedCategories.includes(categoryName)) {
-      onCategoriesChange(selectedCategories.filter((name) => name !== categoryName));
+      onCategoriesChange(
+        selectedCategories.filter((name) => name !== categoryName)
+      );
     } else {
       if (selectedCategories.length >= maxCategories) {
         return;
@@ -87,27 +89,30 @@ export default function SearchJobCategory({
   }
 
   function handleRemoveCategory(categoryName: string) {
-    onCategoriesChange(selectedCategories.filter((name) => name !== categoryName));
+    onCategoriesChange(
+      selectedCategories.filter((name) => name !== categoryName)
+    );
   }
 
   const selectedCategoryNames = selectedCategories;
 
   return (
     <div ref={containerRef} className="w-full">
-      <div className="flex flex-wrap gap-2 mb-3">
-        {selectedCategoryNames.map((name, idx) => (
-          <Badge key={idx} variant="secondary" className="gap-1">
-            {name}
-            <button
-              onClick={() => handleRemoveCategory(selectedCategories[idx])}
-              className="ml-1 hover:bg-muted-foreground/20 rounded"
-            >
-              <X className="h-3 w-3" />
-            </button>
-          </Badge>
-        ))}
-      </div>
-
+      {selectedCategoryNames.length > 0 && (
+        <div className="flex flex-wrap gap-2 mb-3">
+          {selectedCategoryNames.map((name, idx) => (
+            <Badge key={idx} variant="secondary" className="gap-1">
+              {name}
+              <button
+                onClick={() => handleRemoveCategory(selectedCategories[idx])}
+                className="ml-1 hover:bg-muted-foreground/20 rounded"
+              >
+                <X className="h-3 w-3" />
+              </button>
+            </Badge>
+          ))}
+        </div>
+      )}
       <Popover open={isOpen} onOpenChange={setIsOpen}>
         <PopoverTrigger asChild>
           <div className="relative">
