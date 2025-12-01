@@ -152,27 +152,41 @@ export default function CompanyPostForm() {
             </CardHeader>
             <CardContent className="grid gap-4">
               <div className="grid gap-2">
-                <Label htmlFor="title">Post Title</Label>
+                <div className="flex items-center justify-between">
+                  <Label htmlFor="title">Post Title</Label>
+                  <span className="text-xs text-muted-foreground">
+                    {(formData.title || "").length}/100
+                  </span>
+                </div>
                 <Input
                   id="title"
                   name="title"
                   placeholder="e.g., Exciting News: New Product Launch"
                   value={formData.title || ""}
                   onChange={handleInputChange}
+                  maxLength={150}
                 />
               </div>
 
               <div className="grid gap-2">
                 <Label htmlFor="content">Post Content</Label>
-                <Textarea
-                  id="content"
-                  name="content"
-                  placeholder="Write your post content here... You can include multiple lines and paragraphs."
-                  value={formData.content || ""}
-                  onChange={handleInputChange}
-                  rows={8}
-                  className="resize-none"
-                />
+                <div className="relative">
+                  <Textarea
+                    id="content"
+                    name="content"
+                    placeholder="Write your post content here... You can include multiple lines and paragraphs."
+                    value={formData.content || ""}
+                    onChange={handleInputChange}
+                    rows={8}
+                    className="resize-none"
+                    maxLength={3000}
+                  />
+                  <div className="flex justify-end mt-1">
+                    <span className="text-xs text-muted-foreground">
+                      {(formData.content || "").length}/3000
+                    </span>
+                  </div>
+                </div>
               </div>
 
               <div className="grid gap-2">
