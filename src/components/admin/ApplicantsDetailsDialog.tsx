@@ -21,10 +21,7 @@ import {
   Mail,
   MapPin,
   Calendar,
-  GraduationCap,
   Phone,
-  Clock,
-  CalendarCheck,
 } from "lucide-react";
 import { ApplicantProfileAndUser } from "@/types/applicant_profile.types";
 import { Account } from "@/types/user.types";

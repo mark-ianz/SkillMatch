@@ -211,7 +211,7 @@ export default function Step3() {
           type="number"
           placeholder="e.g., 300"
           onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-            setRequiredHours(e.target.value)
+            setRequiredHours(Number(e.target.value))
           }
           label="Required OJT Hours"
           containerClassName="w-full"

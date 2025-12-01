@@ -34,7 +34,6 @@ export default function Step1() {
   const setFirstName = useApplicantProfileStore((state) => state.setFirstName);
   const setMiddleName = useApplicantProfileStore((state) => state.setMiddleName);
   const setLastName = useApplicantProfileStore((state) => state.setLastName);
-  const setEmail = useApplicantProfileStore((state) => state.setEmail);
   const setPhoneNumber = useApplicantProfileStore((state) => state.setPhoneNumber);
   const setGender = useApplicantProfileStore((state) => state.setGender);
 
