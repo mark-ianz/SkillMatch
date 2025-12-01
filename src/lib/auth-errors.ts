@@ -4,7 +4,8 @@ export type AuthErrorCode =
   | 'AccountPending'
   | 'DoesNotExist'
   | 'InvalidCredentials'
-  | 'AccountInvalidStatus';
+  | 'AccountInvalidStatus'
+  | 'EmailNotAllowed';
 
 export type AuthStatusCode =
   | 'pending'
@@ -38,6 +39,10 @@ const errorMessages: Record<AuthErrorCode, AuthError> = {
     title: 'Account Status Invalid',
     description: 'Your account status is invalid. Please contact support for more information.',
   },
+  EmailNotAllowed: {
+    title: 'Email Not Allowed',
+    description: 'The email you are trying to use is not associated with Quezon City University. Please use your university email to sign up.',
+  }
 };
 
 const statusMessages: Record<AuthStatusCode, AuthError> = {
