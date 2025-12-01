@@ -14,8 +14,13 @@ import { CopyLinkButton } from "@/components/common/button/CopyLinkButton";
 import DateDifference from "@/components/common/DateDifference";
 import { useSession } from "next-auth/react";
 import { SignInPromptDialog } from "@/components/common/SignInPromptDialog";
-import { useIsPostSaved, useSavePost, useUnsavePost } from "@/hooks/query/useSavedItems";
+import {
+  useIsPostSaved,
+  useSavePost,
+  useUnsavePost,
+} from "@/hooks/query/useSavedItems";
 import { cn } from "@/lib/utils";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 interface CompanyPostProps {
   post: CompanyPostType;
@@ -50,20 +55,26 @@ export function CompanyPost({ post }: CompanyPostProps) {
   return (
     <>
       <Card className="w-full h-fit">
-        <CardHeader>
-          <div className="flex items-start justify-between">
-            <div className="flex-1">
-              <Link
-                href={`/view/company/${post.company_id}`}
-                className="font-semibold text-base text-card-foreground hover:text-primary transition-colors"
-              >
-                {post.company_name}
-              </Link>
-              <DateDifference
-                className="text-xs text-muted-foreground"
-                date={post.created_at}
-              />
-            </div>
+        <CardHeader className="flex">
+          {post.company_image && (
+            <Avatar className="w-10 h-10">
+              <AvatarImage src={post.company_image} alt={post.company_name} />
+              <AvatarFallback>
+                {post.company_name.charAt(0).toUpperCase()}
+              </AvatarFallback>
+            </Avatar>
+          )}
+          <div className="flex-1">
+            <Link
+              href={`/view/company/${post.company_id}`}
+              className="font-semibold text-base text-card-foreground hover:text-primary transition-colors"
+            >
+              {post.company_name}
+            </Link>
+            <DateDifference
+              className="text-xs text-muted-foreground"
+              date={post.created_at}
+            />
           </div>
         </CardHeader>
 
@@ -104,10 +115,14 @@ export function CompanyPost({ post }: CompanyPostProps) {
                   variant="ghost"
                   size="sm"
                   onClick={handleSavePost}
-                  disabled={savePostMutation.isPending || unsavePostMutation.isPending}
+                  disabled={
+                    savePostMutation.isPending || unsavePostMutation.isPending
+                  }
                   className="gap-2 h-8 text-skillmatch-muted-dark hover:text-foreground"
                 >
-                  <Bookmark className={cn("w-4 h-4", isSaved && "fill-current")} />
+                  <Bookmark
+                    className={cn("w-4 h-4", isSaved && "fill-current")}
+                  />
                   <span className="text-xs">{isSaved ? "Saved" : "Save"}</span>
                 </Button>
               )}
