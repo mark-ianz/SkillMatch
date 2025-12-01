@@ -118,8 +118,8 @@ export function JobApplicationDialog({
       technicalSkills: userProfile.skills || [],
       // certifications: [],
       resumePath: userProfile.resume_path || null,
-      hoursRequired: "",
-      proposedSchedule: [],
+      hoursRequired: userProfile.required_hours?.toString() || "",
+      proposedSchedule: userProfile.preferred_schedule ? userProfile.preferred_schedule.split(",") : [],
     });
     setIsInitialized(true);
   }, [userProfile, session, isInitialized]);

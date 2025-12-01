@@ -107,12 +107,23 @@ async function submitStepThree(
   try {
     // Update the onboarding table with the provided data
     await connection.query<ResultSetHeader>(
-      `UPDATE applicant_profile SET college = ?, course = ?, year_level = ?, expected_graduation_year = ? WHERE applicant_profile.user_id = ?`,
+      `UPDATE applicant_profile SET 
+        student_number = ?,
+        college = ?, 
+        course = ?, 
+        year_level = ?, 
+        expected_graduation_year = ?,
+        preferred_schedule = ?,
+        required_hours = ?
+      WHERE applicant_profile.user_id = ?`,
       [
+        data.student_number,
         data.college,
         data.course,
         data.year_level,
         data.expected_graduation_year,
+        data.preferred_schedule,
+        data.required_hours,
         user_id,
       ]
     );
