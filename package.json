@@ -7,6 +7,7 @@
     "dev:turbo": "next dev --turbo",
     "build": "next build",
     "start": "next start",
+    "build_start": "next build && next start",
     "lint": "eslint",
     "check": "tsc --noEmit && eslint ."
   },
