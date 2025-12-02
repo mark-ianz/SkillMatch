@@ -23,7 +23,7 @@ export default async function FeedPage() {
         <div className="flex-1">
           <div className="sticky top-24 min-w-80 flex-shrink-0">
             {isAuthenticated && role_name === "Company" && (
-              <div className="pr-3">
+              <div className="px-3">
                 <Link
                   href="/company/create-post"
                   className="border-2 p-4 rounded-md border-dashed flex flex-col items-center justify-center mb-6 cursor-pointer hover:bg-muted/50 transition-colors border-skillmatch-primary-blue text-skillmatch-primary-blue"
@@ -35,7 +35,7 @@ export default async function FeedPage() {
             )}
 
             <ScrollArea className="h-[calc(100vh-7rem)]">
-              <div className="flex flex-col gap-10 pr-3">
+              <div className="flex flex-col gap-10 px-3">
                 <SidebarProfile />
                 <Separator />
                 <SuggestedCompanies />
