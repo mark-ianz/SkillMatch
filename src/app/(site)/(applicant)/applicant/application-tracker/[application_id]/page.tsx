@@ -23,7 +23,6 @@ import {
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import {
-  ArrowLeft,
   Building2,
   MapPin,
   Briefcase,
@@ -34,14 +33,13 @@ import {
   AlertCircle,
   XCircle,
 } from "lucide-react";
-import Link from "next/link";
 import { statusConfig } from "@/components/page_specific/application-tracker/applicationStatusConfig";
 import { useState } from "react";
 import LinkWithIcon from "@/components/global/LinkWithIcon";
+import { GoBackButton } from "@/components/common/button/GoBackButton";
 
 export default function ApplicationDetailsPage() {
   const params = useParams();
-  const router = useRouter();
   const application_id = params.application_id as string;
 
   const { data: application, isLoading } = useApplication(application_id);
@@ -138,12 +136,7 @@ export default function ApplicationDetailsPage() {
               The application you&apos;re looking for doesn&apos;t exist or has
               been removed.
             </p>
-            <Button
-              onClick={() => router.push("/applicant/application-tracker")}
-            >
-              <ArrowLeft className="mr-2 h-4 w-4" />
-              Back to Applications
-            </Button>
+            <GoBackButton />
           </div>
         </Card>
       </div>
@@ -159,14 +152,7 @@ export default function ApplicationDetailsPage() {
   return (
     <>
       {/* Back Button */}
-      <Button
-        variant="ghost"
-        onClick={() => router.push("/applicant/application-tracker")}
-        className="mb-6"
-      >
-        <ArrowLeft className="mr-2 h-4 w-4" />
-        Back to Applications
-      </Button>
+      <GoBackButton />
 
       {/* Header Card */}
       <Card className="mb-6">

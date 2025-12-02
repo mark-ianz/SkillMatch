@@ -1,15 +1,13 @@
 import MainLayout from "@/components/layout/MainLayout";
 import { JobPostFullInfo } from "@/components/page_specific/job_postings/JobPostFullInfo";
-import Link from "next/link";
 import { authConfig } from "@/lib/auth";
 import { getServerSession } from "next-auth";
 import { JobPostingServices } from "@/services/job-posting.services";
 import { redirect, notFound } from "next/navigation";
 import { getRoleName } from "@/lib/utils";
-import { Button } from "@/components/ui/button";
-import { ArrowLeft } from "lucide-react";
 import { AnimatedJobContent } from "@/components/page_specific/job_postings/AnimatedJobContent";
 import { AnimatedJobSuggestionsSection } from "@/components/page_specific/job_postings/AnimatedJobSuggestionsSection";
+import { GoBackButton } from "@/components/common/button/GoBackButton";
 
 interface JobPostPageProps {
   params: Promise<{
@@ -57,12 +55,7 @@ export default async function JobPostPage({ params }: JobPostPageProps) {
         {/* Main Content */}
         <AnimatedJobContent>
           {/* Back Button */}
-          <Link href="/explore/job-postings" className="self-start">
-            <Button variant="ghost">
-              <ArrowLeft className="mr-2 h-4 w-4" />
-              Back to Job Postings
-            </Button>
-          </Link>
+          <GoBackButton />
 
           {/* Job Post Full Info */}
           <JobPostFullInfo

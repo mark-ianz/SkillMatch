@@ -2,8 +2,6 @@
 
 import { motion } from "framer-motion";
 import Link from "next/link";
-import { Button } from "@/components/ui/button";
-import { ArrowLeft } from "lucide-react";
 import { CompanyProfile } from "./CompanyProfile";
 import { Badge } from "@/components/ui/badge";
 import { ScrollArea } from "@/components/ui/scroll-area";
@@ -11,6 +9,7 @@ import { JobPostPreview } from "../job-postings/JobPostPreview";
 import { Card } from "@/components/ui/card";
 import type { CompanyProfile as CompanyProfileType } from "@/types/company.types";
 import type { JobPost } from "@/types/job_post.types";
+import { GoBackButton } from "@/components/common/button/GoBackButton";
 
 interface AnimatedCompanyContentProps {
   company_profile: CompanyProfileType;
@@ -30,15 +29,14 @@ export function AnimatedCompanyContent({
         transition={{ duration: 0.4 }}
         className="space-y-4 px-4"
       >
-        <Link href="/explore/companies" className="self-start">
-          <Button variant="ghost" className="mb-4">
-            <ArrowLeft className="mr-2 h-4 w-4" />
-            Back to Companies
-          </Button>
-        </Link>
+        <GoBackButton />
 
         {/* Company Profile Card */}
-        <CompanyProfile isFullView className="p-10 w-5xl" company={company_profile} />
+        <CompanyProfile
+          isFullView
+          className="p-10 w-5xl"
+          company={company_profile}
+        />
       </motion.div>
 
       {/* Job Posts Section */}
@@ -79,7 +77,8 @@ export function AnimatedCompanyContent({
           <div className="px-4">
             <Card className="p-12 text-center">
               <p className="text-muted-foreground">
-                {company_profile.company_name} has no openings available at the moment.
+                {company_profile.company_name} has no openings available at the
+                moment.
               </p>
             </Card>
           </div>

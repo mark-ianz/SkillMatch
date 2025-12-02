@@ -8,7 +8,6 @@ import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Skeleton } from "@/components/ui/skeleton";
-import { Alert, AlertDescription } from "@/components/ui/alert";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -20,7 +19,6 @@ import {
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
 import {
-  ArrowLeft,
   Mail,
   Phone,
   FileText,
@@ -36,9 +34,7 @@ import {
   Users,
   Edit,
   Building2,
-  AlertCircle,
 } from "lucide-react";
-import Link from "next/link";
 import Image from "next/image";
 import {
   DropdownMenu,
@@ -63,6 +59,7 @@ import { useJobPost, useUpdateJobPostStatus } from "@/hooks/query/useJobPosts";
 import { ApplicationWithUserDetails } from "@/types/application.types";
 import { getCourseByAbbr } from "@/lib/utils";
 import { getJobStatusConfig } from "@/const/jobStatusConfig";
+import { GoBackButton } from "@/components/common/button/GoBackButton";
 
 // Status configuration matching database IDs
 const statusConfig: Record<
@@ -314,31 +311,7 @@ export default function JobDetailsPage() {
 
   // Error state
   if (error || jobPostError) {
-    return (
-      <div className="min-h-screen bg-gradient-to-b from-green-50 to-white">
-        <div className="border-b bg-white">
-          <div className="container mx-auto px-4 py-4">
-            <Link href="/company/job-postings">
-              <Button variant="ghost" size="sm">
-                <ArrowLeft className="h-4 w-4 mr-2" />
-                Back to Job Posts
-              </Button>
-            </Link>
-          </div>
-        </div>
-        <div className="container mx-auto px-4 py-8">
-          <Alert variant="destructive">
-            <AlertCircle className="h-4 w-4" />
-            <AlertDescription>
-              {jobPostError
-                ? "Failed to load job post details."
-                : "Failed to load job post applications."}{" "}
-              Please try again.
-            </AlertDescription>
-          </Alert>
-        </div>
-      </div>
-    );
+    notFound()
   }
 
   // No job post found
@@ -580,14 +553,9 @@ export default function JobDetailsPage() {
     <div className="min-h-screen bg-background">
       <main className="container py-8 px-4 max-w-7xl">
         {/* Back Button */}
-        <Link href="/company/job-postings">
-          <Button variant="ghost" className="mb-4">
-            <ArrowLeft className="mr-2 h-4 w-4" />
-            Back to Job Posts
-          </Button>
-        </Link>
+        <GoBackButton />
 
-        <Card className="mb-8 shadow-sm">
+        <Card className="mt-4 mb-8 shadow-sm">
           <CardContent className="p-6">
             <div className="space-y-6">
               {/* Improved Company Header */}

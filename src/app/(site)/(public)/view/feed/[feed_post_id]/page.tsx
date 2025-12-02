@@ -1,14 +1,13 @@
 import { Badge } from "@/components/ui/badge";
 import { Card } from "@/components/ui/card";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { Button } from "@/components/ui/button";
 import MainLayout from "@/components/layout/MainLayout";
 import { CompanyPost } from "@/components/page_specific/company_post/CompanyPost";
 import Link from "next/link";
 import { CompanyPostServices } from "@/services/company-post.services";
-import { redirect } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
 import { CompanyPostPreview } from "@/components/page_specific/company_post/CompanyPostPreview";
-import { ArrowLeft } from "lucide-react";
+import { GoBackButton } from "@/components/common/button/GoBackButton";
 
 interface FeedPostPageProps {
   params: Promise<{
@@ -27,15 +26,7 @@ export default async function FeedPostPage({ params }: FeedPostPageProps) {
   const post = await CompanyPostServices.getCompanyPostById(feed_post_id);
 
   if (!post) {
-    return (
-      <MainLayout>
-        <div className="flex items-center justify-center">
-          <p className="text-destructive">
-            Post not found. Please try again later.
-          </p>
-        </div>
-      </MainLayout>
-    );
+    notFound();
   }
 
   const suggestions = await CompanyPostServices.getCompanyPostSuggestions(
@@ -47,14 +38,7 @@ export default async function FeedPostPage({ params }: FeedPostPageProps) {
       <div className="gap-10 flex flex-col items-center container max-w-5xl">
         <div className="space-y-4 px-4">
           {/* Back Button */}
-          <div className="w-full">
-            <Link href="/feed">
-              <Button variant="ghost">
-                <ArrowLeft className="mr-2 h-4 w-4" />
-                Go Back to Feed
-              </Button>
-            </Link>
-          </div>
+          <GoBackButton />
 
           {/* Company Post Full Info */}
           <CompanyPost post={post} />
