@@ -37,6 +37,7 @@
     "clsx": "^2.1.1",
     "cmdk": "^1.1.1",
     "date-fns": "^4.1.0",
+    "framer-motion": "^12.23.25",
     "google-auth-library": "^10.5.0",
     "google-gax": "^5.0.5",
     "lucide-react": "^0.544.0",
