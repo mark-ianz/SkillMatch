@@ -33,7 +33,6 @@ export function JobPostPreview({
         <h3 className="text-lg font-semibold text-foreground group-hover:text-primary transition-colors">
           {job.job_title}
         </h3>
-        {job.job_post_status && <JobStatusBadge status={job.job_post_status} />}
       </div>
 
       {/* Company name and Status */}
