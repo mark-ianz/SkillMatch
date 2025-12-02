@@ -23,9 +23,6 @@ export function useJobPosts(
         filters.workArrangement?.forEach((w: string) => params.append("arrangement", w));
         filters.industries?.forEach((i: string) => params.append("industry", i));
         filters.jobCategories?.forEach((j: string) => params.append("jobCategory", j));
-        if (filters.isPaid !== undefined) {
-          params.append("paid", String(filters.isPaid));
-        }
         if (filters.search) {
           params.append("search", filters.search);
         }

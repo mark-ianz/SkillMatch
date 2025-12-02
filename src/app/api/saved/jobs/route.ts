@@ -17,8 +17,6 @@ interface SavedJobFromDB {
   preferred_qualifications?: string | null;
   technical_skills: string[];
   soft_skills: string[];
-  is_paid: boolean;
-  allowance_description?: string | null;
   street_name: string;
   city_municipality: string;
   barangay: string;

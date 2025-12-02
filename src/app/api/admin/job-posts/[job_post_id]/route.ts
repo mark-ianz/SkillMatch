@@ -84,7 +84,6 @@ export async function GET(
     const job = jobPosts[0] as JobPostQuery & Status;
     const parsedJob = {
       ...job,
-      is_paid: Boolean(job.is_paid),
       job_post_status: job.status || "Unknown",
       job_responsibilities: job.job_responsibilities
         ? job.job_responsibilities.split(",")

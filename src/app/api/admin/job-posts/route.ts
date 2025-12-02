@@ -41,7 +41,6 @@ export async function GET(request: NextRequest) {
     const parsedJobPosts = Array.isArray(jobPosts)
       ? jobPosts.map((job: JobPostQuery) => ({
           ...job,
-          is_paid: Boolean(job.is_paid),
           job_post_status: job.job_post_status || "Unknown",
           job_responsibilities: job.job_responsibilities
             ? job.job_responsibilities.split(",")

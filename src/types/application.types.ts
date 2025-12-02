@@ -86,8 +86,6 @@ export interface JobPostWithApplicationStats {
   job_post_status_id: number;
   created_at: string;
   updated_at: string;
-  is_paid: boolean;
-  allowance_description?: string | null;
   
   // Application statistics
   total_applications: number;

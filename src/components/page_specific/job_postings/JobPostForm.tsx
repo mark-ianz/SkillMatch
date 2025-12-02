@@ -59,8 +59,6 @@ export default function JobPostingForm({ isEditMode = false, jobPostId }: JobPos
   const handleSelectChange = (name: string, value: string) => {
     if (name === "work_arrangement") {
       updateField("work_arrangement", value as WorkArrangement);
-    } else if (name === "is_paid") {
-      updateField("is_paid", value === "true");
     }
   };
 

@@ -14,7 +14,6 @@ export async function GET(request: NextRequest) {
     const arrangements = searchParams.getAll("arrangement");
     const industries = searchParams.getAll("industry");
     const jobCategories = searchParams.getAll("jobCategory");
-    const isPaid = searchParams.get("paid");
     const search = searchParams.get("search");
     const userId = searchParams.get("userId");
     const roleName = searchParams.get("roleName");
@@ -96,11 +95,6 @@ export async function GET(request: NextRequest) {
       jobCategories.forEach(cat => values.push(`%${cat}%`));
     }
 
-    if (isPaid !== null && isPaid !== undefined) {
-      conditions.push(`jp.is_paid = ?`);
-      values.push(isPaid === "true" ? 1 : 0);
-    }
-
     // Handle search query - optimized with indexed columns first
     if (search && search.trim()) {
       const searchTerm = `%${search.trim()}%`;
@@ -165,7 +159,6 @@ export async function GET(request: NextRequest) {
 
       return {
         ...post,
-        is_paid: Boolean(post.is_paid),
         job_responsibilities: post.job_responsibilities.split(","),
         courses_required: coursesRequiredArray,
         job_categories: post.job_categories

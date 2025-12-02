@@ -56,7 +56,6 @@ export function JobExploreFilter({ className }: JobExploreFilterProps) {
     workArrangement: searchParams.getAll("arrangement") || [],
     industries: searchParams.getAll("industry") || [],
     jobCategories: searchParams.getAll("jobCategory") || [],
-    isPaid: searchParams.get("paid") === "true" ? true : undefined,
   });
 
   const handleFilterChange = (type: keyof JobExploreFilters, value: string) => {
@@ -85,8 +84,6 @@ export function JobExploreFilter({ className }: JobExploreFilterProps) {
       filters.workArrangement.forEach((w) => params.append("arrangement", w));
       filters.industries.forEach((i) => params.append("industry", i));
       filters.jobCategories.forEach((j) => params.append("jobCategory", j));
-      if (filters.isPaid !== undefined)
-        params.append("paid", String(filters.isPaid));
     }
 
     // Preserve search param
@@ -108,7 +105,6 @@ export function JobExploreFilter({ className }: JobExploreFilterProps) {
       workArrangement: [],
       industries: [],
       jobCategories: [],
-      isPaid: undefined,
     });
 
     // Preserve search param on reset
@@ -125,8 +121,7 @@ export function JobExploreFilter({ className }: JobExploreFilterProps) {
     filters.locations.length > 0 ||
     filters.workArrangement.length > 0 ||
     filters.industries.length > 0 ||
-    filters.jobCategories.length > 0 ||
-    filters.isPaid !== undefined;
+    filters.jobCategories.length > 0;
 
   return (
     <Card className={cn("p-6 w-full gap-2", className)}>

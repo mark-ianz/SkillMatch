@@ -94,7 +94,6 @@ export const SavedItemsServices = {
         industry: row.industry
           ? row.industry.split(",").map((ind: string) => ind.trim())
           : null,
-        is_paid: Boolean(row.is_paid),
       }));
     } catch (error) {
       console.error("Error fetching saved jobs:", error);

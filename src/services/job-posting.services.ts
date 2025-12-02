@@ -25,7 +25,6 @@ export const JobPostingServices = {
       // Normalize CSV fields to arrays
       return rows.map((row) => ({
         ...row,
-        is_paid: Boolean(row.is_paid),
         job_post_status: row.job_post_status_id
           ? getStatusName(row.job_post_status_id)
           : undefined,
@@ -112,7 +111,6 @@ export const JobPostingServices = {
       // normalize arrays
       return {
         ...row,
-        is_paid: Boolean(row.is_paid),
         job_post_status: row.job_post_status_id
           ? getStatusName(row.job_post_status_id)
           : undefined,
@@ -185,8 +183,6 @@ export const JobPostingServices = {
           jp.job_responsibilities,
           jp.preferred_qualifications,
           jp.work_arrangement,
-          jp.is_paid,
-          jp.allowance_description,
           jp.soft_skills,
           jp.technical_skills,
           jp.created_at,
@@ -258,7 +254,6 @@ export const JobPostingServices = {
         industry: row.industry
           ? row.industry.split(",").map((ind: string) => ind.trim())
           : null,
-        is_paid: Boolean(row.is_paid),
         skill_match_count: matchCount,
         course_matched: courseMatched,
       } as JobPost;
@@ -361,8 +356,6 @@ export const JobPostingServices = {
           jp.job_responsibilities,
           jp.preferred_qualifications,
           jp.work_arrangement,
-          jp.is_paid,
-          jp.allowance_description,
           jp.soft_skills,
           jp.technical_skills,
           jp.created_at,
@@ -434,7 +427,6 @@ export const JobPostingServices = {
           industry: row.industry
             ? row.industry.split(",").map((ind: string) => ind.trim())
             : null,
-          is_paid: Boolean(row.is_paid),
           skill_match_count: matchCount,
           course_matched: courseMatched,
         };

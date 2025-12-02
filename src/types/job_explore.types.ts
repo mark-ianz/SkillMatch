@@ -5,7 +5,6 @@ export type JobExploreFilters = {
   industries: string[];
   jobCategories: string[];
   search?: string;
-  isPaid?: boolean;
 };
 
 export type CompanyExploreFilters = {

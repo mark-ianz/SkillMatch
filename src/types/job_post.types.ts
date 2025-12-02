@@ -24,11 +24,7 @@ export type JobPost = {
   technical_skills: string[]; // text - comma separated in DB
   soft_skills: string[]; // text - comma separated in DB
   
-  // Compensation
-  is_paid: boolean; // tinyint(1)
-  allowance_description?: string | null; // varchar(255)
-
-  // Address (matching SQL schema exactly)
+  // Location (matching SQL schema)
   street_name: string; // varchar(100)
   city_municipality: string; // varchar(255)
   barangay: string; // varchar(255)

@@ -156,11 +156,6 @@ export function JobPostFullInfo({
                 job_categories={job.job_categories}
                 className="text-sm"
               />
-              {!job?.is_paid && (
-                <Badge variant="outline" className="text-xs">
-                  Unpaid
-                </Badge>
-              )}
             </div>
 
             {/* Apply Button - Will not be shown if the role is admin and company */}

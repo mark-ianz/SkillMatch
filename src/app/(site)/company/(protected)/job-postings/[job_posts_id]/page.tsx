@@ -681,9 +681,6 @@ export default function JobDetailsPage() {
                   {jobPost.work_arrangement}
                 </Badge>
                 <Badge variant="outline">
-                  {jobPost.is_paid ? "Paid" : "Unpaid"}
-                </Badge>
-                <Badge variant="outline">
                   {jobPost.available_positions}{" "}
                   {jobPost.available_positions === 1 ? "Position" : "Positions"}
                 </Badge>
