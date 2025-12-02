@@ -54,7 +54,7 @@ export default function ApplicantCTA() {
                 <ArrowRight className="ml-2 h-5 w-5" />
               </Button>
             </Link>
-            <Link href="/explore">
+            <Link href="/about">
               <Button
                 size="lg"
                 variant="outline"
