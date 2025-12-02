@@ -1,5 +1,3 @@
-import { Badge } from "@/components/ui/badge";
-import { Card } from "@/components/ui/card";
 import MainLayout from "@/components/layout/MainLayout";
 import { JobPostFullInfo } from "@/components/page_specific/job_postings/JobPostFullInfo";
 import Link from "next/link";
@@ -11,8 +9,7 @@ import { getRoleName } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { ArrowLeft } from "lucide-react";
 import { AnimatedJobContent } from "@/components/page_specific/job_postings/AnimatedJobContent";
-import { ScrollArea } from "@/components/ui/scroll-area";
-import { JobPostPreview } from "@/components/page_specific/explore/job-postings/JobPostPreview";
+import { AnimatedJobSuggestionsSection } from "@/components/page_specific/job_postings/AnimatedJobSuggestionsSection";
 
 interface JobPostPageProps {
   params: Promise<{
@@ -84,43 +81,7 @@ export default async function JobPostPage({ params }: JobPostPageProps) {
         </AnimatedJobContent>
 
         {/* Job Suggestions Section */}
-        <div className="space-y-6 w-full">
-          <div className="flex items-center justify-between">
-            <h2 className="text-2xl font-bold text-foreground">
-              Recommended Jobs For You
-            </h2>
-            {suggestions && suggestions.length > 0 && (
-              <Badge
-                variant="secondary"
-                className="text-sm font-medium px-4 py-2"
-              >
-                {suggestions.length} Suggestion
-                {suggestions.length !== 1 ? "s" : ""}
-              </Badge>
-            )}
-          </div>
-
-          {suggestions && suggestions.length > 0 ? (
-            <ScrollArea className="h-96">
-              <div className="grid grid-cols-1 gap-4 pr-4 p-2">
-                {suggestions.map((job) => (
-                  <Link
-                    key={job.job_post_id}
-                    href={"/view/job-postings/" + job.job_post_id}
-                  >
-                    <JobPostPreview job={job} />
-                  </Link>
-                ))}
-              </div>
-            </ScrollArea>
-          ) : (
-            <Card className="p-12 text-center">
-              <p className="text-muted-foreground">
-                No similar job opportunities found.
-              </p>
-            </Card>
-          )}
-        </div>
+        <AnimatedJobSuggestionsSection suggestions={suggestions} />
       </div>
     </MainLayout>
   );
