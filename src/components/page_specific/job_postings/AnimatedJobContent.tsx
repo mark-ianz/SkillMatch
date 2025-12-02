@@ -13,7 +13,7 @@ export function AnimatedJobContent({ children }: AnimatedJobContentProps) {
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.4 }}
-      className="flex flex-col gap-4 w-full"
+      className="flex flex-col gap-4 w-full px-4"
     >
       {children}
     </motion.div>
