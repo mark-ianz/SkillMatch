@@ -10,6 +10,8 @@ import { getServerSession } from "next-auth";
 import { JobPostingServices } from "@/services/job-posting.services";
 import { redirect } from "next/navigation";
 import { getRoleName } from "@/lib/utils";
+import { Button } from "@/components/ui/button";
+import { ArrowLeft } from "lucide-react";
 
 interface JobPostPageProps {
   params: Promise<{
@@ -62,8 +64,18 @@ export default async function JobPostPage({ params }: JobPostPageProps) {
   return (
     <MainLayout className="items-center" wrapperClassName="w-full">
       <div className="gap-10 flex flex-col items-center container max-w-5xl">
-        {/* Job Post Full Info */}
-        <JobPostFullInfo job={jobPost} className="w-full" />
+        <div className="flex flex-col gap-4">
+          {/* Back Button */}
+          <Link href="/explore/job-postings" className="self-start">
+            <Button variant="ghost">
+              <ArrowLeft className="mr-2 h-4 w-4" />
+              Back to Job Postings
+            </Button>
+          </Link>
+
+          {/* Job Post Full Info */}
+          <JobPostFullInfo apply_full_width={false} job={jobPost} className="w-full" />
+        </div>
 
         {/* Job Suggestions Section */}
         <div className="space-y-6 w-full">
@@ -76,7 +88,8 @@ export default async function JobPostPage({ params }: JobPostPageProps) {
                 variant="secondary"
                 className="text-sm font-medium px-4 py-2"
               >
-                {suggestions.length} Suggestion{suggestions.length !== 1 ? "s" : ""}
+                {suggestions.length} Suggestion
+                {suggestions.length !== 1 ? "s" : ""}
               </Badge>
             )}
           </div>
