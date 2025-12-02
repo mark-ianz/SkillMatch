@@ -5,7 +5,6 @@ import { cn } from "@/lib/utils";
 import JobPreviewHeader from "./sub-components/JobPreviewHeader";
 import Location from "./sub-components/Location";
 import DatePosted from "./sub-components/DatePosted";
-import { JobStatusBadge } from "@/components/common/JobStatusBadge";
 
 interface JobPostPreviewProps {
   job: JobPost;

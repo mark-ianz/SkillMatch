@@ -15,7 +15,6 @@ import {
   getAllIndustry,
   getAllJobCategories,
 } from "@/lib/utils";
-import { ScrollArea } from "@/components/ui/scroll-area";
 import { Separator } from "@/components/ui/separator";
 import { useExploreStore } from "@/store/ExploreStore";
 import cityMunicipalityData from "@/data/city_municipality.json";
