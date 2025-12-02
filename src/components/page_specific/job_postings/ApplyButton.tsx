@@ -7,7 +7,7 @@ import { useApplyToJob } from "@/hooks/query/useApplications";
 import { useSession } from "next-auth/react";
 import { SignInPromptDialog } from "@/components/common/SignInPromptDialog";
 import { ApplicationData } from "./JobApplicationDialog";
-import { getRoleName } from "@/lib/utils";
+import { cn, getRoleName } from "@/lib/utils";
 
 interface ApplyButtonProps {
   jobPostId: string;
@@ -16,7 +16,7 @@ interface ApplyButtonProps {
   className?: string;
   variant?: "default" | "outline" | "ghost" | "link" | "destructive" | "secondary";
   size?: "default" | "sm" | "lg" | "icon";
-  fullWidth?: boolean;
+  apply_full_width?: boolean;
 }
 
 export function ApplyButton({
@@ -26,6 +26,7 @@ export function ApplyButton({
   className,
   variant = "default",
   size = "default",
+  apply_full_width = false,
 }: ApplyButtonProps) {
   const { data: session } = useSession();
   const [isDialogOpen, setIsDialogOpen] = useState(false);
@@ -74,7 +75,7 @@ export function ApplyButton({
     <>
       <Button
         onClick={handleApplyClick}
-        className={className}
+        className={cn(className, apply_full_width ? "w-full" : "w-fit px-6")}
         variant={variant}
         size={size}
         disabled={applyMutation.isPending}
