@@ -28,10 +28,12 @@ export function JobPostFullInfo({
   job,
   className,
   apply_button_classname,
+  isFullView = false,
 }: {
   job: JobPost;
   className?: string;
   apply_button_classname?: string;
+  isFullView?: boolean;
 }) {
   const { data: session, status } = useSession();
   const [showSignInDialog, setShowSignInDialog] = useState(false);
@@ -81,10 +83,14 @@ export function JobPostFullInfo({
               )}
               <div className="flex-1">
                 <div className="flex items-center gap-2 flex-wrap">
-                  <LinkWithIcon
-                    path={`/view/job-postings/${job.job_post_id}`}
-                    text={job?.job_title}
-                  />
+                  {!isFullView ? (
+                    <LinkWithIcon
+                      path={`/view/job-postings/${job.job_post_id}`}
+                      text={job?.job_title}
+                    />
+                  ) : (
+                    <h1 className="text-2xl font-bold">{job?.job_title}</h1>
+                  )}
                   {job?.job_post_status && (
                     <JobStatusBadge status={job.job_post_status} />
                   )}

@@ -74,6 +74,7 @@ export default async function JobPostPage({ params }: JobPostPageProps) {
 
           {/* Job Post Full Info */}
           <JobPostFullInfo
+            isFullView={true}
             apply_button_classname="w-fit px-8 py-1 text-sm"
             job={jobPost}
             className="w-full"
