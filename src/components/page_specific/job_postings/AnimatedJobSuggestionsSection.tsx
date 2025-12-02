@@ -23,7 +23,7 @@ export function AnimatedJobSuggestionsSection({
       transition={{ duration: 0.4 }}
       className="space-y-6 w-full"
     >
-      <div className="flex items-center justify-between">
+      <div className="flex items-center justify-between px-4">
         <h2 className="text-2xl font-bold text-foreground">
           Recommended Jobs For You
         </h2>
@@ -37,28 +37,25 @@ export function AnimatedJobSuggestionsSection({
 
       {suggestions && suggestions.length > 0 ? (
         <ScrollArea className="h-96 overflow-y-visible">
-          <div className="grid grid-cols-1 gap-4">
-            {suggestions.map((job, index) => (
-              <motion.div
+          <div className="grid grid-cols-1 gap-4 px-4 py-1">
+            {suggestions.map((job) => (
+              <Link
                 key={job.job_post_id}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, margin: "-50px" }}
-                transition={{ duration: 0.3, delay: index * 0.1 }}
+                href={"/view/job-postings/" + job.job_post_id}
               >
-                <Link href={"/view/job-postings/" + job.job_post_id}>
-                  <JobPostPreview job={job} />
-                </Link>
-              </motion.div>
+                <JobPostPreview job={job} />
+              </Link>
             ))}
           </div>
         </ScrollArea>
       ) : (
-        <Card className="p-12 text-center">
-          <p className="text-muted-foreground">
-            No similar job opportunities found.
-          </p>
-        </Card>
+        <div className="px-4">
+          <Card className="p-12 text-center">
+            <p className="text-muted-foreground">
+              No similar job opportunities found.
+            </p>
+          </Card>
+        </div>
       )}
     </motion.div>
   );
