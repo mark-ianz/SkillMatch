@@ -39,24 +39,26 @@ export default async function FeedPostPage({ params }: FeedPostPageProps) {
   }
 
   const suggestions = await CompanyPostServices.getCompanyPostSuggestions(
-    feed_post_id,
+    feed_post_id
   );
 
   return (
     <MainLayout className="items-center" wrapperClassName="w-full">
-      <div className="gap-4 flex flex-col items-center container max-w-5xl">
-        {/* Back Button */}
-        <div className="w-full">
-          <Link href="/feed">
-            <Button variant="ghost">
-              <ArrowLeft className="mr-2 h-4 w-4" />
-              Go Back to Feed
-            </Button>
-          </Link>
-        </div>
+      <div className="gap-10 flex flex-col items-center container max-w-5xl">
+        <div className="space-y-4">
+          {/* Back Button */}
+          <div className="w-full">
+            <Link href="/feed">
+              <Button variant="ghost">
+                <ArrowLeft className="mr-2 h-4 w-4" />
+                Go Back to Feed
+              </Button>
+            </Link>
+          </div>
 
-        {/* Company Post Full Info */}
-        <CompanyPost post={post} />
+          {/* Company Post Full Info */}
+          <CompanyPost post={post} />
+        </div>
 
         {/* Post Suggestions Section */}
         <div className="space-y-6 w-full">
@@ -69,7 +71,8 @@ export default async function FeedPostPage({ params }: FeedPostPageProps) {
                 variant="secondary"
                 className="text-sm font-medium px-4 py-2"
               >
-                {suggestions.length} Suggestion{suggestions.length !== 1 ? "s" : ""}
+                {suggestions.length} Suggestion
+                {suggestions.length !== 1 ? "s" : ""}
               </Badge>
             )}
           </div>
@@ -78,10 +81,7 @@ export default async function FeedPostPage({ params }: FeedPostPageProps) {
             <ScrollArea className="h-96">
               <div className="grid grid-cols-1 gap-4 pr-4">
                 {suggestions.map((post) => (
-                  <Link
-                    key={post.post_id}
-                    href={"/view/feed/" + post.post_id}
-                  >
+                  <Link key={post.post_id} href={"/view/feed/" + post.post_id}>
                     <CompanyPostPreview post={post} />
                   </Link>
                 ))}
@@ -89,9 +89,7 @@ export default async function FeedPostPage({ params }: FeedPostPageProps) {
             </ScrollArea>
           ) : (
             <Card className="p-12 text-center">
-              <p className="text-muted-foreground">
-                No similar posts found.
-              </p>
+              <p className="text-muted-foreground">No similar posts found.</p>
             </Card>
           )}
         </div>
