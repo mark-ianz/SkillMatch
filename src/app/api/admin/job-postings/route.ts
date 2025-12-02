@@ -45,7 +45,7 @@ export async function GET(request: NextRequest) {
           job_responsibilities: job.job_responsibilities
             ? job.job_responsibilities.split(",")
             : [],
-          courses_requiredjo: job.courses_required
+          courses_required: job.courses_required
             ? job.courses_required.split(",")
             : [],
           job_categories: job.job_categories
