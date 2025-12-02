@@ -11,9 +11,11 @@ import { CompanyCardSkeleton } from "@/components/common/skeleton/JobPostSkeleto
 import { motion } from "framer-motion";
 
 export function SuggestedCompanies() {
-  const { data: session } = useSession();
+  const { data: session, status } = useSession();
   const { data: companies, isLoading } = useSuggestedCompanies();
 
+  const isLoadingAll = status === "loading" || isLoading;
+  
   // Don't show for company users
   if (session?.user?.role_id && getRoleName(session.user.role_id) !== "Applicant") {
     return null;
@@ -28,7 +30,7 @@ export function SuggestedCompanies() {
         </CardTitle>
       </CardHeader>
       <CardContent className="p-0">
-        {isLoading ? (
+        {isLoadingAll ? (
           <div className="flex flex-col gap-4">
             {[...Array(3)].map((_, i) => (
               <CompanyCardSkeleton key={i} />
