@@ -4,7 +4,9 @@ import { useNotifications, useMarkNotificationAsRead, useMarkAllNotificationsAsR
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Bell, CheckCheck, Loader2 } from "lucide-react";
+import { Bell, CheckCheck, ClipboardList, Calendar, PartyPopper } from "lucide-react";
+import { Skeleton } from "@/components/ui/skeleton";
+import { motion } from "framer-motion";
 import { formatDistanceToNow } from "date-fns";
 import { useRouter } from "next/navigation";
 import { Notification } from "@/types/notification.types";
@@ -42,31 +44,73 @@ export default function NotificationsPage() {
   };
 
   const getNotificationIcon = (type: string) => {
+    const iconClass = "h-6 w-6 text-skillmatch-primary-green";
     switch (type) {
       case "application_status_update":
-        return "📋";
+        return <ClipboardList className={iconClass} />;
       case "interview_scheduled":
-        return "📅";
+        return <Calendar className={iconClass} />;
       case "offer_sent":
-        return "🎉";
+        return <PartyPopper className={iconClass} />;
       default:
-        return "🔔";
+        return <Bell className={iconClass} />;
     }
   };
 
   if (isLoading) {
     return (
-      <div className="container mx-auto px-4 py-8">
-        <div className="flex items-center justify-center min-h-[400px]">
-          <Loader2 className="h-8 w-8 animate-spin text-muted-foreground" />
+      <>
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.3 }}
+          className="mb-6"
+        >
+          <Skeleton className="h-9 w-48 mb-2" />
+          <Skeleton className="h-5 w-64" />
+        </motion.div>
+
+        <div className="space-y-2">
+          {[...Array(5)].map((_, index) => (
+            <motion.div
+              key={index}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.3, delay: index * 0.05 }}
+            >
+              <Card>
+                <CardHeader className="pb-3">
+                  <div className="flex items-start justify-between gap-4">
+                    <div className="flex items-start gap-3 flex-1">
+                      <Skeleton className="h-6 w-6 mt-1 rounded-md" />
+                      <div className="flex-1 min-w-0 space-y-2">
+                        <div className="flex items-center gap-2">
+                          <Skeleton className="h-5 w-48" />
+                          <Skeleton className="h-5 w-12" />
+                        </div>
+                        <Skeleton className="h-4 w-full" />
+                        <Skeleton className="h-4 w-3/4" />
+                      </div>
+                    </div>
+                    <Skeleton className="h-4 w-20" />
+                  </div>
+                </CardHeader>
+              </Card>
+            </motion.div>
+          ))}
         </div>
-      </div>
+      </>
     );
   }
 
   return (
     <>
-      <div className="mb-6">
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.3 }}
+        className="mb-6"
+      >
         <div className="flex items-center justify-between mb-2">
           <h1 className="text-3xl font-bold">Notifications</h1>
           {unreadCount > 0 && (
@@ -86,10 +130,15 @@ export default function NotificationsPage() {
             ? `You have ${unreadCount} unread notification${unreadCount > 1 ? "s" : ""}`
             : "You're all caught up!"}
         </p>
-      </div>
+      </motion.div>
 
       {!notifications || notifications.length === 0 ? (
-        <Card>
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.3, delay: 0.1 }}
+        >
+          <Card>
           <CardContent className="flex flex-col items-center justify-center py-16">
             <Bell className="h-16 w-16 text-muted-foreground/50 mb-4" />
             <h3 className="text-lg font-semibold mb-2">No notifications yet</h3>
@@ -98,12 +147,18 @@ export default function NotificationsPage() {
             </p>
           </CardContent>
         </Card>
+        </motion.div>
       ) : (
         <div className="space-y-2">
-          {notifications.map((notification) => (
-            <Card
+          {notifications.map((notification, index) => (
+            <motion.div
               key={notification.notification_id}
-              className={`cursor-pointer transition-all hover:shadow-md ${
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.3, delay: index * 0.05 }}
+            >
+              <Card
+                className={`cursor-pointer transition-all hover:shadow-md ${
                 !notification.is_read
                   ? "border-l-4 border-l-skillmatch-primary-green bg-green-50/30"
                   : ""
@@ -113,9 +168,9 @@ export default function NotificationsPage() {
               <CardHeader className="pb-3">
                 <div className="flex items-start justify-between gap-4">
                   <div className="flex items-start gap-3 flex-1">
-                    <span className="text-2xl mt-1">
+                    <div className="mt-1">
                       {getNotificationIcon(notification.type)}
-                    </span>
+                    </div>
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center gap-2 mb-1">
                         <CardTitle className="text-base">
@@ -141,6 +196,7 @@ export default function NotificationsPage() {
                 </div>
               </CardHeader>
             </Card>
+            </motion.div>
           ))}
         </div>
       )}
