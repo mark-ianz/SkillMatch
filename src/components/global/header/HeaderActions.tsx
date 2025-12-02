@@ -16,7 +16,7 @@ export default function HeaderActions() {
   const role_id = session?.user?.role_id;
   const status_id = session?.user?.status_id;
   const role = getRoleName(role_id);
-  const isActive = status_id === 1;
+  const isActive = status_id === 1 || role_id === 2; /* admin */
 
   // Determine user type based on current path
   const isCompanyPath = pathname?.startsWith("/company");
