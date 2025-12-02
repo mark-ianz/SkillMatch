@@ -4,23 +4,14 @@ import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Bookmark } from "lucide-react";
 import type { CompanyPost as CompanyPostType } from "@/types/company_post.types";
 import { ReactionButton } from "./ReactionButton";
 import { ReactionsModal } from "./ReactionsModal";
 import placeholder_image from "@/images/placeholder_image.avif";
 import { CopyLinkButton } from "@/components/common/button/CopyLinkButton";
 import DateDifference from "@/components/common/DateDifference";
-import { useSession } from "next-auth/react";
-import { SignInPromptDialog } from "@/components/common/SignInPromptDialog";
-import {
-  useIsPostSaved,
-  useSavePost,
-  useUnsavePost,
-} from "@/hooks/query/useSavedItems";
-import { cn } from "@/lib/utils";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { SavePostButton } from "./SavePostButton";
 
 interface CompanyPostProps {
   post: CompanyPostType;
@@ -28,25 +19,7 @@ interface CompanyPostProps {
 
 export function CompanyPost({ post }: CompanyPostProps) {
   const [showReactionsModal, setShowReactionsModal] = useState(false);
-  const [showSignInDialog, setShowSignInDialog] = useState(false);
   const [isContentExpanded, setIsContentExpanded] = useState(false);
-  const { data: session } = useSession();
-  const isSaved = useIsPostSaved(post.post_id);
-  const savePostMutation = useSavePost();
-  const unsavePostMutation = useUnsavePost();
-
-  const handleSavePost = () => {
-    if (!session) {
-      setShowSignInDialog(true);
-      return;
-    }
-
-    if (isSaved) {
-      unsavePostMutation.mutate(post.post_id);
-    } else {
-      savePostMutation.mutate(post.post_id);
-    }
-  };
 
   const baseUrl =
     process.env.NEXT_PUBLIC_FRONTEND_BASE_URL ||
@@ -123,28 +96,7 @@ export function CompanyPost({ post }: CompanyPostProps) {
             />
 
             <div className="ml-auto flex items-center gap-1">
-              {/* Save button - Only visible for applicants (role_id 3) */}
-              {session?.user?.role_id === 3 && (
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  onClick={handleSavePost}
-                  disabled={
-                    savePostMutation.isPending || unsavePostMutation.isPending
-                  }
-                  className="gap-2 h-9 text-skillmatch-muted-dark hover:text-foreground hover:bg-muted/50 transition-colors"
-                >
-                  <Bookmark
-                    className={cn(
-                      "w-4 h-4 transition-all",
-                      isSaved && "fill-current text-primary"
-                    )}
-                  />
-                  <span className="text-xs font-medium">
-                    {isSaved ? "Saved" : "Save"}
-                  </span>
-                </Button>
-              )}
+              <SavePostButton postId={post.post_id} />
 
               <CopyLinkButton
                 url={postUrl}
@@ -163,13 +115,6 @@ export function CompanyPost({ post }: CompanyPostProps) {
         open={showReactionsModal}
         onOpenChange={setShowReactionsModal}
         post_id={post.post_id}
-      />
-
-      <SignInPromptDialog
-        open={showSignInDialog}
-        onOpenChange={setShowSignInDialog}
-        title="Save this post for later"
-        description="Sign in to save posts and access them anytime from your saved items."
       />
     </>
   );

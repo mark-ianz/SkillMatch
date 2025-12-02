@@ -1,28 +1,20 @@
 "use client";
 
 import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
 import { JobPost } from "@/types/job_post.types";
-import { Bookmark, Briefcase } from "lucide-react";
+import { Briefcase } from "lucide-react";
 import Image from "next/image";
 import { CopyLinkButton } from "@/components/common/button/CopyLinkButton";
 import { Separator } from "@/components/ui/separator";
 import MatchedBadges from "../explore/job-postings/sub-components/MatchedBadges";
 import JobCategories from "../explore/job-postings/sub-components/JobCategories";
-import {
-  useIsJobSaved,
-  useSaveJob,
-  useUnsaveJob,
-} from "@/hooks/query/useSavedItems";
-import { useSession } from "next-auth/react";
-import { SignInPromptDialog } from "@/components/common/SignInPromptDialog";
-import { useState } from "react";
 import Location from "../explore/job-postings/sub-components/Location";
 import { JobStatusBadge } from "@/components/common/JobStatusBadge";
 import { ApplyButton } from "./ApplyButton";
 import LinkWithIcon from "@/components/global/LinkWithIcon";
+import { SaveJobButton } from "./SaveJobButton";
 
 export function JobPostFullInfo({
   job,
@@ -35,25 +27,6 @@ export function JobPostFullInfo({
   apply_button_classname?: string;
   isFullView?: boolean;
 }) {
-  const { data: session, status } = useSession();
-  const [showSignInDialog, setShowSignInDialog] = useState(false);
-  const isSaved = useIsJobSaved(job?.job_post_id);
-  const saveJobMutation = useSaveJob();
-  const unsaveJobMutation = useUnsaveJob();
-
-  const handleSave = () => {
-    if (!session) {
-      setShowSignInDialog(true);
-      return;
-    }
-
-    if (isSaved) {
-      unsaveJobMutation.mutate(job?.job_post_id);
-    } else {
-      saveJobMutation.mutate(job?.job_post_id);
-    }
-  };
-
   const baseUrl =
     process.env.NEXT_PUBLIC_FRONTEND_BASE_URL ||
     (typeof window !== "undefined" ? window.location.origin : "");
@@ -106,33 +79,13 @@ export function JobPostFullInfo({
 
             {/* Action buttons */}
             <div className="flex gap-2 md:self-start">
-              {/* Bookmark button - Only visible for applicants (role_id 3) */}
-              {session?.user?.role_id === 3 && (
-                <Button
-                  aria-label={isSaved ? "Unsave Job" : "Save Job"}
-                  variant="ghost"
-                  size="icon"
-                  onClick={handleSave}
-                  disabled={
-                    saveJobMutation.isPending || unsaveJobMutation.isPending
-                  }
-                  className="rounded-lg h-10 w-10"
-                >
-                  <Bookmark
-                    className={cn("w-5 h-5", isSaved && "fill-current")}
-                  />
-                </Button>
-              )}
+              <SaveJobButton
+                jobPostId={job?.job_post_id}
+                className="rounded-lg h-10 w-10"
+              />
               <CopyLinkButton url={jobPostUrl} />
             </div>
           </div>
-
-          <SignInPromptDialog
-            open={showSignInDialog}
-            onOpenChange={setShowSignInDialog}
-            title="Save this job for later"
-            description="Sign in to save jobs and access them anytime from your saved items."
-          />
 
           <div className="space-y-2">
             {/* Job meta information */}
@@ -165,21 +118,15 @@ export function JobPostFullInfo({
             </div>
 
             {/* Apply Button - Will not be shown if the role is admin and company */}
-            {!(
-              session?.user?.role_id === 2 ||
-              session?.user?.role_id === 4 ||
-              status === "loading"
-            ) && (
-              <ApplyButton
-                jobPostId={job.job_post_id}
-                jobTitle={job.job_title}
-                companyName={job.company_name!}
-                className={cn(
-                  "w-full h-11 text-base font-medium",
-                  apply_button_classname
-                )}
-              />
-            )}
+            <ApplyButton
+              jobPostId={job.job_post_id}
+              jobTitle={job.job_title}
+              companyName={job.company_name!}
+              className={cn(
+                "w-full h-11 text-base font-medium",
+                apply_button_classname
+              )}
+            />
           </div>
         </div>
 

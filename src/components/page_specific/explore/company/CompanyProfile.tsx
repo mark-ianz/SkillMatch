@@ -5,7 +5,6 @@ import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 import {
-  Bookmark,
   Globe,
   Mail,
   Facebook,
@@ -21,15 +20,8 @@ import { CompanyProfile as CompanyProfileType } from "@/types/company.types";
 import { formatDate } from "date-fns";
 import CompanyEmptyImage from "./CompanyEmptyImage";
 import { CopyLinkButton } from "@/components/common/button/CopyLinkButton";
-import {
-  useIsCompanySaved,
-  useSaveCompany,
-  useUnsaveCompany,
-} from "@/hooks/query/useSavedItems";
-import { useSession } from "next-auth/react";
-import { SignInPromptDialog } from "@/components/common/SignInPromptDialog";
-import { useState } from "react";
 import LinkWithIcon from "@/components/global/LinkWithIcon";
+import { SaveCompanyButton } from "./SaveCompanyButton";
 
 export function CompanyProfile({
   className,
@@ -40,26 +32,6 @@ export function CompanyProfile({
   company: CompanyProfileType;
   isFullView?: boolean;
 }) {
-  const { data: session } = useSession();
-  const [showSignInDialog, setShowSignInDialog] = useState(false);
-  const isSaved = useIsCompanySaved(company?.company_id);
-  const saveCompanyMutation = useSaveCompany();
-  const unsaveCompanyMutation = useUnsaveCompany();
-
-  const handleSave = () => {
-    console.log(session);
-    if (!session) {
-      setShowSignInDialog(true);
-      return;
-    }
-
-    if (isSaved) {
-      unsaveCompanyMutation.mutate(company?.company_id);
-    } else {
-      saveCompanyMutation.mutate(company?.company_id);
-    }
-  };
-
   const baseUrl =
     process.env.NEXT_PUBLIC_FRONTEND_BASE_URL ||
     (typeof window !== "undefined" ? window.location.origin : "");
@@ -97,23 +69,7 @@ export function CompanyProfile({
                 </h1>
               )}
               <div className="flex gap-2 flex-shrink-0">
-                {/* Bookmark button - Only visible for applicants (role_id 3) */}
-                {session?.user?.role_id === 3 && (
-                  <Button
-                    variant="ghost"
-                    size="icon"
-                    onClick={handleSave}
-                    disabled={
-                      saveCompanyMutation.isPending ||
-                      unsaveCompanyMutation.isPending
-                    }
-                    className="h-9 w-9"
-                  >
-                    <Bookmark
-                      className={cn("w-4 h-4", isSaved && "fill-current")}
-                    />
-                  </Button>
-                )}
+                <SaveCompanyButton companyId={company?.company_id} />
                 <CopyLinkButton
                   url={companyUrl}
                   size="icon"
@@ -319,13 +275,6 @@ export function CompanyProfile({
           </div>
         </>
       )}
-
-      <SignInPromptDialog
-        open={showSignInDialog}
-        onOpenChange={setShowSignInDialog}
-        title="Save this company for later"
-        description="Sign in to save companies and access them anytime from your saved items."
-      />
     </Card>
   );
 }
