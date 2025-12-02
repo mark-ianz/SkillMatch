@@ -8,6 +8,7 @@ import { getRoleName } from "@/lib/utils";
 import { getServerSession } from "next-auth";
 import { authConfig } from "@/lib/auth";
 import { Separator } from "@/components/ui/separator";
+import { ScrollArea } from "@/components/ui/scroll-area";
 
 export default async function FeedPage() {
   const session = await getServerSession(authConfig);
@@ -30,10 +31,14 @@ export default async function FeedPage() {
             </Link>
           )}
 
-          <div className="min-w-80 flex-shrink-0 h-fit flex flex-col gap-10">
-            <SidebarProfile />
-            <Separator/>
-            <SuggestedCompanies />
+          <div className="sticky top-24 min-w-80 flex-shrink-0">
+            <ScrollArea className="h-[calc(100vh-7rem)]">
+              <div className="flex flex-col gap-10 pr-4">
+                <SidebarProfile />
+                <Separator/>
+                <SuggestedCompanies />
+              </div>
+            </ScrollArea>
           </div>
         </div>
 
