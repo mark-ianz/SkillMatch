@@ -64,7 +64,7 @@ export default function CompanyHeroSection() {
               transition={{ duration: 0.5, delay: 0.5 }}
               className="flex flex-col sm:flex-row gap-4"
             >
-              <Link href="/signup">
+              <Link href="/signup?type=company">
                 <Button
                   size="lg"
                   className="text-lg bg-skillmatch-primary-blue text-white hover:bg-skillmatch-primary-blue/90 transition-all hover:scale-105"

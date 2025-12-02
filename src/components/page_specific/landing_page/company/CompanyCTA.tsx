@@ -44,7 +44,7 @@ export default function CompanyCTA() {
               transition={{ duration: 0.5, delay: 0.4 }}
               className="flex flex-col sm:flex-row gap-4 justify-center"
             >
-            <Link href="/signup">
+            <Link href="/signup?type=company">
               <Button
                 size="lg"
                 className="text-sm bg-skillmatch-light text-skillmatch-dark hover:bg-skillmatch-light/90"
