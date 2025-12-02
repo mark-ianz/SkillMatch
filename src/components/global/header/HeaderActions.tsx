@@ -39,13 +39,13 @@ export default function HeaderActions() {
   if (!role_id) {
     return (
       <div className="flex gap-2">
-        <Button asChild variant="outline" size="sm">
+        <Button asChild variant="outline" size="sm" className="text-xs sm:text-sm px-2 sm:px-4">
           <Link href={`/signin?type=${userType}`}>Sign In</Link>
         </Button>
         <Button
           asChild
           size="sm"
-          className={cn("bg-skillmatch-primary-green text-skillmatch-light hover:bg-skillmatch-primary-green/90", userType === "company" && "bg-skillmatch-primary-blue hover:bg-skillmatch-primary-blue/90")}
+          className={cn("bg-skillmatch-primary-green text-skillmatch-light hover:bg-skillmatch-primary-green/90 text-xs sm:text-sm px-2 sm:px-4", userType === "company" && "bg-skillmatch-primary-blue hover:bg-skillmatch-primary-blue/90")}
         >
           <Link href={`/signup?type=${userType}`}>Get Started</Link>
         </Button>
