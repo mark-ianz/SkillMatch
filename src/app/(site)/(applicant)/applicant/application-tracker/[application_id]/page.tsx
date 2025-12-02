@@ -125,18 +125,6 @@ export default function ApplicationDetailsPage() {
     );
   };
 
-  if (isLoading) {
-    return (
-      <div className="container max-w-4xl py-8">
-        <div className="flex items-center justify-center py-12">
-          <p className="text-muted-foreground">
-            Loading application details...
-          </p>
-        </div>
-      </div>
-    );
-  }
-
   if (!application) {
     return (
       <div className="container max-w-4xl py-8">
