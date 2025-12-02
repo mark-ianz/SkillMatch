@@ -3,6 +3,7 @@ import DynamicLogo from "../DynamicLogo";
 import NavigationMenuUniversal from "./NavigationMenuUniversal";
 import HeaderActions from "./HeaderActions";
 import { Roles } from "@/types/role.types";
+import MobileMenu from "./MobileMenu";
 
 export default async function UniversalHeader({ role }: { role?: Roles }) {
   return (
@@ -10,9 +11,16 @@ export default async function UniversalHeader({ role }: { role?: Roles }) {
       <div className="container mx-auto px-4 lg:px-8">
         <div className="flex items-center justify-between h-16">
           <DynamicLogo role={role} />
-          <div className="flex items-center gap-4">
+          
+          {/* Desktop Navigation */}
+          <div className="hidden md:flex items-center gap-4">
             <NavigationMenuUniversal />
             <HeaderActions />
+          </div>
+
+          {/* Mobile Menu */}
+          <div className="md:hidden">
+            <MobileMenu />
           </div>
         </div>
       </div>
