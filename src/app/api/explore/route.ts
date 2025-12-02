@@ -29,7 +29,7 @@ export async function GET(request: NextRequest) {
         >(
           `SELECT ap.skills, ap.course 
            FROM applicant_profile ap
-           JOIN user u ON ap.applicant_id = u.applicant_id
+           JOIN user u ON ap.user_id = u.user_id
            WHERE u.user_id = ?`,
           [userId]
         );
