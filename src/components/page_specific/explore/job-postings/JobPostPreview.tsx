@@ -21,11 +21,9 @@ export function JobPostPreview({
   return (
     <div
       className={cn(
-        "group shadow-sm cursor-pointer rounded-lg border border-border/40 bg-background p-5 transition-all hover:border-border hover:shadow-sm hover:scale-[1.01]",
+        "group shadow-sm cursor-pointer rounded-lg border border-border/40 bg-background p-5 transition-all hover:border-skillmatch-primary-green hover:shadow-sm hover:scale-[1.01]",
         className,
-        isSelected
-          ? "border-skillmatch-primary-green hover:border-skillmatch-primary-green"
-          : "border-border/40 hover:border-border"
+        isSelected && "border-skillmatch-primary-green"
       )}
     >
       <JobPreviewHeader job={job} />
@@ -39,9 +37,7 @@ export function JobPostPreview({
       </div>
 
       {/* Company name and Status */}
-      <p className="text-sm text-muted-foreground mb-4">
-        {job.company_name}
-      </p>
+      <p className="text-sm text-muted-foreground mb-4">{job.company_name}</p>
 
       <div className="flex items-center gap-4 text-xs text-muted-foreground flex-wrap">
         <Location
