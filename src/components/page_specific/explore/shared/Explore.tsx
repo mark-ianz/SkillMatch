@@ -26,7 +26,7 @@ export default function Explore({}) {
       <JobExploreHeader />
 
       {/* Job List - Scrollable */}
-      <div className="overflow-y-hidden space-y-3">
+      <div className="overflow-y-hidden space-y-3 p-1">
         {exploreType === "job-postings" ? <JobPostExplore /> : <CompanyExplore />}
       </div>
     </div>

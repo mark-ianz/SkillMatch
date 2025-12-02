@@ -102,7 +102,7 @@ export default async function JobPostPage({ params }: JobPostPageProps) {
 
           {suggestions && suggestions.length > 0 ? (
             <ScrollArea className="h-96">
-              <div className="grid grid-cols-1 gap-4 pr-4">
+              <div className="grid grid-cols-1 gap-4 pr-4 p-2">
                 {suggestions.map((job) => (
                   <Link
                     key={job.job_post_id}

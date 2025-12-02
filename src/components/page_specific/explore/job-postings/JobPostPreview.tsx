@@ -21,7 +21,7 @@ export function JobPostPreview({
   return (
     <div
       className={cn(
-        "group shadow-sm cursor-pointer rounded-lg border border-border/40 bg-background p-5 transition-all hover:border-border hover:shadow-sm",
+        "group shadow-sm cursor-pointer rounded-lg border border-border/40 bg-background p-5 transition-all hover:border-border hover:shadow-sm hover:scale-[1.01]",
         className,
         isSelected
           ? "border-skillmatch-primary-green hover:border-skillmatch-primary-green"
