@@ -46,7 +46,7 @@ export function AnimatedCompanyContent({
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.4, delay: 0.2 }}
-        className="space-y-6 grow"
+        className="space-y-6 grow w-full"
       >
         <div className="flex items-center justify-between">
           <h2 className="text-2xl font-bold text-foreground">
