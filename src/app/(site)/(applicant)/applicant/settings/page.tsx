@@ -2,7 +2,7 @@
 
 import { useEffect } from "react";
 import { motion } from "framer-motion";
-import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { AnimatedTabsRoot, AnimatedTabsList, AnimatedTabsTrigger } from "@/components/ui/animated-tabs";
 import { useUserSettings } from "@/hooks/query/useUserSettings";
 import PersonalInfoTab from "@/components/page_specific/settings/PersonalInfoTab";
 import AccountTab from "@/components/page_specific/settings/AccountTab";
@@ -88,20 +88,21 @@ export default function ApplicantSettingsPage() {
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.3, delay: 0.1 }}
+        className="w-full"
       >
-        <Tabs defaultValue="personal" className="space-y-4">
-          <TabsList className="grid w-full grid-cols-4 lg:w-auto lg:inline-grid">
-            <TabsTrigger value="personal">Personal</TabsTrigger>
-            <TabsTrigger value="account">Account</TabsTrigger>
-            <TabsTrigger value="availability">Availability</TabsTrigger>
-            <TabsTrigger value="education">Education</TabsTrigger>
-          </TabsList>
+        <AnimatedTabsRoot defaultValue="personal" className="space-y-4 w-full">
+          <AnimatedTabsList className="grid w-full grid-cols-4 ">
+            <AnimatedTabsTrigger value="personal">Personal</AnimatedTabsTrigger>
+            <AnimatedTabsTrigger value="account">Account</AnimatedTabsTrigger>
+            <AnimatedTabsTrigger value="availability">Availability</AnimatedTabsTrigger>
+            <AnimatedTabsTrigger value="education">Education</AnimatedTabsTrigger>
+          </AnimatedTabsList>
 
           <PersonalInfoTab />
           <AccountTab />
           <AvailabilityTab />
           <EducationTab />
-        </Tabs>
+        </AnimatedTabsRoot>
       </motion.div>
     </>
   );
