@@ -4,6 +4,7 @@ import { AnimatedCompanyContent } from "@/components/page_specific/explore/compa
 import { getServerSession } from "next-auth";
 import { authConfig } from "@/lib/auth";
 import { getRoleName } from "@/lib/utils";
+import { notFound } from "next/navigation";
 
 export default async function CompanyProfilePage({
   params,
@@ -20,16 +21,9 @@ export default async function CompanyProfilePage({
   const { company_profile, job_posted } =
     await CompanyServices.getCompanyWithJobs(company_id, user_id, role_name);
 
-  if (!company_profile) {
-    return (
-      <MainLayout>
-        <div className="flex items-center justify-center">
-          <p className="text-destructive">
-            Failed to load company profile. Please try again later.
-          </p>
-        </div>
-      </MainLayout>
-    );
+  // Show 404 if company doesn't exist or has no active job posts
+  if (!company_profile || job_posted.length === 0) {
+    notFound();
   }
 
   return (
