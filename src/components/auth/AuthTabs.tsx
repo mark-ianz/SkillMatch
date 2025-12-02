@@ -2,11 +2,17 @@
 
 import React, { useEffect, useState } from "react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
+import {
+  AnimatedTabsRoot,
+  AnimatedTabsList,
+  AnimatedTabsTrigger,
+  AnimatedTabsContent,
+} from "@/components/ui/animated-tabs";
 import { SigninForm } from "@/components/auth/SigninForm";
 import { SignupForm } from "@/components/auth/SignupForm";
 import ErrorAlert from "@/components/common/ErrorAlert";
 import { getAuthError, getAuthStatus, AuthError } from "@/lib/auth-errors";
+import { motion, AnimatePresence } from "framer-motion";
 
 export default function AuthTabs() {
   const router = useRouter();
@@ -41,43 +47,64 @@ export default function AuthTabs() {
     params.delete("error");
     params.delete("status");
     router.push(`${pathname}?${params.toString()}`);
-  }
-
-  return (
-    <Tabs
+  }  return (
+    <AnimatedTabsRoot
       onValueChange={handleTabChange}
       defaultValue={type}
       className="w-full"
     >
-      <TabsContent value="applicant" className="border-r border-y rounded-r-md p-4 space-y-4">
+      <AnimatedTabsContent
+        value="applicant"
+        className="border-r border-y rounded-r-md p-4 space-y-4"
+      >
         <TabList />
         {authError && <ErrorAlert error={authError} />}
-        {isSignupRoute && <SignupForm mode="applicant" />}
-        {isSigninRoute && <SigninForm mode="applicant" />}
-      </TabsContent>
+        <AnimatePresence mode="wait">
+          <motion.div
+            key={isSignupRoute ? "signup-applicant" : "signin-applicant"}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.15 }}
+          >
+            {isSignupRoute && <SignupForm mode="applicant" />}
+            {isSigninRoute && <SigninForm mode="applicant" />}
+          </motion.div>
+        </AnimatePresence>
+      </AnimatedTabsContent>
 
-      <TabsContent
+      <AnimatedTabsContent
         value="company"
         className="border-r border-y rounded-r-md p-4 space-y-4"
       >
         <TabList />
         {authError && <ErrorAlert error={authError} />}
-        {isSignupRoute && <SignupForm mode="company" />}
-        {isSigninRoute && <SigninForm mode="company" />}
-      </TabsContent>
-    </Tabs>
+        <AnimatePresence mode="wait">
+          <motion.div
+            key={isSignupRoute ? "signup-company" : "signin-company"}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.15 }}
+          >
+            {isSignupRoute && <SignupForm mode="company" />}
+            {isSigninRoute && <SigninForm mode="company" />}
+          </motion.div>
+        </AnimatePresence>
+      </AnimatedTabsContent>
+    </AnimatedTabsRoot>
   );
 }
 
 function TabList() {
   return (
-    <TabsList className="grid w-full grid-cols-2">
-      <TabsTrigger className="cursor-pointer" value="applicant">
+    <AnimatedTabsList className="grid w-full grid-cols-2">
+      <AnimatedTabsTrigger className="cursor-pointer" value="applicant">
         Applicant
-      </TabsTrigger>
-      <TabsTrigger className="cursor-pointer" value="company">
+      </AnimatedTabsTrigger>
+      <AnimatedTabsTrigger className="cursor-pointer" value="company">
         Company
-      </TabsTrigger>
-    </TabsList>
+      </AnimatedTabsTrigger>
+    </AnimatedTabsList>
   );
 }

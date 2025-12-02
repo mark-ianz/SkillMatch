@@ -7,6 +7,7 @@ import signup_general from "@/images/auth/signup_general.jpg";
 import signin_general from "@/images/auth/signin_general.jpg";
 import { usePathname, useSearchParams } from "next/navigation";
 import { Skeleton } from "@/components/ui/skeleton";
+import { motion, AnimatePresence } from "framer-motion";
 
 function LayoutContent() {
   const pathName = usePathname();
@@ -34,13 +35,22 @@ function LayoutContent() {
           {/* subtle dim overlay */}
           <div className="absolute inset-0 bg-black/60" />
 
-          <div className="relative text-skillmatch-light z-20 max-w-md text-center">
-            <p className="text-3xl font-thin">{tagline}</p>
-            <p className="mt-2 text-sm">{description}</p>
-          </div>
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={`${isApplicant}-${isSignup}`}
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -10 }}
+              transition={{ duration: 0.4, ease: "easeOut" }}
+              className="relative text-skillmatch-light z-20 max-w-md text-center"
+            >
+              <p className="text-3xl font-thin">{tagline}</p>
+              <p className="mt-2 text-sm">{description}</p>
+            </motion.div>
+          </AnimatePresence>
         </div>
 
-        <div className="w-full md:w-1/2">
+        <div className="w-full md:w-1/2 h-full">
           <AuthTabs />
         </div>
       </div>
