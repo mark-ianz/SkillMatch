@@ -140,8 +140,42 @@ export const CompanyServices = {
     }
   },
 
-  getCompanyWithJobs: async (company_id: string): Promise<{ company_profile: CompanyProfile, job_posted: JobPost[] }> => {
+  getCompanyWithJobs: async (
+    company_id: string,
+    userId?: number | string,
+    roleName?: string
+  ): Promise<{ company_profile: CompanyProfile, job_posted: JobPost[] }> => {
     try {
+      // Fetch user skills and course if Applicant user
+      let userSkills: string[] = [];
+      let userCourse: string | null = null;
+      if (userId && roleName === "Applicant") {
+        try {
+          const [profileRows] = await db.query<
+            (RowDataPacket & { skills: string | null; course: string | null })[]
+          >(`SELECT skills, course FROM applicant_profile WHERE user_id = ?`, [
+            userId,
+          ]);
+
+          if (profileRows.length > 0) {
+            // Get skills
+            if (profileRows[0].skills) {
+              userSkills = profileRows[0].skills
+                .split(",")
+                .map((skill) => skill.trim().toLowerCase())
+                .filter((skill) => skill.length > 0);
+            }
+            // Get course abbreviation and convert to full course name
+            if (profileRows[0].course) {
+              const courseAbbr = profileRows[0].course;
+              userCourse = getCourseByAbbr(courseAbbr);
+            }
+          }
+        } catch (error) {
+          console.error("Error fetching user profile:", error);
+        }
+      }
+
       // Fetch company profile (excluding private document paths)
       const [companyRows] = await db.query<RowDataPacket[]>(
         `SELECT 
@@ -194,27 +228,54 @@ export const CompanyServices = {
         [company_id]
       );
 
-      const job_posted = jobRows.map((row) => ({
-        ...row,
-        courses_required: row.courses_required
-          ? row.courses_required.split(",").map((course: string) => course.trim())
-          : [],
-        job_categories: row.job_categories
-          ? row.job_categories.split(",").map((cat: string) => cat.trim())
-          : [],
-        job_responsibilities: row.job_responsibilities
-          ? row.job_responsibilities.split(",").map((resp: string) => resp.trim())
-          : [],
-        soft_skills: row.soft_skills
-          ? row.soft_skills.split(",").map((skill: string) => skill.trim())
-          : [],
-        technical_skills: row.technical_skills
+      const job_posted = jobRows.map((row) => {
+        const technicalSkillsArray = row.technical_skills
           ? row.technical_skills.split(",").map((skill: string) => skill.trim())
-          : [],
-        industry: row.industry
-          ? row.industry.split(",").map((ind: string) => ind.trim())
-          : null,
-      })) as JobPost[];
+          : [];
+
+        const coursesRequiredArray = row.courses_required
+          ? row.courses_required.split(",").map((c: string) => c.trim())
+          : [];
+
+        // Calculate skill match count for Applicant users
+        let matchCount = 0;
+        if (userSkills.length > 0) {
+          const postSkillsLowerCase = technicalSkillsArray.map((s: string) =>
+            s.toLowerCase()
+          );
+          matchCount = userSkills.filter((userSkill) =>
+            postSkillsLowerCase.includes(userSkill)
+          ).length;
+        }
+
+        // Check if user's course matches any of the required courses
+        const courseMatched = userCourse
+          ? coursesRequiredArray.some(
+              (requiredCourse: string) =>
+                requiredCourse.toLowerCase() === userCourse.toLowerCase()
+            )
+          : false;
+
+        return {
+          ...row,
+          courses_required: coursesRequiredArray,
+          job_categories: row.job_categories
+            ? row.job_categories.split(",").map((cat: string) => cat.trim())
+            : [],
+          job_responsibilities: row.job_responsibilities
+            ? row.job_responsibilities.split(",").map((resp: string) => resp.trim())
+            : [],
+          soft_skills: row.soft_skills
+            ? row.soft_skills.split(",").map((skill: string) => skill.trim())
+            : [],
+          technical_skills: technicalSkillsArray,
+          industry: row.industry
+            ? row.industry.split(",").map((ind: string) => ind.trim())
+            : null,
+          skill_match_count: matchCount,
+          course_matched: courseMatched,
+        };
+      }) as JobPost[];
 
       return { company_profile, job_posted }
     } catch (error) {
