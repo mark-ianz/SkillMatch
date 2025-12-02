@@ -1,8 +1,6 @@
 import { Badge } from "@/components/ui/badge";
 import { Card } from "@/components/ui/card";
-import { ScrollArea } from "@/components/ui/scroll-area";
 import MainLayout from "@/components/layout/MainLayout";
-import { JobPostPreview } from "@/components/page_specific/explore/job-postings/JobPostPreview";
 import { JobPostFullInfo } from "@/components/page_specific/job_postings/JobPostFullInfo";
 import Link from "next/link";
 import { authConfig } from "@/lib/auth";
@@ -12,6 +10,9 @@ import { redirect } from "next/navigation";
 import { getRoleName } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { ArrowLeft } from "lucide-react";
+import { AnimatedJobContent } from "@/components/page_specific/job_postings/AnimatedJobContent";
+import { ScrollArea } from "@/components/ui/scroll-area";
+import { JobPostPreview } from "@/components/page_specific/explore/job-postings/JobPostPreview";
 
 interface JobPostPageProps {
   params: Promise<{
@@ -64,7 +65,8 @@ export default async function JobPostPage({ params }: JobPostPageProps) {
   return (
     <MainLayout className="items-center" wrapperClassName="w-full">
       <div className="gap-10 flex flex-col items-center container max-w-5xl">
-        <div className="flex flex-col gap-4">
+        {/* Main Content */}
+        <AnimatedJobContent>
           {/* Back Button */}
           <Link href="/explore/job-postings" className="self-start">
             <Button variant="ghost">
@@ -74,8 +76,12 @@ export default async function JobPostPage({ params }: JobPostPageProps) {
           </Link>
 
           {/* Job Post Full Info */}
-          <JobPostFullInfo apply_full_width={false} job={jobPost} className="w-full" />
-        </div>
+          <JobPostFullInfo
+            apply_full_width={false}
+            job={jobPost}
+            className="w-full"
+          />
+        </AnimatedJobContent>
 
         {/* Job Suggestions Section */}
         <div className="space-y-6 w-full">
