@@ -1,4 +1,4 @@
-import { JobExploreFilter } from "@/components/page_specific/explore/job-postings/JobExploreFilter";
+import JobExploreFilter from "@/components/page_specific/explore/job-postings/JobExploreFilter";
 import MainLayout from "@/components/layout/MainLayout";
 import Explore from "@/components/page_specific/explore/shared/Explore";
 import ExploreFullInfo from "@/components/page_specific/explore/shared/ExploreFullInfo";

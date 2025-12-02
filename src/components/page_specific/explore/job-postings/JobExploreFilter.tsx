@@ -1,43 +1,37 @@
-"use client";
+"use client"
 
-import { useEffect, useState } from "react";
-import { useRouter, useSearchParams } from "next/navigation";
-import { Card } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Checkbox } from "@/components/ui/checkbox";
-import { Label } from "@/components/ui/label";
-import { Input } from "@/components/ui/input";
-import { Filter, X, ChevronDown, ChevronUp, Search } from "lucide-react";
-import { JobExploreFilters } from "@/types/job_explore.types";
-import {
-  cn,
-  getAllCourses,
-  getAllIndustry,
-  getAllJobCategories,
-} from "@/lib/utils";
-import { Separator } from "@/components/ui/separator";
-import { useExploreStore } from "@/store/ExploreStore";
-import cityMunicipalityData from "@/data/city_municipality.json";
+import { useEffect, useState } from "react"
+import { useRouter, useSearchParams } from "next/navigation"
+import { Card } from "@/components/ui/card"
+import { Button } from "@/components/ui/button"
+import { Checkbox } from "@/components/ui/checkbox"
+import { Label } from "@/components/ui/label"
+import { Input } from "@/components/ui/input"
+import { ScrollArea } from "@/components/ui/scroll-area"
+import { Filter, X, Search } from "lucide-react"
+import type { JobExploreFilters } from "@/types/job_explore.types"
+import { cn, getAllCourses, getAllIndustry, getAllJobCategories } from "@/lib/utils"
+import { Separator } from "@/components/ui/separator"
+import { useExploreStore } from "@/store/ExploreStore"
+import cityMunicipalityData from "@/data/city_municipality.json"
 
 interface JobExploreFilterProps {
-  className?: string;
+  className?: string
 }
 
-const COURSES = getAllCourses() as string[];
-const INDUSTRIES = getAllIndustry() as string[];
-const JOB_CATEGORIES = getAllJobCategories(false, true) as string[];
-const LOCATION_OPTIONS = Object.keys(cityMunicipalityData).sort();
-const WORK_ARRANGEMENT_OPTIONS = ["Remote", "On-site", "Hybrid"];
-
-const MAX_VISIBLE_ITEMS = 6;
+const COURSES = getAllCourses() as string[]
+const INDUSTRIES = getAllIndustry() as string[]
+const JOB_CATEGORIES = getAllJobCategories(false, true) as string[]
+const LOCATION_OPTIONS = Object.keys(cityMunicipalityData).sort()
+const WORK_ARRANGEMENT_OPTIONS = ["Remote", "On-site", "Hybrid"]
 
 interface FilterSectionProps {
-  title: string;
-  items: string[];
-  selectedItems: string[];
-  onToggle: (value: string) => void;
-  searchable?: boolean;
-  formatLabel?: (item: string) => string;
+  title: string
+  items: string[]
+  selectedItems: string[]
+  onToggle: (value: string) => void
+  searchable?: boolean
+  formatLabel?: (item: string) => string
 }
 
 function FilterSection({
@@ -48,17 +42,9 @@ function FilterSection({
   searchable = false,
   formatLabel = (item) => item,
 }: FilterSectionProps) {
-  const [searchQuery, setSearchQuery] = useState("");
-  const [showAll, setShowAll] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("")
 
-  const filteredItems = items.filter((item) =>
-    item.toLowerCase().includes(searchQuery.toLowerCase())
-  );
-
-  const displayItems = showAll
-    ? filteredItems
-    : filteredItems.slice(0, MAX_VISIBLE_ITEMS);
-  const hasMore = filteredItems.length > MAX_VISIBLE_ITEMS;
+  const filteredItems = items.filter((item) => item.toLowerCase().includes(searchQuery.toLowerCase()))
 
   return (
     <div className="space-y-2">
@@ -76,9 +62,9 @@ function FilterSection({
         </div>
       )}
 
-      <div className={cn("relative", items.length > MAX_VISIBLE_ITEMS && !showAll && "max-h-[240px] overflow-hidden")}>
-        <div className="space-y-1">
-          {displayItems.map((item, index) => (
+      <ScrollArea>
+        <div className="max-h-[300px] space-y-1 pr-3">
+          {filteredItems.map((item, index) => (
             <Label
               key={item + index}
               htmlFor={`${title}-${item}`}
@@ -89,45 +75,20 @@ function FilterSection({
                 checked={selectedItems.includes(item)}
                 onCheckedChange={() => onToggle(item)}
               />
-              <span className="text-sm">{formatLabel(item)}</span>
+              <span className="text-sm break-words">{formatLabel(item)}</span>
             </Label>
           ))}
         </div>
-        
-        {!showAll && hasMore && !searchQuery && (
-          <div className="absolute bottom-0 left-0 right-0 h-16 bg-gradient-to-t from-background via-background to-transparent pointer-events-none" />
-        )}
-      </div>
-
-      {hasMore && !searchQuery && (
-        <Button
-          variant="ghost"
-          size="sm"
-          onClick={() => setShowAll(!showAll)}
-          className="w-full text-xs h-7 text-primary hover:text-primary"
-        >
-          {showAll ? (
-            <>
-              <ChevronUp className="w-3 h-3 mr-1" />
-              View Less
-            </>
-          ) : (
-            <>
-              <ChevronDown className="w-3 h-3 mr-1" />
-              View More ({filteredItems.length - MAX_VISIBLE_ITEMS})
-            </>
-          )}
-        </Button>
-      )}
+      </ScrollArea>
     </div>
-  );
+  )
 }
 
-export function JobExploreFilter({ className }: JobExploreFilterProps) {
-  const searchParams = useSearchParams();
-  const exploreType = useExploreStore((state) => state.exploreType);
-  const setExploreType = useExploreStore((state) => state.setExploreType);
-  const router = useRouter();
+export default function JobExploreFilterV2({ className }: JobExploreFilterProps) {
+  const searchParams = useSearchParams()
+  const exploreType = useExploreStore((state) => state.exploreType)
+  const setExploreType = useExploreStore((state) => state.setExploreType)
+  const router = useRouter()
 
   const [filters, setFilters] = useState<JobExploreFilters>({
     courses: searchParams.getAll("course") || [],
@@ -135,50 +96,45 @@ export function JobExploreFilter({ className }: JobExploreFilterProps) {
     workArrangement: searchParams.getAll("arrangement") || [],
     industries: searchParams.getAll("industry") || [],
     jobCategories: searchParams.getAll("jobCategory") || [],
-  });
+  })
 
   useEffect(() => {
-    setExploreType(exploreType);
-  }, [exploreType, setExploreType]);
+    setExploreType(exploreType)
+  }, [exploreType, setExploreType])
 
   // Automatically apply filters when they change
   useEffect(() => {
-    const params = new URLSearchParams();
+    const params = new URLSearchParams()
 
     if (exploreType === "companies") {
-      filters.industries.forEach((i) => params.append("industry", i));
+      filters.industries.forEach((i) => params.append("industry", i))
     } else {
-      filters.courses.forEach((p) => params.append("course", p));
-      filters.locations.forEach((l) => params.append("location", l));
-      filters.workArrangement.forEach((w) => params.append("arrangement", w));
-      filters.industries.forEach((i) => params.append("industry", i));
-      filters.jobCategories.forEach((j) => params.append("jobCategory", j));
+      filters.courses.forEach((p) => params.append("course", p))
+      filters.locations.forEach((l) => params.append("location", l))
+      filters.workArrangement.forEach((w) => params.append("arrangement", w))
+      filters.industries.forEach((i) => params.append("industry", i))
+      filters.jobCategories.forEach((j) => params.append("jobCategory", j))
     }
 
-    const existingSearch = searchParams.get("search");
+    const existingSearch = searchParams.get("search")
     if (existingSearch) {
-      params.append("search", existingSearch);
+      params.append("search", existingSearch)
     }
 
-    const queryString = params.toString();
-    router.push(
-      `/explore/${exploreType}${queryString ? `?${queryString}` : ""}`,
-      { scroll: false }
-    );
-  }, [filters, exploreType, router, searchParams]);
+    const queryString = params.toString()
+    router.push(`/explore/${exploreType}${queryString ? `?${queryString}` : ""}`, { scroll: false })
+  }, [filters, exploreType, router, searchParams])
 
   const handleFilterChange = (type: keyof JobExploreFilters, value: string) => {
     setFilters((prev) => {
       if (Array.isArray(prev[type])) {
-        const array = prev[type] as string[];
-        const updated = array.includes(value)
-          ? array.filter((v) => v !== value)
-          : [...array, value];
-        return { ...prev, [type]: updated };
+        const array = prev[type] as string[]
+        const updated = array.includes(value) ? array.filter((v) => v !== value) : [...array, value]
+        return { ...prev, [type]: updated }
       }
-      return prev;
-    });
-  };
+      return prev
+    })
+  }
 
   const handleReset = () => {
     setFilters({
@@ -187,15 +143,15 @@ export function JobExploreFilter({ className }: JobExploreFilterProps) {
       workArrangement: [],
       industries: [],
       jobCategories: [],
-    });
-  };
+    })
+  }
 
   const hasActiveFilters =
     filters.courses.length > 0 ||
     filters.locations.length > 0 ||
     filters.workArrangement.length > 0 ||
     filters.industries.length > 0 ||
-    filters.jobCategories.length > 0;
+    filters.jobCategories.length > 0
 
   return (
     <Card className={cn("p-6 w-full", className)}>
@@ -205,12 +161,7 @@ export function JobExploreFilter({ className }: JobExploreFilterProps) {
           <h3 className="font-semibold">Filters</h3>
         </div>
         {hasActiveFilters && (
-          <Button
-            variant="ghost"
-            size="sm"
-            onClick={handleReset}
-            className="text-xs h-7"
-          >
+          <Button variant="ghost" size="sm" onClick={handleReset} className="text-xs h-7">
             <X className="w-3 h-3 mr-1" />
             Reset
           </Button>
@@ -234,9 +185,7 @@ export function JobExploreFilter({ className }: JobExploreFilterProps) {
               selectedItems={filters.courses}
               onToggle={(value) => handleFilterChange("courses", value)}
               searchable
-              formatLabel={(course) =>
-                course.replace("Bachelor of Science in ", "BS ")
-              }
+              formatLabel={(course) => course.replace("Bachelor of Science in ", "BS ")}
             />
 
             <Separator />
@@ -281,5 +230,5 @@ export function JobExploreFilter({ className }: JobExploreFilterProps) {
         )}
       </div>
     </Card>
-  );
+  )
 }
