@@ -4,7 +4,7 @@ import Link from "next/link";
 import { authConfig } from "@/lib/auth";
 import { getServerSession } from "next-auth";
 import { JobPostingServices } from "@/services/job-posting.services";
-import { redirect } from "next/navigation";
+import { redirect, notFound } from "next/navigation";
 import { getRoleName } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { ArrowLeft } from "lucide-react";
@@ -41,16 +41,8 @@ export default async function JobPostPage({ params }: JobPostPageProps) {
     role_name
   );
 
-  if (!jobPost) {
-    return (
-      <MainLayout>
-        <div className="flex items-center justify-center">
-          <p className="text-destructive">
-            Job post not found. Please try again later.
-          </p>
-        </div>
-      </MainLayout>
-    );
+  if (!jobPost || jobPost.job_post_status_id !== 1) {
+    notFound();
   }
 
   const suggestions = await JobPostingServices.getJobPostSuggestions(
