@@ -1,13 +1,6 @@
-import { Badge } from "@/components/ui/badge";
-import { Card } from "@/components/ui/card";
 import MainLayout from "@/components/layout/MainLayout";
-import { JobPostPreview } from "@/components/page_specific/explore/job-postings/JobPostPreview";
-import Link from "next/link";
-import { CompanyProfile } from "@/components/page_specific/explore/company/CompanyProfile";
-import { ScrollArea } from "@/components/ui/scroll-area";
 import CompanyServices from "@/services/company.services";
-import { Button } from "@/components/ui/button";
-import { ArrowLeft } from "lucide-react";
+import { AnimatedCompanyContent } from "@/components/page_specific/explore/company/AnimatedCompanyContent";
 
 export default async function CompanyProfilePage({
   params,
@@ -32,56 +25,10 @@ export default async function CompanyProfilePage({
 
   return (
     <MainLayout className="items-center">
-      <div className="gap-10 flex flex-col items-centerw-full">
-        {/* Back Button */}
-        <div className="space-y-4">
-          <Link href="/explore/companies" className="self-start">
-            <Button variant="ghost" className="mb-4">
-              <ArrowLeft className="mr-2 h-4 w-4" />
-              Back to Companies
-            </Button>
-          </Link>
-
-          {/* Company Profile Card */}
-          <CompanyProfile className="p-10 w-5xl" company={company_profile} />
-        </div>
-
-        {/* Job Posts Section */}
-        <div className="space-y-6 grow">
-          <div className="flex items-center justify-between">
-            <h2 className="text-2xl font-bold text-foreground">
-              Available Positions
-            </h2>
-            <Badge
-              variant="secondary"
-              className="text-sm font-medium px-4 py-2"
-            >
-              {job_posted.length} Opening{job_posted.length !== 1 ? "s" : ""}
-            </Badge>
-          </div>
-
-          {job_posted.length > 0 ? (
-            <ScrollArea className="h-96">
-              <div className="grid grid-cols-1 gap-4 pr-4">
-                {job_posted.map((job) => (
-                  <Link
-                    key={job.job_post_id}
-                    href={"/view/job-postings/" + job.job_post_id}
-                  >
-                    <JobPostPreview job={job} />
-                  </Link>
-                ))}
-              </div>
-            </ScrollArea>
-          ) : (
-            <Card className="p-12 text-center">
-              <p className="text-muted-foreground">
-                No job openings available at the moment.
-              </p>
-            </Card>
-          )}
-        </div>
-      </div>
+      <AnimatedCompanyContent
+        company_profile={company_profile}
+        job_posted={job_posted}
+      />
     </MainLayout>
   );
 }
