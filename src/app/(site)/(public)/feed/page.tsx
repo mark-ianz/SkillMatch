@@ -33,7 +33,7 @@ export default async function FeedPage() {
 
           <div className="sticky top-24 min-w-80 flex-shrink-0">
             <ScrollArea className="h-[calc(100vh-7rem)]">
-              <div className="flex flex-col gap-10 pr-4">
+              <div className="flex flex-col gap-10">
                 <SidebarProfile />
                 <Separator/>
                 <SuggestedCompanies />
