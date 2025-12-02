@@ -12,7 +12,7 @@ import {
 } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { JOB_POST_STATUSES } from "@/types/admin.types";
+import { JOB_POST_STATUSES, JOB_POST_STATUS_COLORS } from "@/types/admin.types";
 import { Ellipsis } from "lucide-react";
 import { useState } from "react";
 import JobPostDetailsDialog from "./JobPostDetailsDialog";
@@ -50,11 +50,18 @@ export default function JobPostsTable() {
     },
   });
 
-  const getStatusBadge = (statusId: number, statusName: string) => {
-    const status = JOB_POST_STATUSES.find((s) => s.value === statusId);
+  const getStatusBadge = (statusId: number) => {
+    const statusConfig = JOB_POST_STATUS_COLORS[statusId] || {
+      bg: "bg-gray-100",
+      text: "text-gray-700",
+      label: "Unknown"
+    };
     return (
-      <Badge variant={status?.variant || "default"}>
-        {statusName || "Unknown"}
+      <Badge
+        variant="outline"
+        className={`${statusConfig.bg} ${statusConfig.text} border-0`}
+      >
+        {statusConfig.label}
       </Badge>
     );
   };
@@ -133,7 +140,7 @@ export default function JobPostsTable() {
                   </TableCell>
                   <TableCell>{job.available_positions}</TableCell>
                   <TableCell>
-                    {getStatusBadge(job.job_post_status_id, job.job_post_status || "")}
+                    {getStatusBadge(job.job_post_status_id)}
                   </TableCell>
                   <TableCell>
                     {format(new Date(job.created_at), "MMM d, yyyy")}

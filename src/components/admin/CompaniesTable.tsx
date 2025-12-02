@@ -12,7 +12,7 @@ import {
 } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { COMPANY_ACCOUNT_STATUSES } from "@/types/admin.types";
+import { COMPANY_ACCOUNT_STATUSES, COMPANY_STATUS_COLORS } from "@/types/admin.types";
 import { Ellipsis } from "lucide-react";
 import { useState } from "react";
 import CompanyDetailsDialog from "./CompanyDetailsDialog";
@@ -47,12 +47,18 @@ export default function CompaniesTable() {
     },
   });
 
-  const getStatusBadge = (statusId: number, statusName: string) => {
-    console.log(statusName);
-    const status = COMPANY_ACCOUNT_STATUSES.find((s) => s.value === statusId);
+  const getStatusBadge = (statusId: number) => {
+    const statusConfig = COMPANY_STATUS_COLORS[statusId] || {
+      bg: "bg-gray-100",
+      text: "text-gray-700",
+      label: "Unknown"
+    };
     return (
-      <Badge variant={status?.variant || "default"}>
-        {statusName || "Unknown"}
+      <Badge
+        variant="outline"
+        className={`${statusConfig.bg} ${statusConfig.text} border-0`}
+      >
+        {statusConfig.label}
       </Badge>
     );
   };
@@ -153,7 +159,7 @@ export default function CompaniesTable() {
                   </TableCell>
                   <TableCell>{company.city_municipality}</TableCell>
                   <TableCell>
-                    {getStatusBadge(company.status_id, company.status)}
+                    {getStatusBadge(company.status_id)}
                   </TableCell>
                   <TableCell>
                     {format(
