@@ -10,22 +10,18 @@ import Image from "next/image";
 interface CompanyPostPreviewProps {
   post: CompanyPostType;
   className?: string;
-  isSelected?: boolean;
 }
 
 export function CompanyPostPreview({
   post,
   className,
-  isSelected = false,
 }: CompanyPostPreviewProps) {
   return (
     <div
       className={cn(
-        "group shadow-sm cursor-pointer rounded-lg border border-border/40 bg-background p-4 transition-all hover:border-border hover:shadow-sm",
+        "group shadow-sm cursor-pointer rounded-lg border border-border/40 bg-background p-4 transition-all",
+        "hover:border-skillmatch-primary-green hover:scale-[1.01]",
         className,
-        isSelected
-          ? "border-skillmatch-primary-green hover:border-skillmatch-primary-green"
-          : "border-border/40 hover:border-border"
       )}
     >
       <div className="flex gap-4">
