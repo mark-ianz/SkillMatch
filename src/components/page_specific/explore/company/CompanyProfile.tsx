@@ -86,7 +86,7 @@ export function CompanyProfile({
           {/* Company Name and Actions */}
           <div className="flex-1 min-w-0">
             <div className="flex items-start justify-between gap-4 mb-4">
-              {isFullView ? (
+              {!isFullView ? (
                 <LinkWithIcon
                   path={"/view/company/" + company.company_id}
                   text={company?.company_name}
