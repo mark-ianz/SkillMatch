@@ -1,3 +1,5 @@
+"use client";
+
 import React from "react";
 import { Badge } from "@/components/ui/badge";
 import { Sparkles, ArrowRight } from "lucide-react";
@@ -5,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Target, Shield, Zap } from "lucide-react";
 import Link from "next/link";
+import { motion } from "framer-motion";
 
 export default function CompanyHeroSection() {
   return (
@@ -13,40 +16,79 @@ export default function CompanyHeroSection() {
       <div className="container mx-auto px-4 lg:px-8 relative">
         <div className="grid lg:grid-cols-2 gap-12 items-center px-20">
           <div>
-            <Badge
-              variant="outline"
-              className="mb-6 border-skillmatch-primary-blue/50"
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5 }}
             >
-              <Sparkles className="h-3 w-3 mr-1 text-skillmatch-primary-blue" />
-              QCU Partnership Program
-            </Badge>
-            <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold tracking-tight mb-6 text-balance">
+              <Badge
+                variant="outline"
+                className="mb-6 border-skillmatch-primary-blue/50"
+              >
+                <Sparkles className="h-3 w-3 mr-1 text-skillmatch-primary-blue" />
+                QCU Partnership Program
+              </Badge>
+            </motion.div>
+
+            <motion.h1
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.1 }}
+              className="text-4xl md:text-6xl lg:text-7xl font-bold tracking-tight mb-6 text-balance"
+            >
               Hire Tomorrow&apos;s
-              <span className="text-skillmatch-primary-blue block mt-2">
+              <motion.span
+                initial={{ opacity: 0, x: -20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.5, delay: 0.3 }}
+                className="text-skillmatch-primary-blue block mt-2"
+              >
                 Top Talent Today
-              </span>
-            </h1>
-            <p className="text-lg md:text-xl text-muted-foreground mb-8 text-pretty">
+              </motion.span>
+            </motion.h1>
+
+            <motion.p
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.4 }}
+              className="text-lg md:text-xl text-muted-foreground mb-8 text-pretty"
+            >
               Access a curated pool of skilled students from Quezon City
               University. Post opportunities, find perfect matches, and build
               your team with pre-vetted talent.
-            </p>
-            <div className="flex flex-col sm:flex-row gap-4">
+            </motion.p>
+
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.5 }}
+              className="flex flex-col sm:flex-row gap-4"
+            >
               <Link href="/signup">
                 <Button
                   size="lg"
-                  className="text-lg bg-skillmatch-primary-blue text-white hover:bg-skillmatch-primary-blue/90"
+                  className="text-lg bg-skillmatch-primary-blue text-white hover:bg-skillmatch-primary-blue/90 transition-all hover:scale-105"
                 >
                   Get Started
                   <ArrowRight className="ml-2 h-5 w-5" />
                 </Button>
               </Link>
-            </div>
+            </motion.div>
           </div>
-          <div className="relative">
-            <Card className="p-8 backdrop-blur-sm bg-card/50 border-skillmatch-primary-blue/20">
+          <motion.div
+            initial={{ opacity: 0, x: 50 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.6, delay: 0.3 }}
+            className="relative"
+          >
+            <Card className="p-8 backdrop-blur-sm bg-card/50 border-skillmatch-primary-blue/20 hover:border-skillmatch-primary-blue/40 transition-all">
               <div className="space-y-6">
-                <div className="flex items-start gap-4">
+                <motion.div
+                  initial={{ opacity: 0, x: 20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ duration: 0.5, delay: 0.5 }}
+                  className="flex items-start gap-4"
+                >
                   <div className="w-12 h-12 rounded-lg bg-skillmatch-primary-blue/10 flex items-center justify-center flex-shrink-0">
                     <Target className="h-6 w-6 text-skillmatch-primary-blue" />
                   </div>
@@ -57,8 +99,13 @@ export default function CompanyHeroSection() {
                       skill sets instantly
                     </p>
                   </div>
-                </div>
-                <div className="flex items-start gap-4">
+                </motion.div>
+                <motion.div
+                  initial={{ opacity: 0, x: 20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ duration: 0.5, delay: 0.6 }}
+                  className="flex items-start gap-4"
+                >
                   <div className="w-12 h-12 rounded-lg bg-skillmatch-primary-blue/10 flex items-center justify-center flex-shrink-0">
                     <Shield className="h-6 w-6 text-skillmatch-primary-blue" />
                   </div>
@@ -69,8 +116,13 @@ export default function CompanyHeroSection() {
                       academic records
                     </p>
                   </div>
-                </div>
-                <div className="flex items-start gap-4">
+                </motion.div>
+                <motion.div
+                  initial={{ opacity: 0, x: 20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ duration: 0.5, delay: 0.7 }}
+                  className="flex items-start gap-4"
+                >
                   <div className="w-12 h-12 rounded-lg bg-skillmatch-primary-blue/10 flex items-center justify-center flex-shrink-0">
                     <Zap className="h-6 w-6 text-skillmatch-primary-blue" />
                   </div>
@@ -81,10 +133,10 @@ export default function CompanyHeroSection() {
                       review workflows
                     </p>
                   </div>
-                </div>
+                </motion.div>
               </div>
             </Card>
-          </div>
+          </motion.div>
         </div>
       </div>
     </section>
