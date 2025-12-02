@@ -27,9 +27,11 @@ import { ApplyButton } from "./ApplyButton";
 export function JobPostFullInfo({
   job,
   className,
+  apply_full_width
 }: {
   job: JobPost;
   className?: string;
+  apply_full_width?: boolean;
 }) {
   const { data: session } = useSession();
   const [showSignInDialog, setShowSignInDialog] = useState(false);
@@ -171,7 +173,7 @@ export function JobPostFullInfo({
                 jobTitle={job.job_title}
                 companyName={job.company_name!}
                 className="w-full h-11 text-base font-medium"
-                fullWidth
+                apply_full_width={apply_full_width}
               />
             )}
           </div>
