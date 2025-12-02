@@ -53,7 +53,10 @@ export async function GET(request: NextRequest) {
         c.twitter_page,
         c.created_at
       FROM company c
+      JOIN account a
+      ON c.company_id = a.company_id
       ${whereClause}
+      AND a.status_id = 1
       ORDER BY c.created_at DESC`,
       values
     );
