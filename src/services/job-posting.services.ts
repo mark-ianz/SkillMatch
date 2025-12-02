@@ -339,10 +339,10 @@ export const JobPostingServices = {
 
       const whereClause = `(${conditions.join(
         " OR "
-      )}) AND jp.job_post_id != ?`;
+      )}) AND jp.job_post_id != ? AND jp.job_post_status_id = 1`;
       values.push(job_post_id);
 
-      // Fetch suggestions
+      // Fetch suggestions (only active posts)
       const [rows] = await db.query<RowDataPacket[]>(
         `SELECT 
           jp.job_post_id,

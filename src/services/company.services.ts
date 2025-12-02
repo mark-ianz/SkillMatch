@@ -211,7 +211,7 @@ export const CompanyServices = {
           : null,
       } as CompanyProfile;
 
-      // Fetch all job posts for this company
+      // Fetch all job posts for this company (only active posts)
       const [jobRows] = await db.query<RowDataPacket[]>(
         `SELECT 
         jp.*,
@@ -223,7 +223,7 @@ export const CompanyServices = {
         c.city_municipality
       FROM job_posts jp
       JOIN company c ON jp.company_id = c.company_id
-      WHERE jp.company_id = ?
+      WHERE jp.company_id = ? AND jp.job_post_status_id = 1
       ORDER BY jp.created_at DESC`,
         [company_id]
       );
