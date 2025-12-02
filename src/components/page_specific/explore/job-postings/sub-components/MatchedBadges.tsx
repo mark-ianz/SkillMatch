@@ -14,6 +14,10 @@ export default function MatchedBadges({
   className?: string;
   badgeClassName?: string;
 }) {
+  if (!course_matched && (!skill_match_count || skill_match_count === 0)) {
+    return null;
+  }
+
   return (
     <div className={cn("flex gap-1", className)}>
       {skill_match_count !== undefined && skill_match_count > 0 && (
