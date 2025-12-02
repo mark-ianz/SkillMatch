@@ -1,7 +1,13 @@
 "use client";
 
 import { useState } from "react";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { motion } from "framer-motion";
+import {
+  AnimatedTabsRoot,
+  AnimatedTabsContent,
+  AnimatedTabsList,
+  AnimatedTabsTrigger,
+} from "@/components/ui/animated-tabs";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Bookmark, Trash2, TrendingUp, Users } from "lucide-react";
@@ -52,33 +58,45 @@ export default function SavedPage() {
   };
 
   return (
-    <>
-      <div className="mb-8">
-        <h1 className="text-3xl font-bold mb-2">Saved Items</h1>
-        <p className="text-muted-foreground">
-          Manage your saved job posts, company updates, and companies of
-          interest
-        </p>
-      </div>
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.3 }}
+      className="mb-8"
+    >
+      <h1 className="text-3xl font-bold mb-2">Saved Items</h1>
+      <p className="text-muted-foreground">
+        Manage your saved job posts, company updates, and companies of interest
+      </p>
 
-      <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-        <TabsList className="grid w-full max-w-md grid-cols-3 mb-8">
-          <TabsTrigger value="jobs" className="gap-2">
-            <Bookmark className="h-4 w-4" />
-            Jobs ({savedJobs?.length || 0})
-          </TabsTrigger>
-          <TabsTrigger value="posts" className="gap-2">
-            <TrendingUp className="h-4 w-4" />
-            Posts ({savedPosts?.length || 0})
-          </TabsTrigger>
-          <TabsTrigger value="companies" className="gap-2">
-            <Users className="h-4 w-4" />
-            Companies ({savedCompanies?.length || 0})
-          </TabsTrigger>
-        </TabsList>
+      <AnimatedTabsRoot
+        value={activeTab}
+        onValueChange={setActiveTab}
+        className="w-full"
+      >
+        <AnimatedTabsList className="grid w-full max-w-md grid-cols-3 mb-8">
+          <AnimatedTabsTrigger value="jobs">
+            <div className="flex gap-2">
+              <Bookmark className="h-4 w-4" />
+              Jobs ({savedJobs?.length || 0})
+            </div>
+          </AnimatedTabsTrigger>
+          <AnimatedTabsTrigger value="posts">
+            <div className="flex gap-2">
+              <TrendingUp className="h-4 w-4" />
+              Posts ({savedPosts?.length || 0})
+            </div>
+          </AnimatedTabsTrigger>
+          <AnimatedTabsTrigger value="companies">
+            <div className="flex gap-2">
+              <Users className="h-4 w-4" />
+              Companies ({savedCompanies?.length || 0})
+            </div>
+          </AnimatedTabsTrigger>
+        </AnimatedTabsList>
 
         {/* Saved Jobs Tab */}
-        <TabsContent value="jobs" className="space-y-4">
+        <AnimatedTabsContent value="jobs" className="space-y-4">
           {jobsLoading ? (
             <div className="flex items-center justify-center py-12">
               <LoadingGeneric />
@@ -114,10 +132,10 @@ export default function SavedPage() {
               </div>
             ))
           )}
-        </TabsContent>
+        </AnimatedTabsContent>
 
         {/* Saved Company Posts Tab */}
-        <TabsContent value="posts" className="space-y-4">
+        <AnimatedTabsContent value="posts" className="space-y-4">
           {postsLoading ? (
             <div className="flex items-center justify-center py-12">
               <LoadingGeneric />
@@ -145,10 +163,10 @@ export default function SavedPage() {
               </div>
             ))
           )}
-        </TabsContent>
+        </AnimatedTabsContent>
 
         {/* Saved Companies Tab */}
-        <TabsContent value="companies" className="space-y-4">
+        <AnimatedTabsContent value="companies" className="space-y-4">
           {companiesLoading ? (
             <div className="flex items-center justify-center py-12">
               <LoadingGeneric />
@@ -178,8 +196,8 @@ export default function SavedPage() {
               </div>
             ))
           )}
-        </TabsContent>
-      </Tabs>
-    </>
+        </AnimatedTabsContent>
+      </AnimatedTabsRoot>
+    </motion.div>
   );
 }

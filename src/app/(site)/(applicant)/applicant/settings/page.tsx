@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect } from "react";
+import { motion } from "framer-motion";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useUserSettings } from "@/hooks/query/useUserSettings";
 import PersonalInfoTab from "@/components/page_specific/settings/PersonalInfoTab";
@@ -12,12 +13,14 @@ import useSettingsStore from "@/store/SettingsStore";
 
 export default function ApplicantSettingsPage() {
   const { data: settings, isLoading } = useUserSettings();
-  
+
   const setPersonalInfo = useSettingsStore((state) => state.setPersonalInfo);
   const setAvailability = useSettingsStore((state) => state.setAvailability);
   const setSkills = useSettingsStore((state) => state.setSkills);
   const setEducation = useSettingsStore((state) => state.setEducation);
-  const setProfilePicturePreview = useSettingsStore((state) => state.setProfilePicturePreview);
+  const setProfilePicturePreview = useSettingsStore(
+    (state) => state.setProfilePicturePreview
+  );
 
   // Initialize form states when settings are loaded
   useEffect(() => {
@@ -57,7 +60,14 @@ export default function ApplicantSettingsPage() {
 
       setProfilePicturePreview(settings.applicant_image_path);
     }
-  }, [settings, setPersonalInfo, setAvailability, setSkills, setEducation, setProfilePicturePreview]);
+  }, [
+    settings,
+    setPersonalInfo,
+    setAvailability,
+    setSkills,
+    setEducation,
+    setProfilePicturePreview,
+  ]);
 
   if (isLoading) {
     return <SettingsSkeleton />;
@@ -65,21 +75,34 @@ export default function ApplicantSettingsPage() {
 
   return (
     <>
-      <h1 className="text-3xl font-bold mb-6">Account Settings</h1>
+      <motion.h1
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.3 }}
+        className="text-3xl font-bold mb-6"
+      >
+        Account Settings
+      </motion.h1>
 
-      <Tabs defaultValue="personal" className="space-y-4">
-        <TabsList className="grid w-full grid-cols-4 lg:w-auto lg:inline-grid">
-          <TabsTrigger value="personal">Personal</TabsTrigger>
-          <TabsTrigger value="account">Account</TabsTrigger>
-          <TabsTrigger value="availability">Availability</TabsTrigger>
-          <TabsTrigger value="education">Education</TabsTrigger>
-        </TabsList>
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.3, delay: 0.1 }}
+      >
+        <Tabs defaultValue="personal" className="space-y-4">
+          <TabsList className="grid w-full grid-cols-4 lg:w-auto lg:inline-grid">
+            <TabsTrigger value="personal">Personal</TabsTrigger>
+            <TabsTrigger value="account">Account</TabsTrigger>
+            <TabsTrigger value="availability">Availability</TabsTrigger>
+            <TabsTrigger value="education">Education</TabsTrigger>
+          </TabsList>
 
-        <PersonalInfoTab />
-        <AccountTab />
-        <AvailabilityTab />
-        <EducationTab />
-      </Tabs>
+          <PersonalInfoTab />
+          <AccountTab />
+          <AvailabilityTab />
+          <EducationTab />
+        </Tabs>
+      </motion.div>
     </>
   );
 }
