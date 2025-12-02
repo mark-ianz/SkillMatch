@@ -25,8 +25,8 @@ export async function GET(
     if (session?.user) {
       const userId =
         session.user.role_id === 3
-          ? undefined
-          : session.user.user_id?.toString();
+          ? session.user.user_id?.toString()
+          : undefined;
       const companyId =
         session.user.role_id === 4 ? session.user.company_id : undefined;
 

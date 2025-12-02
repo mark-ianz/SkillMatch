@@ -279,8 +279,6 @@ export const CompanyPostServices = {
         throw new ServiceError("Either user_id or company_id must be provided", 400);
       }
 
-      const reaction_id = nanoid();
-
       // Check if reaction already exists
       const whereClause = user_id 
         ? "post_id = ? AND user_id = ?"
@@ -301,11 +299,11 @@ export const CompanyPostServices = {
           [reaction_type, ...whereParams]
         );
       } else {
-        // Insert new reaction
+        // Insert new reaction (reaction_id will auto-increment)
         await connection.query<ResultSetHeader>(
-          `INSERT INTO company_post_reactions (reaction_id, post_id, user_id, company_id, reaction_type, created_at)
-           VALUES (?, ?, ?, ?, ?, NOW())`,
-          [reaction_id, post_id, user_id || null, company_id || null, reaction_type]
+          `INSERT INTO company_post_reactions (post_id, user_id, company_id, reaction_type, created_at)
+           VALUES (?, ?, ?, ?, NOW())`,
+          [post_id, user_id || null, company_id || null, reaction_type]
         );
       }
 

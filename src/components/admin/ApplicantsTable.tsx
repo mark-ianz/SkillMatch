@@ -84,13 +84,13 @@ export default function ApplicantsTable() {
             {applicants && applicants.length > 0 ? (
               applicants.map((student) => (
                 <TableRow key={student.user_id}>
-                  <TableCell className="font-medium">
+                  <TableCell className="text-sm">
                     {student.student_number}
                   </TableCell>
-                  <TableCell className="font-medium">
+                  <TableCell className="text-sm">
                     {`${student.first_name} ${student.last_name}`}
                   </TableCell>
-                  <TableCell>{student.email}</TableCell>
+                  <TableCell className="text-sm">{student.email}</TableCell>
                   <TableCell>
                     {student.course ? (
                       <Badge variant="outline">{`${getCourseByAbbr(student.course)} (${student.course})`}</Badge>
@@ -110,7 +110,7 @@ export default function ApplicantsTable() {
                       <span className="text-muted-foreground text-sm">N/A</span>
                     )}
                   </TableCell>
-                  <TableCell>
+                  <TableCell className="text-sm">
                     {format(
                       new Date(student.created_at),
                       "MMM d, yyyy"

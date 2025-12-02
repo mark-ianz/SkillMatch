@@ -42,7 +42,7 @@ export function ReactionButton({
 }: ReactionButtonProps) {
   const [open, setOpen] = useState(false);
   const [showSignInDialog, setShowSignInDialog] = useState(false);
-  const { data: session } = useSession();
+  const { data: session, status: sessionStatus } = useSession();
   
   const { data: reactionData, isLoading } = useReactions(post_id);
   const addReaction = useAddReaction();
@@ -75,7 +75,51 @@ export function ReactionButton({
     setOpen(false);
   };
 
-  if (isLoading) {
+  const isUpdating = addReaction.isPending || removeReaction.isPending;
+
+  // Get role-based color classes
+  const getReactionColors = () => {
+    if (!session?.user?.role_id) {
+      return {
+        bg: "bg-primary/10",
+        bgHover: "hover:bg-primary/20",
+        text: "text-primary",
+        ring: "ring-primary/30",
+      };
+    }
+
+    const roleId = session.user.role_id;
+    
+    if (roleId === 4) {
+      // Company - Blue
+      return {
+        bg: "bg-skillmatch-primary-blue/10",
+        bgHover: "hover:bg-skillmatch-primary-blue/20",
+        text: "text-skillmatch-primary-blue",
+        ring: "ring-skillmatch-primary-blue/30",
+      };
+    } else if (roleId === 3) {
+      // Applicant - Green
+      return {
+        bg: "bg-skillmatch-primary-green/10",
+        bgHover: "hover:bg-skillmatch-primary-green/20",
+        text: "text-skillmatch-primary-green",
+        ring: "ring-skillmatch-primary-green/30",
+      };
+    } else {
+      // Admin or others - Grayscale
+      return {
+        bg: "bg-gray-200",
+        bgHover: "hover:bg-gray-300",
+        text: "text-gray-700",
+        ring: "ring-gray-400/30",
+      };
+    }
+  };
+
+  const colors = getReactionColors();
+
+  if (isLoading || sessionStatus === "loading") {
     return (
       <Button variant="ghost" size="sm" className="h-9" disabled>
         <span className="text-lg">👍</span>
@@ -115,10 +159,10 @@ export function ReactionButton({
             <PopoverTrigger asChild>
               {userReaction ? (
                 <Button
-                  variant="ghost"
+                  variant="secondary"
                   size="sm"
-                  className="gap-1 h-9 hover:bg-muted/50"
-                  disabled={addReaction.isPending || removeReaction.isPending}
+                  className={`gap-1 h-9 ${colors.bg} ${colors.bgHover} ${colors.text}`}
+                  disabled={isUpdating}
                 >
                   <span className="text-lg">{REACTIONS[userReaction].emoji}</span>
                   <span className="text-xs font-medium">{REACTIONS[userReaction].label}</span>
@@ -128,7 +172,7 @@ export function ReactionButton({
                   variant="ghost" 
                   size="sm" 
                   className="gap-1 h-9 hover:bg-muted/50"
-                  disabled={addReaction.isPending || removeReaction.isPending}
+                  disabled={isUpdating}
                 >
                   <span className="text-lg">👍</span>
                   <span className="text-xs font-medium">Like</span>
@@ -142,8 +186,12 @@ export function ReactionButton({
                     <TooltipTrigger asChild>
                       <button
                         onClick={() => handleReactionClick(reaction)}
-                        className="text-2xl rounded transition-transform duration-150 hover:scale-125 cursor-pointer p-1 disabled:opacity-50 disabled:cursor-not-allowed"
-                        disabled={addReaction.isPending || removeReaction.isPending}
+                        className={`text-2xl rounded transition-all duration-150 hover:scale-125 cursor-pointer p-1 disabled:opacity-50 disabled:cursor-not-allowed ${
+                          userReaction === reaction 
+                            ? `${colors.bg} scale-110 ring-2 ${colors.ring}` 
+                            : ""
+                        }`}
+                        disabled={isUpdating}
                       >
                         {REACTIONS[reaction].emoji}
                       </button>

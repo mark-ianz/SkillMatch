@@ -40,12 +40,38 @@ export function useAddReaction() {
       );
       return data;
     },
+    onMutate: async (variables) => {
+      // Cancel outgoing refetches
+      await queryClient.cancelQueries({ queryKey: ["reactions", variables.post_id] });
+
+      // Snapshot the previous value
+      const previousReactions = queryClient.getQueryData<ReactionData>(["reactions", variables.post_id]);
+
+      // Optimistically update
+      if (previousReactions) {
+        queryClient.setQueryData<ReactionData>(["reactions", variables.post_id], {
+          ...previousReactions,
+          userReaction: variables.reaction_type,
+        });
+      }
+
+      return { previousReactions };
+    },
     onSuccess: (data, variables) => {
-      // Update the cache with new reaction data
+      // Update the cache with new reaction data from server
       queryClient.setQueryData<ReactionData>(
         ["reactions", variables.post_id],
         data
       );
+    },
+    onError: (err, variables, context) => {
+      // Rollback on error
+      if (context?.previousReactions) {
+        queryClient.setQueryData<ReactionData>(
+          ["reactions", variables.post_id],
+          context.previousReactions
+        );
+      }
     },
   });
 }
@@ -61,12 +87,38 @@ export function useRemoveReaction() {
       );
       return data;
     },
+    onMutate: async (variables) => {
+      // Cancel outgoing refetches
+      await queryClient.cancelQueries({ queryKey: ["reactions", variables.post_id] });
+
+      // Snapshot the previous value
+      const previousReactions = queryClient.getQueryData<ReactionData>(["reactions", variables.post_id]);
+
+      // Optimistically update
+      if (previousReactions) {
+        queryClient.setQueryData<ReactionData>(["reactions", variables.post_id], {
+          ...previousReactions,
+          userReaction: null,
+        });
+      }
+
+      return { previousReactions };
+    },
     onSuccess: (data, variables) => {
-      // Update the cache with new reaction data
+      // Update the cache with new reaction data from server
       queryClient.setQueryData<ReactionData>(
         ["reactions", variables.post_id],
         data
       );
+    },
+    onError: (err, variables, context) => {
+      // Rollback on error
+      if (context?.previousReactions) {
+        queryClient.setQueryData<ReactionData>(
+          ["reactions", variables.post_id],
+          context.previousReactions
+        );
+      }
     },
   });
 }
