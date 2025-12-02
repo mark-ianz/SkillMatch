@@ -79,9 +79,11 @@ export function JobPostFullInfo({
               )}
               <div className="flex-1">
                 <div className="flex items-center gap-2 flex-wrap">
-                  <h1 className="text-3xl font-semibold text-skillmatch-dark text-balance">
-                    {job?.job_title}
-                  </h1>
+                  <Link href={`/view/job-postings/${job.job_post_id}`}>
+                    <h1 className="text-2xl font-semibold text-skillmatch-dark text-balance hover:underline">
+                      {job?.job_title}
+                    </h1>
+                  </Link>
                   {job?.job_post_status && (
                     <JobStatusBadge status={job.job_post_status} />
                   )}
@@ -161,7 +163,9 @@ export function JobPostFullInfo({
             </div>
 
             {/* Apply Button - Will not be shown if the role is admin and company */}
-            {!(session?.user?.role_id === 2 || session?.user?.role_id === 4) && (
+            {!(
+              session?.user?.role_id === 2 || session?.user?.role_id === 4
+            ) && (
               <ApplyButton
                 jobPostId={job.job_post_id}
                 jobTitle={job.job_title}
