@@ -2,6 +2,7 @@
 
 import { useParams, useRouter } from "next/navigation";
 import { notFound } from "next/navigation";
+import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -553,9 +554,20 @@ export default function JobDetailsPage() {
     <div className="min-h-screen bg-background">
       <main className="container py-8 px-4 max-w-7xl">
         {/* Back Button */}
-        <GoBackButton />
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.3 }}
+        >
+          <GoBackButton />
+        </motion.div>
 
-        <Card className="mt-4 mb-8 shadow-sm">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.3, delay: 0.1 }}
+        >
+          <Card className="mt-4 mb-8 shadow-sm">
           <CardContent className="p-6">
             <div className="space-y-6">
               {/* Improved Company Header */}
@@ -817,9 +829,15 @@ export default function JobDetailsPage() {
             </div>
           </CardContent>
         </Card>
+        </motion.div>
 
         {/* Applicants Section with Tabs */}
-        <Card>
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.3, delay: 0.2 }}
+        >
+          <Card>
           <CardHeader>
             <CardTitle>Applicants Management</CardTitle>
           </CardHeader>
@@ -932,6 +950,7 @@ export default function JobDetailsPage() {
             </Tabs>
           </CardContent>
         </Card>
+        </motion.div>
       </main>
 
       <ScheduleInterviewDialog

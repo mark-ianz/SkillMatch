@@ -1,7 +1,12 @@
 "use client";
 
 import { useEffect } from "react";
-import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { motion } from "framer-motion";
+import {
+  AnimatedTabsRoot,
+  AnimatedTabsList,
+  AnimatedTabsTrigger,
+} from "@/components/ui/animated-tabs";
 import { useCompanySettings } from "@/hooks/query/useCompanySettings";
 import CompanyProfileTab from "@/components/page_specific/company-settings/CompanyProfileTab";
 import CompanyContactTab from "@/components/page_specific/company-settings/CompanyContactTab";
@@ -53,21 +58,34 @@ export default function CompanySettingsPage() {
 
   return (
     <div className="container py-8 max-w-7xl">
-      <h1 className="text-3xl font-bold mb-6">Company Settings</h1>
+      <motion.h1
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.3 }}
+        className="text-3xl font-bold mb-6"
+      >
+        Company Settings
+      </motion.h1>
 
-      <Tabs defaultValue="profile" className="space-y-4">
-        <TabsList className="grid w-full grid-cols-4 lg:w-auto lg:inline-grid">
-          <TabsTrigger value="profile">Profile</TabsTrigger>
-          <TabsTrigger value="contact">Contact</TabsTrigger>
-          <TabsTrigger value="location">Location</TabsTrigger>
-          <TabsTrigger value="security">Security</TabsTrigger>
-        </TabsList>
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.3, delay: 0.1 }}
+      >
+        <AnimatedTabsRoot defaultValue="profile" className="space-y-4">
+          <AnimatedTabsList className="grid w-full grid-cols-4 lg:w-auto lg:inline-grid">
+            <AnimatedTabsTrigger value="profile">Profile</AnimatedTabsTrigger>
+            <AnimatedTabsTrigger value="contact">Contact</AnimatedTabsTrigger>
+            <AnimatedTabsTrigger value="location">Location</AnimatedTabsTrigger>
+            <AnimatedTabsTrigger value="security">Security</AnimatedTabsTrigger>
+          </AnimatedTabsList>
 
         <CompanyProfileTab />
         <CompanyContactTab />
         <CompanyLocationTab />
         <CompanySecurityTab />
-      </Tabs>
+      </AnimatedTabsRoot>
+      </motion.div>
     </div>
   );
 }

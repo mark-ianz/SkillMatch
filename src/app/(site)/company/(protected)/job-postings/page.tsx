@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { motion } from "framer-motion";
 import { useCompanyJobPostsWithStats } from "@/hooks/query/useApplications";
 import { Card, CardContent} from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -88,7 +89,12 @@ export default function CompanyJobPostsPage() {
   return (
     <div className="container max-w-7xl py-8 px-4">
       {/* Header */}
-      <div className="flex items-center justify-between mb-8">
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.3 }}
+        className="flex items-center justify-between mb-8"
+      >
         <div>
           <h1 className="text-3xl font-bold mb-2">Job Postings</h1>
           <p className="text-muted-foreground">
@@ -107,10 +113,15 @@ export default function CompanyJobPostsPage() {
             </Button>
           </Link>
         </div>
-      </div>
+      </motion.div>
 
       {/* Stats Overview */}
-      <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4 mb-8">
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.3, delay: 0.1 }}
+        className="grid gap-6 md:grid-cols-2 lg:grid-cols-4 mb-8"
+      >
         <Card>
           <CardContent className="p-6">
             <div className="flex items-center justify-between">
@@ -174,10 +185,15 @@ export default function CompanyJobPostsPage() {
             </div>
           </CardContent>
         </Card>
-      </div>
+      </motion.div>
 
       {/* Job Posts List */}
-      <div className="space-y-4">
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.3, delay: 0.2 }}
+        className="space-y-4"
+      >
         <div className="flex items-center justify-between mb-4">
           <h2 className="text-xl font-semibold">All Job Posts</h2>
           {filteredJobPosts && filteredJobPosts.length > 0 && (
@@ -222,7 +238,7 @@ export default function CompanyJobPostsPage() {
             />
           ))
         )}
-      </div>
+      </motion.div>
     </div>
   );
 }
