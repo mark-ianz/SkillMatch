@@ -6,7 +6,13 @@ import { LogOut } from "lucide-react";
 import { signOut, useSession } from "next-auth/react";
 import React from "react";
 
-export default function LogoutButton({ className }: { className?: string }) {
+export default function LogoutButton({
+  className,
+  iconClassName,
+}: {
+  className?: string;
+  iconClassName?: string;
+}) {
   const { data: session } = useSession();
 
   const handleLogout = () => {
@@ -37,7 +43,7 @@ export default function LogoutButton({ className }: { className?: string }) {
       )}
       size="sm"
     >
-      <LogOut className="mr-2 h-4 w-4" />
+      <LogOut className={cn("mr-2 h-5 w-5", iconClassName)} />
       Log Out
     </Button>
   );
