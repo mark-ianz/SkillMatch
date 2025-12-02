@@ -23,7 +23,7 @@ export function CompanyPreview({
   return (
     <div
       className={cn(
-        "flex gap-5 group cursor-pointer rounded-lg border bg-background p-5 transition-all hover:shadow-sm",
+        "flex gap-5 group cursor-pointer rounded-lg border bg-background p-5 hover:shadow-sm hover:scale-[1.01] transition-all ",
         isSelected
           ? "border-skillmatch-primary-green hover:border-skillmatch-primary-green"
           : "border-border/40 hover:border-border",
