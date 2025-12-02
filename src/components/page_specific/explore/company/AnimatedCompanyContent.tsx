@@ -28,7 +28,7 @@ export function AnimatedCompanyContent({
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.4 }}
-        className="space-y-4"
+        className="space-y-4 px-4"
       >
         <Link href="/explore/companies" className="self-start">
           <Button variant="ghost" className="mb-4">
@@ -38,7 +38,7 @@ export function AnimatedCompanyContent({
         </Link>
 
         {/* Company Profile Card */}
-        <CompanyProfile className="p-10 w-5xl" company={company_profile} />
+        <CompanyProfile isFullView className="p-10 w-5xl" company={company_profile} />
       </motion.div>
 
       {/* Job Posts Section */}
@@ -46,9 +46,9 @@ export function AnimatedCompanyContent({
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.4, delay: 0.2 }}
-        className="space-y-6 grow w-full"
+        className="space-y-4 grow w-full"
       >
-        <div className="flex items-center justify-between">
+        <div className="flex items-center justify-between px-4">
           <h2 className="text-2xl font-bold text-foreground">
             Available Positions
           </h2>
@@ -59,7 +59,7 @@ export function AnimatedCompanyContent({
 
         {job_posted.length > 0 ? (
           <ScrollArea className="h-96">
-            <div className="grid grid-cols-1 gap-4 pr-4">
+            <div className="grid grid-cols-1 gap-4 py-1 px-4">
               {job_posted.map((job, index) => (
                 <motion.div
                   key={job.job_post_id}
@@ -76,11 +76,13 @@ export function AnimatedCompanyContent({
             </div>
           </ScrollArea>
         ) : (
-          <Card className="p-12 text-center">
-            <p className="text-muted-foreground">
-              No job openings available at the moment.
-            </p>
-          </Card>
+          <div className="px-4">
+            <Card className="p-12 text-center">
+              <p className="text-muted-foreground">
+                No job openings available at the moment.
+              </p>
+            </Card>
+          </div>
         )}
       </motion.div>
     </div>
