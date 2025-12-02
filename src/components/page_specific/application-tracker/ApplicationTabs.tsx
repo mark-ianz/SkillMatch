@@ -1,6 +1,6 @@
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { AnimatedTabsRoot, AnimatedTabsContent, AnimatedTabsList, AnimatedTabsTrigger } from "@/components/ui/animated-tabs";
 import { FileText } from "lucide-react";
 import { ApplicationCard } from "./ApplicationCard";
 import { ApplicationWithJobDetails } from "@/types/application.types";
@@ -31,21 +31,21 @@ export function ApplicationTabs({
       : applications.filter((app) => app.application_status_id.toString() === activeTab);
 
   return (
-    <Tabs value={activeTab} onValueChange={onTabChange} className="w-full">
-      <TabsList className="grid w-full grid-cols-3 lg:grid-cols-6 mb-6">
-        <TabsTrigger value="ALL">
+    <AnimatedTabsRoot value={activeTab} onValueChange={onTabChange} className="w-full">
+      <AnimatedTabsList className="grid w-full grid-cols-3 lg:grid-cols-6 mb-6">
+        <AnimatedTabsTrigger value="ALL">
           All
           <Badge variant="secondary" className="ml-2">
             {applications.length}
           </Badge>
-        </TabsTrigger>
-        <TabsTrigger value="8">
+        </AnimatedTabsTrigger>
+        <AnimatedTabsTrigger value="8">
           Applied
           <Badge variant="secondary" className="ml-2">
             {applications.filter((a) => a.application_status_id === 8).length}
           </Badge>
-        </TabsTrigger>
-        <TabsTrigger value="9">
+        </AnimatedTabsTrigger>
+        <AnimatedTabsTrigger value="9">
           Interview
           <Badge variant="secondary" className="ml-2">
             {
@@ -53,28 +53,28 @@ export function ApplicationTabs({
                 .length
             }
           </Badge>
-        </TabsTrigger>
-        <TabsTrigger value="10">
+        </AnimatedTabsTrigger>
+        <AnimatedTabsTrigger value="10">
           Selected
           <Badge variant="secondary" className="ml-2">
             {applications.filter((a) => a.application_status_id === 10).length}
           </Badge>
-        </TabsTrigger>
-        <TabsTrigger value="11">
+        </AnimatedTabsTrigger>
+        <AnimatedTabsTrigger value="11">
           Accepted
           <Badge variant="secondary" className="ml-2">
             {applications.filter((a) => a.application_status_id === 11).length}
           </Badge>
-        </TabsTrigger>
-        <TabsTrigger value="3">
+        </AnimatedTabsTrigger>
+        <AnimatedTabsTrigger value="3">
           Rejected
           <Badge variant="secondary" className="ml-2">
             {applications.filter((a) => a.application_status_id === 3).length}
           </Badge>
-        </TabsTrigger>
-      </TabsList>
+        </AnimatedTabsTrigger>
+      </AnimatedTabsList>
 
-      <TabsContent value={activeTab} className="mt-0">
+      <AnimatedTabsContent value={activeTab} className="mt-0">
         {filteredApplications.length === 0 ? (
           <Card className="p-12">
             <div className="text-center">
@@ -108,7 +108,7 @@ export function ApplicationTabs({
             })}
           </div>
         )}
-      </TabsContent>
-    </Tabs>
+      </AnimatedTabsContent>
+    </AnimatedTabsRoot>
   );
 }
