@@ -1,6 +1,6 @@
 [
   {
-    "industry": "Information Technology / Computer Studies",
+    "industry": "Information Technology",
     "job_categories": [
       "Web Development",
       "Software Engineering",
@@ -104,6 +104,201 @@
       "Technical Documentation",
       "Business Intelligence",
       "IT Consulting"
+    ]
+  },
+  {
+    "industry": "Healthcare and Medical Services",
+    "job_categories": [
+      "Nursing",
+      "Medical Technology",
+      "Pharmacy",
+      "Physical Therapy",
+      "Medical Records Management",
+      "Healthcare Administration",
+      "Clinical Research",
+      "Patient Care Coordination",
+      "Telemedicine Support",
+      "Health Information Management"
+    ]
+  },
+  {
+    "industry": "Hospitality and Tourism",
+    "job_categories": [
+      "Hotel Management",
+      "Restaurant Management",
+      "Event Planning and Coordination",
+      "Travel and Tour Operations",
+      "Front Desk Operations",
+      "Food and Beverage Service",
+      "Housekeeping Management",
+      "Guest Relations",
+      "Resort Operations",
+      "Tourism Marketing"
+    ]
+  },
+  {
+    "industry": "Retail and Consumer Services",
+    "job_categories": [
+      "Store Management",
+      "Merchandising",
+      "Sales Associate",
+      "Inventory Management",
+      "Visual Merchandising",
+      "Customer Service",
+      "Cashier Operations",
+      "Product Sourcing",
+      "Retail Analytics",
+      "Loss Prevention"
+    ]
+  },
+  {
+    "industry": "Media and Communications",
+    "job_categories": [
+      "Journalism and Reporting",
+      "Content Creation",
+      "Social Media Management",
+      "Video Production",
+      "Broadcasting",
+      "Public Relations",
+      "Copywriting",
+      "Digital Marketing",
+      "Photography",
+      "Graphic Design"
+    ]
+  },
+  {
+    "industry": "Construction and Civil Engineering",
+    "job_categories": [
+      "Project Site Management",
+      "Structural Engineering",
+      "Quantity Surveying",
+      "Construction Planning",
+      "Building Design",
+      "Site Safety Management",
+      "Architectural Drafting",
+      "Surveying and Mapping",
+      "Materials Testing",
+      "Infrastructure Development"
+    ]
+  },
+  {
+    "industry": "Human Resources and Recruitment",
+    "job_categories": [
+      "Talent Acquisition",
+      "Employee Relations",
+      "HR Administration",
+      "Compensation and Benefits",
+      "Training and Development",
+      "Performance Management",
+      "HR Analytics",
+      "Organizational Development",
+      "Labor Relations",
+      "HR Compliance"
+    ]
+  },
+  {
+    "industry": "Logistics and Transportation",
+    "job_categories": [
+      "Supply Chain Management",
+      "Warehouse Operations",
+      "Fleet Management",
+      "Freight Forwarding",
+      "Inventory Control",
+      "Distribution Management",
+      "Procurement",
+      "Shipping Coordination",
+      "Route Planning",
+      "Import/Export Documentation"
+    ]
+  },
+  {
+    "industry": "Real Estate and Property Management",
+    "job_categories": [
+      "Property Sales",
+      "Property Leasing",
+      "Real Estate Appraisal",
+      "Facility Management",
+      "Property Development",
+      "Property Marketing",
+      "Tenant Relations",
+      "Building Maintenance",
+      "Real Estate Analysis",
+      "Property Acquisition"
+    ]
+  },
+  {
+    "industry": "Food and Beverage Industry",
+    "job_categories": [
+      "Food Production",
+      "Quality Control",
+      "Food Safety Management",
+      "Menu Development",
+      "Kitchen Management",
+      "Culinary Arts",
+      "Food Science and Technology",
+      "Beverage Production",
+      "Catering Management",
+      "Barista Services"
+    ]
+  },
+  {
+    "industry": "Legal Services",
+    "job_categories": [
+      "Legal Research",
+      "Paralegal Services",
+      "Contract Management",
+      "Corporate Law",
+      "Litigation Support",
+      "Legal Documentation",
+      "Compliance and Regulatory",
+      "Intellectual Property",
+      "Legal Administration",
+      "Notarial Services"
+    ]
+  },
+  {
+    "industry": "Arts and Creative Services",
+    "job_categories": [
+      "Illustration and Animation",
+      "Interior Design",
+      "Fashion Design",
+      "Music Production",
+      "Theater Arts",
+      "Creative Direction",
+      "Art Direction",
+      "Multimedia Arts",
+      "Brand Design",
+      "Exhibition Management"
+    ]
+  },
+  {
+    "industry": "Environmental Services",
+    "job_categories": [
+      "Environmental Consulting",
+      "Waste Management",
+      "Sustainability Planning",
+      "Environmental Compliance",
+      "Renewable Energy",
+      "Water Resource Management",
+      "Environmental Impact Assessment",
+      "Pollution Control",
+      "Conservation Programs",
+      "Environmental Education"
+    ]
+  },
+  {
+    "industry": "Agriculture and Agribusiness",
+    "job_categories": [
+      "Crop Production",
+      "Farm Management",
+      "Agricultural Research",
+      "Agribusiness Management",
+      "Agricultural Sales",
+      "Livestock Management",
+      "Food Processing",
+      "Agricultural Extension",
+      "Irrigation Management",
+      "Agricultural Marketing"
     ]
   }
 ]
