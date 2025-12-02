@@ -79,7 +79,7 @@ export function AnimatedCompanyContent({
           <div className="px-4">
             <Card className="p-12 text-center">
               <p className="text-muted-foreground">
-                No job openings available at the moment.
+                {company_profile.company_name} has no openings available at the moment.
               </p>
             </Card>
           </div>
