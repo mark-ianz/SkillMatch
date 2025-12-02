@@ -3,7 +3,13 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
-import { Building2, Briefcase, BarChart3, ShieldCheck, GraduationCap } from "lucide-react";
+import {
+  Building2,
+  Briefcase,
+  BarChart3,
+  ShieldCheck,
+  GraduationCap,
+} from "lucide-react";
 import LogoutButton from "../common/button/LogoutButton";
 
 const navItems = [
@@ -13,7 +19,7 @@ const navItems = [
     icon: Building2,
   },
   {
-    title: "Job Posts",
+    title: "Job Postings",
     href: "/admin/job-postings",
     icon: Briefcase,
   },
@@ -65,8 +71,11 @@ export default function AdminSidebar() {
         })}
       </nav>
 
-      <div className="absolute bottom-6 left-6 right-6">
-        <LogoutButton/>
+      <div>
+        <LogoutButton
+          className="px-4 py-3 w-full h-full text-md"
+          iconClassName="ml-2"
+        />
       </div>
     </aside>
   );
