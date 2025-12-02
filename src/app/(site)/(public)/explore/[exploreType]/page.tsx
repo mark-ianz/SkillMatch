@@ -12,7 +12,7 @@ export default async function ExplorePage() {
         {/* Left Sidebar */}
         <div className="flex-2 sticky top-24 h-fit">
           <ScrollArea className="h-[calc(100vh-7rem)]">
-            <div className="space-y-6 pr-4">
+            <div className="space-y-6 pr-3">
               <SidebarProfile />
               <JobExploreFilter />
             </div>
