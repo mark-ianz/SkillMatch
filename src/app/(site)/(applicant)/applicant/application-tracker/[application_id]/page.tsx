@@ -1,7 +1,10 @@
 "use client";
 
 import { useParams, useRouter } from "next/navigation";
-import { useApplication, useRespondToOffer } from "@/hooks/query/useApplications";
+import {
+  useApplication,
+  useRespondToOffer,
+} from "@/hooks/query/useApplications";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -34,6 +37,7 @@ import {
 import Link from "next/link";
 import { statusConfig } from "@/components/page_specific/application-tracker/applicationStatusConfig";
 import { useState } from "react";
+import LinkWithIcon from "@/components/global/LinkWithIcon";
 
 export default function ApplicationDetailsPage() {
   const params = useParams();
@@ -125,7 +129,9 @@ export default function ApplicationDetailsPage() {
     return (
       <div className="container max-w-4xl py-8">
         <div className="flex items-center justify-center py-12">
-          <p className="text-muted-foreground">Loading application details...</p>
+          <p className="text-muted-foreground">
+            Loading application details...
+          </p>
         </div>
       </div>
     );
@@ -137,11 +143,16 @@ export default function ApplicationDetailsPage() {
         <Card className="p-12">
           <div className="text-center">
             <AlertCircle className="h-12 w-12 mx-auto text-muted-foreground mb-4" />
-            <h3 className="text-lg font-semibold mb-2">Application not found</h3>
+            <h3 className="text-lg font-semibold mb-2">
+              Application not found
+            </h3>
             <p className="text-sm text-muted-foreground mb-4">
-              The application you&apos;re looking for doesn&apos;t exist or has been removed.
+              The application you&apos;re looking for doesn&apos;t exist or has
+              been removed.
             </p>
-            <Button onClick={() => router.push("/applicant/application-tracker")}>
+            <Button
+              onClick={() => router.push("/applicant/application-tracker")}
+            >
               <ArrowLeft className="mr-2 h-4 w-4" />
               Back to Applications
             </Button>
@@ -151,7 +162,10 @@ export default function ApplicationDetailsPage() {
     );
   }
 
-  const config = statusConfig[application.application_status_id.toString() as keyof typeof statusConfig];
+  const config =
+    statusConfig[
+      application.application_status_id.toString() as keyof typeof statusConfig
+    ];
   const StatusIcon = config?.icon || FileText;
 
   return (
@@ -186,14 +200,10 @@ export default function ApplicationDetailsPage() {
             </Avatar>
 
             <div className="flex-1">
-              <Link
-                href={`/view/job-postings/${application.job_post_id}`}
-                target="_blank"
-                className="text-2xl font-bold hover:text-green-600 transition-colors inline-flex items-center gap-2"
-              >
-                {application.job_title}
-                <ExternalLink className="h-5 w-5" />
-              </Link>
+              <LinkWithIcon
+                path={`/view/job-postings/${application.job_post_id}`}
+                text={application.job_title}
+              />
 
               <div className="flex items-center gap-2 mt-2 text-muted-foreground">
                 <Building2 className="h-4 w-4" />
@@ -251,14 +261,17 @@ export default function ApplicationDetailsPage() {
               <div className="flex-1 pb-4">
                 <p className="font-medium">Application Submitted</p>
                 <p className="text-sm text-muted-foreground">
-                  {new Date(application.applied_date).toLocaleDateString("en-US", {
-                    weekday: "long",
-                    month: "long",
-                    day: "numeric",
-                    year: "numeric",
-                    hour: "2-digit",
-                    minute: "2-digit",
-                  })}
+                  {new Date(application.applied_date).toLocaleDateString(
+                    "en-US",
+                    {
+                      weekday: "long",
+                      month: "long",
+                      day: "numeric",
+                      year: "numeric",
+                      hour: "2-digit",
+                      minute: "2-digit",
+                    }
+                  )}
                 </p>
               </div>
             </motion.div>
@@ -317,7 +330,10 @@ export default function ApplicationDetailsPage() {
                         </a>
                         {application.interview_code && (
                           <p className="text-sm text-muted-foreground">
-                            Meeting Code: <span className="font-mono font-semibold">{application.interview_code}</span>
+                            Meeting Code:{" "}
+                            <span className="font-mono font-semibold">
+                              {application.interview_code}
+                            </span>
                           </p>
                         )}
                       </div>
@@ -385,7 +401,9 @@ export default function ApplicationDetailsPage() {
                         disabled={respondToOfferMutation.isPending}
                       >
                         <CheckCircle2 className="mr-2 h-4 w-4" />
-                        {respondToOfferMutation.isPending ? "Accepting..." : "Accept Offer"}
+                        {respondToOfferMutation.isPending
+                          ? "Accepting..."
+                          : "Accept Offer"}
                       </Button>
                       <Button
                         size="sm"
@@ -433,20 +451,19 @@ export default function ApplicationDetailsPage() {
                       : "Selection Offer Declined"}
                   </p>
                   <p className="text-sm text-muted-foreground">
-                    {new Date(application.offer_response_date).toLocaleDateString(
-                      "en-US",
-                      {
-                        month: "long",
-                        day: "numeric",
-                        year: "numeric",
-                      }
-                    )}
+                    {new Date(
+                      application.offer_response_date
+                    ).toLocaleDateString("en-US", {
+                      month: "long",
+                      day: "numeric",
+                      year: "numeric",
+                    })}
                   </p>
                   {application.application_status_id === 11 && (
                     <div className="mt-2 p-3 bg-green-50 rounded-md border border-green-200">
                       <p className="text-sm text-green-900">
-                        Congratulations! You&apos;ll receive onboarding details from the
-                        company soon.
+                        Congratulations! You&apos;ll receive onboarding details
+                        from the company soon.
                       </p>
                     </div>
                   )}
@@ -471,11 +488,14 @@ export default function ApplicationDetailsPage() {
                 <div className="flex-1">
                   <p className="font-medium">Application Rejected</p>
                   <p className="text-sm text-muted-foreground">
-                    {new Date(application.last_update).toLocaleDateString("en-US", {
-                      month: "long",
-                      day: "numeric",
-                      year: "numeric",
-                    })}
+                    {new Date(application.last_update).toLocaleDateString(
+                      "en-US",
+                      {
+                        month: "long",
+                        day: "numeric",
+                        year: "numeric",
+                      }
+                    )}
                   </p>
                   {application.rejection_reason && (
                     <div className="mt-2 p-3 bg-muted rounded-md">
@@ -539,7 +559,9 @@ export default function ApplicationDetailsPage() {
                 <ExternalLink className="h-3 w-3" />
               </a>
             ) : (
-              <p className="text-sm text-muted-foreground">No resume attached</p>
+              <p className="text-sm text-muted-foreground">
+                No resume attached
+              </p>
             )}
           </div>
 
@@ -570,15 +592,13 @@ export default function ApplicationDetailsPage() {
           <DialogHeader>
             <DialogTitle>Decline Job Offer</DialogTitle>
             <DialogDescription>
-              Are you sure you want to decline this offer from {application?.company_name}?
-              This action cannot be undone.
+              Are you sure you want to decline this offer from{" "}
+              {application?.company_name}? This action cannot be undone.
             </DialogDescription>
           </DialogHeader>
           <div className="space-y-4 py-4">
             <div className="space-y-2">
-              <Label htmlFor="decline-message">
-                Message (Optional)
-              </Label>
+              <Label htmlFor="decline-message">Message (Optional)</Label>
               <Textarea
                 id="decline-message"
                 placeholder="Share your reason for declining (optional)..."
@@ -604,7 +624,9 @@ export default function ApplicationDetailsPage() {
               onClick={handleDeclineOffer}
               disabled={respondToOfferMutation.isPending}
             >
-              {respondToOfferMutation.isPending ? "Declining..." : "Decline Offer"}
+              {respondToOfferMutation.isPending
+                ? "Declining..."
+                : "Decline Offer"}
             </Button>
           </DialogFooter>
         </DialogContent>
