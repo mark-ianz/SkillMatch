@@ -14,9 +14,14 @@ interface ApplyButtonProps {
   jobTitle: string;
   companyName: string;
   className?: string;
-  variant?: "default" | "outline" | "ghost" | "link" | "destructive" | "secondary";
+  variant?:
+    | "default"
+    | "outline"
+    | "ghost"
+    | "link"
+    | "destructive"
+    | "secondary";
   size?: "default" | "sm" | "lg" | "icon";
-  apply_full_width?: boolean;
 }
 
 export function ApplyButton({
@@ -26,7 +31,6 @@ export function ApplyButton({
   className,
   variant = "default",
   size = "default",
-  apply_full_width = true,
 }: ApplyButtonProps) {
   const { data: session } = useSession();
   const [isDialogOpen, setIsDialogOpen] = useState(false);
@@ -34,7 +38,9 @@ export function ApplyButton({
   const applyMutation = useApplyToJob();
 
   // Don't render the button if user is a Company
-  const role = session?.user?.role_id ? getRoleName(session.user.role_id) : null;
+  const role = session?.user?.role_id
+    ? getRoleName(session.user.role_id)
+    : null;
   if (role === "Company") {
     return null;
   }
@@ -75,7 +81,7 @@ export function ApplyButton({
     <>
       <Button
         onClick={handleApplyClick}
-        className={cn(className, apply_full_width ? "w-full" : "w-fit px-6")}
+        className={cn("w-full", className)}
         variant={variant}
         size={size}
         disabled={applyMutation.isPending}
