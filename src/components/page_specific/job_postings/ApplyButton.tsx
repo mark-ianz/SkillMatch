@@ -37,11 +37,11 @@ export function ApplyButton({
   const [showSignInDialog, setShowSignInDialog] = useState(false);
   const applyMutation = useApplyToJob();
 
-  // Don't render the button if user is a Company
+  // Don't render the button if user is a Company or Admin
   const role = session?.user?.role_id
     ? getRoleName(session.user.role_id)
     : null;
-  if (role === "Company") {
+  if (role === "Company" || role === "Admin") {
     return null;
   }
 
