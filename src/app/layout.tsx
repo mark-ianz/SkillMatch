@@ -47,6 +47,11 @@ export const metadata: Metadata = {
     "career opportunities",
   ],
   authors: [{ name: "SkillMatch Team" }],
+  icons: {
+    icon: "/logo/SkillMatch.png",
+    shortcut: "/logo/SkillMatch.png",
+    apple: "/logo/SkillMatch.png",
+  },
   openGraph: {
     type: "website",
     locale: "en_US",
@@ -54,12 +59,21 @@ export const metadata: Metadata = {
     title: "SkillMatch - Connect QCU Students with Top Companies",
     description:
       "Connect with top companies partnered with Quezon City University. Find internships and OJT opportunities that match your skills.",
+    images: [
+      {
+        url: "/logo/SkillMatch.png",
+        width: 1200,
+        height: 630,
+        alt: "SkillMatch Logo",
+      },
+    ],
   },
   twitter: {
     card: "summary_large_image",
     title: "SkillMatch - QCU Student Job Platform",
     description:
       "Find your perfect internship or OJT opportunity at QCU partner companies.",
+    images: ["/logo/SkillMatch.png"],
   },
   robots: {
     index: true,
