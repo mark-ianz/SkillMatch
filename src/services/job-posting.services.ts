@@ -63,8 +63,6 @@ export const JobPostingServices = {
         job_responsibilities,
         preferred_qualifications,
         work_arrangement,
-        is_paid,
-        allowance_description,
         soft_skills,
         technical_skills,
         street_name,
@@ -76,8 +74,8 @@ export const JobPostingServices = {
       const job_post_id = nanoid();
 
       const [result] = await connection.query<ResultSetHeader>(
-        `INSERT INTO job_posts (job_post_id, company_id, job_title, courses_required, job_categories, available_positions, job_post_status_id, job_overview, job_responsibilities, preferred_qualifications, work_arrangement, is_paid, allowance_description, soft_skills, technical_skills, street_name, barangay, city_municipality, postal_code, created_at, updated_at)
-         VALUES (?, ?, ?, ?, ?, ?, 2, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW(), NOW())`,
+        `INSERT INTO job_posts (job_post_id, company_id, job_title, courses_required, job_categories, available_positions, job_post_status_id, job_overview, job_responsibilities, preferred_qualifications, work_arrangement, soft_skills, technical_skills, street_name, barangay, city_municipality, postal_code, created_at, updated_at)
+         VALUES (?, ?, ?, ?, ?, ?, 2, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW(), NOW())`,
         [
           job_post_id,
           company_id,
@@ -89,8 +87,6 @@ export const JobPostingServices = {
           (job_responsibilities || []).join(","),
           preferred_qualifications || null,
           work_arrangement,
-          is_paid ? 1 : 0,
-          allowance_description || null,
           (soft_skills || []).join(","),
           (technical_skills || []).join(","),
           street_name,
