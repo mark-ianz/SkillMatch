@@ -6,10 +6,17 @@ import Link from "next/link";
 import { CompanyProfile } from "@/components/page_specific/explore/company/CompanyProfile";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import CompanyServices from "@/services/company.services";
+import { Button } from "@/components/ui/button";
+import { ArrowLeft } from "lucide-react";
 
-export default async function CompanyProfilePage({params} : { params: Promise<{ company_id: string }> }) {
+export default async function CompanyProfilePage({
+  params,
+}: {
+  params: Promise<{ company_id: string }>;
+}) {
   const { company_id } = await params;
-  const { company_profile, job_posted } = await CompanyServices.getCompanyWithJobs(company_id);
+  const { company_profile, job_posted } =
+    await CompanyServices.getCompanyWithJobs(company_id);
 
   if (!company_profile) {
     return (
@@ -23,12 +30,21 @@ export default async function CompanyProfilePage({params} : { params: Promise<{ 
     );
   }
 
-
   return (
     <MainLayout className="items-center">
       <div className="gap-10 flex flex-col items-centerw-full">
-        {/* Company Profile Card */}
-        <CompanyProfile className="p-10 w-5xl" company={company_profile} />
+        {/* Back Button */}
+        <div className="space-y-4">
+          <Link href="/explore/companies" className="self-start">
+            <Button variant="ghost" className="mb-4">
+              <ArrowLeft className="mr-2 h-4 w-4" />
+              Back to Companies
+            </Button>
+          </Link>
+
+          {/* Company Profile Card */}
+          <CompanyProfile className="p-10 w-5xl" company={company_profile} />
+        </div>
 
         {/* Job Posts Section */}
         <div className="space-y-6 grow">
