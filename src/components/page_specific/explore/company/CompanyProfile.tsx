@@ -19,20 +19,26 @@ import Image from "next/image";
 import { cn } from "@/lib/utils";
 import { CompanyProfile as CompanyProfileType } from "@/types/company.types";
 import { formatDate } from "date-fns";
-import Link from "next/link";
 import CompanyEmptyImage from "./CompanyEmptyImage";
 import { CopyLinkButton } from "@/components/common/button/CopyLinkButton";
-import { useIsCompanySaved, useSaveCompany, useUnsaveCompany } from "@/hooks/query/useSavedItems";
+import {
+  useIsCompanySaved,
+  useSaveCompany,
+  useUnsaveCompany,
+} from "@/hooks/query/useSavedItems";
 import { useSession } from "next-auth/react";
 import { SignInPromptDialog } from "@/components/common/SignInPromptDialog";
 import { useState } from "react";
+import LinkWithIcon from "@/components/global/LinkWithIcon";
 
 export function CompanyProfile({
   className,
   company,
+  isFullView = false,
 }: {
   className?: string;
   company: CompanyProfileType;
+  isFullView?: boolean;
 }) {
   const { data: session } = useSession();
   const [showSignInDialog, setShowSignInDialog] = useState(false);
@@ -41,7 +47,7 @@ export function CompanyProfile({
   const unsaveCompanyMutation = useUnsaveCompany();
 
   const handleSave = () => {
-    console.log(session)
+    console.log(session);
     if (!session) {
       setShowSignInDialog(true);
       return;
@@ -54,7 +60,9 @@ export function CompanyProfile({
     }
   };
 
-  const baseUrl = process.env.NEXT_PUBLIC_FRONTEND_BASE_URL || (typeof window !== 'undefined' ? window.location.origin : '');
+  const baseUrl =
+    process.env.NEXT_PUBLIC_FRONTEND_BASE_URL ||
+    (typeof window !== "undefined" ? window.location.origin : "");
   const companyUrl = `${baseUrl}/view/company/${company.company_id}`;
 
   return (
@@ -78,11 +86,16 @@ export function CompanyProfile({
           {/* Company Name and Actions */}
           <div className="flex-1 min-w-0">
             <div className="flex items-start justify-between gap-4 mb-4">
-              <h1 className="text-2xl font-semibold text-foreground text-balance leading-tight underline">
-                <Link href={"/view/company/" + company.company_id}>
+              {isFullView ? (
+                <LinkWithIcon
+                  path={"/view/company/" + company.company_id}
+                  text={company?.company_name}
+                />
+              ) : (
+                <h1 className="text-2xl font-bold">
                   {company?.company_name}
-                </Link>
-              </h1>
+                </h1>
+              )}
               <div className="flex gap-2 flex-shrink-0">
                 {/* Bookmark button - Only visible for applicants (role_id 3) */}
                 {session?.user?.role_id === 3 && (
@@ -90,13 +103,22 @@ export function CompanyProfile({
                     variant="ghost"
                     size="icon"
                     onClick={handleSave}
-                    disabled={saveCompanyMutation.isPending || unsaveCompanyMutation.isPending}
+                    disabled={
+                      saveCompanyMutation.isPending ||
+                      unsaveCompanyMutation.isPending
+                    }
                     className="h-9 w-9"
                   >
-                    <Bookmark className={cn("w-4 h-4", isSaved && "fill-current")} />
+                    <Bookmark
+                      className={cn("w-4 h-4", isSaved && "fill-current")}
+                    />
                   </Button>
                 )}
-                <CopyLinkButton url={companyUrl} size="icon" className="h-9 w-9" />
+                <CopyLinkButton
+                  url={companyUrl}
+                  size="icon"
+                  className="h-9 w-9"
+                />
               </div>
             </div>
 
