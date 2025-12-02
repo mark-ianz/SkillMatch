@@ -16,22 +16,26 @@ To-Do:
 - nag ooverlap na yung mga same name na variable sa database pati sa types tanginang yan
 - company email sa settings ng company is editable dapat, ang hindi editable is yung personal email na pinang login, ilagay rin to sa security.
 - optimize bg image on signup/signin
+- reaction count is stale after reacting
 
+
+- save button is visible to all except admin and company role
+- location, bat ncr lang. pano taga antipolo
 
 **************************************************
 **************** // PRIORITIZE // ****************
 **************************************************
 
-**************** // Landing Page // ****************
-  Landing Page (Both):
+**************** // Landing Page // **************** Done
+  Landing Page (Both): Done
     - Buttons on the CTA sections are not functional.
 
-  Landing Page / Applicant:
+  Landing Page / Applicant: Done
   - Make the search jobs functional on the hero section.
   - On the quick link below the search job on the hero section (popular). Get the 5 most used job_categories on the job_posts table then display it. If for some reason, no result was found. Then replace this with some text saying no popular category something...
 ************************************************
 
-**************** // Auth Pages // ****************
+**************** // Auth Pages // **************** Done
   Onboarding
     - Remove the links on the header when they are on the onboarding, to not distract them. They won't be able to access protected routes anyway if they are still onboarding.
 
@@ -47,33 +51,43 @@ To-Do:
     - error and not found page
 ************************************************
 
-**************** // Company // ****************
-  Posting Job
+**************** // Company // **************** Done
+  Posting Job Done
     - Remove the compentsation section
     - After the job posting is successfully posted. The toast should have a link like `View Jost Post` under the Success message. The link should be smaller, primary-blue and underlined.
     - Job Post Confirmation button should be primary-blue
 
-  Feed Posts
+  Feed Posts Done
     - The text and button is touching each other.
+    - Create Post is green, it should be blue.
+    - Character limit
 
-  Create Post
+  Create Post Done
     - bug: Content is shrinking when typing on post content
     - Reset Confirmation is too big.
     - Post Confirmation is too big.
     - Post Confirmation button should be primary-blue
 
-  Viewing Job Post by the company
-  - bug: showing as Active even if it's pending.
-  - Make the Edit Job functional
-  - Make the close posting functional
+  Viewing Job Post by the company Done
+    - bug: showing as Active even if it's pending. Done
+    - Make the Edit Job functional
+    - Make the close posting functional
+  
+  Job Posting Done
+    - The gap on the search and label is too big. Done
+    - Reset popover is too wide. Done
+    - Reposition the strucute on the Location: Skipped
+      - 1 row & 2 column is Street Address and Postal Code
+      - 1 row & 2 column is City/Municipality and Barangay
+
 ************************************************
 
-**************** // Authorization // ****************
-  Brute Force Viewing:
+**************** // Authorization // **************** Done
+  Brute Force Viewing: Done
   - No one should be able to visit/view pending company or pending job-postings.
   - /view/job-postings/nVCDwwuAb02I8K3efVm-I (still pending). Then it should be 404 not found, same goes to visiting pending company.
 
-  Route
+  Route Done
   - If their status is onboarding and tried to access:
     - Protected Route for their role, then unauthorized them with a message saying they must finish their onboarding first to access this page something then add a link for /onboaring/role
     - Unauthorized route (example company is still onboarding and they accessed /applicant/settings) then instead of prompting them that they are still onboarding and can't access this, they should receive a different unauthorized message saying they are not allowed to this page.
@@ -81,39 +95,31 @@ To-Do:
   - Redirect these unauthorized users to error page with custom messages.
 ************************************************
 
-**************** // Applicants // ****************
+**************** // Applicants // **************** DONE
   Job Posts
-    - Apply now button ilagay sa header na.
-    - If walang result sa search, add a display saying no result found on both the feed and the full info
-    - The gap on the search and label is too big.
-    - Reset popover is too wide.
-    - Reposition the strucute on the Location:
-      - 1 row & 2 column is Street Address and Postal Code
-      - 1 row & 2 column is City/Municipality and Barangay
+    - Apply now button ilagay sa header na. Done
+    - If walang result sa search, add a display saying no result found on both the feed and the full info Done
 
-  Applicant Settings
+  Applicant Settings Done
     - Student Number is for VIEW only
 
-  Applicant Saved
+  Applicant Saved Done
     - Add course/skill matching badges on the saved jobs.
 
-  Application:
+  Application: DONE
     - Instead of random character on the google meet link, use the ACTUAL GOOGLE MEET BUTTON! for company when generating google links. and when storing the link, store the code too and display it along side the link when rendering.
 ************************************************
 
 **************** // Admin // ****************
-  Sidebar Panel
+  Sidebar Panel Done
     - Line the Logout button with the navigations, so it's under them and not at the very end of the page. Because if the page is long then the logout button will be at the very end of the screen.
 
-  Companies
+  Companies Done
     - Industry is getting displayed like Information Technology / Computer Studies,Electronics and Electrical Engineering. industry is string on the database but separated with ,. But they should be split with (","). Then render it with map. Same problem occurs when viewing company details popover.
-  Job Posts
+  Job Posts Done
     - (bug): nothing is showing up
 
-  Status
-    - On status, add a color theme. Check JobStatusBadge. I know it's for JobStatus, but make it work.
-
-  Applicant Popover
+  Applicant Popover Done
     - Applicant info font size is too big.
 
   General
@@ -121,25 +127,26 @@ To-Do:
 ************************************************
 
 **************** // General // ****************
-  Filter
+  Filter Done
     - Make the filter selection automatic. So if they select a filter, it will automatically query and the same if they unchecked too.
-    - Make the section have a max height. And if checkbox exceed like 6+ filters, there will be a text saying view more, if they clicked it then it will show all the filter checkboxes.
+    - Make the section have a max height. And if checkbox exceed like 6+ check box filters, there will be a text saying view more, if they clicked it then it will show all the filter checkboxes.
+    - Add a search on the filter section.
     - On the Location filter, render all the city_municipality from the json.
 
   Explore tab
     - Inconsistent yung PopoverContent.
 
-  Reactions
+  Reactions Done
     - Move the reaction count from beside of reaction to above it.
     - Display the 2 most reactions beside the count.
 
       2 (._.)(;_;)  
     |  (<3) React    |
 
-  Legal
+  Legal Done
     - On the privacy-policy page and terms-of-service, there's a footer for Related Documents and some links. I want to have those quick links on Abous Us and FAQs
 
-  Animation:
+  Animation: Done
     - Add minimal but attention catching animations. Especially for STATIC/SSR pages
     - PRIORITIZE THE LANDING PAGE FOR BOTH APPLICANT AND COMPANY
 
@@ -150,4 +157,9 @@ To-Do:
       - Partnership Documents (onboarding/company)
       - Legal Documents (onboarding/company)
       - Resume
+************************************************
+
+**************** // General // **************** Done
+  Popover Logout
+    - Conditionally direct the user to the landing page base on their role when they logged out.
 ************************************************
