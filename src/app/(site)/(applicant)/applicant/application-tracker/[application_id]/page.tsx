@@ -1,6 +1,6 @@
 "use client";
 
-import { useParams } from "next/navigation";
+import { notFound, useParams } from "next/navigation";
 import {
   useApplication,
   useRespondToOffer,
@@ -124,23 +124,7 @@ export default function ApplicationDetailsPage() {
   };
 
   if (!application) {
-    return (
-      <div className="container max-w-4xl py-8">
-        <Card className="p-12">
-          <div className="text-center">
-            <AlertCircle className="h-12 w-12 mx-auto text-muted-foreground mb-4" />
-            <h3 className="text-lg font-semibold mb-2">
-              Application not found
-            </h3>
-            <p className="text-sm text-muted-foreground mb-4">
-              The application you&apos;re looking for doesn&apos;t exist or has
-              been removed.
-            </p>
-            <GoBackButton />
-          </div>
-        </Card>
-      </div>
-    );
+    notFound();
   }
 
   const config =
@@ -155,7 +139,7 @@ export default function ApplicationDetailsPage() {
       <GoBackButton />
 
       {/* Header Card */}
-      <Card className="mb-6">
+      <Card className="mb-6 mt-4">
         <CardContent className="p-6">
           <div className="flex flex-col md:flex-row gap-6">
             <Avatar className="h-20 w-20 rounded-xl">
