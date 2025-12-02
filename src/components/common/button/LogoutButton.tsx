@@ -18,7 +18,7 @@ export default function LogoutButton({ className }: { className?: string }) {
     if (!isAdmin) {
       // Role 3 = Applicant, Role 4 = Company
       if (roleId === 3) {
-        callbackUrl = "/applicant";
+        callbackUrl = "/";
       } else if (roleId === 4) {
         callbackUrl = "/company";
       }
