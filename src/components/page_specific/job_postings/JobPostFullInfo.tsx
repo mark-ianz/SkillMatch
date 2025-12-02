@@ -33,7 +33,7 @@ export function JobPostFullInfo({
   className?: string;
   apply_button_classname?: string;
 }) {
-  const { data: session } = useSession();
+  const { data: session, status } = useSession();
   const [showSignInDialog, setShowSignInDialog] = useState(false);
   const isSaved = useIsJobSaved(job?.job_post_id);
   const saveJobMutation = useSaveJob();
@@ -165,7 +165,9 @@ export function JobPostFullInfo({
 
             {/* Apply Button - Will not be shown if the role is admin and company */}
             {!(
-              session?.user?.role_id === 2 || session?.user?.role_id === 4
+              session?.user?.role_id === 2 ||
+              session?.user?.role_id === 4 ||
+              status === "loading"
             ) && (
               <ApplyButton
                 jobPostId={job.job_post_id}
