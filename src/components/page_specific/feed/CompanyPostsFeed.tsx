@@ -4,6 +4,7 @@ import { useCompanyPostsFeed } from "@/hooks/query/useFeed";
 import { CompanyPost } from "@/components/page_specific/company_post/CompanyPost";
 import { FileText } from "lucide-react";
 import { CompanyPostSkeleton } from "@/components/common/skeleton/JobPostSkeleton";
+import { motion } from "framer-motion";
 
 export function CompanyPostsFeed() {
   const { data: posts, isLoading, error } = useCompanyPostsFeed();
@@ -45,8 +46,15 @@ export function CompanyPostsFeed() {
 
   return (
     <div className="space-y-6 pb-10">
-      {posts.map((post) => (
-        <CompanyPost key={post.post_id} post={post} />
+      {posts.map((post, index) => (
+        <motion.div
+          key={post.post_id}
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.3, delay: index * 0.1 }}
+        >
+          <CompanyPost post={post} />
+        </motion.div>
       ))}
     </div>
   );

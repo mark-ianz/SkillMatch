@@ -8,6 +8,7 @@ import Link from "next/link";
 import { useSession } from "next-auth/react";
 import { getRoleName } from "@/lib/utils";
 import { CompanyCardSkeleton } from "@/components/common/skeleton/JobPostSkeleton";
+import { motion } from "framer-motion";
 
 export function SuggestedCompanies() {
   const { data: session } = useSession();
@@ -35,16 +36,20 @@ export function SuggestedCompanies() {
           </div>
         ) : companies && companies.length > 0 ? (
           <div className="flex flex-col gap-4">
-            {companies.map((company) => (
-              <Link
+            {companies.map((company, index) => (
+              <motion.div
                 key={company.company_id}
-                href={`/view/company/${company.company_id}`}
+                initial={{ opacity: 0, x: -20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.3, delay: index * 0.1 }}
               >
-                <CompanyPreview
-                  company={company}
-                  className="hover:border-skillmatch-primary-green transition-colors"
-                />
-              </Link>
+                <Link href={`/view/company/${company.company_id}`}>
+                  <CompanyPreview
+                    company={company}
+                    className="hover:border-skillmatch-primary-green transition-colors"
+                  />
+                </Link>
+              </motion.div>
             ))}
           </div>
         ) : (
