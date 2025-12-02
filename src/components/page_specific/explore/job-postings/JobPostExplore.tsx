@@ -10,6 +10,7 @@ import { JobExploreFilters } from "@/types/job_explore.types";
 import { JobPostCardSkeleton } from "@/components/common/skeleton/JobPostSkeleton";
 import { useSession } from "next-auth/react";
 import { getRoleName } from "@/lib/utils";
+import { motion } from "framer-motion";
 
 export default function JobPostExplore() {
   const searchParams = useSearchParams();
@@ -38,9 +39,17 @@ export default function JobPostExplore() {
   const setSelectedJobPost = useExploreStore(
     (state) => state.setSelectedJobPost
   );
+  const setIsJobPostsLoading = useExploreStore(
+    (state) => state.setIsJobPostsLoading
+  );
 
   console.log("JobPostFeed - User Info:", { user_id, role_name });
   console.log("JobPostFeed - Job Posts:", job_posts);
+
+  // Update loading state in store
+  useEffect(() => {
+    setIsJobPostsLoading(isLoading);
+  }, [isLoading, setIsJobPostsLoading]);
 
   // Set initial selected item when data loads
   useEffect(() => {
@@ -75,7 +84,12 @@ export default function JobPostExplore() {
 
   if (!job_posts || job_posts.length === 0) {
     return (
-      <div className="flex flex-col items-center justify-center py-16 px-4 text-center">
+      <motion.div
+        initial={{ opacity: 0, scale: 0.95 }}
+        animate={{ opacity: 1, scale: 1 }}
+        transition={{ duration: 0.4 }}
+        className="flex flex-col items-center justify-center py-16 px-4 text-center"
+      >
         <div className="w-16 h-16 rounded-full bg-gray-100 flex items-center justify-center mb-4">
           <svg
             className="w-8 h-8 text-gray-400"
@@ -97,19 +111,25 @@ export default function JobPostExplore() {
         <p className="text-sm text-muted-foreground max-w-sm">
           Try adjusting your filters or search query to find more results.
         </p>
-      </div>
+      </motion.div>
     );
   }
 
   return (
     <>
-      {job_posts.map((job: JobPost) => (
-        <div key={job.job_post_id} onClick={() => setSelectedJobPost(job)}>
+      {job_posts.map((job: JobPost, index) => (
+        <motion.div
+          key={job.job_post_id}
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.3, delay: index * 0.05 }}
+          onClick={() => setSelectedJobPost(job)}
+        >
           <JobPostPreview
             job={job}
             isSelected={selected_job_post?.job_post_id === job.job_post_id}
           />
-        </div>
+        </motion.div>
       ))}
     </>
   );

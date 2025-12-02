@@ -6,16 +6,22 @@ import { useExploreStore } from "@/store/ExploreStore";
 import { CompanyProfile } from "../company/CompanyProfile";
 import { JobPostFullInfoSkeleton } from "@/components/common/skeleton/JobPostSkeleton";
 import { useSession } from "next-auth/react";
+import { motion, AnimatePresence } from "framer-motion";
 
 export default function ExploreFullInfo() {
   const exploreType = useExploreStore((state) => state.exploreType);
+  const isJobPostsLoading = useExploreStore((state) => state.isJobPostsLoading);
+  const isCompaniesLoading = useExploreStore((state) => state.isCompaniesLoading);
   const { status } = useSession();
 
   const selected_job_post = useExploreStore((state) => state.selected_job_post);
   const selected_company = useExploreStore((state) => state.selected_company);
 
-  // Show skeleton only while session is loading
-  if (status === "loading") {
+  // Determine if we should show loading based on exploreType
+  const isLoading = exploreType === "job-postings" ? isJobPostsLoading : isCompaniesLoading;
+
+  // Show skeleton while session is loading OR data is loading
+  if (status === "loading" || isLoading) {
     return (
       <div className="flex-4 sticky top-24 bottom-4 pb-20 h-fit">
         <div className="max-h-[calc(100vh-9rem)] pb-4">
@@ -87,20 +93,29 @@ export default function ExploreFullInfo() {
 
   return (
     <div className="flex-4 sticky top-24 bottom-4 pb-20 h-fit">
-      <div className="max-h-[calc(100vh-9rem)] overflow-y-auto border pb-4 rounded-lg">
-        {exploreType === "job-postings" && (
-          <JobPostFullInfo
-            job={selected_job_post!}
-            className="border-0 shadow-none"
-          />
-        )}
-        {exploreType === "companies" && (
-          <CompanyProfile
-            company={selected_company!}
-            className="border-0 shadow-none"
-          />
-        )}
-      </div>
+      <AnimatePresence mode="wait">
+        <motion.div
+          key={exploreType === "job-postings" ? selected_job_post?.job_post_id : selected_company?.company_id}
+          initial={{ opacity: 0, x: 20 }}
+          animate={{ opacity: 1, x: 0 }}
+          exit={{ opacity: 0, x: -20 }}
+          transition={{ duration: 0.3 }}
+          className="max-h-[calc(100vh-9rem)] overflow-y-auto border pb-4 rounded-lg"
+        >
+          {exploreType === "job-postings" && (
+            <JobPostFullInfo
+              job={selected_job_post!}
+              className="border-0 shadow-none"
+            />
+          )}
+          {exploreType === "companies" && (
+            <CompanyProfile
+              company={selected_company!}
+              className="border-0 shadow-none"
+            />
+          )}
+        </motion.div>
+      </AnimatePresence>
     </div>
   );
 }

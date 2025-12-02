@@ -5,8 +5,6 @@ import { Button } from "@/components/ui/button";
 import MainLayout from "@/components/layout/MainLayout";
 import { CompanyPost } from "@/components/page_specific/company_post/CompanyPost";
 import Link from "next/link";
-import { authConfig } from "@/lib/auth";
-import { getServerSession } from "next-auth";
 import { CompanyPostServices } from "@/services/company-post.services";
 import { redirect } from "next/navigation";
 import { CompanyPostPreview } from "@/components/page_specific/company_post/CompanyPostPreview";
@@ -25,10 +23,6 @@ export default async function FeedPostPage({ params }: FeedPostPageProps) {
     redirect("/feed");
   }
 
-  // Get server-side session
-  const session = await getServerSession(authConfig);
-  const user_id = session?.user?.user_id;
-
   // Fetch data server-side
   const post = await CompanyPostServices.getCompanyPostById(feed_post_id);
 
@@ -46,7 +40,6 @@ export default async function FeedPostPage({ params }: FeedPostPageProps) {
 
   const suggestions = await CompanyPostServices.getCompanyPostSuggestions(
     feed_post_id,
-    user_id
   );
 
   return (

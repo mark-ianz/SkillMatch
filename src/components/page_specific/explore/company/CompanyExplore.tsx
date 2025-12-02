@@ -1,3 +1,5 @@
+"use client";
+
 import { CompanyProfile } from "@/types/company.types";
 import React, { useEffect } from "react";
 import { CompanyPreview } from "./CompanyPreview";
@@ -6,6 +8,7 @@ import { useExploreStore } from "@/store/ExploreStore";
 import { useSearchParams } from "next/navigation";
 import { CompanyExploreFilters } from "@/types/job_explore.types";
 import { CompanyCardSkeleton } from "@/components/common/skeleton/JobPostSkeleton";
+import { motion } from "framer-motion";
 
 export default function CompanyExplore() {
   const searchParams = useSearchParams();
@@ -19,8 +22,16 @@ export default function CompanyExplore() {
   const { data: companies, isLoading, error } = useGetAllCompanies(filters);
   const selected_company = useExploreStore((state) => state.selected_company);
   const setSelectedCompany = useExploreStore((state) => state.setSelectedCompany);
+  const setIsCompaniesLoading = useExploreStore(
+    (state) => state.setIsCompaniesLoading
+  );
 
   console.log(companies);
+
+  // Update loading state in store
+  useEffect(() => {
+    setIsCompaniesLoading(isLoading);
+  }, [isLoading, setIsCompaniesLoading]);
 
   // Set initial selected item when data loads
   useEffect(() => {
@@ -54,7 +65,12 @@ export default function CompanyExplore() {
 
   if (!companies || companies.length === 0) {
     return (
-      <div className="flex flex-col items-center justify-center py-16 px-4 text-center">
+      <motion.div
+        initial={{ opacity: 0, scale: 0.95 }}
+        animate={{ opacity: 1, scale: 1 }}
+        transition={{ duration: 0.4 }}
+        className="flex flex-col items-center justify-center py-16 px-4 text-center"
+      >
         <div className="w-16 h-16 rounded-full bg-gray-100 flex items-center justify-center mb-4">
           <svg
             className="w-8 h-8 text-gray-400"
@@ -76,22 +92,25 @@ export default function CompanyExplore() {
         <p className="text-sm text-muted-foreground max-w-sm">
           Try adjusting your filters or search query to find more results.
         </p>
-      </div>
+      </motion.div>
     );
   }
 
   return (
     <>
-      {companies.map((company: CompanyProfile) => (
-        <div
+      {companies.map((company: CompanyProfile, index) => (
+        <motion.div
           key={company.company_id}
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.3, delay: index * 0.05 }}
           onClick={() => setSelectedCompany(company)}
         >
           <CompanyPreview
             company={company}
             isSelected={selected_company?.company_id === company.company_id}
           />
-        </div>
+        </motion.div>
       ))}
     </>
   );
