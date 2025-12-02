@@ -45,7 +45,7 @@ export default async function FeedPostPage({ params }: FeedPostPageProps) {
   return (
     <MainLayout className="items-center" wrapperClassName="w-full">
       <div className="gap-10 flex flex-col items-center container max-w-5xl">
-        <div className="space-y-4">
+        <div className="space-y-4 px-4">
           {/* Back Button */}
           <div className="w-full">
             <Link href="/feed">
@@ -62,7 +62,7 @@ export default async function FeedPostPage({ params }: FeedPostPageProps) {
 
         {/* Post Suggestions Section */}
         <div className="space-y-6 w-full">
-          <div className="flex items-center justify-between">
+          <div className="flex items-center justify-between px-4">
             <h2 className="text-2xl font-bold text-foreground">
               Recommended Posts For You
             </h2>
@@ -79,7 +79,7 @@ export default async function FeedPostPage({ params }: FeedPostPageProps) {
 
           {suggestions && suggestions.length > 0 ? (
             <ScrollArea className="h-96">
-              <div className="grid grid-cols-1 gap-4 pr-4">
+              <div className="grid grid-cols-1 gap-4 py-1 px-4">
                 {suggestions.map((post) => (
                   <Link key={post.post_id} href={"/view/feed/" + post.post_id}>
                     <CompanyPostPreview post={post} />
@@ -88,9 +88,11 @@ export default async function FeedPostPage({ params }: FeedPostPageProps) {
               </div>
             </ScrollArea>
           ) : (
-            <Card className="p-12 text-center">
-              <p className="text-muted-foreground">No similar posts found.</p>
-            </Card>
+            <div>
+              <Card className="p-12 text-center">
+                <p className="text-muted-foreground">No similar posts found.</p>
+              </Card>
+            </div>
           )}
         </div>
       </div>
