@@ -21,13 +21,13 @@ import { SignInPromptDialog } from "@/components/common/SignInPromptDialog";
 import { useState } from "react";
 import Location from "../explore/job-postings/sub-components/Location";
 import { JobStatusBadge } from "@/components/common/JobStatusBadge";
-import Link from "next/link";
 import { ApplyButton } from "./ApplyButton";
+import LinkWithIcon from "@/components/global/LinkWithIcon";
 
 export function JobPostFullInfo({
   job,
   className,
-  apply_button_classname
+  apply_button_classname,
 }: {
   job: JobPost;
   className?: string;
@@ -81,21 +81,20 @@ export function JobPostFullInfo({
               )}
               <div className="flex-1">
                 <div className="flex items-center gap-2 flex-wrap">
-                  <Link href={`/view/job-postings/${job.job_post_id}`}>
-                    <h1 className="text-2xl font-semibold text-skillmatch-dark text-balance hover:underline">
-                      {job?.job_title}
-                    </h1>
-                  </Link>
+                  <LinkWithIcon
+                    path={`/view/job-postings/${job.job_post_id}`}
+                    text={job?.job_title}
+                  />
                   {job?.job_post_status && (
                     <JobStatusBadge status={job.job_post_status} />
                   )}
                 </div>
-                <Link
-                  href={`/view/company/${job?.company_id}`}
-                  className="text-lg font-medium text-foreground hover:underline"
-                >
-                  {job?.company_name}
-                </Link>
+                <LinkWithIcon
+                  path={`/view/company/${job?.company_id}`}
+                  text={job?.company_name || ""}
+                  className="text-lg hover:underline font-medium"
+                  hasIcon={false}
+                />
               </div>
             </div>
 
@@ -172,7 +171,10 @@ export function JobPostFullInfo({
                 jobPostId={job.job_post_id}
                 jobTitle={job.job_title}
                 companyName={job.company_name!}
-                className={cn("w-full h-11 text-base font-medium", apply_button_classname)}
+                className={cn(
+                  "w-full h-11 text-base font-medium",
+                  apply_button_classname
+                )}
               />
             )}
           </div>
