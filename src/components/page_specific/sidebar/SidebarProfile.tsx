@@ -60,7 +60,7 @@ export default async function SidebarProfile() {
     const adminEmail = session.user.email || "admin@skillmatch.com";
     
     return (
-      <Card className="pt-0 border-0">
+      <Card className="pt-0">
         <div className="h-12 w-full bg-skillmatch-primary-green rounded-t-lg" />
         
         <div className="relative -mt-12 flex justify-center">
@@ -146,7 +146,7 @@ export default async function SidebarProfile() {
   const location = (isOjt ? applicantProfile?.location : companyProfile?.location) || null;
 
   return (
-    <Card className="pt-0 border-0">
+    <Card className="pt-0">
       <div
         className={cn(
           "h-12 w-full bg-skillmatch-primary-blue rounded-t-lg",
