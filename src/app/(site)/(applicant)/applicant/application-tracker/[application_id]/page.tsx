@@ -7,6 +7,8 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Separator } from "@/components/ui/separator";
+import { Skeleton } from "@/components/ui/skeleton";
+import { motion } from "framer-motion";
 import {
   Dialog,
   DialogContent,
@@ -43,6 +45,59 @@ export default function ApplicationDetailsPage() {
 
   const [showDeclineDialog, setShowDeclineDialog] = useState(false);
   const [declineMessage, setDeclineMessage] = useState("");
+
+  if (isLoading) {
+    return (
+      <div className="container max-w-4xl py-8">
+        {/* Back Button Skeleton */}
+        <div className="mb-6">
+          <Skeleton className="h-10 w-32" />
+        </div>
+
+        {/* Header Card Skeleton */}
+        <Card className="mb-6">
+          <CardHeader>
+            <div className="flex items-start gap-4">
+              <Skeleton className="h-12 w-12 rounded-full" />
+              <div className="flex-1 space-y-2">
+                <Skeleton className="h-6 w-3/4" />
+                <Skeleton className="h-4 w-1/2" />
+                <div className="flex items-center gap-4 mt-2">
+                  <Skeleton className="h-4 w-32" />
+                  <Skeleton className="h-4 w-24" />
+                </div>
+              </div>
+              <Skeleton className="h-6 w-24" />
+            </div>
+          </CardHeader>
+        </Card>
+
+        {/* Timeline Card Skeleton */}
+        <Card>
+          <CardHeader>
+            <Skeleton className="h-6 w-48" />
+          </CardHeader>
+          <CardContent>
+            <div className="space-y-8">
+              {[...Array(4)].map((_, i) => (
+                <div key={i} className="flex gap-4">
+                  <div className="flex flex-col items-center">
+                    <Skeleton className="h-8 w-8 rounded-full" />
+                    {i < 3 && <Skeleton className="h-16 w-0.5 mt-2" />}
+                  </div>
+                  <div className="flex-1 space-y-2">
+                    <Skeleton className="h-5 w-48" />
+                    <Skeleton className="h-4 w-32" />
+                    <Skeleton className="h-4 w-64" />
+                  </div>
+                </div>
+              ))}
+            </div>
+          </CardContent>
+        </Card>
+      </div>
+    );
+  }
 
   const handleAcceptOffer = () => {
     respondToOfferMutation.mutate({
@@ -180,7 +235,13 @@ export default function ApplicationDetailsPage() {
         <CardContent>
           <div className="space-y-4">
             {/* Applied */}
-            <div className="flex gap-4">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: "-100px" }}
+              transition={{ duration: 0.4, delay: 0 }}
+              className="flex gap-4"
+            >
               <div className="flex flex-col items-center">
                 <div className="rounded-full bg-blue-100 p-2">
                   <FileText className="h-4 w-4 text-blue-600" />
@@ -200,11 +261,17 @@ export default function ApplicationDetailsPage() {
                   })}
                 </p>
               </div>
-            </div>
+            </motion.div>
 
             {/* Interview Scheduled */}
             {application.interview_date && (
-              <div className="flex gap-4">
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: "-100px" }}
+                transition={{ duration: 0.4, delay: 0.2 }}
+                className="flex gap-4"
+              >
                 <div className="flex flex-col items-center">
                   <div className="rounded-full bg-indigo-100 p-2">
                     <Calendar className="h-4 w-4 text-indigo-600" />
@@ -264,12 +331,18 @@ export default function ApplicationDetailsPage() {
                     </div>
                   )}
                 </div>
-              </div>
+              </motion.div>
             )}
 
             {/* Selected */}
             {application.selected_date && (
-              <div className="flex gap-4">
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: "-100px" }}
+                transition={{ duration: 0.4, delay: 0.4 }}
+                className="flex gap-4"
+              >
                 <div className="flex flex-col items-center">
                   <div className="rounded-full bg-orange-100 p-2">
                     <AlertCircle className="h-4 w-4 text-orange-600" />
@@ -326,12 +399,18 @@ export default function ApplicationDetailsPage() {
                     </div>
                   )}
                 </div>
-              </div>
+              </motion.div>
             )}
 
             {/* Offer Response */}
             {application.offer_response_date && (
-              <div className="flex gap-4">
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: "-100px" }}
+                transition={{ duration: 0.4, delay: 0.6 }}
+                className="flex gap-4"
+              >
                 <div className="flex flex-col items-center">
                   <div
                     className={`rounded-full p-2 ${
@@ -372,12 +451,18 @@ export default function ApplicationDetailsPage() {
                     </div>
                   )}
                 </div>
-              </div>
+              </motion.div>
             )}
 
             {/* Rejected */}
             {application.application_status_id === 3 && (
-              <div className="flex gap-4">
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: "-100px" }}
+                transition={{ duration: 0.4, delay: 0.6 }}
+                className="flex gap-4"
+              >
                 <div className="flex flex-col items-center">
                   <div className="rounded-full bg-red-100 p-2">
                     <XCircle className="h-4 w-4 text-red-600" />
@@ -401,7 +486,7 @@ export default function ApplicationDetailsPage() {
                     </div>
                   )}
                 </div>
-              </div>
+              </motion.div>
             )}
           </div>
         </CardContent>
