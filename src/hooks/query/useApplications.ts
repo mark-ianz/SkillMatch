@@ -116,7 +116,7 @@ export function useRespondToOffer() {
 // ==================== COMPANY HOOKS ====================
 
 // Query: Get all job posts for company with application statistics
-export function useCompanyJobPostsWithStats() {
+export function useCompanyJobPostsWithStatus() {
   return useQuery({
     queryKey: ["company-job-postings-stats"],
     queryFn: async () => {

@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { motion } from "framer-motion";
-import { useCompanyJobPostsWithStats } from "@/hooks/query/useApplications";
+import { useCompanyJobPostsWithStatus } from "@/hooks/query/useApplications";
 import { Card, CardContent} from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -34,7 +34,7 @@ const statusColors: Record<
 };
 
 export default function CompanyJobPostsPage() {
-  const { data: jobPosts, isLoading, error } = useCompanyJobPostsWithStats();
+  const { data: jobPosts, isLoading, error } = useCompanyJobPostsWithStatus();
   const [selectedStatuses, setSelectedStatuses] = useState<number[]>([1, 2, 3, 4, 5, 6]);
 
   // Filter job posts based on selected statuses
