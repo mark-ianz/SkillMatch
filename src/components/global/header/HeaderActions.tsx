@@ -16,7 +16,7 @@ export default function HeaderActions() {
   const role_id = session?.user?.role_id;
   const status_id = session?.user?.status_id;
   const role = getRoleName(role_id);
-  const isActive = status_id === 1 || role_id === 2; /* admin */
+  const isOnboarding = status_id === 7;
 
   // Determine user type based on current path
   const isCompanyPath = pathname?.startsWith("/company");
@@ -31,9 +31,28 @@ export default function HeaderActions() {
     );
   }
 
-  // Hide actions if user is in onboarding (not active)
-  if (role_id && !isActive) {
-    return null;
+  // Show "Complete Onboarding" button if user is in onboarding status
+  if (role_id && isOnboarding) {
+    const isOnboardingPage = pathname?.startsWith("/onboarding");
+    if (isOnboardingPage) {
+      return null; // Don't show button on onboarding pages
+    }
+
+    const onboardingPath = role_id === 3 
+      ? "/onboarding/applicant" 
+      : role_id === 4 
+      ? "/onboarding/company"
+      : "/onboarding/applicant";
+
+    return (
+      <Button
+        asChild
+        size="sm"
+        className="bg-yellow-500 hover:bg-yellow-600 text-white text-xs sm:text-sm px-3 sm:px-4"
+      >
+        <Link href={onboardingPath}>Complete Onboarding</Link>
+      </Button>
+    );
   }
 
   if (!role_id) {

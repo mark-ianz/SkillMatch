@@ -78,19 +78,13 @@ export async function middleware(request: NextRequest) {
     // Check role-specific onboarding routes
     if (pathname.startsWith("/onboarding/applicant")) {
       if (role_id !== ROLE_APPLICANT) {
-        return NextResponse.json(
-          { message: "Forbidden: Applicant access only" },
-          { status: 403 }
-        );
+        return NextResponse.redirect(new URL("/forbidden", request.url));
       }
     }
 
     if (pathname.startsWith("/onboarding/company")) {
       if (role_id !== ROLE_COMPANY) {
-        return NextResponse.json(
-          { message: "Forbidden: Company access only" },
-          { status: 403 }
-        );
+        return NextResponse.redirect(new URL("/forbidden", request.url));
       }
     }
 
@@ -100,14 +94,11 @@ export async function middleware(request: NextRequest) {
   // ========== ADMIN ROUTES ==========
   if (pathname.startsWith("/admin")) {
     if (!isAuthenticated) {
-      return NextResponse.redirect(new URL("/signin?type=admin", request.url));
+      return NextResponse.redirect(new URL("/unauthorized", request.url));
     }
 
     if (role_id !== ROLE_ADMIN) {
-      return NextResponse.json(
-        { message: "Forbidden: Admin access only" },
-        { status: 403 }
-      );
+      return NextResponse.redirect(new URL("/forbidden", request.url));
     }
 
     return NextResponse.next();
@@ -119,7 +110,7 @@ export async function middleware(request: NextRequest) {
 
   if (isProtectedRoute) {
     if (!isAuthenticated) {
-      return NextResponse.redirect(new URL("/signup", request.url));
+      return NextResponse.redirect(new URL("/unauthorized", request.url));
     }
 
     // Check if user is active
@@ -133,10 +124,7 @@ export async function middleware(request: NextRequest) {
       }
 
       // Other statuses (pending, disabled, etc.) - forbidden
-      return NextResponse.json(
-        { message: "Forbidden: Account is not active" },
-        { status: 403 }
-      );
+      return NextResponse.redirect(new URL("/forbidden", request.url));
     }
 
     return NextResponse.next();
@@ -147,44 +135,42 @@ export async function middleware(request: NextRequest) {
   // Applicant-only routes (profile, etc.)
   if (pathname.match(/^\/(profile|applications)/)) {
     if (!isAuthenticated) {
-      return NextResponse.redirect(new URL("/signup?type=applicant", request.url));
+      return NextResponse.redirect(new URL("/unauthorized", request.url));
     }
 
     if (role_id !== ROLE_APPLICANT) {
-      return NextResponse.json(
-        { message: "Forbidden: Applicant access only" },
-        { status: 403 }
-      );
+      return NextResponse.redirect(new URL("/forbidden", request.url));
     }
 
     if (status_id !== STATUS_ACTIVE) {
-      return NextResponse.json(
-        { message: "Forbidden: Account is not active" },
-        { status: 403 }
-      );
+      // If onboarding, redirect to onboarding page
+      if (status_id === STATUS_ONBOARDING) {
+        return NextResponse.redirect(new URL("/onboarding/applicant", request.url));
+      }
+      // Other statuses - forbidden
+      return NextResponse.redirect(new URL("/forbidden", request.url));
     }
 
     return NextResponse.next();
   }
 
-  // Company-only routes
-  if (pathname.startsWith("/company") && !pathname.match(/^\/company\/?$/)) {
+  // Company-only routes (excludes public /company landing page)
+  if (pathname.startsWith("/company/") || (pathname.startsWith("/company") && pathname !== "/company")) {
     if (!isAuthenticated) {
-      return NextResponse.redirect(new URL("/signup?type=company", request.url));
+      return NextResponse.redirect(new URL("/unauthorized", request.url));
     }
 
     if (role_id !== ROLE_COMPANY) {
-      return NextResponse.json(
-        { message: "Forbidden: Company access only" },
-        { status: 403 }
-      );
+      return NextResponse.redirect(new URL("/forbidden", request.url));
     }
 
     if (status_id !== STATUS_ACTIVE) {
-      return NextResponse.json(
-        { message: "Forbidden: Account is not active" },
-        { status: 403 }
-      );
+      // If onboarding, redirect to onboarding page
+      if (status_id === STATUS_ONBOARDING) {
+        return NextResponse.redirect(new URL("/onboarding/company", request.url));
+      }
+      // Other statuses - forbidden
+      return NextResponse.redirect(new URL("/forbidden", request.url));
     }
 
     return NextResponse.next();

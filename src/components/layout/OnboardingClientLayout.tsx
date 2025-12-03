@@ -7,40 +7,28 @@ import ErrorArray from "@/components/common/ErrorArray";
 import { cn, getStepDetails } from "@/lib/utils";
 import TextLogo from "@/components/global/TextLogo";
 import { useEffect, useState } from "react";
-import { useSession } from "next-auth/react";
-import LoadingGeneric from "@/components/global/LoadingGeneric";
-import { usePathname } from "next/navigation";
 import useOnboardingStore from "@/store/onboarding/shared.onboarding.store";
 
-export default function OnboardingLayout({
-  children,
-}: {
+interface OnboardingClientLayoutProps {
   children: React.ReactNode;
-}) {
-  // checks if the path is for applicant or employer
-  const path = usePathname();
-  const type = path.includes("/onboarding/applicant") ? "applicant" : "employer";
+  type: "applicant" | "employer";
+}
 
-  const session = useSession();
+export default function OnboardingClientLayout({
+  children,
+  type,
+}: OnboardingClientLayoutProps) {
   const currentStep = useOnboardingStore((state) => state.currentStep);
   const errors = useOnboardingStore((state) => state.error);
 
   const [currentStepDetails, setCurrentStepDetails] = useState(
-    getStepDetails(currentStep)
+    getStepDetails(currentStep, type)
   );
 
   // update current step details when currentStep changes
   useEffect(() => {
     setCurrentStepDetails(getStepDetails(currentStep, type));
   }, [currentStep, type]);
-
-  if (session.status === "loading") {
-    return (
-      <MainLayout className="items-center">
-        <LoadingGeneric />
-      </MainLayout>
-    );
-  }
 
   return (
     <MainLayout className="items-center" wrapperClassName="w-full">
@@ -76,22 +64,9 @@ export default function OnboardingLayout({
                 alt="SkillMatch Logo"
               />
             </div>
-            <div className="flex flex-col gap-4">
-              <div className="flex flex-col gap-2">
-                <p className="text-4xl text-skillmatch-dark">
-                  {currentStepDetails?.title}
-                </p>
-                <p>
-                  <span className="text-red-500 mr-1">*</span>{" "}
-                  <span className="text-sm text-skillmatch-muted-dark">
-                    Indicates required fields
-                  </span>
-                </p>
-              </div>
-              <ErrorArray error={errors} />
-            </div>
           </div>
-          <form>{children}</form>
+          <ErrorArray error={errors} />
+          {children}
         </div>
       </div>
     </MainLayout>

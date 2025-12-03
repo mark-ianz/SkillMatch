@@ -4,6 +4,7 @@ import "./globals.css";
 import { Toaster } from "@/components/ui/sonner";
 import QueryClientProviderWrapper from "@/components/providers/QueryClientProviderWrapper";
 import SessionProviderWrapper from "@/components/providers/SessionProviderWrapper";
+import OnboardingReminder from "@/components/global/OnboardingReminder";
 
 const geistSans = Geist({
   variable: "--font-geist",
@@ -98,7 +99,10 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} ${sansation.variable} antialiased overflow-y-scroll`}
       >
         <SessionProviderWrapper>
-          <QueryClientProviderWrapper>{children}</QueryClientProviderWrapper>
+          <QueryClientProviderWrapper>
+            {children}
+            <OnboardingReminder />
+          </QueryClientProviderWrapper>
         </SessionProviderWrapper>
         <Toaster />
       </body>
