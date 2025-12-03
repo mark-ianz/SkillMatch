@@ -7,7 +7,7 @@ import {
   ApplicationWithJobDetails,
   ApplicationWithUserDetails,
   CompanyApplicationStatusId,
-  JobPostWithApplicationStats,
+  JobPostWithApplicationStatus,
 } from "@/types/application.types";
 
 // ==================== USER HOOKS ====================
@@ -120,7 +120,7 @@ export function useCompanyJobPostsWithStats() {
   return useQuery({
     queryKey: ["company-job-postings-stats"],
     queryFn: async () => {
-      const { data } = await api.get<{ jobPosts: JobPostWithApplicationStats[] }>(
+      const { data } = await api.get<{ jobPosts: JobPostWithApplicationStatus[] }>(
         "/admin/job-postings"
       );
       return data.jobPosts;

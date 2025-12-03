@@ -78,7 +78,7 @@ export interface ApplicationWithUserDetails extends Application {
 }
 
 // Job post with application statistics (for company dashboard)
-export interface JobPostWithApplicationStats {
+export interface JobPostWithApplicationStatus {
   job_post_id: string;
   job_title: string;
   work_arrangement: string;

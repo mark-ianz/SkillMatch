@@ -6,7 +6,7 @@ import {
   ApplicationWithJobDetails,
   ApplicationWithUserDetails,
   CompanyApplicationStatusId,
-  JobPostWithApplicationStats,
+  JobPostWithApplicationStatus,
 } from "@/types/application.types";
 import { NotificationServices } from "./notification.services";
 
@@ -284,9 +284,9 @@ export const ApplicationServices = {
   // COMPANY: Get all job posts for a company with application statistics
   getCompanyJobPostsWithStats: async (
     company_id: string
-  ): Promise<JobPostWithApplicationStats[]> => {
+  ): Promise<JobPostWithApplicationStatus[]> => {
     try {
-      const [rows] = await db.query<(RowDataPacket & JobPostWithApplicationStats)[]>(
+      const [rows] = await db.query<(RowDataPacket & JobPostWithApplicationStatus)[]>(
         `SELECT 
           jp.job_post_id,
           jp.job_title,
