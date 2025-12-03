@@ -1,21 +1,15 @@
 import type { Metadata } from "next";
 import { Button } from "@/components/ui/button";
-import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-} from "@/components/ui/accordion";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import {
-  GraduationCap,
   HelpCircle,
   MessageCircle,
   Mail,
   Globe,
 } from "lucide-react";
 import Link from "next/link";
+import { FAQsClient } from "@/components/page_specific/faqs/FAQsClient";
 
 // SEO Metadata
 export const metadata: Metadata = {
@@ -297,44 +291,7 @@ export default function FAQsPage() {
         </header>
 
         {/* FAQs Section */}
-        <section className="py-20 bg-background">
-          <div className="container mx-auto px-4 lg:px-8">
-            <div className="max-w-4xl mx-auto space-y-12">
-              {faqCategories.map((category, categoryIndex) => (
-                <div key={categoryIndex} className="space-y-6">
-                  <div className="flex items-center gap-3 mb-6">
-                    <div className="w-10 h-10 rounded-full bg-skillmatch-primary-green/10 flex items-center justify-center">
-                      <GraduationCap className="h-5 w-5 text-skillmatch-primary-green" />
-                    </div>
-                    <h2 className="text-2xl md:text-3xl font-bold">
-                      {category.category}
-                    </h2>
-                  </div>
-
-                  <Accordion type="single" collapsible className="space-y-4">
-                    {category.questions.map((faq, faqIndex) => (
-                      <AccordionItem
-                        key={faqIndex}
-                        value={`${categoryIndex}-${faqIndex}`}
-                        id={faq.id}
-                        className="border rounded-lg px-6 bg-card hover:bg-accent/5 transition-colors scroll-mt-24"
-                      >
-                        <AccordionTrigger className="text-left hover:no-underline py-5">
-                          <span className="font-semibold text-base md:text-lg">
-                            {faq.question}
-                          </span>
-                        </AccordionTrigger>
-                        <AccordionContent className="text-muted-foreground leading-relaxed pb-5 pt-2">
-                          {faq.answer}
-                        </AccordionContent>
-                      </AccordionItem>
-                    ))}
-                  </Accordion>
-                </div>
-              ))}
-            </div>
-          </div>
-        </section>
+        <FAQsClient faqCategories={faqCategories} />
 
         {/* Still Have Questions Section */}
         <section className="py-20 bg-muted/50">
