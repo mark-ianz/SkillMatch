@@ -1,21 +1,29 @@
+import { authConfig } from "@/lib/auth";
 import CompanyOnboardingService from "@/services/onboarding/onboarding.company.services";
+import { getServerSession } from "next-auth";
 import { NextResponse } from "next/server";
 
-export async function GET(
-  _req: Request,
-  context: { params: { id: string | undefined } }
-) {
-  const params = await context.params;
+export async function GET() {
+  const session = await getServerSession(authConfig);
 
-  if (!params.id || isNaN(Number(params.id))) {
+  console.log({ company:session });
+
+  // Check if user is logged in
+  if (!session?.user) {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
+
+  const company_id = session.user.company_id;
+
+  if (!company_id) {
     return NextResponse.json(
-      { error: "Invalid or missing ID parameter" },
+      { error: "Company ID not found in session" },
       { status: 400 }
     );
   }
 
   const onboardingData = await CompanyOnboardingService.getOnboardingCompany(
-    params.id
+    company_id
   );
 
   if (!onboardingData) {

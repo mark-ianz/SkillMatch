@@ -27,8 +27,10 @@ export function useGetOnboardingCompany(company_id: string | undefined) {
     queryKey: ["onboarding", company_id],
     queryFn: async () => {
       const { data } = await api.get<OnboardingCompanyFullInfo>(
-        `/onboarding/${company_id}/company`
+        `/onboarding/company`
       );
+
+      console.log(data)
 
       // Set type to company to ensure correct MAX_STEP
       setType("company");

@@ -14,10 +14,13 @@ import { formatZodError, getAllCities, getBarangaysByCity } from "@/lib/utils";
 import { useUpdateStepOneOnboardingCompany } from "@/hooks/query/useOnboardingCompany";
 import { useSession } from "next-auth/react";
 import { ItemList } from "@/components/common/input/ComboBox";
+import { format } from "date-fns";
 
 export default function Step1() {
   const session = useSession();
-  const { mutate, isPending } = useUpdateStepOneOnboardingCompany(session.data?.user.company_id);
+  const { mutate, isPending } = useUpdateStepOneOnboardingCompany(
+    session.data?.user.company_id
+  );
 
   const company_name = useCompanyStore((s) => s.company_name || "");
   const company_email = useCompanyStore((s) => s.company_email || "");
@@ -39,7 +42,9 @@ export default function Step1() {
 
   // Get cities and barangays
   const cities = getAllCities(true) as ItemList[];
-  const barangays = city_municipality ? (getBarangaysByCity(city_municipality, true) as ItemList[]) : [];
+  const barangays = city_municipality
+    ? (getBarangaysByCity(city_municipality, true) as ItemList[])
+    : [];
 
   // Reset barangay when city_municipality changes
   useEffect(() => {
@@ -88,7 +93,9 @@ export default function Step1() {
           id="company_name"
           placeholder="Enter your company name"
           value={company_name}
-          onChange={(e: React.ChangeEvent<HTMLInputElement>) => setCompanyName(e.target.value)}
+          onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+            setCompanyName(e.target.value)
+          }
           required
         />
 
@@ -99,7 +106,9 @@ export default function Step1() {
           type="email"
           placeholder="company@domain.com"
           value={company_email}
-          onChange={(e: React.ChangeEvent<HTMLInputElement>) => setCompanyEmail(e.target.value)}
+          onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+            setCompanyEmail(e.target.value)
+          }
           required
         />
       </RowContainer>
@@ -111,7 +120,9 @@ export default function Step1() {
           id="telephone_number"
           placeholder="Enter your telephone number"
           value={telephone_number}
-          onChange={(e: React.ChangeEvent<HTMLInputElement>) => setTelephoneNumber(e.target.value)}
+          onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+            setTelephoneNumber(e.target.value)
+          }
           required
         />
 
@@ -121,7 +132,9 @@ export default function Step1() {
           id="phone_number"
           placeholder="Enter your phone number"
           value={phone_number}
-          onChange={(e: React.ChangeEvent<HTMLInputElement>) => setPhoneNumber(e.target.value)}
+          onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+            setPhoneNumber(e.target.value)
+          }
           required
         />
       </RowContainer>
@@ -157,8 +170,10 @@ export default function Step1() {
           containerClassName="grow"
           id="date_founded"
           type="date"
-          value={date_founded}
-          onChange={(e: React.ChangeEvent<HTMLInputElement>) => setDateFounded(e.target.value)}
+          value={date_founded ? format(new Date(date_founded), "yyyy-MM-dd") : ""}
+          onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+            setDateFounded(e.target.value)
+          }
           required
         />
       </RowContainer>
