@@ -4,44 +4,28 @@ import {
   ExtendedToken,
   ExtendedUser,
 } from "@/types/user.types";
-import GoogleProvider from "next-auth/providers/google";
 import { handleCompanySignIn } from "@/services/auth/auth.company.service";
 import { handleApplicantSignIn } from "@/services/auth/auth.applicant.service";
 import { handleSignup } from "@/services/auth/auth.shared.service";
 import { adminCredentialsProvider } from "@/services/auth/auth.admin.service";
-// Sign-in logic moved to service: @/services/auth/onboardingSignIn.service
+import {
+  applicantCredentialsProvider,
+  companyCredentialsProvider,
+  googleApplicantSignInProvider,
+  googleApplicantSignUpProvider,
+  googleCompanySignInProvider,
+  googleCompanySignUpProvider,
+} from "./auth.providers";
 
 export const authConfig: NextAuthOptions = {
   providers: [
     adminCredentialsProvider,
-    GoogleProvider({
-      id: "google-applicant-signin",
-      clientId: process.env.GOOGLE_CLIENT_ID!,
-      clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
-      issuer: "https://accounts.google.com",
-      wellKnown: "https://accounts.google.com/.well-known/openid-configuration",
-    }),
-    GoogleProvider({
-      id: "google-applicant-signup",
-      clientId: process.env.GOOGLE_CLIENT_ID!,
-      clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
-      issuer: "https://accounts.google.com",
-      wellKnown: "https://accounts.google.com/.well-known/openid-configuration",
-    }),
-    GoogleProvider({
-      id: "google-company-signin",
-      clientId: process.env.GOOGLE_CLIENT_ID!,
-      clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
-      issuer: "https://accounts.google.com",
-      wellKnown: "https://accounts.google.com/.well-known/openid-configuration",
-    }),
-    GoogleProvider({
-      id: "google-company-signup",
-      clientId: process.env.GOOGLE_CLIENT_ID!,
-      clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
-      issuer: "https://accounts.google.com",
-      wellKnown: "https://accounts.google.com/.well-known/openid-configuration",
-    }),
+    applicantCredentialsProvider,
+    companyCredentialsProvider,
+    googleApplicantSignInProvider,
+    googleApplicantSignUpProvider,
+    googleCompanySignInProvider,
+    googleCompanySignUpProvider,
 
   ],
   callbacks: {
@@ -50,6 +34,12 @@ export const authConfig: NextAuthOptions = {
         /* Admin Credentials Authentication */
         if (account?.provider === "admin-credentials") {
           // Admin login via credentials - already validated in authorize
+          return true;
+        }
+
+        /* Applicant/Company Credentials Authentication */
+        if (account?.provider === "applicant-credentials" || account?.provider === "company-credentials") {
+          // Password-based authentication - already validated in authorize
           return true;
         }
 
