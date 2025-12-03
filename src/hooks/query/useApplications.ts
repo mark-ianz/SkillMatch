@@ -121,7 +121,7 @@ export function useCompanyJobPostsWithStatus() {
     queryKey: ["company-job-postings-stats"],
     queryFn: async () => {
       const { data } = await api.get<{ jobPosts: JobPostWithApplicationStatus[] }>(
-        "/admin/job-postings"
+        "/company/job-postings"
       );
       return data.jobPosts;
     },
