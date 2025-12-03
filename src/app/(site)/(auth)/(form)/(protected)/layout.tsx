@@ -74,7 +74,7 @@ export default function LayoutContent() {
       ];
 
   return (
-    <div className="min-h-dvh w-dvw flex">
+    <div className="flex">
       <div
         className="relative flex items-start w-1/2 overflow-hidden bg-cover bg-center justify-center pt-20"
         style={{ backgroundImage: `url(${imageSrc.src})` }}
