@@ -54,7 +54,7 @@ export default function OnboardingClientLayout({
             <RenderSteps type={type} />
           </div>
         </div>
-        <div className="grow p-10 flex flex-col gap-10">
+        <div className="grow p-10 flex flex-col gap-6">
           <div className="flex flex-col">
             <div className="flex items-center justify-end">
               <Image
@@ -64,6 +64,7 @@ export default function OnboardingClientLayout({
                 alt="SkillMatch Logo"
               />
             </div>
+            <p className="text-3xl">{currentStepDetails?.title}</p>
           </div>
           <ErrorArray error={errors} />
           {children}
