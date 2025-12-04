@@ -112,18 +112,6 @@ export const onboardingStepThreeSchema = z.object({
     .string()
     .trim()
     .min(1, { message: "Student number is required" }),
-  preferred_schedule: z
-    .string()
-    .trim()
-    .min(1, { message: "Please select at least one available day" }),
-  required_hours: z
-    .string()
-    .trim()
-    .min(1, { message: "Required hours is required" })
-    .refine(
-      (val) => !isNaN(Number(val)) && Number(val) > 0,
-      { message: "Required hours must be a positive number" }
-    ),
 });
 
 export type OnboardingStepOneSchema = z.infer<typeof onboardingStepOneSchema>;
