@@ -78,13 +78,37 @@ export default async function SidebarProfile() {
     return <LoadingGeneric />;
   }
 
+  const isOjt = getRoleName(role_id) === "Applicant";
+  const isCompany = getRoleName(role_id) === "Company";
+
   // Show rejection banner for rejected accounts
   if (status_id === 3) {
     return <RejectionReasonBanner />;
   }
 
-  const isOjt = getRoleName(role_id) === "Applicant";
-  const isCompany = getRoleName(role_id) === "Company";
+  // Show onboarding message for users in onboarding status
+  if (status_id === 7) {
+    return (
+      <Card className="p-6 border-2 border-dashed border-yellow-200 bg-yellow-50">
+        <div className="text-center space-y-4">
+          <div className="w-16 h-16 rounded-full bg-gradient-to-br from-yellow-400 to-yellow-600 mx-auto flex items-center justify-center">
+            <UserPlus className="h-8 w-8 text-white" />
+          </div>
+          <div className="space-y-2">
+            <h3 className="font-semibold text-lg text-yellow-900">Complete Your Profile</h3>
+            <p className="text-sm text-yellow-800">
+              Finish setting up your account to access all features and start your journey.
+            </p>
+          </div>
+          <Button asChild className="w-full bg-yellow-600 hover:bg-yellow-700">
+            <Link href={role_id === 3 ? "/onboarding/applicant" : "/onboarding/company"}>
+              Continue Onboarding
+            </Link>
+          </Button>
+        </div>
+      </Card>
+    );
+  }
 
   // Fetch profile data from database
   let applicantProfile;
