@@ -49,6 +49,7 @@ import { Separator } from "@/components/ui/separator";
 import { ScheduleInterviewDialog } from "@/components/page_specific/company/view_job_post/ScheduleInterviewDialog";
 import { useInterviewStore } from "@/store/InterviewStore";
 import Location from "@/components/page_specific/explore/job-postings/sub-components/Location";
+import ApplicantProfileDialog from "@/components/common/ApplicantProfileDialog";
 import {
   useJobPostApplications,
   useScheduleInterview,
@@ -153,11 +154,19 @@ export default function JobDetailsPage() {
     useState<ApplicationWithUserDetails | null>(null);
   const [closeDialogOpen, setCloseDialogOpen] = useState(false);
   const [fillDialogOpen, setFillDialogOpen] = useState(false);
+  const [profileDialogOpen, setProfileDialogOpen] = useState(false);
+  const [profileApplicant, setProfileApplicant] =
+    useState<ApplicationWithUserDetails | null>(null);
   const { resetForm } = useInterviewStore();
 
   const handleScheduleInterview = (applicant: ApplicationWithUserDetails) => {
     setSelectedApplicant(applicant);
     setScheduleDialogOpen(true);
+  };
+
+  const handleViewProfile = (applicant: ApplicationWithUserDetails) => {
+    setProfileApplicant(applicant);
+    setProfileDialogOpen(true);
   };
 
   const handleScheduleSubmit = (data: {
@@ -395,7 +404,9 @@ export default function JobDetailsPage() {
                     </Button>
                   </DropdownMenuTrigger>
                   <DropdownMenuContent align="end">
-                    <DropdownMenuItem>View Full Profile</DropdownMenuItem>
+                    <DropdownMenuItem onClick={() => handleViewProfile(applicant)}>
+                      View Full Profile
+                    </DropdownMenuItem>
                     <DropdownMenuItem
                       onClick={() =>
                         applicant.resume_path &&
@@ -996,6 +1007,29 @@ export default function JobDetailsPage() {
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
+
+      {/* Applicant Profile Dialog */}
+      <ApplicantProfileDialog
+        applicant={
+          profileApplicant
+            ? {
+                first_name: profileApplicant.first_name,
+                last_name: profileApplicant.last_name,
+                email: profileApplicant.user_email,
+                course: profileApplicant.course || "",
+                student_number: profileApplicant.student_number,
+                year_level: profileApplicant.year_level,
+                required_hours: profileApplicant.required_hours,
+                preferred_schedule: profileApplicant.preferred_schedule,
+                phone_number: profileApplicant.phone_number,
+                city_municipality: profileApplicant.address,
+                created_at: profileApplicant.created_at,
+              }
+            : null
+        }
+        open={profileDialogOpen}
+        onOpenChange={setProfileDialogOpen}
+      />
     </div>
   );
 }

@@ -247,7 +247,9 @@ export const ApplicationServices = {
           u.region,
           acc.email as user_email,
           op.course,
-          op.skills
+          op.skills,
+          op.student_number,
+          op.year_level
         FROM applications a
         JOIN user u ON a.user_id = u.user_id
         JOIN account acc ON u.user_id = acc.user_id

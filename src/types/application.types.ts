@@ -69,12 +69,16 @@ export interface ApplicationWithJobDetails extends Application {
 
 // Application with user details (for company view)
 export interface ApplicationWithUserDetails extends Application {
+  first_name: string;
+  last_name: string;
   user_name: string;
   user_email: string;
   phone_number?: string | null;
   address?: string | null;
   course?: string | null;
   skills?: string | null;
+  student_number?: string | null;
+  year_level?: string | null;
 }
 
 // Job post with application statistics (for company dashboard)
