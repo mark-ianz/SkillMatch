@@ -17,12 +17,9 @@ import { Button } from "@/components/ui/button";
 import {
   LogIn,
   UserPlus,
-  ShieldCheck,
-  Users,
-  Briefcase,
-  BarChart3,
 } from "lucide-react";
 import AdminSidebarProfile from "./AdminSidebarProfile";
+import RejectionReasonBanner from "@/components/global/RejectionReasonBanner";
 
 export default async function SidebarProfile() {
   const session = await getServerSession(authConfig);
@@ -65,6 +62,7 @@ export default async function SidebarProfile() {
   const user_id = session?.user.user_id;
   const company_id = session?.user.company_id;
   const isAdmin = session.user.isAdmin || role_id === 2;
+  const status_id = session.user.status_id;
 
   // Show admin card for admin users
   if (isAdmin) {
@@ -78,6 +76,11 @@ export default async function SidebarProfile() {
 
   if (!role_id) {
     return <LoadingGeneric />;
+  }
+
+  // Show rejection banner for rejected accounts
+  if (status_id === 3) {
+    return <RejectionReasonBanner />;
   }
 
   const isOjt = getRoleName(role_id) === "Applicant";
