@@ -3,14 +3,62 @@ import type { NextRequest } from "next/server";
 import { getToken } from "next-auth/jwt";
 
 // Role IDs
+const ROLE_ADMIN = 1;
 const ROLE_APPLICANT = 3;
 const ROLE_COMPANY = 4;
-const ROLE_ADMIN = 1;
 
 // Status IDs
 const STATUS_ACTIVE = 1;
 const STATUS_PENDING = 2;
 const STATUS_ONBOARDING = 7;
+
+// Route definitions
+const PUBLIC_ROUTES = ["/", "/company", "/explore", "/faqs"];
+const ADMIN_REDIRECT = "/admin";
+const UNAUTHORIZED_REDIRECT = "/unauthorized";
+const FORBIDDEN_REDIRECT = "/forbidden";
+
+// Helper functions
+function redirect(request: NextRequest, path: string) {
+  return NextResponse.redirect(new URL(path, request.url));
+}
+
+function isPublicRoute(pathname: string): boolean {
+  return PUBLIC_ROUTES.some((route) => pathname === route);
+}
+
+function isAuthRoute(pathname: string): boolean {
+  return pathname.startsWith("/signin") || pathname.startsWith("/signup");
+}
+
+function isOnboardingRoute(pathname: string): boolean {
+  return pathname.startsWith("/onboarding");
+}
+
+function isAdminRoute(pathname: string): boolean {
+  return pathname.startsWith("/admin");
+}
+
+function isProtectedRoute(pathname: string): boolean {
+  return ["/feed", "/profile", "/explore", "/test"].some((route) => 
+    pathname.startsWith(route)
+  );
+}
+
+function isApplicantRoute(pathname: string): boolean {
+  return pathname.match(/^\/(profile|applications)/) !== null;
+}
+
+function isCompanyProtectedRoute(pathname: string): boolean {
+  return pathname.startsWith("/company/") || 
+    (pathname.startsWith("/company") && pathname !== "/company");
+}
+
+function getOnboardingPath(roleId: number | undefined): string {
+  if (roleId === ROLE_APPLICANT) return "/onboarding/applicant";
+  if (roleId === ROLE_COMPANY) return "/onboarding/company";
+  return "/onboarding/applicant";
+}
 
 export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
@@ -24,169 +72,159 @@ export async function middleware(request: NextRequest) {
   const role_id = token?.role_id as number | undefined;
   const status_id = token?.status_id as number | undefined;
   const isAuthenticated = !!token;
+  const isAdmin = role_id === ROLE_ADMIN;
 
-  // ========== PUBLIC ROUTES (No authentication needed) ==========
-  const publicRoutes = ["/", "/company", "/explore", "/faqs"];
-  const isPublicRoute = publicRoutes.some((route) => pathname === route);
-
-  if (isPublicRoute) {
+  // ========== PUBLIC ROUTES ==========
+  if (isPublicRoute(pathname)) {
     return NextResponse.next();
   }
 
   // ========== AUTH ROUTES (/signin, /signup) ==========
-  const isAuthRoute = pathname.startsWith("/signin") || pathname.startsWith("/signup");
-
-  if (isAuthRoute) {
+  if (isAuthRoute(pathname)) {
     if (!isAuthenticated) {
-      // Not logged in - allow access to signin/signup
       return NextResponse.next();
     }
 
-    // User is authenticated - redirect based on status
+    // Redirect admins to admin dashboard
+    if (isAdmin) {
+      return redirect(request, ADMIN_REDIRECT);
+    }
+
+    // Redirect onboarding users to their onboarding page
     if (status_id === STATUS_ONBOARDING) {
-      // Onboarding user trying to access signin/signup - redirect to onboarding
-      const onboardingPath = role_id === ROLE_APPLICANT 
-        ? "/onboarding/applicant" 
-        : role_id === ROLE_COMPANY 
-        ? "/onboarding/company"
-        : "/onboarding/applicant"; // fallback
-
-      return NextResponse.redirect(new URL(onboardingPath, request.url));
+      return redirect(request, getOnboardingPath(role_id));
     }
 
-    if (status_id === STATUS_ACTIVE) {
-      // Active user trying to access signin/signup - redirect to feed
-      return NextResponse.redirect(new URL("/feed", request.url));
+    // Redirect active users to feed
+    if (status_id === STATUS_ACTIVE || status_id === STATUS_PENDING) {
+      return redirect(request, "/feed");
     }
 
-    // Allow for other statuses (pending, etc.)
     return NextResponse.next();
   }
 
   // ========== ONBOARDING ROUTES ==========
-  if (pathname.startsWith("/onboarding")) {
+  if (isOnboardingRoute(pathname)) {
     if (!isAuthenticated) {
-      // Not logged in - redirect to signup
-      return NextResponse.redirect(new URL("/signup", request.url));
+      return redirect(request, "/signup");
     }
 
-    // Check if user is in onboarding status
+    if (isAdmin) {
+      return redirect(request, ADMIN_REDIRECT);
+    }
+
     if (status_id !== STATUS_ONBOARDING) {
-      // Not in onboarding status - redirect to appropriate page
-      return NextResponse.redirect(new URL("/feed", request.url));
+      return redirect(request, "/feed");
     }
 
-    // Check role-specific onboarding routes
-    if (pathname.startsWith("/onboarding/applicant")) {
-      if (role_id !== ROLE_APPLICANT) {
-        return NextResponse.redirect(new URL("/forbidden", request.url));
-      }
+    // Check role-specific onboarding access
+    if (pathname.startsWith("/onboarding/applicant") && role_id !== ROLE_APPLICANT) {
+      return redirect(request, FORBIDDEN_REDIRECT);
     }
 
-    if (pathname.startsWith("/onboarding/company")) {
-      if (role_id !== ROLE_COMPANY) {
-        return NextResponse.redirect(new URL("/forbidden", request.url));
-      }
+    if (pathname.startsWith("/onboarding/company") && role_id !== ROLE_COMPANY) {
+      return redirect(request, FORBIDDEN_REDIRECT);
     }
 
     return NextResponse.next();
   }
 
   // ========== ADMIN ROUTES ==========
-  if (pathname.startsWith("/admin")) {
+  if (isAdminRoute(pathname)) {
     if (!isAuthenticated) {
-      return NextResponse.redirect(new URL("/unauthorized", request.url));
+      return redirect(request, UNAUTHORIZED_REDIRECT);
     }
 
-    if (role_id !== ROLE_ADMIN) {
-      return NextResponse.redirect(new URL("/forbidden", request.url));
+    if (!isAdmin) {
+      return redirect(request, FORBIDDEN_REDIRECT);
     }
 
     return NextResponse.next();
   }
 
-  // ========== PROTECTED ROUTES - Require authentication and active status ==========
-  const protectedRoutes = ["/feed", "/profile", "/explore", "/test"];
-  const isProtectedRoute = protectedRoutes.some((route) => pathname.startsWith(route));
-
-  if (isProtectedRoute) {
+  // ========== PROTECTED ROUTES (/feed, /profile, /explore, /test) ==========
+  if (isProtectedRoute(pathname)) {
     if (!isAuthenticated) {
-      return NextResponse.redirect(new URL("/unauthorized", request.url));
+      return redirect(request, UNAUTHORIZED_REDIRECT);
     }
 
-    // Allow pending users to access /feed only
+    if (isAdmin) {
+      return redirect(request, ADMIN_REDIRECT);
+    }
+
+    // Pending users can only access /feed
     if (status_id === STATUS_PENDING) {
-      if (pathname === "/feed" || pathname.startsWith("/feed")) {
-        return NextResponse.next(); // Allow access to feed
+      if (pathname.startsWith("/feed")) {
+        return NextResponse.next();
       }
-      // Restrict other routes for pending users
-      return NextResponse.redirect(new URL("/feed", request.url));
+      return redirect(request, "/feed");
     }
 
-    // Check if user is active
-    if (status_id !== STATUS_ACTIVE) {
-      if (status_id === STATUS_ONBOARDING) {
-        // Still in onboarding - redirect to onboarding
-        const onboardingPath = role_id === ROLE_APPLICANT 
-          ? "/onboarding/applicant" 
-          : "/onboarding/company";
-        return NextResponse.redirect(new URL(onboardingPath, request.url));
-      }
+    // Onboarding users should complete onboarding
+    if (status_id === STATUS_ONBOARDING) {
+      return redirect(request, getOnboardingPath(role_id));
+    }
 
-      // Other statuses (disabled, etc.) - forbidden
-      return NextResponse.redirect(new URL("/forbidden", request.url));
+    // Other non-active statuses are forbidden
+    if (status_id !== STATUS_ACTIVE) {
+      return redirect(request, FORBIDDEN_REDIRECT);
     }
 
     return NextResponse.next();
   }
 
-  // ========== ROLE-BASED ROUTES ==========
-
-  // Applicant-only routes (profile, etc.)
-  if (pathname.match(/^\/(profile|applications)/)) {
+  // ========== APPLICANT-ONLY ROUTES ==========
+  if (isApplicantRoute(pathname)) {
     if (!isAuthenticated) {
-      return NextResponse.redirect(new URL("/unauthorized", request.url));
+      return redirect(request, UNAUTHORIZED_REDIRECT);
+    }
+
+    if (isAdmin) {
+      return redirect(request, ADMIN_REDIRECT);
     }
 
     if (role_id !== ROLE_APPLICANT) {
-      return NextResponse.redirect(new URL("/forbidden", request.url));
+      return redirect(request, FORBIDDEN_REDIRECT);
+    }
+
+    if (status_id === STATUS_ONBOARDING) {
+      return redirect(request, "/onboarding/applicant");
     }
 
     if (status_id !== STATUS_ACTIVE) {
-      // If onboarding, redirect to onboarding page
-      if (status_id === STATUS_ONBOARDING) {
-        return NextResponse.redirect(new URL("/onboarding/applicant", request.url));
-      }
-      // Other statuses - forbidden
-      return NextResponse.redirect(new URL("/forbidden", request.url));
+      return redirect(request, FORBIDDEN_REDIRECT);
     }
 
     return NextResponse.next();
   }
 
-  // Company-only routes (excludes public /company landing page)
-  if (pathname.startsWith("/company/") || (pathname.startsWith("/company") && pathname !== "/company")) {
+  // ========== COMPANY PROTECTED ROUTES ==========
+  if (isCompanyProtectedRoute(pathname)) {
     if (!isAuthenticated) {
-      return NextResponse.redirect(new URL("/unauthorized", request.url));
+      return redirect(request, UNAUTHORIZED_REDIRECT);
+    }
+
+    if (isAdmin) {
+      return redirect(request, ADMIN_REDIRECT);
     }
 
     if (role_id !== ROLE_COMPANY) {
-      return NextResponse.redirect(new URL("/forbidden", request.url));
+      return redirect(request, FORBIDDEN_REDIRECT);
     }
 
-    if (status_id !== STATUS_ACTIVE) {
-      // If onboarding, redirect to onboarding page
-      if (status_id === STATUS_ONBOARDING) {
-        return NextResponse.redirect(new URL("/onboarding/company", request.url));
-      }
-      // Other statuses - forbidden
-      return NextResponse.redirect(new URL("/forbidden", request.url));
+    // Allow both active and pending companies
+    if (status_id === STATUS_ONBOARDING) {
+      return redirect(request, "/onboarding/company");
+    }
+
+    if (status_id !== STATUS_ACTIVE && status_id !== STATUS_PENDING) {
+      return redirect(request, FORBIDDEN_REDIRECT);
     }
 
     return NextResponse.next();
   }
 
-  // Default: allow access
+  // ========== DEFAULT: ALLOW ==========
   return NextResponse.next();
 }
 
