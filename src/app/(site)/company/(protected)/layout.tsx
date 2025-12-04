@@ -19,8 +19,14 @@ export default async function Layout({ children }: { children: ReactNode }) {
     redirect("/onboarding/company");
   }
 
-  // Check if user is a company and active
-  if (session.user.role_id !== 4 || session.user.status_id !== 1) {
+  // Check if user is a company and has proper status (active, pending, or rejected)
+  if (session.user.role_id !== 4) {
+    redirect("/forbidden");
+  }
+
+  // Allow active (1), pending (2), and rejected (3) companies
+  const allowedStatuses = [1];
+  if (!allowedStatuses.includes(session.user.status_id || 0)) {
     redirect("/forbidden");
   }
 
