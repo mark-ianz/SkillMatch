@@ -34,7 +34,7 @@ export function AnimatedCompanyContent({
         {/* Company Profile Card */}
         <CompanyProfile
           isFullView
-          className="p-10 w-5xl"
+          className="p-10 w-full max-w-5xl"
           company={company_profile}
         />
       </motion.div>
