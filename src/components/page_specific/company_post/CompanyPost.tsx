@@ -32,7 +32,7 @@ export function CompanyPost({ post }: CompanyPostProps) {
         <CardHeader className="flex pb-3">
           <div className="flex items-center gap-3">
             <Avatar className="w-12 h-12 ring-2 ring-border/50">
-              <AvatarImage src={post.company_image} alt={post.company_name} />
+              <AvatarImage className="object-cover" src={post.company_image} alt={post.company_name} />
               <AvatarFallback className="bg-primary/10 text-primary font-semibold">
                 {post.company_name.charAt(0).toUpperCase()}
               </AvatarFallback>
