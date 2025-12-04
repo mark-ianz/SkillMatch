@@ -15,6 +15,7 @@ export type JobPost = {
   courses_required: string[]; // text - comma separated in DB
   job_post_status_id: JobPostStatusId; // int(11) - 1-active, 2-pending, 3-rejected, 4-disabled, 5-filled, 6-closed
   job_post_status?: StatusName; // Computed field from status join
+  rejected_reason?: string | null; // varchar - reason for rejection if status is rejected
   
   // Responsibilities & Requirements
   job_responsibilities: string[]; // text - comma separated in DB

@@ -293,6 +293,7 @@ export const ApplicationServices = {
           jp.work_arrangement,
           jp.available_positions,
           jp.job_post_status_id,
+          jp.rejected_reason,
           jp.created_at,
           jp.updated_at,
           COUNT(a.application_id) as total_applications,
