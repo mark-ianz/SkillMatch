@@ -27,7 +27,7 @@ interface AnalyticsData {
 }
 
 export default function AnalyticsDashboard() {
-  const [timeFrame, setTimeFrame] = useState<string>("today");
+  const [timeFrame, setTimeFrame] = useState<string>("all");
 
   const { data: analytics, isLoading } = useQuery({
     queryKey: ["admin-analytics", timeFrame],
@@ -47,8 +47,10 @@ export default function AnalyticsDashboard() {
         return "This Week";
       case "month":
         return "This Month";
+      case "all":
+        return "All Time";
       default:
-        return "Today";
+        return "All Time";
     }
   };
 
@@ -84,6 +86,7 @@ export default function AnalyticsDashboard() {
             <SelectValue />
           </SelectTrigger>
           <SelectContent>
+            <SelectItem value="all">All Time</SelectItem>
             <SelectItem value="today">Today</SelectItem>
             <SelectItem value="week">This Week</SelectItem>
             <SelectItem value="month">This Month</SelectItem>
