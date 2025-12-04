@@ -9,18 +9,44 @@ import { Clock } from "lucide-react";
 const STATUS_PENDING = 2;
 
 export default function PendingApprovalReminder() {
-  const { data: session } = useSession();
+  const { data: session, update: updateSession } = useSession();
   const pathname = usePathname();
 
   const status_id = session?.user?.status_id;
   const isPending = status_id === STATUS_PENDING;
+
+  // Refresh session when page becomes visible (tab focus)
+  useEffect(() => {
+    const handleVisibilityChange = () => {
+      if (document.visibilityState === "visible") {
+        updateSession();
+      }
+    };
+
+    document.addEventListener("visibilitychange", handleVisibilityChange);
+    return () => {
+      document.removeEventListener("visibilitychange", handleVisibilityChange);
+    };
+  }, [updateSession]);
+
+  // Periodically check session every 30 seconds if pending
+  useEffect(() => {
+    if (!isPending) return;
+
+    const interval = setInterval(() => {
+      updateSession();
+    }, 30000); // 30 seconds
+
+    return () => clearInterval(interval);
+  }, [isPending, updateSession]);
 
   useEffect(() => {
     // Only show if user is in pending approval status
     if (!isPending) return;
 
     // Don't show on auth pages
-    if (pathname?.startsWith("/signin") || pathname?.startsWith("/signup")) return;
+    if (pathname?.startsWith("/signin") || pathname?.startsWith("/signup"))
+      return;
 
     // Don't show on onboarding pages
     if (pathname?.startsWith("/onboarding")) return;
@@ -32,7 +58,7 @@ export default function PendingApprovalReminder() {
         <div className="flex-1">
           <p className="font-semibold text-sm">Account Pending Approval</p>
           <p className="text-xs text-gray-600 mt-1">
-            Your account is currently under review by our administrators. You will be notified once approved. This usually takes 1-2 business days.
+            Your account is currently under review by our administrators. This usually takes 1-2 business days.
           </p>
         </div>
       </div>,

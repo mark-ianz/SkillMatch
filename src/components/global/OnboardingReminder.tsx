@@ -12,12 +12,26 @@ const ROLE_APPLICANT = 3;
 const ROLE_COMPANY = 4;
 
 export default function OnboardingReminder() {
-  const { data: session } = useSession();
+  const { data: session, update: updateSession } = useSession();
   const pathname = usePathname();
 
   const status_id = session?.user?.status_id;
   const role_id = session?.user?.role_id;
   const isOnboarding = status_id === STATUS_ONBOARDING;
+
+  // Refresh session when page becomes visible (tab focus)
+  useEffect(() => {
+    const handleVisibilityChange = () => {
+      if (document.visibilityState === "visible") {
+        updateSession();
+      }
+    };
+
+    document.addEventListener("visibilitychange", handleVisibilityChange);
+    return () => {
+      document.removeEventListener("visibilitychange", handleVisibilityChange);
+    };
+  }, [updateSession]);
 
   useEffect(() => {
     // Only show if user is in onboarding status
