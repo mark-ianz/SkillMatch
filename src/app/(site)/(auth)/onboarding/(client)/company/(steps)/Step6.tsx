@@ -14,8 +14,8 @@ import React from "react";
 import { ZodError } from "zod";
 
 export default function Step6() {
-  const session = useSession();
-  const company_id = session.data?.user?.company_id;
+  const { data: sessionData, update: updateSession } = useSession();
+  const company_id = sessionData?.user?.company_id;
   const router = useRouter();
   const farthestStep = useOnboardingStore((s) => s.farthestStep);
   const nextStep = useOnboardingStore((s) => s.nextStep);
@@ -35,6 +35,10 @@ export default function Step6() {
       await api.post(
         `/onboarding/${company_id}/submit/${farthestStep}/step-six-skip/company`
       );
+      
+      // Update session to reflect new status_id
+      await updateSession();
+      
       nextStep();
       router.push("/feed");
     } catch (err) {
@@ -53,7 +57,10 @@ export default function Step6() {
       });
       // call backend
       mutate(parsed, {
-        onSuccess: () => {
+        onSuccess: async () => {
+          // Update session to reflect new status_id
+          await updateSession();
+          
           // increment locally then navigate to profile after successful finalization
           nextStep();
           router.push("/feed");
