@@ -8,7 +8,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { COMPANY_ACCOUNT_STATUSES } from "@/types/admin.types";
+import { COMPANY_ACCOUNT_STATUSES, COMPANY_STATUS_COLORS } from "@/types/admin.types";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
@@ -80,11 +80,18 @@ export default function CompanyDetailsDialog({
     }
   };
 
-  const getStatusBadge = (statusId: number, statusName: string) => {
-    const status = COMPANY_ACCOUNT_STATUSES.find((s) => s.value === statusId);
+  const getStatusBadge = (statusId: number) => {
+    const statusConfig = COMPANY_STATUS_COLORS[statusId] || {
+      bg: "bg-gray-100",
+      text: "text-gray-700",
+      label: "Unknown"
+    };
     return (
-      <Badge variant={status?.variant || "default"} className="text-sm">
-        {statusName || "Unknown"}
+      <Badge
+        variant="outline"
+        className={`${statusConfig.bg} ${statusConfig.text} border-0 text-sm`}
+      >
+        {statusConfig.label}
       </Badge>
     );
   };
@@ -129,7 +136,7 @@ export default function CompanyDetailsDialog({
               <h3 className="text-xl font-bold mb-2">{company.company_name}</h3>
               <div className="flex items-center gap-2 mb-2">
                 <span className="text-sm text-muted-foreground">Status:</span>
-                {getStatusBadge(company.status_id, company.status)}
+                {getStatusBadge(company.status_id)}
               </div>
               <p className="text-sm text-muted-foreground">
                 {company.description}
