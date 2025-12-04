@@ -58,7 +58,7 @@ const errorMessages: Record<AuthErrorCode, AuthError> = {
 const statusMessages: Record<AuthStatusCode, AuthError> = {
   pending: {
     title: 'Account Pending Approval',
-    description: 'Your account is currently under review by our administrators. You will be notified once your account has been approved. This usually takes 1-2 business days.',
+    description: 'Your account is currently under review by our administrators. This usually takes 1-2 business days.',
   },
   rejected: {
     title: 'Account Application Rejected',
