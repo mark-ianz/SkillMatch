@@ -19,14 +19,15 @@ export default function HeaderActions() {
   const role = getRoleName(role_id);
   const isOnboarding = status_id === 7;
   const isPending = status_id === 2;
-
-  console.log(session)
+  const isRejected = status_id === 3;
 
   // Determine user type based on current path
   const isCompanyPath = pathname?.startsWith("/company");
   const userType = isCompanyPath ? "company" : "applicant";
 
-  if (status === "loading") {
+  // Only show loading on initial load (when there's no session data yet)
+  // Not on tab switches/revalidations when session already exists
+  if (status === "loading" && !session) {
     return (
       <>
         <Skeleton className="h-6 w-16 rounded-md" />
@@ -66,6 +67,18 @@ export default function HeaderActions() {
         <Clock className="w-4 h-4 text-orange-600" />
         <span className="text-xs sm:text-sm text-orange-700 font-medium">
           Account Pending Verification
+        </span>
+      </div>
+    );
+  }
+
+  // Show rejected status for rejected companies
+  if (role_id && isRejected) {
+    return (
+      <div className="flex items-center gap-2 px-3 py-1.5 bg-red-50 border border-red-200 rounded-md">
+        <Clock className="w-4 h-4 text-red-600" />
+        <span className="text-xs sm:text-sm text-red-700 font-medium">
+          Account Rejected
         </span>
       </div>
     );
