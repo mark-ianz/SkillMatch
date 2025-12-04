@@ -13,7 +13,15 @@ const STATUS_PENDING = 2;
 const STATUS_ONBOARDING = 7;
 
 // Route definitions
-const PUBLIC_ROUTES = ["/", "/company", "/explore", "/faqs"];
+const PUBLIC_ROUTES = [
+  "/", 
+  "/company", 
+  "/explore", 
+  "/faqs",
+  "/about",
+  "/terms-of-service",
+  "/privacy-policy"
+];
 const ADMIN_REDIRECT = "/admin";
 const UNAUTHORIZED_REDIRECT = "/unauthorized";
 const FORBIDDEN_REDIRECT = "/forbidden";
