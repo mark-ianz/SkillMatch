@@ -27,7 +27,7 @@ export async function GET(request: NextRequest) {
     }
 
     const { searchParams } = new URL(request.url);
-    const timeFrame = searchParams.get("timeFrame") || "today"; // today, week, month
+    const timeFrame = searchParams.get("timeFrame") || "today"; // today, week, month, all
 
     // Determine date filter based on timeFrame
     let dateFilter = "";
@@ -41,8 +41,11 @@ export async function GET(request: NextRequest) {
       case "month":
         dateFilter = "created_at >= DATE_SUB(NOW(), INTERVAL 30 DAY)";
         break;
+      case "all":
+        dateFilter = "1=1"; // No date restriction
+        break;
       default:
-        dateFilter = "DATE(created_at) = CURDATE()";
+        dateFilter = "1=1";
     }
 
     // Get applicant count (role_id = 3)
