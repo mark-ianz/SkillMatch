@@ -25,12 +25,12 @@ export default async function NavigationMenuApplicant() {
             <NavigationMenuLink className="w-[200px]" href="/explore/job-postings">
               <div className="font-medium">Jobs</div>
               <div className="text-muted-foreground">
-                Browse all job listings.
+                See available positions
               </div>
             </NavigationMenuLink>
             <NavigationMenuLink className="w-[200px]" href="/explore/companies">
               <div className="font-medium">Companies</div>
-              <div className="text-muted-foreground">Browse all companies.</div>
+              <div className="text-muted-foreground">See company profiles</div>
             </NavigationMenuLink>
           </NavigationMenuContent>
         </NavigationMenuItem>
