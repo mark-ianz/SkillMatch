@@ -37,7 +37,7 @@ export async function handleCompanySignIn(
 
       if (!company_id) {
         await connection.rollback();
-        return "/signup?error=DataInconsistency";
+        return "/signup?type=company&error=DataInconsistency";
       }
 
       (user as ExtendedUser).company_id = company_id;
@@ -51,7 +51,7 @@ export async function handleCompanySignIn(
     if (accountRows.length > 0) {
       if (!acc.company_id) {
         await connection.rollback();
-        return "/signup?error=DataInconsistency";
+        return "/signup?type=company&error=DataInconsistency";
       }
 
       const statusId: number = acc.status_id;
@@ -72,7 +72,7 @@ export async function handleCompanySignIn(
         (user as ExtendedUser).status_id = status_id;
 
         await connection.commit();
-        return "/signup?error=AccountPending";
+        return "/signup?type=company&error=AccountPending";
       }
 
       // If status is pending (2) - account is awaiting admin approval
@@ -100,7 +100,7 @@ export async function handleCompanySignIn(
 
     // No account and no onboarding -> DoesNotExist
     await connection.rollback();
-    return "/signup?error=DoesNotExist";
+    return "/signup?type=company&error=DoesNotExist";
   } catch (err) {
     await connection.rollback();
     console.error("company sign-in error:", err);
