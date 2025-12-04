@@ -39,11 +39,16 @@ export async function GET(request: NextRequest) {
 
     const [companies] = await db.query<(RowDataPacket & Company & Status)[]>(query, params);
 
-    // Map status to status_name for frontend
+    // Map status to status_name for frontend and transform industry string to array
     const mappedCompanies = Array.isArray(companies)
       ? companies.map((company) => ({
           ...company,
           status_name: company.status || "Unknown",
+          industry: company.industry 
+            ? (typeof company.industry === 'string' 
+              ? company.industry.split(',').map((i: string) => i.trim()).filter(Boolean)
+              : Array.isArray(company.industry) ? company.industry : [])
+            : [],
         }))
       : [];
 
