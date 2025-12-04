@@ -20,8 +20,8 @@ export default function Step6() {
   const setConfirmPassword = useOnboardingStore((s) => s.setConfirmPassword);
   const setError = useOnboardingStore((s) => s.setError);
 
-  const session = useSession();
-  const userId = session.data?.user?.user_id;
+  const { data: sessionData, update: updateSession } = useSession();
+  const userId = sessionData?.user?.user_id;
   const router = useRouter();
   const { mutate, isPending } = useUpdateStepSixOnboardingApplicant(userId);
   const farthestStep = useOnboardingStore((s) => s.farthestStep);
@@ -35,7 +35,10 @@ export default function Step6() {
       const parsed = onboardingPasswordSchema.parse({ password: password.trim(), confirm_password: confirm_password.trim() });
       // call backend
       mutate(parsed, {
-        onSuccess: () => {
+        onSuccess: async () => {
+          // Update session to reflect new status_id
+          await updateSession();
+          
           // increment locally then navigate to profile after successful finalization
           nextStep();
           router.push("/feed");
@@ -89,6 +92,10 @@ export default function Step6() {
             try {
               setError(null);
               await api.post(`/onboarding/${userId}/submit/${farthestStep}/step-six-skip`);
+              
+              // Update session to reflect new status_id
+              await updateSession();
+              
               nextStep();
               router.push("/feed");
             } catch (err) {

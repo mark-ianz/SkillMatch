@@ -16,6 +16,7 @@ import {
   googleCompanySignInProvider,
   googleCompanySignUpProvider,
 } from "./auth.providers";
+import { RowDataPacket } from "mysql2";
 
 export const authConfig: NextAuthOptions = {
   providers: [
@@ -81,7 +82,7 @@ export const authConfig: NextAuthOptions = {
         return false;
       }
     },
-    async jwt({ token, user }) {
+    async jwt({ token, user, trigger }) {
       // First time jwt callback is run, user object is available
       try {
         if (user) {
@@ -95,6 +96,31 @@ export const authConfig: NextAuthOptions = {
           token.isAdmin = (user as ExtendedUser).isAdmin || false;
           token.username = (user as ExtendedUser).username;
         }
+
+        // Handle session update trigger - refetch status_id from database
+        if (trigger === "update") {
+          const { db } = await import("@/lib/db");
+          
+          // Fetch latest account data based on user_id or company_id
+          if (token.user_id) {
+            const [rows] = await db.query<(RowDataPacket & { status_id: number })[]>(
+              "SELECT status_id FROM account WHERE user_id = ?",
+              [token.user_id]
+            );
+            if (rows.length > 0) {
+              token.status_id = rows[0].status_id;
+            }
+          } else if (token.company_id) {
+            const [rows] = await db.query<(RowDataPacket & { status_id: number })[]>(
+              "SELECT status_id FROM account WHERE company_id = ?",
+              [token.company_id]
+            );
+            if (rows.length > 0) {
+              token.status_id = rows[0].status_id;
+            }
+          }
+        }
+
         return token;
       } catch (error) {
         console.log("JWT CALLBACK ERROR:", error);
