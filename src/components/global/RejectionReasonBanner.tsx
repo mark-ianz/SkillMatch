@@ -66,7 +66,8 @@ export default function RejectionReasonBanner() {
               onClick={handleResubmit}
               disabled={isResubmitting}
               size="sm"
-              className="bg-red-600 hover:bg-red-700 text-white"
+              variant="default_employer"
+              className="w-full"
             >
               <RefreshCcw className="w-4 h-4 mr-2" />
               {isResubmitting ? "Processing..." : "Resubmit Application"}
