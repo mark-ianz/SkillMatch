@@ -65,6 +65,16 @@ export async function handleCompanySignIn(
         return true;
       }
 
+      // If status is pending (2) - allow login but with limited access
+      if (statusId === 2) {
+        (user as ExtendedUser).company_id = acc.company_id;
+        (user as ExtendedUser).role_id = acc.role_id ?? 4;
+        (user as ExtendedUser).status_id = status_id;
+
+        await connection.commit();
+        return true;
+      }
+
       // If status is onboarding (7) - should have been caught earlier, but treat as onboarding
       if (statusId === 7) {
         (user as ExtendedUser).company_id = acc.company_id;
@@ -73,12 +83,6 @@ export async function handleCompanySignIn(
 
         await connection.commit();
         return "/signup?type=company&error=AccountPending";
-      }
-
-      // If status is pending (2) - account is awaiting admin approval
-      if (statusId === 2) {
-        await connection.rollback();
-        return "/signin?status=pending";
       }
 
       // If status is rejected (3) - account was rejected by admin
