@@ -16,7 +16,7 @@ export async function PATCH(
     }
 
     const { company_id } = params;
-    const { status_id } = await request.json();
+    const { status_id, rejected_reason } = await request.json();
 
     // Validate status_id - Company account statuses: 1=active, 2=pending, 3=rejected, 4=disabled, 7=onboarding
     if (!status_id || ![1, 2, 3, 4, 7].includes(status_id)) {
@@ -26,14 +26,19 @@ export async function PATCH(
       );
     }
 
-    // Update account status
-    await db.query(
-      "UPDATE account SET status_id = ? WHERE company_id = ?",
-      [status_id, company_id]
-    );
+    // If status is rejected (3), require rejection reason
+    if (status_id === 3 && (!rejected_reason || !rejected_reason.trim())) {
+      return NextResponse.json(
+        { error: "Rejection reason is required when rejecting a company" },
+        { status: 400 }
+      );
+    }
 
-    // If rejected (status_id = 3), you might want to store the reason
-    // For now, we'll just update the status
+    // Update account status and rejected_reason
+    await db.query(
+      "UPDATE account SET status_id = ?, rejected_reason = ? WHERE company_id = ?",
+      [status_id, status_id === 3 ? rejected_reason : null, company_id]
+    );
 
     return NextResponse.json({ 
       success: true, 
@@ -67,6 +72,7 @@ export async function GET(
         c.*,
         a.email as company_email,
         a.status_id,
+        a.rejected_reason,
         a.created_at as account_created_at,
         s.status
       FROM company c

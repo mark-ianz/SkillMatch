@@ -21,6 +21,7 @@ export async function GET(request: NextRequest) {
         c.*,
         a.email,
         a.status_id,
+        a.rejected_reason,
         a.created_at as account_created_at,
         s.status
       FROM company c

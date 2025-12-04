@@ -10,6 +10,7 @@ const ROLE_COMPANY = 4;
 // Status IDs
 const STATUS_ACTIVE = 1;
 const STATUS_PENDING = 2;
+const STATUS_REJECTED = 3;
 const STATUS_ONBOARDING = 7;
 
 // Route definitions
@@ -103,8 +104,8 @@ export async function middleware(request: NextRequest) {
       return redirect(request, getOnboardingPath(role_id));
     }
 
-    // Redirect active users to feed
-    if (status_id === STATUS_ACTIVE || status_id === STATUS_PENDING) {
+    // Redirect active, pending, or rejected users to feed
+    if (status_id === STATUS_ACTIVE || status_id === STATUS_PENDING || status_id === STATUS_REJECTED) {
       return redirect(request, "/feed");
     }
 
@@ -160,8 +161,8 @@ export async function middleware(request: NextRequest) {
       return redirect(request, ADMIN_REDIRECT);
     }
 
-    // Pending users can only access /feed
-    if (status_id === STATUS_PENDING) {
+    // Pending and rejected users can only access /feed
+    if (status_id === STATUS_PENDING || status_id === STATUS_REJECTED) {
       if (pathname.startsWith("/feed")) {
         return NextResponse.next();
       }
@@ -220,12 +221,12 @@ export async function middleware(request: NextRequest) {
       return redirect(request, FORBIDDEN_REDIRECT);
     }
 
-    // Allow both active and pending companies
+    // Allow active, pending, and rejected companies
     if (status_id === STATUS_ONBOARDING) {
       return redirect(request, "/onboarding/company");
     }
 
-    if (status_id !== STATUS_ACTIVE && status_id !== STATUS_PENDING) {
+    if (status_id !== STATUS_ACTIVE && status_id !== STATUS_PENDING && status_id !== STATUS_REJECTED) {
       return redirect(request, FORBIDDEN_REDIRECT);
     }
 

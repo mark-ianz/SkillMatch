@@ -103,20 +103,22 @@ export const authConfig: NextAuthOptions = {
           
           // Fetch latest account data based on user_id or company_id
           if (token.user_id) {
-            const [rows] = await db.query<(RowDataPacket & { status_id: number })[]>(
-              "SELECT status_id FROM account WHERE user_id = ?",
+            const [rows] = await db.query<(RowDataPacket & { status_id: number; rejected_reason: string | null })[]>(
+              "SELECT status_id, rejected_reason FROM account WHERE user_id = ?",
               [token.user_id]
             );
             if (rows.length > 0) {
               token.status_id = rows[0].status_id;
+              token.rejected_reason = rows[0].rejected_reason;
             }
           } else if (token.company_id) {
-            const [rows] = await db.query<(RowDataPacket & { status_id: number })[]>(
-              "SELECT status_id FROM account WHERE company_id = ?",
+            const [rows] = await db.query<(RowDataPacket & { status_id: number; rejected_reason: string | null })[]>(
+              "SELECT status_id, rejected_reason FROM account WHERE company_id = ?",
               [token.company_id]
             );
             if (rows.length > 0) {
               token.status_id = rows[0].status_id;
+              token.rejected_reason = rows[0].rejected_reason;
             }
           }
         }
@@ -144,6 +146,9 @@ export const authConfig: NextAuthOptions = {
         (session as ExtendedSession).user.status_id = (
           token as ExtendedToken
         ).status_id;
+        (session as ExtendedSession).user.rejected_reason = (
+          token as ExtendedToken
+        ).rejected_reason;
         (session as ExtendedSession).user.isAdmin = (token as ExtendedToken).isAdmin || false;
         (session as ExtendedSession).user.username = (token as ExtendedToken).username;
       }

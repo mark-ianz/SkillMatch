@@ -6,6 +6,7 @@ import QueryClientProviderWrapper from "@/components/providers/QueryClientProvid
 import SessionProviderWrapper from "@/components/providers/SessionProviderWrapper";
 import OnboardingReminder from "@/components/global/OnboardingReminder";
 import PendingApprovalReminder from "@/components/global/PendingApprovalReminder";
+import RejectedAccountReminder from "@/components/global/RejectedAccountReminder";
 
 const geistSans = Geist({
   variable: "--font-geist",
@@ -104,6 +105,7 @@ export default function RootLayout({
             {children}
             <OnboardingReminder />
             <PendingApprovalReminder />
+            <RejectedAccountReminder />
           </QueryClientProviderWrapper>
         </SessionProviderWrapper>
         <Toaster />
