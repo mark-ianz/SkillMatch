@@ -309,7 +309,7 @@ export const ApplicationServices = {
         LEFT JOIN applications a ON jp.job_post_id = a.job_post_id
         WHERE jp.company_id = ?
         GROUP BY jp.job_post_id
-        ORDER BY jp.created_at DESC`,
+        ORDER BY jp.updated_at DESC`,
         [company_id]
       );
 
