@@ -9,6 +9,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { Users, Building2, Briefcase, GraduationCap } from "lucide-react";
 import { CoursesChart } from "./CoursesChart";
 import { IndustriesChart } from "./IndustriesChart";
+import { JobPostsChart } from "./JobPostsChart";
 
 interface AnalyticsData {
   applicants: number;
@@ -21,6 +22,11 @@ interface AnalyticsData {
   }>;
   industries: Array<{
     industry: string;
+    count: number;
+    fill: string;
+  }>;
+  jobPostStatuses: Array<{
+    status: string;
     count: number;
     fill: string;
   }>;
@@ -190,6 +196,34 @@ export default function AnalyticsDashboard() {
           <CardContent className="flex items-center justify-center py-12">
             <p className="text-muted-foreground">
               No company data available for this time period
+            </p>
+          </CardContent>
+        </Card>
+      )}
+
+      {/* Job Posts Status Distribution Chart */}
+      {analytics?.jobPostStatuses && analytics.jobPostStatuses.length > 0 && (
+        <JobPostsChart 
+          data={analytics.jobPostStatuses} 
+          timeFrame={getTimeFrameLabel()}
+        />
+      )}
+
+      {/* No Job Posts Data Message */}
+      {analytics?.jobPostStatuses && analytics.jobPostStatuses.length === 0 && (
+        <Card>
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <Briefcase className="h-5 w-5" />
+              Job Posts Status Distribution
+            </CardTitle>
+            <CardDescription>
+              {getTimeFrameLabel()}
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="flex items-center justify-center py-12">
+            <p className="text-muted-foreground">
+              No job post data available for this time period
             </p>
           </CardContent>
         </Card>
