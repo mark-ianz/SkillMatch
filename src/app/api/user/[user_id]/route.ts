@@ -29,6 +29,8 @@ export async function GET(
         op.course,
         op.year_level,
         op.expected_graduation_year,
+        op.required_hours,
+        op.preferred_schedule,
         op.created_at as applicant_created_at
       FROM user u
       LEFT JOIN applicant_profile op ON u.user_id = op.user_id

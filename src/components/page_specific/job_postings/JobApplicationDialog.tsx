@@ -378,9 +378,9 @@ export function JobApplicationDialog({
               <Label className="text-sm font-medium">Technical Skills</Label>
               <div className="flex flex-wrap gap-2 p-2 border rounded-md min-h-[42px] bg-muted/30">
                 {formData.technicalSkills.length > 0 ? (
-                  formData.technicalSkills.map((skill) => (
+                  formData.technicalSkills.map((skill, index) => (
                     <span
-                      key={skill}
+                      key={`${skill}-${index}`}
                       className="inline-flex items-center px-2 py-1 bg-muted rounded-md text-sm"
                     >
                       {skill}
