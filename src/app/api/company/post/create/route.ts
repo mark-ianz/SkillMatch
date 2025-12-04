@@ -59,18 +59,30 @@ export async function POST(request: Request) {
 
     // If there's a cover image file, validate and moderate it
     if (coverImageFile) {
+      // Validate file type and size
       try {
-        // Validate file type and size
         validateImageFile(coverImageFile);
+      } catch (err) {
+        if (err instanceof ServiceError) {
+          return NextResponse.json(
+            { error: err.message },
+            { status: err.status }
+          );
+        }
+        return NextResponse.json(
+          { error: "Invalid image file" },
+          { status: 400 }
+        );
+      }
 
-        // Moderate image for inappropriate content
+      // Moderate image for inappropriate content
+      try {
         const moderationResult = await moderateImage(coverImageFile);
-        console.log(moderationResult)
+        
         if (!moderationResult.safe) {
           return NextResponse.json(
             { 
               error: moderationResult.reason || "Image contains inappropriate content",
-              details: "Please upload a different image that complies with our content policy."
             },
             { status: 400 }
           );
@@ -82,11 +94,8 @@ export async function POST(request: Request) {
             { status: err.status }
           );
         }
-        console.error("Image validation/moderation failed", err);
-        return NextResponse.json(
-          { error: "Unable to process image. Please try again." },
-          { status: 500 }
-        );
+        // Don't block the upload if moderation service fails
+        console.error("Image moderation service error:", err);
       }
     }
 

@@ -87,7 +87,7 @@ export async function moderateImage(
     const arrayBuffer = await imageFile.arrayBuffer();
     const buffer = Buffer.from(arrayBuffer);
 
-    // Create FormData
+    // Create FormData using form-data package
     const formData = new FormData();
     formData.append("media", buffer, {
       filename: imageFile.name,
@@ -102,7 +102,9 @@ export async function moderateImage(
       "https://api.sightengine.com/1.0/check.json",
       formData,
       {
-        headers: formData.getHeaders(),
+        headers: {
+          ...formData.getHeaders(),
+        },
         timeout: 10000, // 10 second timeout
       }
     );
