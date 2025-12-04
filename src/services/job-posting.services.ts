@@ -73,8 +73,8 @@ export const JobPostingServices = {
       const job_post_id = nanoid();
 
       const [result] = await connection.query<ResultSetHeader>(
-        `INSERT INTO job_posts (job_post_id, company_id, job_title, courses_required, job_categories, available_positions, job_post_status_id, job_overview, job_responsibilities, preferred_qualifications, work_arrangement, soft_skills, technical_skills, street_name, barangay, city_municipality, postal_code, created_at, updated_at)
-         VALUES (?, ?, ?, ?, ?, ?, 2, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW(), NOW())`,
+        `INSERT INTO job_posts (job_post_id, company_id, job_title, courses_required, job_categories, available_positions, job_post_status_id, job_overview, job_responsibilities, preferred_qualifications, work_arrangement, soft_skills, technical_skills, street_name, barangay, city_municipality, postal_code)
+         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
         [
           job_post_id,
           company_id,
@@ -82,6 +82,7 @@ export const JobPostingServices = {
           (courses_required || []).join(","),
           (job_categories || []).join(","),
           available_positions,
+          2, // Default to 'pending' status
           job_overview,
           (job_responsibilities || []).join(","),
           preferred_qualifications || null,
@@ -468,14 +469,17 @@ export const JobPostingServices = {
 
       // Extract individual categories and count their occurrences
       const categoryMap = new Map<string, number>();
-      
+
       rows.forEach((row) => {
         if (row.job_categories) {
           const categories = row.job_categories.split(" / ");
           categories.forEach((cat: string) => {
             const trimmed = cat.trim();
             if (trimmed) {
-              categoryMap.set(trimmed, (categoryMap.get(trimmed) || 0) + row.category_count);
+              categoryMap.set(
+                trimmed,
+                (categoryMap.get(trimmed) || 0) + row.category_count
+              );
             }
           });
         }
