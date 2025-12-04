@@ -41,15 +41,23 @@ export async function GET(request: NextRequest) {
 
     // Map status to status_name for frontend and transform industry string to array
     const mappedCompanies = Array.isArray(companies)
-      ? companies.map((company) => ({
-          ...company,
-          status_name: company.status || "Unknown",
-          industry: company.industry 
-            ? (typeof company.industry === 'string' 
-              ? company.industry.split(',').map((i: string) => i.trim()).filter(Boolean)
-              : Array.isArray(company.industry) ? company.industry : [])
-            : [],
-        }))
+      ? companies.map((company) => {
+          let industryArray: string[] = [];
+          
+          if (company.industry) {
+            if (typeof company.industry === 'string') {
+              industryArray = (company.industry as string).split(',').map((i: string) => i.trim()).filter(Boolean);
+            } else if (Array.isArray(company.industry)) {
+              industryArray = company.industry as string[];
+            }
+          }
+          
+          return {
+            ...company,
+            status_name: company.status || "Unknown",
+            industry: industryArray,
+          };
+        })
       : [];
 
     return NextResponse.json(mappedCompanies);
