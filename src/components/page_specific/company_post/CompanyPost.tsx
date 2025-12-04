@@ -2,7 +2,6 @@
 
 import { useState } from "react";
 import Image from "next/image";
-import Link from "next/link";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import type { CompanyPost as CompanyPostType } from "@/types/company_post.types";
 import { ReactionButton } from "./ReactionButton";
@@ -12,6 +11,7 @@ import { CopyLinkButton } from "@/components/common/button/CopyLinkButton";
 import DateDifference from "@/components/common/DateDifference";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { SavePostButton } from "./SavePostButton";
+import LinkWithIcon from "@/components/global/LinkWithIcon";
 
 interface CompanyPostProps {
   post: CompanyPostType;
@@ -32,18 +32,22 @@ export function CompanyPost({ post }: CompanyPostProps) {
         <CardHeader className="flex pb-3">
           <div className="flex items-center gap-3">
             <Avatar className="w-12 h-12 ring-2 ring-border/50">
-              <AvatarImage className="object-cover" src={post.company_image} alt={post.company_name} />
+              <AvatarImage
+                className="object-cover"
+                src={post.company_image}
+                alt={post.company_name}
+              />
               <AvatarFallback className="bg-primary/10 text-primary font-semibold">
                 {post.company_name.charAt(0).toUpperCase()}
               </AvatarFallback>
             </Avatar>
             <div className="flex-1">
-              <Link
-                href={`/view/company/${post.company_id}`}
-                className="font-semibold text-base text-card-foreground hover:text-primary transition-colors inline-block"
-              >
-                {post.company_name}
-              </Link>
+              <LinkWithIcon
+                className="text-base"
+                iconClassName="w-3 h-3"
+                path={`/view/company/${post.company_id}`}
+                text={post.company_name}
+              />
               <DateDifference
                 className="text-xs text-muted-foreground block"
                 date={post.created_at}
