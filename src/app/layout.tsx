@@ -5,6 +5,7 @@ import { Toaster } from "@/components/ui/sonner";
 import QueryClientProviderWrapper from "@/components/providers/QueryClientProviderWrapper";
 import SessionProviderWrapper from "@/components/providers/SessionProviderWrapper";
 import OnboardingReminder from "@/components/global/OnboardingReminder";
+import PendingApprovalReminder from "@/components/global/PendingApprovalReminder";
 
 const geistSans = Geist({
   variable: "--font-geist",
@@ -102,6 +103,7 @@ export default function RootLayout({
           <QueryClientProviderWrapper>
             {children}
             <OnboardingReminder />
+            <PendingApprovalReminder />
           </QueryClientProviderWrapper>
         </SessionProviderWrapper>
         <Toaster />

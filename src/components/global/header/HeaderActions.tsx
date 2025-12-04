@@ -9,6 +9,7 @@ import ProfilePopover from "./ProfilePopover";
 import { useSession } from "next-auth/react";
 import { Skeleton } from "@/components/ui/skeleton";
 import { usePathname } from "next/navigation";
+import { Clock } from "lucide-react";
 
 export default function HeaderActions() {
   const { data: session, status } = useSession();
@@ -17,6 +18,9 @@ export default function HeaderActions() {
   const status_id = session?.user?.status_id;
   const role = getRoleName(role_id);
   const isOnboarding = status_id === 7;
+  const isPending = status_id === 2;
+
+  console.log(session)
 
   // Determine user type based on current path
   const isCompanyPath = pathname?.startsWith("/company");
@@ -52,6 +56,18 @@ export default function HeaderActions() {
       >
         <Link href={onboardingPath}>Complete Onboarding</Link>
       </Button>
+    );
+  }
+
+  // Show pending approval text if user is awaiting admin approval
+  if (role_id && isPending) {
+    return (
+      <div className="flex items-center gap-2 px-3 py-1.5 bg-orange-50 border border-orange-200 rounded-md">
+        <Clock className="w-4 h-4 text-orange-600" />
+        <span className="text-xs sm:text-sm text-orange-700 font-medium">
+          Account Pending Verification
+        </span>
+      </div>
     );
   }
 

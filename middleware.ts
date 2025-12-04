@@ -9,6 +9,7 @@ const ROLE_ADMIN = 1;
 
 // Status IDs
 const STATUS_ACTIVE = 1;
+const STATUS_PENDING = 2;
 const STATUS_ONBOARDING = 7;
 
 export async function middleware(request: NextRequest) {
@@ -113,6 +114,15 @@ export async function middleware(request: NextRequest) {
       return NextResponse.redirect(new URL("/unauthorized", request.url));
     }
 
+    // Allow pending users to access /feed only
+    if (status_id === STATUS_PENDING) {
+      if (pathname === "/feed" || pathname.startsWith("/feed")) {
+        return NextResponse.next(); // Allow access to feed
+      }
+      // Restrict other routes for pending users
+      return NextResponse.redirect(new URL("/feed", request.url));
+    }
+
     // Check if user is active
     if (status_id !== STATUS_ACTIVE) {
       if (status_id === STATUS_ONBOARDING) {
@@ -123,7 +133,7 @@ export async function middleware(request: NextRequest) {
         return NextResponse.redirect(new URL(onboardingPath, request.url));
       }
 
-      // Other statuses (pending, disabled, etc.) - forbidden
+      // Other statuses (disabled, etc.) - forbidden
       return NextResponse.redirect(new URL("/forbidden", request.url));
     }
 
