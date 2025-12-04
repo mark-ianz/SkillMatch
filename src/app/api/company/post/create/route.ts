@@ -3,6 +3,7 @@ import { CompanyPostServices } from "@/services/company-post.services";
 import { companyPostSchema } from "@/schema/company-post.schema";
 import { formatZodError } from "@/lib/utils";
 import { ServiceError } from "@/lib/errors";
+import { moderateImage, validateImageFile } from "@/services/image-moderation.service";
 
 export async function POST(request: Request) {
   try {
@@ -54,6 +55,39 @@ export async function POST(request: Request) {
         { error: "Missing company_id" },
         { status: 401 }
       );
+    }
+
+    // If there's a cover image file, validate and moderate it
+    if (coverImageFile) {
+      try {
+        // Validate file type and size
+        validateImageFile(coverImageFile);
+
+        // Moderate image for inappropriate content
+        const moderationResult = await moderateImage(coverImageFile);
+        console.log(moderationResult)
+        if (!moderationResult.safe) {
+          return NextResponse.json(
+            { 
+              error: moderationResult.reason || "Image contains inappropriate content",
+              details: "Please upload a different image that complies with our content policy."
+            },
+            { status: 400 }
+          );
+        }
+      } catch (err) {
+        if (err instanceof ServiceError) {
+          return NextResponse.json(
+            { error: err.message },
+            { status: err.status }
+          );
+        }
+        console.error("Image validation/moderation failed", err);
+        return NextResponse.json(
+          { error: "Unable to process image. Please try again." },
+          { status: 500 }
+        );
+      }
     }
 
     try {
