@@ -23,7 +23,6 @@ export const COMPANY_ACCOUNT_STATUSES: StatusOption[] = [
   { value: 2, label: "Pending", variant: "secondary" },
   { value: 3, label: "Rejected", variant: "destructive" },
   { value: 4, label: "Disabled", variant: "outline" },
-  { value: 7, label: "Onboarding", variant: "secondary" },
 ];
 
 // Job post statuses (for admin panel)
@@ -40,7 +39,6 @@ export const COMPANY_STATUS_COLORS: Record<number, StatusColorConfig> = {
   2: { bg: "bg-yellow-100", text: "text-yellow-700", label: "Pending" },
   3: { bg: "bg-red-100", text: "text-red-700", label: "Rejected" },
   4: { bg: "bg-gray-100", text: "text-gray-700", label: "Disabled" },
-  7: { bg: "bg-purple-100", text: "text-purple-700", label: "Onboarding" },
 };
 
 // Enhanced status colors for job posts
