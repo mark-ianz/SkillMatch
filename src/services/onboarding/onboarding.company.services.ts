@@ -217,10 +217,10 @@ async function submitStepSix(
       [hashed, company_id]
     );
 
-    // Finalize onboarding for company: mark account active and remove onboarding row
+    // Finalize onboarding for company: mark account as pending approval and remove onboarding row
     await connection.query<ResultSetHeader>(
       `UPDATE account SET status_id = ? WHERE company_id = ?`,
-      [1, company_id]
+      [2, company_id]
     );
     await connection.query<ResultSetHeader>(
       `DELETE FROM onboarding WHERE company_id = ?`,
