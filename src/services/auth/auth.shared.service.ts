@@ -23,7 +23,7 @@ export async function handleSignup(
 
     if (existingAccount.length > 0) {
       await connection.rollback();
-      return "/signup?error=AlreadyExist";
+      return `/signup?type=${type}&error=AlreadyExist`;
     }
 
     // Insert data based on type of signup
@@ -47,11 +47,11 @@ export async function handleSignup(
     console.log(error);
     await connection.rollback();
     if ((error as MySQLError).code === "ER_DUP_ENTRY") {
-      return "/signup?error=DuplicateEntry";
+      return `/signup?type=${type}&error=DuplicateEntry`;
     }
 
     if (error instanceof Error && error.message === "EmailNotAllowed") {
-      return "/signup?error=EmailNotAllowed"; // Redirect to sign-up page with error
+      return `/signup?type=${type}&error=EmailNotAllowed`; // Redirect to sign-up page with error
     }
 
     return false;
