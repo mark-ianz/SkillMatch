@@ -18,10 +18,16 @@ import useCompanySettingsStore from "@/store/CompanySettingsStore";
 export default function CompanySettingsPage() {
   const { data: settings, isLoading } = useCompanySettings();
 
-  const setCompanyProfile = useCompanySettingsStore((state) => state.setCompanyProfile);
-  const setContactInfo = useCompanySettingsStore((state) => state.setContactInfo);
+  const setCompanyProfile = useCompanySettingsStore(
+    (state) => state.setCompanyProfile
+  );
+  const setContactInfo = useCompanySettingsStore(
+    (state) => state.setContactInfo
+  );
   const setLocation = useCompanySettingsStore((state) => state.setLocation);
-  const setCompanyLogoPreview = useCompanySettingsStore((state) => state.setCompanyLogoPreview);
+  const setCompanyLogoPreview = useCompanySettingsStore(
+    (state) => state.setCompanyLogoPreview
+  );
 
   // Initialize form states when settings are loaded
   useEffect(() => {
@@ -50,7 +56,13 @@ export default function CompanySettingsPage() {
 
       setCompanyLogoPreview(settings.company_image);
     }
-  }, [settings, setCompanyProfile, setContactInfo, setLocation, setCompanyLogoPreview]);
+  }, [
+    settings,
+    setCompanyProfile,
+    setContactInfo,
+    setLocation,
+    setCompanyLogoPreview,
+  ]);
 
   if (isLoading) {
     return <CompanySettingsSkeleton />;
@@ -73,18 +85,18 @@ export default function CompanySettingsPage() {
         transition={{ duration: 0.3, delay: 0.1 }}
       >
         <AnimatedTabsRoot defaultValue="profile" className="space-y-4">
-          <AnimatedTabsList className="grid w-full grid-cols-4 lg:w-auto lg:inline-grid">
+          <AnimatedTabsList className="grid w-full grid-cols-4">
             <AnimatedTabsTrigger value="profile">Profile</AnimatedTabsTrigger>
             <AnimatedTabsTrigger value="contact">Contact</AnimatedTabsTrigger>
             <AnimatedTabsTrigger value="location">Location</AnimatedTabsTrigger>
             <AnimatedTabsTrigger value="security">Security</AnimatedTabsTrigger>
           </AnimatedTabsList>
 
-        <CompanyProfileTab />
-        <CompanyContactTab />
-        <CompanyLocationTab />
-        <CompanySecurityTab />
-      </AnimatedTabsRoot>
+          <CompanyProfileTab />
+          <CompanyContactTab />
+          <CompanyLocationTab />
+          <CompanySecurityTab />
+        </AnimatedTabsRoot>
       </motion.div>
     </div>
   );
