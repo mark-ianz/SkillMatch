@@ -7,6 +7,13 @@ import { Card, CardContent} from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import {
   Briefcase,
   Users,
   Plus,
@@ -14,6 +21,7 @@ import {
   TrendingUp,
   AlertCircle,
   Send,
+  ArrowUpDown,
 } from "lucide-react";
 import Link from "next/link";
 import { Alert, AlertDescription } from "@/components/ui/alert";
@@ -36,11 +44,30 @@ const statusColors: Record<
 export default function CompanyJobPostsPage() {
   const { data: jobPosts, isLoading, error } = useCompanyJobPostsWithStatus();
   const [selectedStatuses, setSelectedStatuses] = useState<number[]>([1, 2, 3, 4, 5, 6]);
+  const [sortBy, setSortBy] = useState<string>("updated");
 
   // Filter job posts based on selected statuses
   const filteredJobPosts = jobPosts?.filter((post) =>
     selectedStatuses.length === 0 || selectedStatuses.includes(post.job_post_status_id)
   );
+
+  // Sort job posts based on selected sort option
+  const sortedJobPosts = filteredJobPosts?.sort((a, b) => {
+    switch (sortBy) {
+      case "updated":
+        return new Date(b.updated_at).getTime() - new Date(a.updated_at).getTime();
+      case "created-newest":
+        return new Date(b.created_at).getTime() - new Date(a.created_at).getTime();
+      case "created-oldest":
+        return new Date(a.created_at).getTime() - new Date(b.created_at).getTime();
+      case "applications":
+        return (b.total_applications || 0) - (a.total_applications || 0);
+      case "title":
+        return a.job_title.localeCompare(b.job_title);
+      default:
+        return new Date(b.updated_at).getTime() - new Date(a.updated_at).getTime();
+    }
+  });
 
   if (isLoading) {
     return (
@@ -196,14 +223,31 @@ export default function CompanyJobPostsPage() {
       >
         <div className="flex items-center justify-between mb-4">
           <h2 className="text-xl font-semibold">All Job Posts</h2>
-          {filteredJobPosts && filteredJobPosts.length > 0 && (
-            <p className="text-sm text-muted-foreground">
-              Showing {filteredJobPosts.length} of {jobPosts?.length || 0} posts
-            </p>
-          )}
+          <div className="flex items-center gap-4">
+            {filteredJobPosts && filteredJobPosts.length > 0 && (
+              <>
+                <Select value={sortBy} onValueChange={setSortBy}>
+                  <SelectTrigger className="w-[220px]">
+                    <ArrowUpDown className="mr-2 h-4 w-4" />
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="updated">Recently Updated</SelectItem>
+                    <SelectItem value="created-newest">Date Posted: Newest</SelectItem>
+                    <SelectItem value="created-oldest">Date Posted: Oldest</SelectItem>
+                    <SelectItem value="applications">Total Applications</SelectItem>
+                    <SelectItem value="title">Job Title (A-Z)</SelectItem>
+                  </SelectContent>
+                </Select>
+                <p className="text-sm text-muted-foreground">
+                  Showing {filteredJobPosts.length} of {jobPosts?.length || 0} posts
+                </p>
+              </>
+            )}
+          </div>
         </div>
 
-        {!filteredJobPosts || filteredJobPosts.length === 0 ? (
+        {!sortedJobPosts || sortedJobPosts.length === 0 ? (
           <Card>
             <CardContent className="p-12">
               <div className="text-center">
@@ -230,7 +274,7 @@ export default function CompanyJobPostsPage() {
             </CardContent>
           </Card>
         ) : (
-          filteredJobPosts.map((post) => (
+          sortedJobPosts.map((post) => (
             <JobPostCard
               key={post.job_post_id}
               post={post}
