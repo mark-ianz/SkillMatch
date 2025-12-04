@@ -15,6 +15,7 @@ export default async function FeedPage() {
   const isAuthenticated = !!session;
   const role = session?.user?.role_id;
   const role_name = session?.user ? getRoleName(role) : null;
+  const status_id = session?.user?.status_id;
 
   return (
     <MainLayout className="items-center pb-20" wrapperClassName="p-4 w-full">
@@ -22,7 +23,7 @@ export default async function FeedPage() {
         {/* Left Sidebar - Profile */}
         <div className="flex-1">
           <div className="sticky top-24 min-w-80 flex-shrink-0">
-            {isAuthenticated && role_name === "Company" && (
+            {isAuthenticated && role_name === "Company" && status_id === 1 && (
               <div className="px-3">
                 <Link
                   href="/company/create-post"
