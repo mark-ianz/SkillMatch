@@ -5,7 +5,9 @@ export type AuthErrorCode =
   | 'DoesNotExist'
   | 'InvalidCredentials'
   | 'AccountInvalidStatus'
-  | 'EmailNotAllowed';
+  | 'EmailNotAllowed'
+  | 'AlreadyExist'
+  | 'DuplicateEntry';
 
 export type AuthStatusCode =
   | 'pending'
@@ -42,6 +44,14 @@ const errorMessages: Record<AuthErrorCode, AuthError> = {
   EmailNotAllowed: {
     title: 'Email Not Allowed',
     description: 'The email you are trying to use is not associated with Quezon City University. Please use your university email to sign up.',
+  },
+  AlreadyExist: {
+    title: 'Account Already Exists',
+    description: 'An account with this email already exists. Please sign in instead or use a different email address.',
+  },
+  DuplicateEntry: {
+    title: 'Duplicate Account',
+    description: 'This account information is already registered in our system. Please sign in or contact support if you need assistance.',
   }
 };
 
