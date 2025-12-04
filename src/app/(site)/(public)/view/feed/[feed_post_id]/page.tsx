@@ -36,7 +36,7 @@ export default async function FeedPostPage({ params }: FeedPostPageProps) {
   return (
     <MainLayout className="items-center" wrapperClassName="w-full">
       <div className="gap-10 flex flex-col items-center container max-w-5xl">
-        <div className="space-y-4 px-4">
+        <div className="space-y-4 px-4 w-full">
           {/* Back Button */}
           <GoBackButton />
 
