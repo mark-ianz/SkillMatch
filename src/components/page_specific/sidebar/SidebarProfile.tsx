@@ -8,14 +8,22 @@ import { getServerSession } from "next-auth";
 import { authConfig } from "@/lib/auth";
 import { UserService } from "@/services/user.services";
 import CompanyServices from "@/services/company.services";
-import { CompanyFallbackSVG, ApplicantFallbackSVG } from "@/components/common/fallback/ImageFallback";
+import {
+  CompanyFallbackSVG,
+  ApplicantFallbackSVG,
+} from "@/components/common/fallback/ImageFallback";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import { LogIn, UserPlus, ShieldCheck, Users, Briefcase, BarChart3 } from "lucide-react";
+import {
+  LogIn,
+  UserPlus,
+} from "lucide-react";
+import AdminSidebarProfile from "./AdminSidebarProfile";
+import RejectionReasonBanner from "@/components/global/RejectionReasonBanner";
 
 export default async function SidebarProfile() {
   const session = await getServerSession(authConfig);
-  
+
   // Show CTA for non-logged-in users
   if (!session) {
     return (
@@ -27,7 +35,8 @@ export default async function SidebarProfile() {
           <div className="space-y-2">
             <h3 className="font-semibold text-lg">Join SkillMatch</h3>
             <p className="text-sm text-muted-foreground">
-              Create an account to explore opportunities, connect with companies, and manage your career journey.
+              Create an account to explore opportunities, connect with
+              companies, and manage your career journey.
             </p>
           </div>
           <div className="space-y-2">
@@ -53,66 +62,15 @@ export default async function SidebarProfile() {
   const user_id = session?.user.user_id;
   const company_id = session?.user.company_id;
   const isAdmin = session.user.isAdmin || role_id === 2;
+  const status_id = session.user.status_id;
 
   // Show admin card for admin users
   if (isAdmin) {
-    const adminName = session.user.name || "Administrator";
-    const adminEmail = session.user.email || "admin@skillmatch.com";
-    
     return (
-      <Card className="pt-0">
-        <div className="h-12 w-full bg-skillmatch-primary-green rounded-t-lg" />
-        
-        <div className="relative -mt-12 flex justify-center">
-          <div className="w-20 h-20 rounded-full bg-white p-1 shadow-md">
-            <div className="relative w-full h-full rounded-full overflow-hidden bg-skillmatch-primary-green flex items-center justify-center">
-              <ShieldCheck className="h-10 w-10 text-white" />
-            </div>
-          </div>
-        </div>
-
-        <div className="px-6 space-y-4">
-          <div className="flex flex-col gap-1 pt-2">
-            <div className="text-lg font-semibold text-slate-800 text-center">
-              {adminName}
-            </div>
-            <div className="text-xs text-slate-600 text-center">
-              {adminEmail}
-            </div>
-            <div className="text-xs text-skillmatch-primary-green font-medium text-center">
-              SPARDS
-            </div>
-          </div>
-          <hr />
-          
-          <div className="space-y-2">
-            <Link href="/admin/companies" className="block">
-              <Button variant="ghost" size="sm" className="w-full justify-start">
-                <Users className="h-4 w-4 mr-2" />
-                Companies
-              </Button>
-            </Link>
-            <Link href="/admin/job-postings" className="block">
-              <Button variant="ghost" size="sm" className="w-full justify-start">
-                <Briefcase className="h-4 w-4 mr-2" />
-                Job Posts
-              </Button>
-            </Link>
-            <Link href="/admin/students" className="block">
-              <Button variant="ghost" size="sm" className="w-full justify-start">
-                <Users className="h-4 w-4 mr-2" />
-                Students
-              </Button>
-            </Link>
-            <Link href="/admin/analytics" className="block">
-              <Button variant="ghost" size="sm" className="w-full justify-start">
-                <BarChart3 className="h-4 w-4 mr-2" />
-                Analytics
-              </Button>
-            </Link>
-          </div>
-        </div>
-      </Card>
+      <AdminSidebarProfile
+        email={session.user.email || ""}
+        username={session.user.name || ""}
+      />
     );
   }
 
@@ -122,28 +80,63 @@ export default async function SidebarProfile() {
 
   const isOjt = getRoleName(role_id) === "Applicant";
   const isCompany = getRoleName(role_id) === "Company";
-  
+
+  // Show rejection banner for rejected accounts
+  if (status_id === 3) {
+    return <RejectionReasonBanner />;
+  }
+
+  // Show onboarding message for users in onboarding status
+  if (status_id === 7) {
+    return (
+      <Card className="p-6 border-2 border-dashed border-yellow-200 bg-yellow-50">
+        <div className="text-center space-y-4">
+          <div className="w-16 h-16 rounded-full bg-gradient-to-br from-yellow-400 to-yellow-600 mx-auto flex items-center justify-center">
+            <UserPlus className="h-8 w-8 text-white" />
+          </div>
+          <div className="space-y-2">
+            <h3 className="font-semibold text-lg text-yellow-900">Complete Your Profile</h3>
+            <p className="text-sm text-yellow-800">
+              Finish setting up your account to access all features and start your journey.
+            </p>
+          </div>
+          <Button asChild className="w-full bg-yellow-600 hover:bg-yellow-700">
+            <Link href={role_id === 3 ? "/onboarding/applicant" : "/onboarding/company"}>
+              Continue Onboarding
+            </Link>
+          </Button>
+        </div>
+      </Card>
+    );
+  }
+
   // Fetch profile data from database
   let applicantProfile;
   let companyProfile;
-  
+
   if (isOjt && user_id) {
     applicantProfile = await UserService.getApplicantProfileForSidebar(user_id);
   } else if (isCompany && company_id) {
-    companyProfile = await CompanyServices.getCompanyProfileForSidebar(company_id);
+    companyProfile = await CompanyServices.getCompanyProfileForSidebar(
+      company_id
+    );
   }
 
   if (!applicantProfile && !companyProfile) {
     return <LoadingGeneric />;
   }
 
-  const displayName = isOjt 
+  const displayName = isOjt
     ? applicantProfile?.name || "Applicant User"
     : companyProfile?.company_name || "Company User";
-  const profileImage = (isOjt ? applicantProfile?.applicant_image_path : companyProfile?.company_image) || null;
+  const profileImage =
+    (isOjt
+      ? applicantProfile?.applicant_image_path
+      : companyProfile?.company_image) || null;
   const studentId = applicantProfile?.student_number || null;
   const course = getCourseByAbbr(applicantProfile?.course || "") || null;
-  const location = (isOjt ? applicantProfile?.location : companyProfile?.location) || null;
+  const location =
+    (isOjt ? applicantProfile?.location : companyProfile?.location) || null;
 
   return (
     <Card className="pt-0">
@@ -184,9 +177,7 @@ export default async function SidebarProfile() {
               </div>
             </div>
 
-            {studentId && (
-              <p className="text-xs text-slate-600">{studentId}</p>
-            )}
+            {studentId && <p className="text-xs text-slate-600">{studentId}</p>}
           </div>
           <div>
             {course && (

@@ -233,7 +233,7 @@ export default function PrivacyPolicyPage() {
                 <ul className="list-disc list-inside space-y-2 ml-4 mt-2">
                   <li>Google OAuth (for authentication)</li>
                   <li>aiven.io (for data storage)</li>
-                  <li>vercel (for notifications)</li>
+                  <li>vercel (for deployment)</li>
                 </ul>
                 <p className="mt-2">
                   These providers are contractually obligated to protect your

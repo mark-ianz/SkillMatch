@@ -61,8 +61,10 @@ AnimatedTabsRoot.displayName = "AnimatedTabsRoot";
 
 const AnimatedTabsTrigger = React.forwardRef<
   React.ElementRef<typeof TabsPrimitive.Trigger>,
-  React.ComponentPropsWithoutRef<typeof TabsPrimitive.Trigger>
->(({ className, value, ...props }, ref) => {
+  React.ComponentPropsWithoutRef<typeof TabsPrimitive.Trigger> & {
+    activeBgColor?: string;
+  }
+>(({ className, value, activeBgColor, ...props }, ref) => {
   const context = React.useContext(TabsContext);
   const isActive = context.value === value;
 
@@ -80,7 +82,7 @@ const AnimatedTabsTrigger = React.forwardRef<
       {isActive && (
         <motion.div
           layoutId="active-tab"
-          className="absolute inset-0 bg-background rounded-md shadow"
+          className={cn("absolute inset-0 bg-background rounded-md shadow", activeBgColor)}
           transition={{ type: "spring", stiffness: 500, damping: 30, mass: 1 }}
         />
       )}

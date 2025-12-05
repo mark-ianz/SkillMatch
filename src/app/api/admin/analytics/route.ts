@@ -27,7 +27,7 @@ export async function GET(request: NextRequest) {
     }
 
     const { searchParams } = new URL(request.url);
-    const timeFrame = searchParams.get("timeFrame") || "today"; // today, week, month
+    const timeFrame = searchParams.get("timeFrame") || "today"; // today, week, month, all
 
     // Determine date filter based on timeFrame
     let dateFilter = "";
@@ -41,8 +41,11 @@ export async function GET(request: NextRequest) {
       case "month":
         dateFilter = "created_at >= DATE_SUB(NOW(), INTERVAL 30 DAY)";
         break;
+      case "all":
+        dateFilter = "1=1"; // No date restriction
+        break;
       default:
-        dateFilter = "DATE(created_at) = CURDATE()";
+        dateFilter = "1=1";
     }
 
     // Get applicant count (role_id = 3)
@@ -135,12 +138,33 @@ export async function GET(request: NextRequest) {
       }))
       .sort((a, b) => b.count - a.count);
 
+    // Get job post status distribution
+    const [jobPostStatusResult] = await db.query<(
+      { status: string; count: number } & RowDataPacket
+    )[]>(
+      `SELECT s.status, COUNT(*) as count
+       FROM job_posts jp
+       INNER JOIN status s ON jp.job_post_status_id = s.status_id
+       WHERE ${timeFrame !== "all" ? dateFilter : "1=1"}
+       GROUP BY jp.job_post_status_id, s.status
+       ORDER BY count DESC`
+    );
+
+    const jobPostStatusesData = Array.isArray(jobPostStatusResult)
+      ? jobPostStatusResult.map((row, index: number) => ({
+          status: row.status || "Unknown",
+          count: row.count || 0,
+          fill: `var(--chart-${(index % 5) + 1})`,
+        }))
+      : [];
+
     return NextResponse.json({
       applicants: applicantCount,
       companies: companyCount,
       jobPosts: jobPostCount,
       courses: coursesData,
       industries: industriesData,
+      jobPostStatuses: jobPostStatusesData,
     });
   } catch (error) {
     console.error("Error fetching analytics:", error);

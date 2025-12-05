@@ -20,6 +20,7 @@ export default function Step4() {
   const setSkills = useApplicantProfileStore((state) => state.setSkills);
   const setError = useOnboardingStore.getState().setError;
 
+  console.log(skills)
   const { mutate, isPending } = useUpdateUserSkills(
     session?.data?.user?.user_id
   );
@@ -41,15 +42,35 @@ export default function Step4() {
   }
 
   // Convert skill objects to skill names for the new SearchSkill component
-  const selectedSkillNames = skills.map((skill) => skill.skill_name);
+  // Handle both cases: array of Skill objects OR array of strings (from API after split)
+  const selectedSkillNames = skills
+    .map((skill) => {
+      // If skill is already a string, return it
+      if (typeof skill === "string") return skill;
+      // If skill is an object with skill_name, return that
+      return skill?.skill_name;
+    })
+    .filter((name): name is string => typeof name === "string" && name.length > 0);
 
   // Handle skill changes from the new SearchSkill component
   function handleSkillsChange(skillNames: string[]) {
     // Convert skill names back to skill objects
     // We need to preserve skill_id for existing skills and create new ones for new skills
     const updatedSkills = skillNames.map((name) => {
-      const existingSkill = skills.find((s) => s.skill_name === name);
+      const existingSkill = skills.find((s) => {
+        // Handle both string and object format
+        if (typeof s === "string") return s === name;
+        return s.skill_name === name;
+      });
+      
       if (existingSkill) {
+        // If existing skill is a string, convert it to object format
+        if (typeof existingSkill === "string") {
+          return {
+            skill_id: 0,
+            skill_name: existingSkill,
+          };
+        }
         return existingSkill;
       }
       // For newly added skills, we'll use a temporary ID

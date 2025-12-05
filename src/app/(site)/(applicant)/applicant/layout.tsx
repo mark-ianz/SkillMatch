@@ -9,13 +9,19 @@ import MainLayout from "@/components/layout/MainLayout";
 export default async function Layout({ children }: { children: ReactNode }) {
   const session = await getServerSession(authConfig);
 
-  // Check if user is logged in, is an applicant (role_id = 3), and is active (status_id = 1)
+  // Check if user is logged in
   if (!session || !session.user.user_id) {
     redirect("/signin");
   }
 
+  // Check if user is in onboarding
+  if (session.user.status_id === 7) {
+    redirect("/onboarding/applicant");
+  }
+
+  // Check if user is an applicant and active
   if (session.user.role_id !== 3 || session.user.status_id !== 1) {
-    redirect("/");
+    redirect("/forbidden");
   }
   
   return (

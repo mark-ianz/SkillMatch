@@ -1,5 +1,6 @@
 "use client";
 
+import { GoBackButton } from "@/components/common/button/GoBackButton";
 import MainLayout from "@/components/layout/MainLayout";
 import JobPostingForm from "@/components/page_specific/job_postings/JobPostForm";
 import { motion } from "framer-motion";
@@ -8,6 +9,14 @@ export default function PostJobPage() {
   return (
     <MainLayout className="items-center w-full" wrapperClassName="w-full py-0">
       <div className="flex flex-col container max-w-3xl">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.3 }}
+          className="mb-4"
+        >
+          <GoBackButton />
+        </motion.div>
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}

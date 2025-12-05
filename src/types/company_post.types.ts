@@ -15,6 +15,7 @@ export type CompanyPost = {
   content: string
   cover_image?: string
   created_at: string
+  is_suggested?: boolean
 }
 
 export type PostReactions = {

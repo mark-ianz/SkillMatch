@@ -6,7 +6,7 @@ import {
   ApplicationWithJobDetails,
   ApplicationWithUserDetails,
   CompanyApplicationStatusId,
-  JobPostWithApplicationStats,
+  JobPostWithApplicationStatus,
 } from "@/types/application.types";
 import { NotificationServices } from "./notification.services";
 
@@ -247,7 +247,9 @@ export const ApplicationServices = {
           u.region,
           acc.email as user_email,
           op.course,
-          op.skills
+          op.skills,
+          op.student_number,
+          op.year_level
         FROM applications a
         JOIN user u ON a.user_id = u.user_id
         JOIN account acc ON u.user_id = acc.user_id
@@ -284,15 +286,16 @@ export const ApplicationServices = {
   // COMPANY: Get all job posts for a company with application statistics
   getCompanyJobPostsWithStats: async (
     company_id: string
-  ): Promise<JobPostWithApplicationStats[]> => {
+  ): Promise<JobPostWithApplicationStatus[]> => {
     try {
-      const [rows] = await db.query<(RowDataPacket & JobPostWithApplicationStats)[]>(
+      const [rows] = await db.query<(RowDataPacket & JobPostWithApplicationStatus)[]>(
         `SELECT 
           jp.job_post_id,
           jp.job_title,
           jp.work_arrangement,
           jp.available_positions,
           jp.job_post_status_id,
+          jp.rejected_reason,
           jp.created_at,
           jp.updated_at,
           COUNT(a.application_id) as total_applications,
@@ -308,7 +311,7 @@ export const ApplicationServices = {
         LEFT JOIN applications a ON jp.job_post_id = a.job_post_id
         WHERE jp.company_id = ?
         GROUP BY jp.job_post_id
-        ORDER BY jp.created_at DESC`,
+        ORDER BY jp.updated_at DESC`,
         [company_id]
       );
 
@@ -345,28 +348,28 @@ export const ApplicationServices = {
       );
 
       if (appRows.length > 0) {
-        const { user_id, job_title, job_post_id } = appRows[0];
+        const { user_id, job_post_id } = appRows[0];
         
-        // Create notification for user based on status change
-        let title = "Application Status Updated";
-        let message = `Your application for ${job_title} has been updated`;
+        // Only send notifications for specific status changes
+        // Status 13 (Shortlisted) and 14 (On Hold) should NOT send notifications
+        // Only notify for: Applied (8), Interview (9), Selected (10), Accepted (11), Rejected (3)
+        // Note: Interview (9), Selected (10), and Accepted (11) are handled in their respective functions
         
-        if (company_status_id === 13) {
-          title = "You've Been Shortlisted!";
-          message = `Great news! You've been shortlisted for ${job_title}`;
-        } else if (company_status_id === 14) {
-          title = "Application On Hold";
-          message = `Your application for ${job_title} is currently on hold`;
+        const shouldNotify = company_status_id !== 13 && company_status_id !== 14;
+        
+        if (shouldNotify) {
+          const title = "Application Update";
+          const message = "Your application status has been updated";
+          
+          await NotificationServices.createUserNotification(
+            user_id,
+            "application_status_update",
+            title,
+            message,
+            application_id,
+            job_post_id
+          ).catch(err => console.error("Failed to create notification:", err));
         }
-        
-        await NotificationServices.createUserNotification(
-          user_id,
-          "application_status_update",
-          title,
-          message,
-          application_id,
-          job_post_id
-        ).catch(err => console.error("Failed to create notification:", err));
       }
     } catch (error) {
       console.error("Error updating company status:", error);
@@ -506,6 +509,29 @@ export const ApplicationServices = {
          WHERE application_id = ?`,
         [rejection_reason || null, application_id]
       );
+
+      // Get application details for notification
+      const [appRows] = await db.query<RowDataPacket[]>(
+        `SELECT a.user_id, jp.job_title, jp.job_post_id, c.company_name 
+         FROM applications a 
+         JOIN job_posts jp ON a.job_post_id = jp.job_post_id 
+         JOIN company c ON jp.company_id = c.company_id 
+         WHERE a.application_id = ?`,
+        [application_id]
+      );
+
+      if (appRows.length > 0) {
+        const { user_id, job_title, job_post_id, company_name } = appRows[0];
+        
+        await NotificationServices.createUserNotification(
+          user_id,
+          "application_status_update",
+          "Application Update",
+          `Your application for ${job_title} at ${company_name} has been reviewed`,
+          application_id,
+          job_post_id
+        ).catch(err => console.error("Failed to create notification:", err));
+      }
     } catch (error) {
       console.error("Error rejecting application:", error);
       throw error;

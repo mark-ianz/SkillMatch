@@ -16,6 +16,7 @@ import SelectWithLabel from "@/components/common/input/SelectWithLabel";
 import { getAllCourses } from "@/lib/utils";
 import { ItemList } from "@/components/common/input/ComboBox";
 import { toast } from "sonner";
+import { useCompanySettings } from "@/hooks/query/useCompanySettings";
 
 type Props = {
   formData: Partial<JobPost>;
@@ -34,6 +35,7 @@ export default function RequirementsSection({
   removeCourses,
   updateField,
 }: Props) {
+  const { data: companySettings } = useCompanySettings();
   const COURSES = getAllCourses(true) as ItemList[];
   const [selectedCourse, setSelectedCourse] = React.useState<ItemList | null>(
     null
@@ -117,6 +119,7 @@ export default function RequirementsSection({
             onCategoriesChange={(categories) =>
               updateField("job_categories" as keyof JobPost, categories)
             }
+            companyIndustries={companySettings?.industry || []}
           />
         </div>
 

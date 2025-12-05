@@ -1,3 +1,4 @@
+import UniversalHeader from "@/components/global/header/UniversalHeader";
 import { authConfig } from "@/lib/auth";
 import { getServerSession } from "next-auth";
 import { redirect, RedirectType } from "next/navigation";
@@ -22,6 +23,7 @@ export default async function OnboardingLayout({
 
   return (
     <>
+      <UniversalHeader />
       {children}
     </>
   );

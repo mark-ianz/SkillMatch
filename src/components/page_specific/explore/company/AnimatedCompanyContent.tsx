@@ -6,35 +6,39 @@ import { CompanyProfile } from "./CompanyProfile";
 import { Badge } from "@/components/ui/badge";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { JobPostPreview } from "../job-postings/JobPostPreview";
+import { CompanyPostPreview } from "../../company_post/CompanyPostPreview";
 import { Card } from "@/components/ui/card";
 import type { CompanyProfile as CompanyProfileType } from "@/types/company.types";
 import type { JobPost } from "@/types/job_post.types";
+import type { CompanyPost } from "@/types/company_post.types";
 import { GoBackButton } from "@/components/common/button/GoBackButton";
 
 interface AnimatedCompanyContentProps {
   company_profile: CompanyProfileType;
   job_posted: JobPost[];
+  company_posts: CompanyPost[];
 }
 
 export function AnimatedCompanyContent({
   company_profile,
   job_posted,
+  company_posts,
 }: AnimatedCompanyContentProps) {
   return (
-    <div className="gap-10 flex flex-col items-center w-full">
+    <div className="gap-10 flex flex-col items-center w-full max-w-5xl">
       {/* Back Button & Profile */}
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.4 }}
-        className="space-y-4 px-4"
+        className="space-y-4 px-4 w-full"
       >
         <GoBackButton />
 
         {/* Company Profile Card */}
         <CompanyProfile
           isFullView
-          className="p-10 w-5xl"
+          className="p-10 w-full"
           company={company_profile}
         />
       </motion.div>
@@ -79,6 +83,51 @@ export function AnimatedCompanyContent({
               <p className="text-muted-foreground">
                 {company_profile.company_name} has no openings available at the
                 moment.
+              </p>
+            </Card>
+          </div>
+        )}
+      </motion.div>
+
+      {/* Company Posts Section */}
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.4, delay: 0.3 }}
+        className="space-y-4 grow w-full"
+      >
+        <div className="flex items-center justify-between px-4">
+          <h2 className="text-2xl font-bold text-foreground">
+            Company Updates
+          </h2>
+          <Badge variant="secondary" className="text-sm font-medium px-4 py-2">
+            {company_posts.length} Post{company_posts.length !== 1 ? "s" : ""}
+          </Badge>
+        </div>
+
+        {company_posts.length > 0 ? (
+          <ScrollArea className="h-96">
+            <div className="grid grid-cols-1 gap-4 py-1 px-4">
+              {company_posts.map((post, index) => (
+                <motion.div
+                  key={post.post_id}
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true, margin: "-50px" }}
+                  transition={{ duration: 0.3, delay: index * 0.1 }}
+                >
+                  <Link href={"/view/feed/" + post.post_id}>
+                    <CompanyPostPreview post={post} />
+                  </Link>
+                </motion.div>
+              ))}
+            </div>
+          </ScrollArea>
+        ) : (
+          <div className="px-4">
+            <Card className="p-12 text-center">
+              <p className="text-muted-foreground">
+                {company_profile.company_name} hasn&apos;t posted any updates yet.
               </p>
             </Card>
           </div>

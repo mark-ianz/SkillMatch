@@ -13,6 +13,7 @@ import { SignupForm } from "@/components/auth/SignupForm";
 import ErrorAlert from "@/components/common/ErrorAlert";
 import { getAuthError, getAuthStatus, AuthError } from "@/lib/auth-errors";
 import { motion, AnimatePresence } from "framer-motion";
+import { cn } from "@/lib/utils";
 
 export default function AuthTabs() {
   const router = useRouter();
@@ -47,64 +48,85 @@ export default function AuthTabs() {
     params.delete("error");
     params.delete("status");
     router.push(`${pathname}?${params.toString()}`);
-  }  return (
+  }
+  return (
     <AnimatedTabsRoot
       onValueChange={handleTabChange}
       defaultValue={type}
-      className="w-full"
+      className="w-full h-full"
     >
-      <AnimatedTabsContent
-        value="applicant"
-        className="border-r border-y rounded-r-md p-4 space-y-4"
-      >
-        <TabList />
-        {authError && <ErrorAlert error={authError} />}
-        <AnimatePresence mode="wait">
-          <motion.div
-            key={isSignupRoute ? "signup-applicant" : "signin-applicant"}
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.15 }}
-          >
-            {isSignupRoute && <SignupForm mode="applicant" />}
-            {isSigninRoute && <SigninForm mode="applicant" />}
-          </motion.div>
-        </AnimatePresence>
-      </AnimatedTabsContent>
+      <TabContentLayout value="applicant" authError={authError}>
+        <AnimatedFormContainer>
+          {isSignupRoute && <SignupForm mode="applicant" />}
+          {isSigninRoute && <SigninForm mode="applicant" />}
+        </AnimatedFormContainer>
+      </TabContentLayout>
 
-      <AnimatedTabsContent
-        value="company"
-        className="border-r border-y rounded-r-md p-4 space-y-4"
-      >
-        <TabList />
-        {authError && <ErrorAlert error={authError} />}
-        <AnimatePresence mode="wait">
-          <motion.div
-            key={isSignupRoute ? "signup-company" : "signin-company"}
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.15 }}
-          >
-            {isSignupRoute && <SignupForm mode="company" />}
-            {isSigninRoute && <SigninForm mode="company" />}
-          </motion.div>
-        </AnimatePresence>
-      </AnimatedTabsContent>
+      <TabContentLayout value="company" authError={authError}>
+        <AnimatedFormContainer>
+          {isSignupRoute && <SignupForm mode="company" />}
+          {isSigninRoute && <SigninForm mode="company" />}
+        </AnimatedFormContainer>
+      </TabContentLayout>
     </AnimatedTabsRoot>
   );
 }
 
-function TabList() {
+function TabList({ isApplicant }: { isApplicant: boolean }) {
   return (
     <AnimatedTabsList className="grid w-full grid-cols-2">
-      <AnimatedTabsTrigger className="cursor-pointer" value="applicant">
+      <AnimatedTabsTrigger
+        className={cn("cursor-pointer", isApplicant ? "text-skillmatch-light" : "text-skillmatch-dark")}
+        activeBgColor="bg-skillmatch-primary-green"
+        value="applicant"
+      >
         Applicant
       </AnimatedTabsTrigger>
-      <AnimatedTabsTrigger className="cursor-pointer" value="company">
+      <AnimatedTabsTrigger
+        className={cn("cursor-pointer", !isApplicant ? "text-skillmatch-light" : "text-skillmatch-dark")}
+        activeBgColor="bg-skillmatch-primary-blue"
+        value="company"
+      >
         Company
       </AnimatedTabsTrigger>
     </AnimatedTabsList>
+  );
+}
+
+function TabContentLayout({
+  children,
+  value,
+  authError,
+}: {
+  children: React.ReactNode;
+  value: "applicant" | "company";
+  authError: AuthError | null;
+}) {
+  return (
+    <AnimatedTabsContent
+      value={value}
+      className="p-4 space-y-4 flex flex-col h-full"
+    >
+      <TabList isApplicant={value === "applicant"} />
+      {authError && <ErrorAlert error={authError} />}
+
+      {children}
+    </AnimatedTabsContent>
+  );
+}
+
+function AnimatedFormContainer({ children }: { children: React.ReactNode }) {
+  return (
+    <AnimatePresence mode="wait">
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        exit={{ opacity: 0 }}
+        transition={{ duration: 0.15 }}
+        className="flex items-center h-full"
+      >
+        {children}
+      </motion.div>
+    </AnimatePresence>
   );
 }

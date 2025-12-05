@@ -19,8 +19,8 @@ export async function POST(
   try {
     await connection.beginTransaction();
 
-    // Finalize company onboarding: set account active and remove onboarding row for company
-    await connection.query(`UPDATE account SET status_id = ? WHERE company_id = ?`, [1, params.id]);
+    // Finalize company onboarding: set account to pending approval and remove onboarding row for company
+    await connection.query(`UPDATE account SET status_id = ? WHERE company_id = ?`, [2, params.id]);
     await connection.query(`DELETE FROM onboarding WHERE company_id = ?`, [params.id]);
 
     await connection.commit();

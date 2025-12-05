@@ -3,7 +3,8 @@
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Briefcase, Calendar, Eye } from "lucide-react";
+import { Alert, AlertDescription } from "@/components/ui/alert";
+import { Briefcase, Calendar, Eye, AlertCircle, Edit } from "lucide-react";
 import Link from "next/link";
 
 interface JobPostCardProps {
@@ -20,16 +21,39 @@ interface JobPostCardProps {
     interview_scheduled: number;
     selected: number;
     offer_accepted: number;
+    rejected_reason?: string | null;
   };
   statusColors: Record<number, { bg: string; text: string; label: string }>;
 }
 
 export default function JobPostCard({ post, statusColors }: JobPostCardProps) {
   const statusInfo = statusColors[post.job_post_status_id] || statusColors[1];
+  const isRejected = post.job_post_status_id === 3;
 
   return (
     <Card className="hover:shadow-md transition-shadow">
       <CardContent className="p-6">
+        {/* Rejection Reason Alert */}
+        {isRejected && post.rejected_reason && (
+          <Alert variant="destructive" className="mb-4">
+            <AlertCircle className="h-4 w-4" />
+            <AlertDescription>
+              <div className="flex flex-col gap-4">
+                <div>
+                  <p className="font-semibold mb-1">Job Post Rejected</p>
+                  <p className="text-sm">Reason: {post.rejected_reason}</p>
+                </div>
+                <Link href={`/company/job-postings/${post.job_post_id}/edit`}>
+                  <Button size="sm" variant="outline" className="shrink-0 hover:text-destructive">
+                    <Edit className="mr-2 h-4 w-4" />
+                    Edit & Resubmit
+                  </Button>
+                </Link>
+              </div>
+            </AlertDescription>
+          </Alert>
+        )}
+
         <div className="flex items-start justify-between gap-4">
           <div className="flex-1 space-y-3">
             {/* Title and Status */}
@@ -53,7 +77,9 @@ export default function JobPostCard({ post, statusColors }: JobPostCardProps) {
                   </Badge>
                 </div>
               </div>
-              {post.job_post_status_id !== 2 && (
+
+              {/* This only shows for active job posts */}
+              {post.job_post_status_id === 1 && (
                 <Link href={`/company/job-postings/${post.job_post_id}`}>
                   <Button variant="outline">
                     <Eye className="mr-2 h-4 w-4" />
@@ -101,9 +127,7 @@ export default function JobPostCard({ post, statusColors }: JobPostCardProps) {
                 </p>
               </div>
               <div className="bg-cyan-50 border border-cyan-100 rounded-lg p-3">
-                <p className="text-xs text-muted-foreground mb-1">
-                  Interviews
-                </p>
+                <p className="text-xs text-muted-foreground mb-1">Interviews</p>
                 <p className="text-lg font-bold text-cyan-600">
                   {post.interview_scheduled}
                 </p>

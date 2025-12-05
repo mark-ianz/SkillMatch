@@ -23,6 +23,7 @@ export type Company = {
   dti_permit_path: string; // private
   bir_cert_of_registration_path: string; // private
   company_image: string | null | undefined;
+  rejected_reason?: string | null; // optional field for rejection explanation
   created_at: string;
 };
 

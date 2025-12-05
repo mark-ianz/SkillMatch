@@ -37,7 +37,7 @@ export async function handleCompanySignIn(
 
       if (!company_id) {
         await connection.rollback();
-        return "/signup?error=DataInconsistency";
+        return "/signup?type=company&error=DataInconsistency";
       }
 
       (user as ExtendedUser).company_id = company_id;
@@ -51,12 +51,22 @@ export async function handleCompanySignIn(
     if (accountRows.length > 0) {
       if (!acc.company_id) {
         await connection.rollback();
-        return "/signup?error=DataInconsistency";
+        return "/signup?type=company&error=DataInconsistency";
       }
 
       const statusId: number = acc.status_id;
       // Active (1) -> allow and redirect to company-only area
       if (statusId === 1) {
+        (user as ExtendedUser).company_id = acc.company_id;
+        (user as ExtendedUser).role_id = acc.role_id ?? 4;
+        (user as ExtendedUser).status_id = status_id;
+
+        await connection.commit();
+        return true;
+      }
+
+      // If status is pending (2) - allow login but with limited access
+      if (statusId === 2) {
         (user as ExtendedUser).company_id = acc.company_id;
         (user as ExtendedUser).role_id = acc.role_id ?? 4;
         (user as ExtendedUser).status_id = status_id;
@@ -72,13 +82,7 @@ export async function handleCompanySignIn(
         (user as ExtendedUser).status_id = status_id;
 
         await connection.commit();
-        return "/signup?error=AccountPending";
-      }
-
-      // If status is pending (2) - account is awaiting admin approval
-      if (statusId === 2) {
-        await connection.rollback();
-        return "/signin?status=pending";
+        return "/signup?type=company&error=AccountPending";
       }
 
       // If status is rejected (3) - account was rejected by admin
@@ -100,7 +104,7 @@ export async function handleCompanySignIn(
 
     // No account and no onboarding -> DoesNotExist
     await connection.rollback();
-    return "/signup?error=DoesNotExist";
+    return "/signup?type=company&error=DoesNotExist";
   } catch (err) {
     await connection.rollback();
     console.error("company sign-in error:", err);

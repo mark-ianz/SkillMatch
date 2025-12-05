@@ -34,7 +34,7 @@ export function CompanyPreview({
             src={company.company_image}
             alt={`${company.company_name} logo`}
             fill
-            className="object-contain"
+            className="object-cover"
           />
         ) : (
           <CompanyEmptyImage />
