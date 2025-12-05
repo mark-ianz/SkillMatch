@@ -10,17 +10,18 @@ Done:
 - on company onboarding, auto fill the input when user first onboard
 - preferred_schedule and hours per week lagay sa onboarding at tanggalin sa application, reference na lang as FK
 - make the job categories required on job posts
+- reaction count is stale after reacting
+- save button is visible to all except admin and company role Done
 
 To-Do:
 - bug when you got no result on search and you searched again with result, it will not preview the first result on the company profile.
 - nag ooverlap na yung mga same name na variable sa database pati sa types tanginang yan
 - company email sa settings ng company is editable dapat, ang hindi editable is yung personal email na pinang login, ilagay rin to sa security.
 - optimize bg image on signup/signin
-- reaction count is stale after reacting
 
 
-- save button is visible to all except admin and company role
 - location, bat ncr lang. pano taga antipolo
+- add a check on the layout page, if onboarding tried to access protected route, they will be redirected to onboarding with error Done
 
 **************************************************
 **************** // PRIORITIZE // ****************
@@ -46,7 +47,7 @@ To-Do:
   - Add password option login on the signin. This should trigger the same function the same as loggin in as google but just with password.
 ************************************************
 
-**************** // New Pages // ****************
+**************** // New Pages // **************** Done
   New Pages
     - error and not found page
 ************************************************
@@ -163,3 +164,60 @@ To-Do:
   Popover Logout
     - Conditionally direct the user to the landing page base on their role when they logged out.
 ************************************************
+
+
+*** 12/4/2025 - bugs and etc. ***
+- ai detector sa image ✅✅
+
+- feed posts algo (dapat mga related lang sa course ng user)✅✅
+
+- view feed layout bug ✅✅
+
+- pag onboarding/rejected, balik yung mga menu sa header, pero wala yung mga for companies, tanggalin din yung sidebar sa render. ✅✅
+
+- /uploads puro 404? okay naman sakin.
+
+- if user did not match the any course required on the job posts but he has 1 skill matched on the skills required, it will still be prioritize on top above the course matches. so the hierarchy of order is: ✅✅
+  - amount of skills
+  - course
+
+- users can only react if active, if they clicked it and not active, there will be a modal shown depending on their status. example if onboarding, there will be a status saying you're still onboarding, please finish and etc.., if pending, you're account is still onboarding and you currently don't have access for etc..., same goes on for rejected companies... ✅✅ (Dinisable ko na lang react button)
+
+- available posistions can't be negative. change this to input string and validate it with zod or allow it being 0 on input but validate when submit.
+
+- job categories on the /company/post-job should be based on company's industry, refer to the industry_categories.json and since it's a long list, add a search feature. ✅✅
+
+- job categories not getting displayed when selected. ✅✅
+
+- on the /comapny/job-postings, there is an option for company on the applicant to view profile, if clicked, there will be a modal showing applicant's info. basically the same popup on the /admin/applicants when clicked the actions button. could make this a component for reusability. ✅✅
+
+- sort button for company job postings.✅✅
+  - Recently Updated (Default)
+  - Date Posted: Newest/Oldest
+  - Total Applcations
+  - Job Title (A - Z)
+
+- rejected job_posts should get a reason, same as rejected company.✅✅
+- disabled has a reason, but company can't edit their job post to comply.
+
+- on /applicant/application-tracker, applicants can't accept the offer on selected. it only works when they view full details on the application and accept it there.
+- generate google link bug, probably sa env lang to, hope so. ✅✅
+
+- If the admin wants to reject the company, a required input will appear to explain the cause of rejection. ✅✅
+  - Addition of column will be on the `account` table. New column will be  an optional field named `account.rejected_reason`.  ✅✅
+  - If rejected company logs in, it will be the same as onboarding where they can view the website but a message will show saying they are rejected and if they view the reason, it will show a popover content. ✅✅
+
+- tanggalin na yung action ng admin to set the job post status ng filled.✅✅
+
+- admin/applicant view lang, bawal edit ✅✅
+
+- all time filter as default sa analytics ng admin, nag add din ako ng analytics sa job status ✅✅
+
+- required hours when applying jobs should not accept 0
+
+- change button when the applicant applied to the job
+
+- shift of skeleton layout on /view/company/... ✅✅
+
+- remove the required hours and preferred schedule on applicant onboarding, they can only set it on the profile ✅✅
+- when applicant is applying for the job, auto fill the required hours and preferred schedule if they set it up on ther profile. ✅✅

@@ -154,11 +154,21 @@ export function JobPostFullInfo({
                   Courses Required
                 </p>
                 <div className="flex flex-wrap gap-2">
-                  {job?.courses_required.map((course, idx) => (
-                    <Badge key={idx} variant="outline" className="text-xs">
-                      {course}
-                    </Badge>
-                  ))}
+                  {job?.courses_required.map((course, idx) => {
+                    const isMatched = job?.matched_courses?.includes(course);
+                    return (
+                      <Badge
+                        key={idx}
+                        variant="outline"
+                        className={cn(
+                          "text-xs",
+                          isMatched && "border-skillmatch-primary-blue bg-blue-500/20"
+                        )}
+                      >
+                        {course}
+                      </Badge>
+                    );
+                  })}
                 </div>
               </div>
             )}
@@ -169,11 +179,21 @@ export function JobPostFullInfo({
                   Technical Skills
                 </p>
                 <div className="flex flex-wrap gap-2">
-                  {job?.technical_skills.map((skill, idx) => (
-                    <Badge key={idx} variant="outline" className="text-xs">
-                      {skill}
-                    </Badge>
-                  ))}
+                  {job?.technical_skills.map((skill, idx) => {
+                    const isMatched = job?.matched_technical_skills?.includes(skill);
+                    return (
+                      <Badge
+                        key={idx}
+                        variant="outline"
+                        className={cn(
+                          "text-xs",
+                          isMatched && "border-skillmatch-primary-green bg-green-500/20"
+                        )}
+                      >
+                        {skill}
+                      </Badge>
+                    );
+                  })}
                 </div>
               </div>
             )}
@@ -184,11 +204,21 @@ export function JobPostFullInfo({
                   Soft Skills
                 </p>
                 <div className="flex flex-wrap gap-2">
-                  {job?.soft_skills.map((skill, idx) => (
-                    <Badge key={idx} variant="outline" className="text-xs">
-                      {skill}
-                    </Badge>
-                  ))}
+                  {job?.soft_skills.map((skill, idx) => {
+                    const isMatched = job?.matched_soft_skills?.includes(skill);
+                    return (
+                      <Badge
+                        key={idx}
+                        variant={isMatched ? "default" : "outline"}
+                        className={cn(
+                          "text-xs",
+                          isMatched && "bg-green-500 hover:bg-green-600"
+                        )}
+                      >
+                        {skill}
+                      </Badge>
+                    );
+                  })}
                 </div>
               </div>
             )}

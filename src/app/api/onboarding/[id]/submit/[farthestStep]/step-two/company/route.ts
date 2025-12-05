@@ -20,8 +20,16 @@ export async function POST(
     return NextResponse.json({ error: "Invalid or missing farthestStep parameter" }, { status: 400 });
   }
 
+  // Handle industry transformation: if string, keep it; if array, join it
+  const processedBody = {
+    ...body,
+    industry: typeof body.industry === 'string' 
+      ? body.industry.split(',').map((i: string) => i.trim()).filter(Boolean)
+      : body.industry
+  };
+
   // Validate request body using employer schema
-  const { data, success, error } = employerOnboardingStepTwoSchema.safeParse(body);
+  const { data, success, error } = employerOnboardingStepTwoSchema.safeParse(processedBody);
   if (!success) {
     return NextResponse.json({ error: formatZodError(error) }, { status: 422 });
   }

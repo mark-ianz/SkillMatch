@@ -72,6 +72,7 @@ export function useUpdateCompanyLogo() {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["company-settings"] });
+      queryClient.invalidateQueries({ queryKey: ["header-profile", "company"] });
       toast.success("Company logo updated successfully");
     },
     onError: () => {

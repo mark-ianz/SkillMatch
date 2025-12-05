@@ -7,7 +7,7 @@ import {
   ApplicationWithJobDetails,
   ApplicationWithUserDetails,
   CompanyApplicationStatusId,
-  JobPostWithApplicationStats,
+  JobPostWithApplicationStatus,
 } from "@/types/application.types";
 
 // ==================== USER HOOKS ====================
@@ -22,6 +22,21 @@ export function useUserApplications() {
       );
       return data.applications;
     },
+    staleTime: 1000 * 60 * 5, // 5 minutes
+  });
+}
+
+// Query: Check if user has applied to a specific job
+export function useHasApplied(jobPostId: string, enabled: boolean = true) {
+  return useQuery({
+    queryKey: ["has-applied", jobPostId],
+    queryFn: async () => {
+      const { data } = await api.get<{ hasApplied: boolean }>(
+        `/applications/check/${jobPostId}`
+      );
+      return data.hasApplied;
+    },
+    enabled: enabled && !!jobPostId,
     staleTime: 1000 * 60 * 5, // 5 minutes
   });
 }
@@ -58,9 +73,10 @@ export function useApplyToJob() {
       );
       return data;
     },
-    onSuccess: (data) => {
+    onSuccess: (data, variables) => {
       toast.success(data.message || "Application submitted successfully");
       qc.invalidateQueries({ queryKey: ["user-applications"] });
+      qc.invalidateQueries({ queryKey: ["has-applied", variables.job_post_id] });
     },
     onError: (error: AxiosError<{ message?: string }>) => {
       const message = error.response?.data?.message || "Failed to apply to job";
@@ -116,12 +132,12 @@ export function useRespondToOffer() {
 // ==================== COMPANY HOOKS ====================
 
 // Query: Get all job posts for company with application statistics
-export function useCompanyJobPostsWithStats() {
+export function useCompanyJobPostsWithStatus() {
   return useQuery({
     queryKey: ["company-job-postings-stats"],
     queryFn: async () => {
-      const { data } = await api.get<{ jobPosts: JobPostWithApplicationStats[] }>(
-        "/admin/job-postings"
+      const { data } = await api.get<{ jobPosts: JobPostWithApplicationStatus[] }>(
+        "/company/job-postings"
       );
       return data.jobPosts;
     },

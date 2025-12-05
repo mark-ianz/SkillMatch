@@ -14,29 +14,39 @@ export function useCreateCompanyPost() {
 
   return useMutation({
     mutationFn: async (payload: CreateCompanyPostPayload) => {
-      const { cover_image_file, ...restPayload } = payload;
+      try {
+        const { cover_image_file, ...restPayload } = payload;
 
-      // If there's a file, send as FormData
-      if (cover_image_file) {
-        const formData = new FormData();
-        formData.append("title", restPayload.title);
-        formData.append("content", restPayload.content);
-        if (restPayload.company_id) {
-          formData.append("company_id", restPayload.company_id.toString());
+        // If there's a file, send as FormData
+        if (cover_image_file) {
+          const formData = new FormData();
+          formData.append("title", restPayload.title);
+          formData.append("content", restPayload.content);
+          if (restPayload.company_id) {
+            formData.append("company_id", restPayload.company_id.toString());
+          }
+          formData.append("cover_image", cover_image_file);
+
+          const { data } = await api.post<{ company_post: CompanyPost }>("/company/post/create", formData, {
+            headers: {
+              "Content-Type": "multipart/form-data",
+            },
+          });
+          return data.company_post;
         }
-        formData.append("cover_image", cover_image_file);
 
-        const { data } = await api.post<{ company_post: CompanyPost }>("/company/post/create", formData, {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-        });
+        // Otherwise send as JSON
+        const { data } = await api.post<{ company_post: CompanyPost }>("/company/post/create", restPayload);
         return data.company_post;
+      } catch (error: unknown) {
+        // Extract error message and throw a more user-friendly error
+        const err = error as { response?: { data?: { error?: string } }; message?: string };
+        const errorMessage = 
+          err?.response?.data?.error || 
+          err?.message || 
+          "Failed to publish post. Please try again.";
+        throw new Error(errorMessage);
       }
-
-      // Otherwise send as JSON
-      const { data } = await api.post<{ company_post: CompanyPost }>("/company/post/create", restPayload);
-      return data.company_post;
     },
     onSuccess: (data) => {
       console.log(data);
@@ -48,12 +58,8 @@ export function useCreateCompanyPost() {
       qc.invalidateQueries({ queryKey: ["company-posts"] });
     },
     onError: (error: unknown) => {
-      console.error("Failed to publish post:", error);
-      const err = error as { response?: { data?: { error?: string } }; message?: string };
-      const errorMessage = 
-        err?.response?.data?.error || 
-        err?.message || 
-        "Failed to publish post. Please try again.";
+      // Error is already formatted from mutationFn, just display it
+      const errorMessage = error instanceof Error ? error.message : "Failed to publish post. Please try again.";
       toast.error(errorMessage);
     },
   });

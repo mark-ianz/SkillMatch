@@ -52,6 +52,7 @@ export type ExtendedInfo = {
   role_id: number;
   company_id?: string;
   status_id?: number;
+  rejected_reason?: string | null;
   username?: string;
   isAdmin?: boolean;
 };

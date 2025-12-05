@@ -8,6 +8,9 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
+import { Textarea } from "@/components/ui/textarea";
+import { Label } from "@/components/ui/label";
+import { AlertCircle } from "lucide-react";
 import {
   Select,
   SelectContent,
@@ -41,12 +44,16 @@ export default function JobPostDetailsDialog({
   const [selectedStatus, setSelectedStatus] = useState<string>(
     jobPost.job_post_status_id.toString()
   );
+  const [rejectedReason, setRejectedReason] = useState<string>(
+    jobPost.rejected_reason || ""
+  );
   const queryClient = useQueryClient();
 
   const updateStatusMutation = useMutation({
-    mutationFn: async (status_id: number) => {
+    mutationFn: async (payload: { status_id: number; rejected_reason?: string }) => {
       await api.patch(`/admin/job-postings/${jobPost.job_post_id}`, {
-        job_post_status_id: status_id,
+        job_post_status_id: payload.status_id,
+        rejected_reason: payload.rejected_reason,
       });
     },
     onSuccess: () => {
@@ -57,8 +64,17 @@ export default function JobPostDetailsDialog({
 
   const handleSave = () => {
     const statusId = parseInt(selectedStatus);
-    if (statusId !== jobPost.job_post_status_id) {
-      updateStatusMutation.mutate(statusId);
+    
+    // Validate rejection reason if status is rejected
+    if (statusId === 3 && !rejectedReason.trim()) {
+      return; // Don't submit if rejected without reason
+    }
+    
+    if (statusId !== jobPost.job_post_status_id || (statusId === 3 && rejectedReason !== jobPost.rejected_reason)) {
+      updateStatusMutation.mutate({ 
+        status_id: statusId,
+        rejected_reason: statusId === 3 ? rejectedReason : undefined 
+      });
     }
   };
 
@@ -97,6 +113,29 @@ export default function JobPostDetailsDialog({
               </Select>
             </div>
 
+            {/* Rejection Reason - Show when Rejected status is selected */}
+            {selectedStatus === "3" && (
+              <div className="space-y-2 p-4 border border-red-200 rounded-lg bg-red-50">
+                <Label htmlFor="rejected_reason" className="text-red-900 font-semibold flex items-center gap-2">
+                  <AlertCircle className="h-4 w-4" />
+                  Rejection Reason *
+                </Label>
+                <Textarea
+                  id="rejected_reason"
+                  value={rejectedReason}
+                  onChange={(e) => setRejectedReason(e.target.value)}
+                  placeholder="Please provide a detailed reason for rejecting this job post. This will be shown to the company."
+                  className="min-h-[100px] border-red-200 focus:border-red-400"
+                  required
+                />
+                {!rejectedReason.trim() && (
+                  <p className="text-sm text-red-600">
+                    Rejection reason is required
+                  </p>
+                )}
+              </div>
+            )}
+
             <div className="flex justify-end gap-2">
               <Button variant="outline" onClick={() => onOpenChange(false)}>
                 Cancel
@@ -105,7 +144,9 @@ export default function JobPostDetailsDialog({
                 onClick={handleSave}
                 disabled={
                   updateStatusMutation.isPending ||
-                  selectedStatus === jobPost.job_post_status_id.toString()
+                  (selectedStatus === jobPost.job_post_status_id.toString() && 
+                    (selectedStatus !== "3" || rejectedReason === jobPost.rejected_reason)) ||
+                  (selectedStatus === "3" && !rejectedReason.trim())
                 }
               >
                 {updateStatusMutation.isPending ? "Saving..." : "Save Changes"}

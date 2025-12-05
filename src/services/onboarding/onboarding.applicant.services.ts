@@ -112,9 +112,7 @@ async function submitStepThree(
         college = ?, 
         course = ?, 
         year_level = ?, 
-        expected_graduation_year = ?,
-        preferred_schedule = ?,
-        required_hours = ?
+        expected_graduation_year = ?
       WHERE applicant_profile.user_id = ?`,
       [
         data.student_number,
@@ -122,8 +120,6 @@ async function submitStepThree(
         data.course,
         data.year_level,
         data.expected_graduation_year,
-        data.preferred_schedule,
-        data.required_hours,
         user_id,
       ]
     );

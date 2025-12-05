@@ -31,7 +31,7 @@ export async function PUT(
 
     // Verify the job post belongs to the company
     const [rows] = await db.query<RowDataPacket[]>(
-      "SELECT company_id FROM job_posts WHERE job_post_id = ?",
+      "SELECT company_id, job_post_status_id FROM job_posts WHERE job_post_id = ?",
       [job_posts_id]
     );
 
@@ -48,6 +48,8 @@ export async function PUT(
         { status: 403 }
       );
     }
+
+    const isRejected = rows[0].job_post_status_id === 3;
 
     const {
       job_title,
@@ -83,6 +85,8 @@ export async function PUT(
            barangay = ?,
            city_municipality = ?,
            postal_code = ?,
+           job_post_status_id = ?,
+           rejected_reason = NULL,
            updated_at = NOW()
        WHERE job_post_id = ?`,
       [
@@ -100,12 +104,15 @@ export async function PUT(
         barangay,
         city_municipality,
         postal_code,
+        isRejected ? 2 : rows[0].job_post_status_id, // Change to pending (2) if was rejected (3)
         job_posts_id,
       ]
     );
 
     return NextResponse.json({
-      message: "Job post updated successfully",
+      message: isRejected 
+        ? "Job post updated and resubmitted for approval" 
+        : "Job post updated successfully",
       job_post_id: job_posts_id,
     });
   } catch (error) {

@@ -138,6 +138,7 @@ export default function JobPostingForm({ isEditMode = false, jobPostId }: JobPos
           onSuccess: () => {
             setShowConfirmDialog(false);
             reset();
+            router.push("/company/job-postings");
           },
         }
       );

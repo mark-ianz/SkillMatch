@@ -3,11 +3,12 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { JobApplicationDialog } from "./JobApplicationDialog";
-import { useApplyToJob } from "@/hooks/query/useApplications";
+import { useApplyToJob, useHasApplied } from "@/hooks/query/useApplications";
 import { useSession } from "next-auth/react";
 import { SignInPromptDialog } from "@/components/common/SignInPromptDialog";
 import { ApplicationData } from "./JobApplicationDialog";
 import { cn, getRoleName } from "@/lib/utils";
+import { Check } from "lucide-react";
 
 interface ApplyButtonProps {
   jobPostId: string;
@@ -37,6 +38,12 @@ export function ApplyButton({
   const [showSignInDialog, setShowSignInDialog] = useState(false);
   const applyMutation = useApplyToJob();
 
+  // Check if user has already applied (only when logged in)
+  const { data: hasApplied } = useHasApplied(
+    jobPostId,
+    !!session?.user?.user_id
+  );
+
   // Don't render the button if user is a Company or Admin
   const role = session?.user?.role_id
     ? getRoleName(session.user.role_id)
@@ -50,6 +57,12 @@ export function ApplyButton({
       setShowSignInDialog(true);
       return;
     }
+    
+    // Don't open dialog if already applied
+    if (hasApplied) {
+      return;
+    }
+    
     setIsDialogOpen(true);
   };
 
@@ -82,11 +95,20 @@ export function ApplyButton({
       <Button
         onClick={handleApplyClick}
         className={cn("w-full", className)}
-        variant={variant}
+        variant={hasApplied ? "outline" : variant}
         size={size}
-        disabled={applyMutation.isPending}
+        disabled={applyMutation.isPending || hasApplied}
       >
-        {applyMutation.isPending ? "Applying..." : "Apply Now"}
+        {applyMutation.isPending ? (
+          "Applying..."
+        ) : hasApplied ? (
+          <span className="flex items-center gap-2">
+            <Check className="h-4 w-4" />
+            Applied
+          </span>
+        ) : (
+          "Apply Now"
+        )}
       </Button>
 
       <JobApplicationDialog

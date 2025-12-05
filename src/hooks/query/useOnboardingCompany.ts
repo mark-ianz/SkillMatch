@@ -27,11 +27,20 @@ export function useGetOnboardingCompany(company_id: string | undefined) {
     queryKey: ["onboarding", company_id],
     queryFn: async () => {
       const { data } = await api.get<OnboardingCompanyFullInfo>(
-        `/onboarding/${company_id}/company`
+        `/onboarding/company`
       );
+
+      console.log(data)
 
       // Set type to company to ensure correct MAX_STEP
       setType("company");
+
+      // Transform industry from comma-separated string to array
+      const industryArray = data.industry 
+        ? (typeof data.industry === 'string' 
+          ? (data.industry as string).split(',').map((i: string) => i.trim()).filter(Boolean)
+          : Array.isArray(data.industry) ? data.industry : [])
+        : [];
 
       // Set company data
       setCompany({
@@ -43,7 +52,7 @@ export function useGetOnboardingCompany(company_id: string | undefined) {
         barangay: data.barangay || "",
         date_founded: data.date_founded || "",
         description: data.description || "",
-        industry: data.industry || [],
+        industry: industryArray,
         company_image: data.company_image || "",
         website: data.website || "",
         facebook_page: data.facebook_page || "",
@@ -95,9 +104,7 @@ export function useUpdateStepTwoOnboardingCompany(
     mutationFn: async (stepTwoData: EmployerOnboardingStepTwoSchema) => {
       await api.post(
         `/onboarding/${company_id}/submit/${farthestStep}/step-two/company`,
-        {
-          ...stepTwoData,
-        }
+        stepTwoData
       );
       return;
     },

@@ -9,6 +9,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { Users, Building2, Briefcase, GraduationCap } from "lucide-react";
 import { CoursesChart } from "./CoursesChart";
 import { IndustriesChart } from "./IndustriesChart";
+import { JobPostsChart } from "./JobPostsChart";
 
 interface AnalyticsData {
   applicants: number;
@@ -24,10 +25,15 @@ interface AnalyticsData {
     count: number;
     fill: string;
   }>;
+  jobPostStatuses: Array<{
+    status: string;
+    count: number;
+    fill: string;
+  }>;
 }
 
 export default function AnalyticsDashboard() {
-  const [timeFrame, setTimeFrame] = useState<string>("today");
+  const [timeFrame, setTimeFrame] = useState<string>("all");
 
   const { data: analytics, isLoading } = useQuery({
     queryKey: ["admin-analytics", timeFrame],
@@ -47,8 +53,10 @@ export default function AnalyticsDashboard() {
         return "This Week";
       case "month":
         return "This Month";
+      case "all":
+        return "All Time";
       default:
-        return "Today";
+        return "All Time";
     }
   };
 
@@ -84,6 +92,7 @@ export default function AnalyticsDashboard() {
             <SelectValue />
           </SelectTrigger>
           <SelectContent>
+            <SelectItem value="all">All Time</SelectItem>
             <SelectItem value="today">Today</SelectItem>
             <SelectItem value="week">This Week</SelectItem>
             <SelectItem value="month">This Month</SelectItem>
@@ -187,6 +196,34 @@ export default function AnalyticsDashboard() {
           <CardContent className="flex items-center justify-center py-12">
             <p className="text-muted-foreground">
               No company data available for this time period
+            </p>
+          </CardContent>
+        </Card>
+      )}
+
+      {/* Job Posts Status Distribution Chart */}
+      {analytics?.jobPostStatuses && analytics.jobPostStatuses.length > 0 && (
+        <JobPostsChart 
+          data={analytics.jobPostStatuses} 
+          timeFrame={getTimeFrameLabel()}
+        />
+      )}
+
+      {/* No Job Posts Data Message */}
+      {analytics?.jobPostStatuses && analytics.jobPostStatuses.length === 0 && (
+        <Card>
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <Briefcase className="h-5 w-5" />
+              Job Posts Status Distribution
+            </CardTitle>
+            <CardDescription>
+              {getTimeFrameLabel()}
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="flex items-center justify-center py-12">
+            <p className="text-muted-foreground">
+              No job post data available for this time period
             </p>
           </CardContent>
         </Card>

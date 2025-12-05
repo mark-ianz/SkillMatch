@@ -4,44 +4,29 @@ import {
   ExtendedToken,
   ExtendedUser,
 } from "@/types/user.types";
-import GoogleProvider from "next-auth/providers/google";
 import { handleCompanySignIn } from "@/services/auth/auth.company.service";
 import { handleApplicantSignIn } from "@/services/auth/auth.applicant.service";
 import { handleSignup } from "@/services/auth/auth.shared.service";
 import { adminCredentialsProvider } from "@/services/auth/auth.admin.service";
-// Sign-in logic moved to service: @/services/auth/onboardingSignIn.service
+import {
+  applicantCredentialsProvider,
+  companyCredentialsProvider,
+  googleApplicantSignInProvider,
+  googleApplicantSignUpProvider,
+  googleCompanySignInProvider,
+  googleCompanySignUpProvider,
+} from "./auth.providers";
+import { RowDataPacket } from "mysql2";
 
 export const authConfig: NextAuthOptions = {
   providers: [
     adminCredentialsProvider,
-    GoogleProvider({
-      id: "google-applicant-signin",
-      clientId: process.env.GOOGLE_CLIENT_ID!,
-      clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
-      issuer: "https://accounts.google.com",
-      wellKnown: "https://accounts.google.com/.well-known/openid-configuration",
-    }),
-    GoogleProvider({
-      id: "google-applicant-signup",
-      clientId: process.env.GOOGLE_CLIENT_ID!,
-      clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
-      issuer: "https://accounts.google.com",
-      wellKnown: "https://accounts.google.com/.well-known/openid-configuration",
-    }),
-    GoogleProvider({
-      id: "google-company-signin",
-      clientId: process.env.GOOGLE_CLIENT_ID!,
-      clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
-      issuer: "https://accounts.google.com",
-      wellKnown: "https://accounts.google.com/.well-known/openid-configuration",
-    }),
-    GoogleProvider({
-      id: "google-company-signup",
-      clientId: process.env.GOOGLE_CLIENT_ID!,
-      clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
-      issuer: "https://accounts.google.com",
-      wellKnown: "https://accounts.google.com/.well-known/openid-configuration",
-    }),
+    applicantCredentialsProvider,
+    companyCredentialsProvider,
+    googleApplicantSignInProvider,
+    googleApplicantSignUpProvider,
+    googleCompanySignInProvider,
+    googleCompanySignUpProvider,
 
   ],
   callbacks: {
@@ -50,6 +35,12 @@ export const authConfig: NextAuthOptions = {
         /* Admin Credentials Authentication */
         if (account?.provider === "admin-credentials") {
           // Admin login via credentials - already validated in authorize
+          return true;
+        }
+
+        /* Applicant/Company Credentials Authentication */
+        if (account?.provider === "applicant-credentials" || account?.provider === "company-credentials") {
+          // Password-based authentication - already validated in authorize
           return true;
         }
 
@@ -91,7 +82,7 @@ export const authConfig: NextAuthOptions = {
         return false;
       }
     },
-    async jwt({ token, user }) {
+    async jwt({ token, user, trigger }) {
       // First time jwt callback is run, user object is available
       try {
         if (user) {
@@ -105,6 +96,33 @@ export const authConfig: NextAuthOptions = {
           token.isAdmin = (user as ExtendedUser).isAdmin || false;
           token.username = (user as ExtendedUser).username;
         }
+
+        // Handle session update trigger - refetch status_id from database
+        if (trigger === "update") {
+          const { db } = await import("@/lib/db");
+          
+          // Fetch latest account data based on user_id or company_id
+          if (token.user_id) {
+            const [rows] = await db.query<(RowDataPacket & { status_id: number; rejected_reason: string | null })[]>(
+              "SELECT status_id, rejected_reason FROM account WHERE user_id = ?",
+              [token.user_id]
+            );
+            if (rows.length > 0) {
+              token.status_id = rows[0].status_id;
+              token.rejected_reason = rows[0].rejected_reason;
+            }
+          } else if (token.company_id) {
+            const [rows] = await db.query<(RowDataPacket & { status_id: number; rejected_reason: string | null })[]>(
+              "SELECT status_id, rejected_reason FROM account WHERE company_id = ?",
+              [token.company_id]
+            );
+            if (rows.length > 0) {
+              token.status_id = rows[0].status_id;
+              token.rejected_reason = rows[0].rejected_reason;
+            }
+          }
+        }
+
         return token;
       } catch (error) {
         console.log("JWT CALLBACK ERROR:", error);
@@ -128,6 +146,9 @@ export const authConfig: NextAuthOptions = {
         (session as ExtendedSession).user.status_id = (
           token as ExtendedToken
         ).status_id;
+        (session as ExtendedSession).user.rejected_reason = (
+          token as ExtendedToken
+        ).rejected_reason;
         (session as ExtendedSession).user.isAdmin = (token as ExtendedToken).isAdmin || false;
         (session as ExtendedSession).user.username = (token as ExtendedToken).username;
       }

@@ -7,8 +7,8 @@ import { JobExploreFilters } from "@/types/job_explore.types";
 
 // Query: Get all job posts with optional filters
 export function useJobPosts(
-  filters?: JobExploreFilters, 
-  userId?: number, 
+  filters?: JobExploreFilters,
+  userId?: number,
   roleName?: string | null,
   isSessionLoading?: boolean
 ) {
@@ -16,13 +16,19 @@ export function useJobPosts(
     queryKey: ["job-postings", filters, userId, roleName],
     queryFn: async () => {
       const params = new URLSearchParams();
-      
+
       if (filters) {
         filters.courses?.forEach((c: string) => params.append("course", c));
         filters.locations?.forEach((l: string) => params.append("location", l));
-        filters.workArrangement?.forEach((w: string) => params.append("arrangement", w));
-        filters.industries?.forEach((i: string) => params.append("industry", i));
-        filters.jobCategories?.forEach((j: string) => params.append("jobCategory", j));
+        filters.workArrangement?.forEach((w: string) =>
+          params.append("arrangement", w)
+        );
+        filters.industries?.forEach((i: string) =>
+          params.append("industry", i)
+        );
+        filters.jobCategories?.forEach((j: string) =>
+          params.append("jobCategory", j)
+        );
         if (filters.search) {
           params.append("search", filters.search);
         }
@@ -38,7 +44,7 @@ export function useJobPosts(
 
       const queryString = params.toString();
       const url = queryString ? `/explore?${queryString}` : "/explore";
-      
+
       const { data } = await api.get(url);
       return data.job_posts as JobPost[];
     },
@@ -60,22 +66,12 @@ export function useCreateJobPost() {
     },
     onSuccess: (data) => {
       console.log(data);
-      toast.success("Job posted successfully", {
-        action: {
-          label: "View Job Post",
-          onClick: () => {
-            window.location.href = `/view/job-postings/${data.job_post_id}`;
-          },
-        },
-        actionButtonStyle: {
-          fontSize: "0.875rem",
-          color: "#4f6899",
-          textDecoration: "underline",
-          backgroundColor: "transparent",
-          border: "none",
-          padding: "0",
-        },
-      });
+      toast.success(
+        "Job post submitted successfully! Your post is now pending admin approval.",
+        {
+          duration: 5000,
+        }
+      );
       // Invalidate job-postings so new job post appears
       qc.invalidateQueries({ queryKey: ["job-postings"] });
     },
@@ -210,23 +206,10 @@ export function useUpdateJobPost() {
       );
       return response.data;
     },
-    onSuccess: (data, variables) => {
-      toast.success("Job post updated successfully", {
-        action: {
-          label: "View Job Post",
-          onClick: () => {
-            window.location.href = `/company/job-postings/${variables.job_post_id}`;
-          },
-        },
-        actionButtonStyle: {
-          fontSize: "0.875rem",
-          color: "#4f6899",
-          textDecoration: "underline",
-          backgroundColor: "transparent",
-          border: "none",
-          padding: "0",
-        },
-      });
+    onSuccess: (variables) => {
+      const message =
+        "Job post updated successfully! Your job post is now pending for admin approval.";
+      toast.success(message);
       // Invalidate relevant queries
       qc.invalidateQueries({ queryKey: ["job-post", variables.job_post_id] });
       qc.invalidateQueries({ queryKey: ["job-postings"] });

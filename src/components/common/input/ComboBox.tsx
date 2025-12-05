@@ -49,7 +49,7 @@ export default function Combobox({
           className="min-w-[200px] w-full justify-between"
         >
           {value
-            ? items?.find((item) => item.value === value)?.label
+            ? items?.find((item) => item.value === value)?.label || value
             : `Select ${searchFor}...`}
           <ChevronsUpDown className="opacity-50" />
         </Button>

@@ -27,8 +27,6 @@ export default function Step3() {
   const expected_graduation_year = useApplicantProfileStore(
     (state) => state.expected_graduation_year
   );
-  const preferred_schedule = useApplicantProfileStore((state) => state.preferred_schedule);
-  const required_hours = useApplicantProfileStore((state) => state.required_hours);
 
   const setCollege = useApplicantProfileStore((state) => state.setCollege);
   const setCourse = useApplicantProfileStore((state) => state.setCourse);
@@ -36,8 +34,6 @@ export default function Step3() {
   const setExpectedGraduationYear = useApplicantProfileStore(
     (state) => state.setExpectedGraduationYear
   );
-  const setPreferredSchedule = useApplicantProfileStore((state) => state.setPreferredSchedule);
-  const setRequiredHours = useApplicantProfileStore((state) => state.setRequiredHours);
   const setError = useOnboardingStore((state) => state.setError);
 
   const college_list = Object.keys(college_courses).map((college) => ({
@@ -64,8 +60,6 @@ export default function Step3() {
         course: course || "",
         year_level: year_level || "",
         expected_graduation_year: expected_graduation_year || "",
-        preferred_schedule: preferred_schedule || "",
-        required_hours: required_hours?.toString() || "",
       }
 
       const parsed = onboardingStepThreeSchema.parse(toParse);
@@ -82,23 +76,7 @@ export default function Step3() {
     }
   }
 
-  const weekDays = [
-    "Monday",
-    "Tuesday",
-    "Wednesday",
-    "Thursday",
-    "Friday",
-    "Saturday",
-    "Sunday",
-  ];
 
-  const toggleDay = (day: string) => {
-    const currentDays = preferred_schedule ? preferred_schedule.split(",") : [];
-    const newDays = currentDays.includes(day)
-      ? currentDays.filter((d) => d !== day)
-      : [...currentDays, day];
-    setPreferredSchedule(newDays.join(","));
-  };
   
   return (
     <StepContainer>
@@ -174,45 +152,6 @@ export default function Step3() {
             },
           ]}
         />
-      </RowContainer>
-      <RowContainer>
-        <InputWithLabel
-          value={required_hours?.toString() || ""}
-          required={true}
-          type="number"
-          placeholder="e.g., 300"
-          onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-            setRequiredHours(e.target.value ? Number(e.target.value) : null)
-          }
-          label="Required OJT Hours"
-          containerClassName="w-full"
-        />
-      </RowContainer>
-      <RowContainer>
-        <div className="w-full">
-          <label className="text-sm font-medium mb-2 block">
-            Preferred Schedule <span className="text-red-500">*</span>
-          </label>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
-            {weekDays.map((day) => {
-              const selectedDays = preferred_schedule ? preferred_schedule.split(",") : [];
-              return (
-                <label
-                  key={day}
-                  className="flex items-center space-x-2 cursor-pointer"
-                >
-                  <input
-                    type="checkbox"
-                    checked={selectedDays.includes(day)}
-                    onChange={() => toggleDay(day)}
-                    className="w-4 h-4 rounded"
-                  />
-                  <span className="text-sm">{day}</span>
-                </label>
-              );
-            })}
-          </div>
-        </div>
       </RowContainer>
       <Button
         disabled={isPending}

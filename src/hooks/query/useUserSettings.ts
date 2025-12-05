@@ -49,6 +49,7 @@ export function useUpdateProfilePicture() {
     mutationFn: (file: File) => updateProfilePicture(file),
     onSuccess: (data) => {
       queryClient.setQueryData(["user-settings"], data.data);
+      queryClient.invalidateQueries({ queryKey: ["header-profile", "applicant"] });
       toast.success(data.message);
     },
     onError: () => {

@@ -4,10 +4,14 @@ import NavigationMenuUnauthenticated from "./NavigationMenuUnauthenticated";
 import { authConfig } from "@/lib/auth";
 import NavigationMenuApplicant from "./NavigationMenuApplicant";
 import NavigationMenuCompany from "./NavigationMenuCompany";
+import { headers } from "next/headers";
 
 export default async function NavigationMenuUniversal() {
+  // Force dynamic rendering by accessing headers
+  await headers();
+  
   const session = await getServerSession(authConfig);
-  const isAuth = session?.user;
+  const isAuth = !!session?.user;
   const userRole = session?.user?.role_id;
   const statusId = session?.user?.status_id;
   const isApplicant = userRole === 3;
@@ -20,11 +24,11 @@ export default async function NavigationMenuUniversal() {
   }
 
   // For authenticated users, show their respective navigation
-  if (isAuth && isApplicant) {
+  if (isAuth && isApplicant && isActive) {
     return <NavigationMenuApplicant />;
   }
 
-  if (isAuth && isCompany) {
+  if (isAuth && isCompany && isActive) {
     return <NavigationMenuCompany />;
   }
 

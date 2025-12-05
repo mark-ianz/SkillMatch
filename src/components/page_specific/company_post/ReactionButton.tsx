@@ -44,6 +44,8 @@ export function ReactionButton({
   const [showSignInDialog, setShowSignInDialog] = useState(false);
   const { data: session, status: sessionStatus } = useSession();
   
+  const status_id = session?.user.status_id;
+
   const { data: reactionData, isLoading } = useReactions(post_id);
   const addReaction = useAddReaction();
   const removeReaction = useRemoveReaction();
@@ -156,7 +158,8 @@ export function ReactionButton({
 
           {/* React button with popover */}
           <Popover open={open} onOpenChange={setOpen}>
-            <PopoverTrigger asChild>
+            {/* Disable the react button if the user is not active */}
+            <PopoverTrigger asChild disabled={status_id !== 1}>
               {userReaction ? (
                 <Button
                   variant="secondary"

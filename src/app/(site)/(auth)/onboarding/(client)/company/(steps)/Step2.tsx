@@ -32,6 +32,8 @@ export default function Step2() {
   const industry = useCompanyStore((s) => s.industry || []);
   const company_image = useCompanyStore((s) => s.company_image || "");
 
+  console.log(industry)
+
   const setDescription = useCompanyStore((s) => s.setDescription);
   const setIndustry = useCompanyStore((s) => s.setIndustry);
   const setCompanyImage = useCompanyStore((s) => s.setCompanyImage);

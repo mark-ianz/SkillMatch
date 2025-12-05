@@ -3,7 +3,7 @@ import { getServerSession } from "next-auth";
 import { redirect, RedirectType } from "next/navigation";
 import { ReactNode } from "react";
 
-export default async function OnboardingLayout({
+export default async function LayoutProtection({
   children,
 }: {
   children: ReactNode;

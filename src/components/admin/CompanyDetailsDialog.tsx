@@ -8,7 +8,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { COMPANY_ACCOUNT_STATUSES } from "@/types/admin.types";
+import { COMPANY_ACCOUNT_STATUSES, COMPANY_STATUS_COLORS } from "@/types/admin.types";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
@@ -34,10 +34,13 @@ import {
   Instagram,
   Twitter,
   FileText,
+  AlertCircle,
 } from "lucide-react";
 import Image from "next/image";
 import { Company } from "@/types/company.types";
 import { Status } from "@/types/status.types";
+import { Textarea } from "@/components/ui/textarea";
+import { Label } from "@/components/ui/label";
 
 interface CompanyDetailsDialogProps {
   company: Company & Status;
@@ -53,12 +56,16 @@ export default function CompanyDetailsDialog({
   const [newStatus, setNewStatus] = useState<string>(
     company.status_id.toString()
   );
+  const [rejectedReason, setRejectedReason] = useState<string>(
+    company.rejected_reason || ""
+  );
   const queryClient = useQueryClient();
 
   const updateStatusMutation = useMutation({
-    mutationFn: async (statusId: number) => {
+    mutationFn: async (data: { statusId: number; rejectedReason?: string }) => {
       await api.patch(`/admin/companies/${company.company_id}`, {
-        status_id: statusId,
+        status_id: data.statusId,
+        rejected_reason: data.rejectedReason || null,
       });
     },
     onSuccess: () => {
@@ -73,18 +80,35 @@ export default function CompanyDetailsDialog({
 
   const handleUpdateStatus = () => {
     const statusId = parseInt(newStatus);
-    if (statusId !== company.status_id) {
-      updateStatusMutation.mutate(statusId);
+    
+    // If status is rejected (3), require rejection reason
+    if (statusId === 3 && !rejectedReason.trim()) {
+      toast.error("Please provide a reason for rejection");
+      return;
+    }
+    
+    if (statusId !== company.status_id || (statusId === 3 && rejectedReason !== company.rejected_reason)) {
+      updateStatusMutation.mutate({ 
+        statusId, 
+        rejectedReason: statusId === 3 ? rejectedReason : undefined 
+      });
     } else {
       onOpenChange(false);
     }
   };
 
-  const getStatusBadge = (statusId: number, statusName: string) => {
-    const status = COMPANY_ACCOUNT_STATUSES.find((s) => s.value === statusId);
+  const getStatusBadge = (statusId: number) => {
+    const statusConfig = COMPANY_STATUS_COLORS[statusId] || {
+      bg: "bg-gray-100",
+      text: "text-gray-700",
+      label: "Unknown"
+    };
     return (
-      <Badge variant={status?.variant || "default"} className="text-sm">
-        {statusName || "Unknown"}
+      <Badge
+        variant="outline"
+        className={`${statusConfig.bg} ${statusConfig.text} border-0 text-sm`}
+      >
+        {statusConfig.label}
       </Badge>
     );
   };
@@ -129,7 +153,7 @@ export default function CompanyDetailsDialog({
               <h3 className="text-xl font-bold mb-2">{company.company_name}</h3>
               <div className="flex items-center gap-2 mb-2">
                 <span className="text-sm text-muted-foreground">Status:</span>
-                {getStatusBadge(company.status_id, company.status)}
+                {getStatusBadge(company.status_id)}
               </div>
               <p className="text-sm text-muted-foreground">
                 {company.description}
@@ -325,6 +349,35 @@ export default function CompanyDetailsDialog({
                 ))}
               </SelectContent>
             </Select>
+
+            {/* Show rejection reason input when Rejected is selected */}
+            {newStatus === "3" && (
+              <div className="mt-4 space-y-2">
+                <Label htmlFor="rejection-reason" className="flex items-center gap-2 text-red-700">
+                  <AlertCircle className="h-4 w-4" />
+                  Rejection Reason <span className="text-red-500">*</span>
+                </Label>
+                <Textarea
+                  id="rejection-reason"
+                  placeholder="Please provide a clear explanation for why this company is being rejected..."
+                  value={rejectedReason}
+                  onChange={(e) => setRejectedReason(e.target.value)}
+                  className="min-h-[100px] border-red-200 focus-visible:ring-red-500"
+                  required
+                />
+                <p className="text-xs text-muted-foreground">
+                  This reason will be displayed to the company when they log in.
+                </p>
+              </div>
+            )}
+
+            {/* Show current rejection reason if exists */}
+            {company.status_id === 3 && company.rejected_reason && newStatus !== "3" && (
+              <div className="mt-4 p-3 bg-red-50 border border-red-200 rounded-md">
+                <p className="text-sm font-medium text-red-700 mb-1">Current Rejection Reason:</p>
+                <p className="text-sm text-red-600">{company.rejected_reason}</p>
+              </div>
+            )}
           </div>
         </div>
 

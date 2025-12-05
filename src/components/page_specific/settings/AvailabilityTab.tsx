@@ -27,7 +27,9 @@ const DAYS_OF_WEEK = [
   "Sunday",
 ];
 
-const MAXIMUM_SKILLS = 8;
+const MAXIMUM_SKILLS = parseInt(
+  process.env.NEXT_PUBLIC_MAXIMUM_SKILLS as string
+);
 
 export default function AvailabilityTab() {
   const availability = useSettingsStore((state) => state.availability);

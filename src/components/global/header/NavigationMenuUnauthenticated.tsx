@@ -54,11 +54,6 @@ export default function NavigationMenuUnauthenticated() {
             </NavigationMenuContent>
           </NavigationMenuItem>
         )}
-        <NavigationMenuItem>
-          <NavigationMenuLink href="/about" className="bg-transparent">
-            About
-          </NavigationMenuLink>
-        </NavigationMenuItem>
         {isCompanyRoute && (
           <NavigationMenuItem>
             <NavigationMenuLink

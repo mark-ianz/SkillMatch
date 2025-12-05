@@ -7,7 +7,7 @@ import { Status } from "@/types/status.types";
 // Update job post status
 export async function PATCH(
   request: NextRequest,
-  { params }: { params: { job_post_id: string } }
+  { params }: { params: Promise<{ job_post_id: string }> }
 ) {
   try {
     // Check if user is admin
@@ -15,8 +15,8 @@ export async function PATCH(
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    const { job_post_id } = params;
-    const { job_post_status_id } = await request.json();
+    const { job_post_id } = await params;
+    const { job_post_status_id, rejected_reason } = await request.json();
 
     // Validate job_post_status_id - Job post statuses: 1=active, 2=pending, 3=rejected, 4=disabled, 5=filled, 6=closed
     if (!job_post_status_id || ![1, 2, 3, 4, 5, 6].includes(job_post_status_id)) {
@@ -26,10 +26,18 @@ export async function PATCH(
       );
     }
 
-    // Update job post status
+    // If status is rejected (3), require rejection reason
+    if (job_post_status_id === 3 && (!rejected_reason || !rejected_reason.trim())) {
+      return NextResponse.json(
+        { error: "Rejection reason is required when rejecting a job post" },
+        { status: 400 }
+      );
+    }
+
+    // Update job post status and rejected_reason
     await db.query(
-      "UPDATE job_posts SET job_post_status_id = ?, updated_at = NOW() WHERE job_post_id = ?",
-      [job_post_status_id, job_post_id]
+      "UPDATE job_posts SET job_post_status_id = ?, rejected_reason = ?, updated_at = NOW() WHERE job_post_id = ?",
+      [job_post_status_id, job_post_status_id === 3 ? rejected_reason : null, job_post_id]
     );
 
     return NextResponse.json({

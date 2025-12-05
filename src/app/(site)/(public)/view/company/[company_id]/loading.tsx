@@ -6,7 +6,7 @@ import { Separator } from "@/components/ui/separator";
 
 export default function Loading() {
   return (
-    <MainLayout className="items-center">
+    <MainLayout className="items-center w-full" wrapperClassName="w-full">
       <div className="gap-10 flex flex-col items-center w-full">
         {/* Back Button & Profile Skeleton */}
         <div className="space-y-4 px-4 w-full max-w-5xl">
@@ -14,7 +14,7 @@ export default function Loading() {
           <Skeleton className="h-10 w-24" />
 
           {/* Company Profile Card */}
-          <Card className="p-10 shadow-sm">
+          <Card className="p-10 shadow-sm w-full">
             <div className="space-y-6">
               <div className="flex items-start gap-6">
                 {/* Square Company Logo */}

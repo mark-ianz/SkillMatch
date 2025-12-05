@@ -4,6 +4,9 @@ import "./globals.css";
 import { Toaster } from "@/components/ui/sonner";
 import QueryClientProviderWrapper from "@/components/providers/QueryClientProviderWrapper";
 import SessionProviderWrapper from "@/components/providers/SessionProviderWrapper";
+import OnboardingReminder from "@/components/global/OnboardingReminder";
+import PendingApprovalReminder from "@/components/global/PendingApprovalReminder";
+import RejectedAccountReminder from "@/components/global/RejectedAccountReminder";
 
 const geistSans = Geist({
   variable: "--font-geist",
@@ -48,10 +51,19 @@ export const metadata: Metadata = {
   ],
   authors: [{ name: "SkillMatch Team" }],
   icons: {
-    icon: "/logo/SkillMatch.png",
+    icon: [
+      { url: "/logo/SkillMatch.png" },
+      { url: "/logo/SkillMatch.png", sizes: "32x32", type: "image/png" },
+      { url: "/logo/SkillMatch.png", sizes: "16x16", type: "image/png" },
+    ],
     shortcut: "/logo/SkillMatch.png",
     apple: "/logo/SkillMatch.png",
+    other: {
+      rel: "icon",
+      url: "/logo/SkillMatch.png",
+    },
   },
+  manifest: "/site.webmanifest",
   openGraph: {
     type: "website",
     locale: "en_US",
@@ -98,7 +110,12 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} ${sansation.variable} antialiased overflow-y-scroll`}
       >
         <SessionProviderWrapper>
-          <QueryClientProviderWrapper>{children}</QueryClientProviderWrapper>
+          <QueryClientProviderWrapper>
+            {children}
+            <OnboardingReminder />
+            <PendingApprovalReminder />
+            <RejectedAccountReminder />
+          </QueryClientProviderWrapper>
         </SessionProviderWrapper>
         <Toaster />
       </body>

@@ -19,7 +19,7 @@ export type OnboardingStoreState = {
 };
 
 const MAX_STEP_Applicant = 6;
-const MAX_STEP_COMPANY = 4;
+const MAX_STEP_COMPANY = 6;
 
 const useOnboardingStore = create<OnboardingStoreState>((set, get) => ({
   currentStep: 1,
