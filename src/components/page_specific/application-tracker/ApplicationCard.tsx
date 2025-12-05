@@ -9,9 +9,21 @@ import {
   Building2,
   FileText,
   ExternalLink,
+  CheckCircle2,
+  XCircle,
 } from "lucide-react";
 import Link from "next/link";
 import { ApplicationWithJobDetails } from "@/types/application.types";
+import { useRespondToOffer } from "@/hooks/query/useApplications";
+import { useState } from "react";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 
 interface StatusConfig {
   label: string;
@@ -30,6 +42,29 @@ export function ApplicationCard({
   statusConfig,
 }: ApplicationCardProps) {
   const StatusIcon = statusConfig.icon || FileText;
+  const respondToOfferMutation = useRespondToOffer();
+  const [showDeclineDialog, setShowDeclineDialog] = useState(false);
+
+  const handleAcceptOffer = () => {
+    respondToOfferMutation.mutate({
+      application_id: application.application_id,
+      response: "accept",
+    });
+  };
+
+  const handleDeclineOffer = () => {
+    respondToOfferMutation.mutate(
+      {
+        application_id: application.application_id,
+        response: "decline",
+      },
+      {
+        onSuccess: () => {
+          setShowDeclineDialog(false);
+        },
+      }
+    );
+  };
 
   return (
     <Card className="hover:shadow-md transition-shadow">
@@ -186,10 +221,19 @@ export function ApplicationCard({
                       <Button
                         size="sm"
                         className="bg-green-600 hover:bg-green-700"
+                        onClick={handleAcceptOffer}
+                        disabled={respondToOfferMutation.isPending}
                       >
-                        Accept
+                        <CheckCircle2 className="mr-1 h-3 w-3" />
+                        {respondToOfferMutation.isPending ? "Accepting..." : "Accept"}
                       </Button>
-                      <Button size="sm" variant="outline">
+                      <Button 
+                        size="sm" 
+                        variant="outline"
+                        onClick={() => setShowDeclineDialog(true)}
+                        disabled={respondToOfferMutation.isPending}
+                      >
+                        <XCircle className="mr-1 h-3 w-3" />
                         Decline
                       </Button>
                     </div>
@@ -220,6 +264,34 @@ export function ApplicationCard({
           </div>
         </div>
       </CardContent>
+      
+      {/* Decline Confirmation Dialog */}
+      <Dialog open={showDeclineDialog} onOpenChange={setShowDeclineDialog}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Decline Job Offer</DialogTitle>
+            <DialogDescription>
+              Are you sure you want to decline this offer from {application.company_name}? This action cannot be undone.
+            </DialogDescription>
+          </DialogHeader>
+          <DialogFooter>
+            <Button
+              variant="outline"
+              onClick={() => setShowDeclineDialog(false)}
+              disabled={respondToOfferMutation.isPending}
+            >
+              Cancel
+            </Button>
+            <Button
+              variant="destructive"
+              onClick={handleDeclineOffer}
+              disabled={respondToOfferMutation.isPending}
+            >
+              {respondToOfferMutation.isPending ? "Declining..." : "Decline Offer"}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </Card>
   );
 }
