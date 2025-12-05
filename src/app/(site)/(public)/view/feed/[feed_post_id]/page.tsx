@@ -8,6 +8,11 @@ import { CompanyPostServices } from "@/services/company-post.services";
 import { notFound, redirect } from "next/navigation";
 import { CompanyPostPreview } from "@/components/page_specific/company_post/CompanyPostPreview";
 import { GoBackButton } from "@/components/common/button/GoBackButton";
+import { getServerSession } from "next-auth";
+import { authConfig } from "@/lib/auth";
+import { db } from "@/lib/db";
+import { RowDataPacket } from "mysql2";
+import { getCourseByAbbr } from "@/lib/utils";
 
 interface FeedPostPageProps {
   params: Promise<{
@@ -22,6 +27,28 @@ export default async function FeedPostPage({ params }: FeedPostPageProps) {
     redirect("/feed");
   }
 
+  // Get user session and course if available
+  const session = await getServerSession(authConfig);
+  let userCourse: string | undefined;
+
+  if (session?.user?.role_id === 3) {
+    // Applicant user - get their course
+    const [applicantRows] = await db.query<
+      (RowDataPacket & { course: string | null })[]
+    >(
+      `SELECT course FROM applicant_profile WHERE user_id = ?`,
+      [session.user.user_id]
+    );
+
+    if (applicantRows && applicantRows.length > 0 && applicantRows[0].course) {
+      const courseAbbr = applicantRows[0].course;
+      const fullCourse = getCourseByAbbr(courseAbbr);
+      if (fullCourse) {
+        userCourse = fullCourse;
+      }
+    }
+  }
+
   // Fetch data server-side
   const post = await CompanyPostServices.getCompanyPostById(feed_post_id);
 
@@ -30,7 +57,8 @@ export default async function FeedPostPage({ params }: FeedPostPageProps) {
   }
 
   const suggestions = await CompanyPostServices.getCompanyPostSuggestions(
-    feed_post_id
+    feed_post_id,
+    userCourse
   );
 
   return (

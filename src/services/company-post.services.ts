@@ -254,45 +254,85 @@ export const CompanyPostServices = {
     }
   },
 
-  getCompanyPostSuggestions: async (post_id: string) => {
+  getCompanyPostSuggestions: async (post_id: string, userCourse?: string) => {
     const connection = await db.getConnection();
     try {
-      // Get the current post's company_id
-      const [currentPost] = await connection.query<RowDataPacket[]>(
-        `SELECT company_id FROM company_posts WHERE post_id = ?`,
-        [post_id]
-      );
+      let suggestedCompanyIds: string[] = [];
 
-      if (currentPost.length === 0) {
-        return [];
+      // If user has a course (Applicant), get suggested companies
+      if (userCourse) {
+        const [suggestedCompanies] = await connection.query<RowDataPacket[]>(
+          `SELECT DISTINCT c.company_id
+           FROM company c
+           INNER JOIN job_posts jp ON c.company_id = jp.company_id
+           WHERE FIND_IN_SET(?, jp.courses_required) > 0
+           LIMIT 10`,
+          [userCourse]
+        );
+        
+        suggestedCompanyIds = suggestedCompanies.map(row => row.company_id);
       }
 
-      const company_id = currentPost[0].company_id;
+      let query: string;
+      const params: (string | number)[] = [];
 
-      // Get suggestions: posts from the same company first, then others
+      if (suggestedCompanyIds.length > 0) {
+        // Prioritize posts from suggested companies
+        const placeholders = suggestedCompanyIds.map(() => '?').join(',');
+        
+        query = `
+          SELECT 
+            cp.post_id,
+            cp.company_id,
+            cp.title,
+            cp.content,
+            cp.cover_image,
+            cp.created_at,
+            c.company_name,
+            c.company_image,
+            CASE 
+              WHEN cp.company_id IN (${placeholders}) THEN 1
+              ELSE 0
+            END as is_suggested
+          FROM company_posts cp
+          INNER JOIN company c ON cp.company_id = c.company_id
+          WHERE cp.post_id != ?
+          ORDER BY is_suggested DESC, cp.created_at DESC
+          LIMIT 10
+        `;
+        params.push(...suggestedCompanyIds, post_id);
+      } else {
+        // No suggested companies or not logged in - show recent posts
+        query = `
+          SELECT 
+            cp.post_id,
+            cp.company_id,
+            cp.title,
+            cp.content,
+            cp.cover_image,
+            cp.created_at,
+            c.company_name,
+            c.company_image,
+            0 as is_suggested
+          FROM company_posts cp
+          INNER JOIN company c ON cp.company_id = c.company_id
+          WHERE cp.post_id != ?
+          ORDER BY cp.created_at DESC
+          LIMIT 10
+        `;
+        params.push(post_id);
+      }
+
       const [rows] = await connection.query<(RowDataPacket & CompanyPost)[]>(
-        `SELECT 
-          cp.post_id,
-          cp.company_id,
-          cp.title,
-          cp.content,
-          cp.cover_image,
-          cp.created_at,
-          c.company_name,
-          c.company_image,
-          CASE 
-            WHEN cp.company_id = ? THEN 1
-            ELSE 0
-          END as same_company
-        FROM company_posts cp
-        INNER JOIN company c ON cp.company_id = c.company_id
-        WHERE cp.post_id != ?
-        ORDER BY same_company DESC, cp.created_at DESC
-        LIMIT 10`,
-        [company_id, post_id]
+        query,
+        params
       );
 
-      return rows as CompanyPost[];
+      // Convert is_suggested from 1/0 to true/false
+      return rows.map(row => ({
+        ...row,
+        is_suggested: (row as unknown as { is_suggested?: number }).is_suggested === 1
+      })) as CompanyPost[];
     } catch (error) {
       console.error("Error fetching company post suggestions:", error);
       throw error;
