@@ -157,6 +157,10 @@ export default function JobDetailsPage() {
   const [profileDialogOpen, setProfileDialogOpen] = useState(false);
   const [profileApplicant, setProfileApplicant] =
     useState<ApplicationWithUserDetails | null>(null);
+  const [selectDialogOpen, setSelectDialogOpen] = useState(false);
+  const [applicantToSelect, setApplicantToSelect] = useState<string | null>(null);
+  const [rejectDialogOpen, setRejectDialogOpen] = useState(false);
+  const [applicantToReject, setApplicantToReject] = useState<string | null>(null);
   const { resetForm } = useInterviewStore();
 
   const handleScheduleInterview = (applicant: ApplicationWithUserDetails) => {
@@ -210,22 +214,38 @@ export default function JobDetailsPage() {
   };
 
   const handleSelectApplicant = (application_id: string) => {
-    if (!confirm("Are you sure you want to select this applicant?")) return;
+    setApplicantToSelect(application_id);
+    setSelectDialogOpen(true);
+  };
+
+  const confirmSelectApplicant = () => {
+    if (!applicantToSelect) return;
 
     const deadline = new Date();
     deadline.setDate(deadline.getDate() + 7);
 
     selectApplicantMutation.mutate({
-      application_id,
+      application_id: applicantToSelect,
       offer_deadline: deadline.toISOString(),
     });
+    setSelectDialogOpen(false);
+    setApplicantToSelect(null);
   };
 
   const handleReject = (application_id: string) => {
+    setApplicantToReject(application_id);
+    setRejectDialogOpen(true);
+  };
+
+  const confirmReject = () => {
+    if (!applicantToReject) return;
+
     rejectApplicationMutation.mutate({
-      application_id,
+      application_id: applicantToReject,
       rejection_reason: "Position filled / Not suitable at this time",
     });
+    setRejectDialogOpen(false);
+    setApplicantToReject(null);
   };
 
   const handleEditJob = () => {
@@ -342,7 +362,6 @@ export default function JobDetailsPage() {
 
     const handleDownloadResume = () => {
       if (!applicant.resume_path) {
-        alert("No resume available for this applicant");
         return;
       }
 
@@ -1003,6 +1022,46 @@ export default function JobDetailsPage() {
             <AlertDialogCancel>Cancel</AlertDialogCancel>
             <AlertDialogAction onClick={confirmMarkAsFilled}>
               Mark as Filled
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
+
+      {/* Select Applicant Confirmation Dialog */}
+      <AlertDialog open={selectDialogOpen} onOpenChange={setSelectDialogOpen}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Select This Applicant?</AlertDialogTitle>
+            <AlertDialogDescription>
+              Are you sure you want to select this applicant for the position? They will receive an offer with a 7-day response deadline.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel onClick={() => setApplicantToSelect(null)}>
+              Cancel
+            </AlertDialogCancel>
+            <AlertDialogAction onClick={confirmSelectApplicant}>
+              Select Applicant
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
+
+      {/* Reject Applicant Confirmation Dialog */}
+      <AlertDialog open={rejectDialogOpen} onOpenChange={setRejectDialogOpen}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Reject This Applicant?</AlertDialogTitle>
+            <AlertDialogDescription>
+              Are you sure you want to reject this applicant? This action will notify them that their application was not successful.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel onClick={() => setApplicantToReject(null)}>
+              Cancel
+            </AlertDialogCancel>
+            <AlertDialogAction onClick={confirmReject} className="bg-red-600 hover:bg-red-700">
+              Reject Applicant
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>
