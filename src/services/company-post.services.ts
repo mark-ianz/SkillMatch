@@ -6,6 +6,7 @@ import { CompanyPostFormData } from "@/schema/company-post.schema";
 import { ResultSetHeader, RowDataPacket } from "mysql2";
 import { ServiceError } from "@/lib/errors";
 import { CompanyPost, ReactionType } from "@/types/company_post.types";
+import CompanyServices from "./company.services";
 
 const ALLOWED_IMAGE_TYPES = [
   "image/jpeg",
@@ -80,9 +81,10 @@ export const CompanyPostServices = {
         [postId, company_id, title, content, finalCoverImagePath]
       );
 
-      const [rows] = await connection.query<
-        (RowDataPacket & CompanyPost)[]
-      >(`SELECT * FROM company_posts WHERE post_id = ?`, [postId]);
+      const [rows] = await connection.query<(RowDataPacket & CompanyPost)[]>(
+        `SELECT * FROM company_posts WHERE post_id = ?`,
+        [postId]
+      );
 
       await connection.commit();
 
@@ -103,7 +105,10 @@ export const CompanyPostServices = {
     }
   },
 
-  getCompanyPostsFeed: async (userCourse?: string, companyIndustries?: string[]) => {
+  getCompanyPostsFeed: async (
+    userCourse?: string,
+    companyIndustries?: string[]
+  ) => {
     const connection = await db.getConnection();
     try {
       let query = `
@@ -121,39 +126,66 @@ export const CompanyPostServices = {
         ORDER BY cp.created_at DESC
       `;
 
-      const params: string[] = [];
+      const params: (string | number)[] = [];
 
-      // If user has a course (Applicant), prioritize posts from companies with matching job posts
+      // If user has a course (Applicant), get suggested companies and prioritize their posts
       if (userCourse) {
-        query = `
-          SELECT 
-            cp.post_id,
-            cp.company_id,
-            cp.title,
-            cp.content,
-            cp.cover_image,
-            cp.created_at,
-            c.company_name,
-            c.company_image,
-            (
-              SELECT COUNT(*) 
-              FROM job_posts jp 
-              WHERE jp.company_id = cp.company_id 
-              AND FIND_IN_SET(?, jp.courses_required) > 0
-            ) as course_match_count
-          FROM company_posts cp
-          INNER JOIN company c ON cp.company_id = c.company_id
-          ORDER BY course_match_count DESC, cp.created_at DESC
-        `;
-        params.push(userCourse);
+        // Get suggested company IDs
+        const suggestedCompanies =
+          await CompanyServices.getSuggestedCompaniesForApplicant(userCourse);
+
+        const suggestedCompanyIds = suggestedCompanies.map(
+          (row) => row.company_id
+        );
+
+        if (suggestedCompanyIds.length > 0) {
+          const placeholders = suggestedCompanyIds.map(() => "?").join(",");
+
+          query = `
+            SELECT 
+              cp.post_id,
+              cp.company_id,
+              cp.title,
+              cp.content,
+              cp.cover_image,
+              cp.created_at,
+              c.company_name,
+              c.company_image,
+              CASE 
+                WHEN cp.company_id IN (${placeholders}) THEN 1
+                ELSE 0
+              END as is_suggested
+            FROM company_posts cp
+            INNER JOIN company c ON cp.company_id = c.company_id
+            ORDER BY is_suggested DESC, cp.created_at DESC
+          `;
+          params.push(...suggestedCompanyIds);
+        } else {
+          // No suggested companies, just return all posts sorted by date
+          query = `
+            SELECT 
+              cp.post_id,
+              cp.company_id,
+              cp.title,
+              cp.content,
+              cp.cover_image,
+              cp.created_at,
+              c.company_name,
+              c.company_image,
+              0 as is_suggested
+            FROM company_posts cp
+            INNER JOIN company c ON cp.company_id = c.company_id
+            ORDER BY cp.created_at DESC
+          `;
+        }
       }
-      
+
       // If company user with industries, prioritize posts from companies with matching industries
       if (companyIndustries && companyIndustries.length > 0) {
-        const industryConditions = companyIndustries.map(() => 
-          `FIND_IN_SET(?, c.industry) > 0`
-        ).join(' OR ');
-        
+        const industryConditions = companyIndustries
+          .map(() => `FIND_IN_SET(?, c.industry) > 0`)
+          .join(" OR ");
+
         query = `
           SELECT 
             cp.post_id,
@@ -167,7 +199,8 @@ export const CompanyPostServices = {
             CASE 
               WHEN ${industryConditions} THEN 1
               ELSE 0
-            END as industry_match
+            END as industry_match,
+            0 as is_suggested
           FROM company_posts cp
           INNER JOIN company c ON cp.company_id = c.company_id
           ORDER BY industry_match DESC, cp.created_at DESC
@@ -180,7 +213,11 @@ export const CompanyPostServices = {
         params
       );
 
-      return rows as CompanyPost[];
+      // Convert is_suggested from 1/0 to true/false
+      return rows.map((row) => ({
+        ...row,
+        is_suggested: (row as unknown as { is_suggested?: number }).is_suggested === 1,
+      })) as CompanyPost[];
     } catch (error) {
       console.error("Error fetching company posts feed:", error);
       throw error;
@@ -276,16 +313,17 @@ export const CompanyPostServices = {
       await connection.beginTransaction();
 
       if (!user_id && !company_id) {
-        throw new ServiceError("Either user_id or company_id must be provided", 400);
+        throw new ServiceError(
+          "Either user_id or company_id must be provided",
+          400
+        );
       }
 
       // Check if reaction already exists
-      const whereClause = user_id 
+      const whereClause = user_id
         ? "post_id = ? AND user_id = ?"
         : "post_id = ? AND company_id = ?";
-      const whereParams = user_id 
-        ? [post_id, user_id]
-        : [post_id, company_id];
+      const whereParams = user_id ? [post_id, user_id] : [post_id, company_id];
 
       const [existing] = await connection.query<RowDataPacket[]>(
         `SELECT reaction_id FROM company_post_reactions WHERE ${whereClause}`,
@@ -327,12 +365,10 @@ export const CompanyPostServices = {
   ) => {
     const connection = await db.getConnection();
     try {
-      const whereClause = user_id 
+      const whereClause = user_id
         ? "post_id = ? AND user_id = ?"
         : "post_id = ? AND company_id = ?";
-      const whereParams = user_id 
-        ? [post_id, user_id]
-        : [post_id, company_id];
+      const whereParams = user_id ? [post_id, user_id] : [post_id, company_id];
 
       await connection.query<ResultSetHeader>(
         `DELETE FROM company_post_reactions WHERE ${whereClause}`,
@@ -382,12 +418,10 @@ export const CompanyPostServices = {
   ): Promise<ReactionType | null> => {
     const connection = await db.getConnection();
     try {
-      const whereClause = user_id 
+      const whereClause = user_id
         ? "post_id = ? AND user_id = ?"
         : "post_id = ? AND company_id = ?";
-      const whereParams = user_id 
-        ? [post_id, user_id]
-        : [post_id, company_id];
+      const whereParams = user_id ? [post_id, user_id] : [post_id, company_id];
 
       const [rows] = await connection.query<RowDataPacket[]>(
         `SELECT reaction_type FROM company_post_reactions WHERE ${whereClause}`,
@@ -507,7 +541,11 @@ export const CompanyPostServices = {
 
         // Delete old image if it exists and we're replacing it
         if (oldCoverImage && oldCoverImage !== finalCoverImagePath) {
-          const oldImagePath = path.join(process.cwd(), "public", oldCoverImage);
+          const oldImagePath = path.join(
+            process.cwd(),
+            "public",
+            oldCoverImage
+          );
           if (fs.existsSync(oldImagePath)) {
             fs.unlinkSync(oldImagePath);
           }

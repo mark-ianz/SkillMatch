@@ -12,6 +12,8 @@ import DateDifference from "@/components/common/DateDifference";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { SavePostButton } from "./SavePostButton";
 import LinkWithIcon from "@/components/global/LinkWithIcon";
+import { Badge } from "@/components/ui/badge";
+import { Sparkles } from "lucide-react";
 
 interface CompanyPostProps {
   post: CompanyPostType;
@@ -42,12 +44,23 @@ export function CompanyPost({ post }: CompanyPostProps) {
               </AvatarFallback>
             </Avatar>
             <div className="flex-1">
-              <LinkWithIcon
-                className="text-base"
-                iconClassName="w-3 h-3"
-                path={`/view/company/${post.company_id}`}
-                text={post.company_name}
-              />
+              <div className="flex items-center gap-2 flex-wrap">
+                <LinkWithIcon
+                  className="text-base"
+                  iconClassName="w-3 h-3"
+                  path={`/view/company/${post.company_id}`}
+                  text={post.company_name}
+                />
+                {post.is_suggested && (
+                  <Badge 
+                    variant="secondary" 
+                    className="text-xs font-medium bg-blue-50 text-blue-700 border-blue-200 dark:bg-blue-950/30 dark:text-blue-400 dark:border-blue-900 flex items-center gap-1 px-2 py-0.5"
+                  >
+                    <Sparkles className="w-3 h-3" />
+                    Suggested for you
+                  </Badge>
+                )}
+              </div>
               <DateDifference
                 className="text-xs text-muted-foreground block"
                 date={post.created_at}
