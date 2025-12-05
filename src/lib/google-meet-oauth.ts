@@ -9,8 +9,22 @@ const TOKEN_PATH = path.join(process.cwd(), "token.json");
 const MEET_API_ENDPOINT = "https://meet.googleapis.com/v2/spaces";
 
 async function getOAuth2Client() {
-  const content = await fs.readFile(CREDENTIALS_PATH, "utf-8");
-  const credentials = JSON.parse(content);
+  let credentials;
+  
+  // Try to use environment variable first (for Vercel deployment)
+  if (process.env.GOOGLE_OAUTH_CLIENT_WEB_CREDENTIALS) {
+    try {
+      credentials = JSON.parse(process.env.GOOGLE_OAUTH_CLIENT_WEB_CREDENTIALS);
+    } catch (error) {
+      console.error("Failed to parse GOOGLE_OAUTH_CLIENT_WEB_CREDENTIALS:", error);
+      throw new Error("Invalid GOOGLE_OAUTH_CLIENT_WEB_CREDENTIALS format");
+    }
+  } else {
+    // Fall back to credentials.json for local development
+    const content = await fs.readFile(CREDENTIALS_PATH, "utf-8");
+    credentials = JSON.parse(content);
+  }
+  
   const { client_id, client_secret, redirect_uris } = credentials.web;
 
   // Find the google-meet callback URI, or use the last one
