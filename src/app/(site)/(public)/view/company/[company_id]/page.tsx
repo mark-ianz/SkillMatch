@@ -1,5 +1,6 @@
 import MainLayout from "@/components/layout/MainLayout";
 import CompanyServices from "@/services/company.services";
+import { CompanyPostServices } from "@/services/company-post.services";
 import { AnimatedCompanyContent } from "@/components/page_specific/explore/company/AnimatedCompanyContent";
 import { getServerSession } from "next-auth";
 import { authConfig } from "@/lib/auth";
@@ -20,6 +21,10 @@ export default async function CompanyProfilePage({
 
   const { company_profile, job_posted } =
     await CompanyServices.getCompanyWithJobs(company_id, user_id, role_name);
+  
+  // Fetch company posts
+  const company_posts = await CompanyPostServices.getCompanyPostsByCompanyId(company_id);
+  
   // Show 404 if company doesn't exist or has no active job posts
   if (!company_profile) {
     notFound();
@@ -30,6 +35,7 @@ export default async function CompanyProfilePage({
       <AnimatedCompanyContent
         company_profile={company_profile}
         job_posted={job_posted}
+        company_posts={company_posts}
       />
     </MainLayout>
   );

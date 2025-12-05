@@ -254,6 +254,35 @@ export const CompanyPostServices = {
     }
   },
 
+  getCompanyPostsByCompanyId: async (company_id: string) => {
+    const connection = await db.getConnection();
+    try {
+      const [rows] = await connection.query<(RowDataPacket & CompanyPost)[]>(
+        `SELECT 
+          cp.post_id,
+          cp.company_id,
+          cp.title,
+          cp.content,
+          cp.cover_image,
+          cp.created_at,
+          c.company_name,
+          c.company_image
+        FROM company_posts cp
+        INNER JOIN company c ON cp.company_id = c.company_id
+        WHERE cp.company_id = ?
+        ORDER BY cp.created_at DESC`,
+        [company_id]
+      );
+
+      return rows as CompanyPost[];
+    } catch (error) {
+      console.error("Error fetching company posts by company ID:", error);
+      throw error;
+    } finally {
+      connection.release();
+    }
+  },
+
   getCompanyPostSuggestions: async (post_id: string, userCourse?: string) => {
     const connection = await db.getConnection();
     try {
