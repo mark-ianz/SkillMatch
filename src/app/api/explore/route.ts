@@ -134,27 +134,47 @@ export async function GET(request: NextRequest) {
         ? post.technical_skills.split(",").map((s) => s.trim())
         : [];
 
+      const softSkillsArray = post.soft_skills
+        ? post.soft_skills.split(",").map((s) => s.trim())
+        : [];
+
       const coursesRequiredArray = post.courses_required
         ? post.courses_required.split(",").map((c) => c.trim())
         : [];
 
-      // Calculate skill match count for Applicant users
+      // Calculate skill match count and get matched skills for Applicant users
       let matchCount = 0;
+      const matchedTechnicalSkills: string[] = [];
+      const matchedSoftSkills: string[] = [];
+      
       if (userSkills.length > 0) {
-        const postSkillsLowerCase = technicalSkillsArray.map((s) =>
-          s.toLowerCase()
-        );
-        matchCount = userSkills.filter((userSkill) =>
-          postSkillsLowerCase.includes(userSkill)
-        ).length;
+        // Match technical skills
+        technicalSkillsArray.forEach((skill) => {
+          if (userSkills.includes(skill.toLowerCase())) {
+            matchedTechnicalSkills.push(skill);
+            matchCount++;
+          }
+        });
+        
+        // Match soft skills
+        softSkillsArray.forEach((skill) => {
+          if (userSkills.includes(skill.toLowerCase())) {
+            matchedSoftSkills.push(skill);
+            matchCount++;
+          }
+        });
       }
 
       // Check if user's course matches any of the required courses
+      const matchedCourses: string[] = [];
       const courseMatched = userCourse
-        ? coursesRequiredArray.some(
-            (requiredCourse) =>
-              requiredCourse.toLowerCase() === userCourse.toLowerCase()
-          )
+        ? coursesRequiredArray.some((requiredCourse) => {
+            const isMatch = requiredCourse.toLowerCase() === userCourse.toLowerCase();
+            if (isMatch) {
+              matchedCourses.push(requiredCourse);
+            }
+            return isMatch;
+          })
         : false;
 
       return {
@@ -164,10 +184,13 @@ export async function GET(request: NextRequest) {
         job_categories: post.job_categories
           ? post.job_categories.split(",")
           : [],
-        soft_skills: post.soft_skills ? post.soft_skills.split(",") : [],
+        soft_skills: softSkillsArray,
         technical_skills: technicalSkillsArray,
         skill_match_count: matchCount,
         course_matched: courseMatched,
+        matched_technical_skills: matchedTechnicalSkills,
+        matched_soft_skills: matchedSoftSkills,
+        matched_courses: matchedCourses,
       };
     });
 

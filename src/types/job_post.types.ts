@@ -44,6 +44,9 @@ export type JobPost = {
   // Optional computed fields (for Applicant users)
   skill_match_count?: number;
   course_matched?: boolean;
+  matched_technical_skills?: string[];
+  matched_soft_skills?: string[];
+  matched_courses?: string[];
 };
 
 export type JobPostQuery = JobPost & {
