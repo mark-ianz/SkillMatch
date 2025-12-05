@@ -43,10 +43,11 @@ export function CopyLinkButton({
       variant={variant}
       size={size}
       onClick={handleCopyLink}
-      className={cn("rounded-lg", size === "icon" && "h-10 w-10", className)}
+      className={cn("rounded-lg text-skillmatch-muted-dark hover:text-foreground hover:bg-muted/50 transition-colors", size === "icon" && "h-10 w-10", className)}
     >
       {showIcon && <Copy className="w-5 h-5 text-skillmatch-muted-dark" />}
       {showText && <span className={"text-skillmatch-muted-dark"}>{text}</span>}
+  
     </Button>
   );
 }

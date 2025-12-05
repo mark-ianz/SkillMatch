@@ -13,13 +13,16 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { SavePostButton } from "./SavePostButton";
 import LinkWithIcon from "@/components/global/LinkWithIcon";
 import { Badge } from "@/components/ui/badge";
-import { Sparkles } from "lucide-react";
+import { MousePointerClick, Sparkles } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import Link from "next/link";
 
 interface CompanyPostProps {
   post: CompanyPostType;
+  isViewing?: boolean;
 }
 
-export function CompanyPost({ post }: CompanyPostProps) {
+export function CompanyPost({ post, isViewing = false }: CompanyPostProps) {
   const [showReactionsModal, setShowReactionsModal] = useState(false);
   const [isContentExpanded, setIsContentExpanded] = useState(false);
 
@@ -52,8 +55,8 @@ export function CompanyPost({ post }: CompanyPostProps) {
                   text={post.company_name}
                 />
                 {post.is_suggested && (
-                  <Badge 
-                    variant="secondary" 
+                  <Badge
+                    variant="secondary"
                     className="text-xs font-medium bg-blue-50 text-blue-700 border-blue-200 dark:bg-blue-950/30 dark:text-blue-400 dark:border-blue-900 flex items-center gap-1 px-2 py-0.5"
                   >
                     <Sparkles className="w-3 h-3" />
@@ -114,7 +117,18 @@ export function CompanyPost({ post }: CompanyPostProps) {
 
             <div className="ml-auto flex items-center gap-1">
               <SavePostButton postId={post.post_id} />
-
+              {!isViewing && (
+                <Button
+                  className="text-xs text-skillmatch-muted-dark hover:text-foreground hover:bg-muted/50 transition-colors"
+                  variant={"ghost"}
+                  asChild
+                >
+                  <Link href={`/view/feed/${post.post_id}`}>
+                    <MousePointerClick />
+                    View Post
+                  </Link>
+                </Button>
+              )}
               <CopyLinkButton
                 url={postUrl}
                 size="sm"
