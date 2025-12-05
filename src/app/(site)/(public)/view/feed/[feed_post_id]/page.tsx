@@ -69,7 +69,7 @@ export default async function FeedPostPage({ params }: FeedPostPageProps) {
           <GoBackButton />
 
           {/* Company Post Full Info */}
-          <CompanyPost post={post} />
+          <CompanyPost post={post} isViewing/>
         </div>
 
         {/* Post Suggestions Section */}
