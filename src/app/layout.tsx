@@ -51,10 +51,19 @@ export const metadata: Metadata = {
   ],
   authors: [{ name: "SkillMatch Team" }],
   icons: {
-    icon: "/logo/SkillMatch.png",
+    icon: [
+      { url: "/logo/SkillMatch.png" },
+      { url: "/logo/SkillMatch.png", sizes: "32x32", type: "image/png" },
+      { url: "/logo/SkillMatch.png", sizes: "16x16", type: "image/png" },
+    ],
     shortcut: "/logo/SkillMatch.png",
     apple: "/logo/SkillMatch.png",
+    other: {
+      rel: "icon",
+      url: "/logo/SkillMatch.png",
+    },
   },
+  manifest: "/site.webmanifest",
   openGraph: {
     type: "website",
     locale: "en_US",
