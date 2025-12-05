@@ -29,7 +29,7 @@ export default async function FeedPage() {
                   href="/company/create-post"
                   className="border-2 p-4 rounded-md border-dashed flex flex-col items-center justify-center mb-6 cursor-pointer hover:bg-muted/50 transition-colors border-skillmatch-primary-blue text-skillmatch-primary-blue"
                 >
-                  <p>Create new post</p>
+                  <p>Create new feed post</p>
                   <PlusCircleIcon />
                 </Link>
               </div>
