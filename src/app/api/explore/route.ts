@@ -171,17 +171,21 @@ export async function GET(request: NextRequest) {
       };
     });
 
-    // Sort by course match and skill match count if Applicant user
-    // Priority: 1. Course matched, 2. Higher skill matches
+    // Sort by skill match count and course match if Applicant user
+    // Priority: 1. Higher skill matches (even if just 1), 2. Course matched
     const sortedRows =
       userCourse || userSkills.length > 0
         ? formattedRows.sort((a, b) => {
-            // First priority: course matched
+            // First priority: skill match count (descending)
+            if (a.skill_match_count !== b.skill_match_count) {
+              return b.skill_match_count - a.skill_match_count;
+            }
+
+            // Second priority: course matched
             if (a.course_matched && !b.course_matched) return -1;
             if (!a.course_matched && b.course_matched) return 1;
 
-            // Second priority: skill match count
-            return b.skill_match_count - a.skill_match_count;
+            return 0;
           })
         : formattedRows;
 
