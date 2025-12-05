@@ -26,7 +26,7 @@ export default async function CompanyProfilePage({
   }
 
   return (
-    <MainLayout className="items-center">
+    <MainLayout className="items-center" wrapperClassName="w-full">
       <AnimatedCompanyContent
         company_profile={company_profile}
         job_posted={job_posted}

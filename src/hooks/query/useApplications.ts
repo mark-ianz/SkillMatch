@@ -26,6 +26,21 @@ export function useUserApplications() {
   });
 }
 
+// Query: Check if user has applied to a specific job
+export function useHasApplied(jobPostId: string, enabled: boolean = true) {
+  return useQuery({
+    queryKey: ["has-applied", jobPostId],
+    queryFn: async () => {
+      const { data } = await api.get<{ hasApplied: boolean }>(
+        `/applications/check/${jobPostId}`
+      );
+      return data.hasApplied;
+    },
+    enabled: enabled && !!jobPostId,
+    staleTime: 1000 * 60 * 5, // 5 minutes
+  });
+}
+
 // Query: Get single application details
 export function useApplication(application_id: string) {
   return useQuery({
@@ -58,9 +73,10 @@ export function useApplyToJob() {
       );
       return data;
     },
-    onSuccess: (data) => {
+    onSuccess: (data, variables) => {
       toast.success(data.message || "Application submitted successfully");
       qc.invalidateQueries({ queryKey: ["user-applications"] });
+      qc.invalidateQueries({ queryKey: ["has-applied", variables.job_post_id] });
     },
     onError: (error: AxiosError<{ message?: string }>) => {
       const message = error.response?.data?.message || "Failed to apply to job";

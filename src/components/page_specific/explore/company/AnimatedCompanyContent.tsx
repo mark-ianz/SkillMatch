@@ -21,20 +21,20 @@ export function AnimatedCompanyContent({
   job_posted,
 }: AnimatedCompanyContentProps) {
   return (
-    <div className="gap-10 flex flex-col items-center w-full">
+    <div className="gap-10 flex flex-col items-center w-full max-w-5xl">
       {/* Back Button & Profile */}
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.4 }}
-        className="space-y-4 px-4"
+        className="space-y-4 px-4 w-full"
       >
         <GoBackButton />
 
         {/* Company Profile Card */}
         <CompanyProfile
           isFullView
-          className="p-10 w-full max-w-5xl"
+          className="p-10 w-full"
           company={company_profile}
         />
       </motion.div>
