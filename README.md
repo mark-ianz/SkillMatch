@@ -301,14 +301,13 @@ Full schema available in `docs/skillmatch_aiven.sql`
 
 ## 📝 License
 
-This project is part of an academic capstone project for Quezon City University.
+This project is part of an academic requirement for the subject **Systems Integration and Architecture 1** at Quezon City University.
 
 ---
 
 ## 👥 Contributors
 
 - Mark Ian Bustillo - Lead Developer
-- [Add other team members]
 
 ---
 
