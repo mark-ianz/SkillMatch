@@ -25,6 +25,7 @@
 .DS_Store
 *.pem
 \ignore
+/docs
 
 # debug logs
 npm-debug.log*
@@ -33,4 +34,4 @@ yarn-error.log*
 .pnpm-debug.log*
 
 # Uploaded resumes (local storage)
-public/uploads
+# public/uploads
